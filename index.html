@@ -275,6 +275,31 @@ details.about > div{display:grid; gap:12px; margin-top:12px}
 .weak{display:grid; gap:2px; padding:10px 12px; border:1px solid var(--line); border-radius:10px; margin-bottom:8px; text-decoration:none; color:var(--ink)}
 .weak span{color:var(--muted); font-size:15px}
 @media (max-width:640px){ .perfTop{grid-template-columns:1fr; justify-items:center; text-align:center} }
+
+.quickNav{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:14px 0 10px}
+.quickNav .partBtn{font-size:16px; padding:11px 4px}
+.statRow{display:flex; gap:12px; align-items:center; margin-top:10px}
+.statRow .progress{flex:1 1 auto; min-width:0; max-width:420px}
+.ringSlot{flex:0 0 auto}
+.ringBtn{width:auto; height:auto; border-radius:18px; padding:6px 8px 4px; display:flex; flex-direction:column; align-items:center; gap:0}
+.ringLbl{font-size:13px; font-weight:700; color:var(--muted); margin-top:-2px}
+.searchBox{position:relative; margin-bottom:4px}
+.searchBox input{width:100%; font:inherit; font-size:17px; padding:12px 14px 12px 40px; border-radius:12px; border:1.5px solid var(--line); background:var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23667' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-4-4'/%3E%3C/svg%3E") no-repeat 13px 50%; color:var(--ink)}
+.searchBox input:focus{outline:none; border-color:var(--fda)}
+.qres{display:none; margin-top:8px; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:10px; max-height:70vh; overflow:auto}
+.qres.open{display:block}
+.qhead{display:flex; align-items:center; gap:6px; color:var(--muted); font-size:15px; margin-bottom:6px}
+.qhead b{color:var(--ink)}
+.qclose{margin-left:auto; font:inherit; font-size:22px; width:36px; height:36px; border-radius:50%; border:1px solid var(--line); background:var(--paper); color:var(--ink); cursor:pointer}
+.qitem{display:grid; gap:3px; width:100%; text-align:left; font:inherit; color:var(--ink); background:var(--paper); border:1px solid var(--line); border-radius:10px; padding:10px 12px; margin-top:8px; cursor:pointer}
+.qitem:hover{border-color:var(--fda)}
+.qitem b{font-size:16.5px}
+.qk{font-size:12.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--fda)}
+.qs{font-size:15px; color:var(--ink)}
+.qw{font-size:14px; color:var(--muted)}
+.qsrc{display:block; font-size:13.5px; margin:3px 2px 0}
+mark{background:#ffe58a; color:inherit; border-radius:3px; padding:0 1px}
+.card.hit{outline:3px solid var(--star); outline-offset:2px; transition:outline-color .4s}
 </style>
 </head>
 <body>
@@ -283,14 +308,22 @@ details.about > div{display:grid; gap:12px; margin-top:12px}
   <div class="eyebrow">Refresher · ISO 13485 · FDA QMSR · EU MDR · Class II and III devices</div>
   <h1>Medical Device QMS Refresher</h1>
   <p class="lede">A refresher for Class II and III medical devices, in four parts. Basics walks through ISO 13485 clause by clause with best practices. Part A covers what changed under the FDA QMSR in each QMS discipline. Part B covers FDA inspection, postmarket and premarket requirements. Part C covers the EU MDR.</p>
+  <div class="quickNav" id="navRow2"></div>
+  <div class="searchBox" role="search">
+    <input id="q" type="search" placeholder="Search: purchasing, Article 10, 820.45, PSUR…" aria-label="Search the app" autocomplete="off">
+    <div id="qres" class="qres" aria-live="polite"></div>
+  </div>
+  <div class="statRow">
   <div class="progress" aria-live="polite">
       <div><b id="pScore">0</b> of <b id="pTotal">0</b> questions answered · <b id="pRight">0</b> correct</div>
       <div class="bar"><i id="pBar"></i></div>
       <div id="saveNote" style="font-size:14px;color:var(--muted);margin-top:4px">Answers are saved on this device.</div>
       <button class="reset" id="resetAll" type="button">Reset my answers</button>
   </div>
+    <div id="ringSlot" class="ringSlot"></div>
+  </div>
 </header>
-<div class="dnav" id="dnav"><div class="partSwitch" id="partSwitch"></div><div class="navRow2" id="navRow2"></div><div class="chTabs" id="chTabs" role="tablist" aria-label="Disciplines"></div></div>
+<div class="dnav" id="dnav"><div class="partSwitch" id="partSwitch"></div><div class="chTabs" id="chTabs" role="tablist" aria-label="Disciplines"></div></div>
 
 <div class="layout">
   <nav class="rail" id="rail" aria-label="Chapters"></nav>
@@ -393,7 +426,6 @@ function renderNav(active){
   r2.append(el("button",{class:"partBtn home",type:"button","aria-pressed":String(active==="home"),onclick:()=>{ location.hash="home"; }},"Home"));
   r2.append(el("button",{class:"partBtn shuffle",type:"button","aria-pressed":String(active==="random"),onclick:()=>{ rnd.cur=null; if(location.hash==="#random") route(); else location.hash="random"; }},"Training"));
   r2.append(el("button",{class:"partBtn dilBtn",type:"button","aria-pressed":String(active==="dilemmas"),onclick:()=>{ location.hash="dilemmas"; }},"Dilemmas"));
-  r2.append(ringButton());
   const ct=document.getElementById("chTabs"); ct.innerHTML=""; ct.style.display=(["random","home","dilemmas"].includes(active))?"none":"";
   CH.filter(x=>x.part===c.part).forEach(x=>{
     const answered=x.qs.filter((q,i)=>state[x.id+"-"+i]!==undefined).length;
@@ -504,10 +536,10 @@ function ringSvg(acc,cov,size){
 function ringButton(){
   const s=stats(); const cov=s.total?Math.round(s.done/s.total*100):0;
   const b=el("button",{class:"ringBtn",type:"button",id:"ringBtn","aria-label":"Your performance: "+(s.acc===null?"no answers yet":s.acc+"% correct, "+s.done+" answered")+". Open details.",onclick:openPerf});
-  b.innerHTML=ringSvg(s.acc,cov,52);
+  b.innerHTML=ringSvg(s.acc,cov,96)+'<span class="ringLbl">'+level(s.acc)[0]+'</span>';
   return b;
 }
-function updateRing(){ const old=document.getElementById("ringBtn"); if(old) old.replaceWith(ringButton()); }
+function updateRing(){ const slot=document.getElementById("ringSlot"); if(slot){ slot.innerHTML=""; slot.append(ringButton()); } }
 function modal(title,body){
   closeModal();
   const ov=el("div",{class:"ovl",id:"ovl",onclick:(e)=>{ if(e.target.id==="ovl") closeModal(); }});
@@ -609,6 +641,97 @@ function renderDilemmas(){
   CH.filter(c=>dsel.scope==="all"||c.part===dsel.scope).forEach(c=>{ if(c.dils.length) list.append(dilCard(c,0,()=>{ const y=window.scrollY; renderDilemmas(); window.scrollTo({top:y}); },true)); });
   m.append(list);
 }
+
+/* ---------- search ---------- */
+const ARTS=[["21 CFR 820.1", "Scope", "Sets who the QMSR applies to: manufacturers of finished devices for the US market, including specification developers and relabelers. Component makers are encouraged, not required, to follow it.", "ch1", "kp", "e820", "qmsr scope"], ["21 CFR 820.3", "Definitions", "Lists FD&C Act and CFR definitions that take precedence over ISO 13485 and ISO 9000 terms, such as device, labeling, manufacturer and finished device.", "b13", "c", "e820", "qmsr definitions"], ["21 CFR 820.7", "Incorporation by reference", "Incorporates ISO 13485:2016 and ISO 9000:2015 Clause 3 into US law.", "ch1", "kp", "e820", "iso 13485 incorporated"], ["21 CFR 820.10", "Requirements for a quality management system", "Requires compliance with ISO 13485:2016 clauses, plus FDA links to Parts 803, 806, 821, 830 and others. 820.10(c) requires design and development controls for Class II, Class III and listed Class I devices.", "ch1", "kp", "e820", "design controls applicability"], ["21 CFR 820.35", "Control of records", "Adds US record requirements on top of ISO 13485 4.2.5: complaint records with specific content, servicing records, and UDI in records. Under the QMSR, management review, internal audit and supplier audit reports are no longer shielded from FDA inspection.", "ch9", "kp", "e820", "complaint records records control"], ["21 CFR 820.45", "Device labeling and packaging controls", "Requires inspection of labeling for accuracy before release (including UDI, expiry date, control number and storage instructions), with the date and the name of the person recorded in the MDF.", "ch8", "kp", "e820", "labeling packaging label inspection"], ["21 CFR Part 4", "Combination products CGMP", "Sets which device and drug CGMP provisions apply to combination products. Updated to align with the QMSR.", "ch1", "kp", "ecfrH", "combination product"], ["21 CFR Part 7", "Recalls (enforcement policy)", "FDA’s recall policy: health hazard evaluation, recall classification (Class I, II, III), recall strategy, communications, status reports and termination.", "ch11", "kp", "e7", "recall policy"], ["21 CFR 7.41", "Health hazard evaluation and recall classification", "FDA evaluates the health hazard of a recalled product and assigns Class I, II or III.", "ch11", "kp", "e7", "hhe recall class"], ["21 CFR 7.46", "Firm-initiated recall", "A firm may recall on its own initiative and should notify FDA. FDA then reviews and classifies the recall.", "ch11", "kp", "e7", "voluntary recall"], ["21 CFR Part 11", "Electronic records and electronic signatures", "Controls for trustworthy electronic records and signatures: system validation, audit trails, access controls and signature manifestation and linking.", "ch6", "kp", "ecfrH", "electronic signature audit trail"], ["21 CFR Part 801", "Labeling", "General device labeling requirements, including adequate directions for use, prescription device labeling (801.109) and UDI on labels (801.20).", "ch8", "kp", "ecfrH", "labeling rx"], ["21 CFR 801.20", "Label to bear a UDI", "Device labels and packages must carry a UDI unless an exception applies.", "ch8", "kp", "ecfrH", "udi label"], ["21 CFR Part 803", "Medical Device Reporting (MDR)", "Manufacturers must report deaths, serious injuries and malfunctions likely to cause them. 30-day reports, 5-day reports when remedial action is needed to prevent unreasonable risk, and supplemental reports.", "ch11", "kp", "e803", "mdr reporting adverse event"], ["21 CFR 803.17", "Written MDR procedures", "Requires written procedures for timely identification, evaluation and submission of MDR reports, and for documentation and record keeping.", "ch11", "kp", "e803", "mdr procedure"], ["21 CFR 803.50", "30-day reports by manufacturers", "Report within 30 calendar days of becoming aware of information that reasonably suggests a reportable death, serious injury or malfunction.", "ch11", "kp", "e803", "30 day"], ["21 CFR 803.53", "5-day reports", "Report within 5 work days when remedial action is needed to prevent an unreasonable risk of substantial harm, or when FDA asks.", "ch11", "kp", "e803", "5 day"], ["21 CFR Part 806", "Reports of corrections and removals", "Report corrections and removals made to reduce a risk to health or remedy a violation that may present a risk to health, within 10 working days of starting them (806.10). Keep records of those not reported (806.20).", "ch11", "kp", "e806", "correction removal field action"], ["21 CFR Part 807", "Establishment registration, listing and 510(k)", "Registration and listing, and the premarket notification (510(k)) requirements in Subpart E, including when a new 510(k) is needed for a change (807.81(a)(3)).", "ch12", "kp", "ecfrH", "510k registration listing"], ["21 CFR Part 812", "Investigational Device Exemptions (IDE)", "Rules for clinical investigations of devices in the US, including significant-risk determinations, IDE applications and sponsor reports.", "ch12", "kp", "ecfrH", "ide clinical investigation"], ["21 CFR Part 814", "Premarket Approval (PMA)", "PMA applications for Class III devices, PMA supplements for changes (814.39) and post-approval requirements and annual reports (814.82, 814.84).", "ch12", "kp", "e814", "pma supplement annual report"], ["21 CFR 814.39", "PMA supplements", "Changes affecting safety or effectiveness need a PMA supplement before implementation, with defined supplement types (180-day, real-time, 30-day notice, special CBE).", "ch11", "kp", "e814", "pma change"], ["21 CFR Part 822", "Postmarket surveillance (Section 522)", "FDA may order postmarket surveillance studies for certain Class II and III devices. Covers plans, timelines and reporting.", "ch11", "kp", "e822", "522 surveillance order"], ["21 CFR Part 830", "Unique Device Identification", "UDI system requirements and data submission to the Global Unique Device Identification Database (GUDID).", "ch8", "kp", "ecfrH", "udi gudid"], ["21 CFR Part 860", "Medical device classification procedures", "How devices are classified into Class I, II or III and how classification changes.", "ch12", "kp", "ecfrH", "classification fda"], ["FD&C Act 513(f)(2)", "De Novo classification", "Pathway for novel low-to-moderate risk devices with no predicate. A granted De Novo creates a new classification regulation and can serve as a predicate.", "ch12", "kp", "fdaGuid", "de novo"], ["FD&C Act 515C", "Predetermined Change Control Plans (PCCP)", "Lets FDA authorize planned future device modifications in the marketing submission, so they can be implemented without a new submission if done as described.", "ch12", "kp", "pccp", "pccp ai ml change plan"], ["FD&C Act 524B", "Cyber devices", "Cybersecurity requirements for devices with software that connect to the internet: SBOM, vulnerability monitoring and plans to address them.", "ch4", "kp", "cyber", "cybersecurity sbom"], ["FD&C Act 704(a)(4)", "Records requests in advance of or in lieu of inspection", "FDA can request records from a device establishment ahead of or instead of an inspection. Used in remote regulatory assessments.", "ch10", "kp", "rra", "records request remote assessment rra"], ["CP 7382.850", "Compliance Program: inspection of medical device manufacturers", "FDA’s inspection program under the QMSR. Replaced QSIT on 2 Feb 2026 with a risk-based approach that follows product risk across QMS areas.", "ch10", "kp", "cp", "inspection qsit"], ["FDA guidance", "Computer Software Assurance (CSA)", "Risk-based assurance for production and QMS software: focus testing on software features with high process risk, use unscripted testing where justified.", "ch6", "kp", "csa", "software validation csv"], ["FDA guidance", "Content of Human Factors information in marketing submissions", "What HF/usability information to include in submissions, scaled by risk of critical tasks.", "ch4", "kp", "hf", "usability human factors"], ["FDA guidance", "Cybersecurity in medical devices: QMS considerations", "Expected design controls, risk management and documentation for device cybersecurity, linked to 524B.", "ch4", "kp", "cyber", "cyber"], ["FDA guidance", "Real-world evidence for medical devices", "When real-world data can support regulatory decisions, and the relevance and reliability tests it must meet.", "ch12", "kp", "rwe", "rwe real world data"], ["FDA guidance", "Sterility information in 510(k)s", "What sterilization and packaging information to include in a 510(k) for devices labeled sterile.", "ch7", "kp", "ster", "sterile 510k"], ["FDA guidance", "Use of ISO 10993-1", "FDA’s approach to biological evaluation of devices under ISO 10993-1.", "ch7", "kp", "bio", "biocompatibility"], ["FDA eSTAR", "Electronic Submission Template", "Structured electronic template that 510(k) and De Novo submissions must use.", "ch12", "kp", "estar", "estar submission"], ["MDR Article 2", "Definitions", "Defines terms such as medical device, accessory, manufacturer, placing on the market, serious incident and field safety corrective action.", "e1", "kp", "mdr", "definitions eu"], ["MDR Article 5", "Placing on the market and putting into service", "A device may be placed on the market only if it complies with the MDR and meets the General Safety and Performance Requirements (Annex I).", "e1", "kp", "mdr", ""], ["MDR Article 7", "Claims", "Bans misleading labeling, IFU and advertising claims about a device’s intended purpose, safety and performance.", "e4", "kp", "mdr", "advertising claims marketing"], ["MDR Article 10", "General obligations of manufacturers", "Core manufacturer duties: risk management, clinical evaluation, technical documentation, declaration of conformity, UDI, PMS, vigilance, liability coverage and a QMS (10(9)).", "e1", "kp", "mdr", "manufacturer obligations"], ["MDR Article 10(9)", "Quality management system", "Lists the aspects the manufacturer’s QMS must address, from regulatory strategy and GSPR to PMS, vigilance and communication with authorities.", "e1", "kp", "mdr", "qms eu"], ["MDR Article 10a", "Interruption or discontinuation of supply", "Manufacturers must give advance notice (generally at least 6 months) when interrupting or stopping supply of certain devices where this could result in serious harm. Added by Regulation (EU) 2024/1860.", "e1", "kp", "art10a", "supply interruption shortage"], ["MDR Article 11", "Authorised representative", "Non-EU manufacturers must designate an EU authorised representative under a written mandate.", "e1", "kp", "mdr", "ec rep"], ["MDR Article 13", "General obligations of importers", "Importers must verify CE marking, DoC, registration, labeling and UDI before placing a device on the market, and keep complaint registers.", "e1", "kp", "mdr", "importer"], ["MDR Article 14", "General obligations of distributors", "Distributors must verify the device is CE marked, labeled and has an importer identified, and must keep storage and transport conditions.", "e1", "kp", "mdr", "distributor"], ["MDR Article 15", "Person responsible for regulatory compliance (PRRC)", "Manufacturers must have at least one person with required expertise responsible for regulatory compliance.", "e1", "kp", "mdcg197", "prrc"], ["MDR Article 16", "When obligations of manufacturers apply to others", "When a distributor, importer or other person takes on manufacturer obligations, for example by changing the intended purpose or relabeling, and the exceptions.", "e1", "kp", "mdr", "relabel translate"], ["MDR Article 18", "Implant card and patient information", "Manufacturers of implantable devices must provide an implant card and information for the patient.", "e4", "kp", "mdr", "implant card"], ["MDR Article 19", "EU declaration of conformity", "The manufacturer’s statement that the device meets the MDR. Content set in Annex IV.", "e2", "kp", "mdr", "doc declaration"], ["MDR Article 20", "CE marking of conformity", "Rules for affixing the CE mark and the notified body number.", "e2", "kp", "mdr", "ce mark"], ["MDR Article 22", "Systems and procedure packs", "Obligations for persons combining CE-marked devices into systems or procedure packs.", "e1", "kp", "mdr", "procedure pack"], ["MDR Article 25", "Identification within the supply chain", "Economic operators must be able to identify who supplied them and whom they supplied, for a defined period.", "e4", "kp", "mdr", "traceability supply chain"], ["MDR Article 27", "Unique Device Identification system", "UDI-DI and UDI-PI on labels, Basic UDI-DI, and storage of UDIs by economic operators and health institutions for certain devices.", "e4", "kp", "mdcg257", "udi eu basic udi-di"], ["MDR Article 29", "Registration of devices", "Before placing a device on the market, the manufacturer assigns a Basic UDI-DI and registers device data in EUDAMED.", "e4", "kp", "eudamed", "registration eudamed"], ["MDR Article 31", "Registration of economic operators", "Manufacturers, authorised representatives and importers register in EUDAMED and receive a Single Registration Number (SRN).", "e4", "kp", "eudamed", "srn actor registration"], ["MDR Article 32", "Summary of safety and clinical performance (SSCP)", "Implantable and Class III devices need an SSCP, validated by the notified body and published in EUDAMED.", "e3", "kp", "mdr", "sscp"], ["MDR Article 33", "European database on medical devices (EUDAMED)", "Establishes EUDAMED and its electronic systems: registration, UDI, notified bodies and certificates, clinical investigations, vigilance and PMS, market surveillance.", "e4", "kp", "eudamed", "eudamed"], ["MDR Article 51", "Classification of devices", "Devices are classified into Class I, IIa, IIb and III using the rules in Annex VIII.", "e2", "kp", "mdcg2124", "classification eu rules"], ["MDR Article 52", "Conformity assessment procedures", "Which conformity assessment route applies by class, and when a notified body is involved.", "e2", "kp", "mdr", "conformity assessment"], ["MDR Article 54", "Clinical evaluation consultation procedure", "For certain Class III implantables and Class IIb active devices that administer or remove medicinal products, the notified body must consult an expert panel.", "e2", "kp", "mdr", "expert panel cecp"], ["MDR Article 56", "Certificates of conformity", "Notified body certificates: content, validity (up to five years) and conditions.", "e2", "kp", "mdr", "certificate nb"], ["MDR Article 61", "Clinical evaluation", "Clinical evidence must confirm the GSPR, based on clinical data, and be updated throughout the lifecycle with PMCF data. Sets the conditions for relying on equivalence.", "e3", "kp", "mdr", "clinical evaluation cer equivalence"], ["MDR Article 62", "Clinical investigations", "General requirements for clinical investigations conducted to show conformity.", "e3", "kp", "mdr", "clinical investigation"], ["MDR Article 83", "Post-market surveillance system", "Manufacturers must plan, establish, document, implement, maintain and update a PMS system proportionate to the risk class, as part of the QMS.", "e3", "kp", "mdcg2510", "pms"], ["MDR Article 84", "Post-market surveillance plan", "PMS must follow a plan as part of the technical documentation (Annex III).", "e3", "kp", "mdcg2510", "pms plan"], ["MDR Article 85", "Post-market surveillance report", "Class I devices need a PMS report, updated when necessary.", "e3", "kp", "mdcg2510", "pmsr"], ["MDR Article 86", "Periodic safety update report (PSUR)", "Class IIa, IIb and III devices need a PSUR: at least every two years for IIa, at least annually for IIb and III.", "e3", "kp", "mdcg2221", "psur"], ["MDR Article 87", "Reporting of serious incidents and FSCAs", "Report serious incidents within 15 days of awareness, 2 days for a serious public health threat and 10 days for death or unanticipated serious deterioration. Report FSCAs before undertaking them, except in urgency.", "e3", "kp", "mdcg233", "vigilance serious incident fsca"], ["MDR Article 88", "Trend reporting", "Report statistically significant increases in non-serious incidents or expected side-effects that could affect the benefit-risk analysis.", "e3", "kp", "mdcg233", "trend"], ["MDR Article 89", "Analysis of serious incidents and FSCAs", "Manufacturers investigate serious incidents and FSCAs, cooperate with authorities, and issue field safety notices.", "e3", "kp", "mdcg233", "fsn field safety notice"], ["MDR Article 120", "Transitional provisions", "Legacy devices with MDD/AIMDD certificates may stay on the market under conditions, with no significant changes in design or intended purpose. Deadlines extended by Regulation (EU) 2023/607.", "e4", "kp", "q2023607", "legacy transition significant change"], ["Regulation (EU) 2023/607", "Extended MDR transition", "Extended legacy deadlines to 31 Dec 2027 (Class III and IIb implantables, with exceptions) and 31 Dec 2028 (other devices), if conditions on QMS and notified body applications are met.", "e4", "kp", "q2023607", "transition extension 2027 2028"], ["Regulation (EU) 2024/1860", "EUDAMED roll-out and Article 10a", "Allows EUDAMED modules to become mandatory one by one, and adds Article 10a on supply interruption.", "e4", "kp", "reg1860", "eudamed rollout"], ["COM(2025) 1023", "Proposal to simplify the MDR and IVDR", "Commission proposal of 16 Dec 2025 for targeted changes to the MDR and IVDR. Not yet law.", "e4", "kp", "proposal", "mdr revision simplification"], ["MDR Annex I", "General Safety and Performance Requirements (GSPR)", "Safety and performance requirements every device must meet: general requirements, design and manufacture, and information supplied with the device.", "e2", "kp", "mdr", "gspr essential requirements"], ["MDR Annex II", "Technical documentation", "Required content: device description, information supplied, design and manufacturing, GSPR, benefit-risk and risk management, verification and validation.", "e2", "kp", "mdr", "technical file"], ["MDR Annex III", "Technical documentation on post-market surveillance", "PMS plan, PSUR and PMS report content.", "e3", "kp", "mdr", "pms documentation"], ["MDR Annex IV", "EU declaration of conformity", "Required content of the DoC.", "e2", "kp", "mdr", ""], ["MDR Annex VI", "Registration data and UDI", "Information to submit at device and operator registration, and the UDI system rules.", "e4", "kp", "mdr", "udi annex"], ["MDR Annex VIII", "Classification rules", "The 22 classification rules for devices, with implementing rules on duration, invasiveness and active devices.", "e2", "kp", "mdcg2124", "rule 11 software rules"], ["MDR Annex IX", "Conformity assessment based on QMS and technical documentation", "Full QMS assessment by the notified body, with technical documentation assessment, surveillance audits and unannounced audits.", "e2", "kp", "mdr", "unannounced audit"], ["MDR Annex XIV", "Clinical evaluation and PMCF", "Clinical evaluation plan, equivalence criteria, and post-market clinical follow-up plan and report.", "e3", "kp", "mdr", "pmcf"], ["MDR Annex XV", "Clinical investigations", "Requirements for conducting clinical investigations.", "e3", "kp", "mdr", ""], ["MDCG 2019-7", "Article 15 PRRC", "Guidance on the qualifications and responsibilities of the PRRC.", "e1", "kp", "mdcg197", "prrc"], ["MDCG 2020-3", "Significant changes under Article 120", "Which changes to legacy devices count as significant changes in design or intended purpose.", "e4", "kp", "mdcg203", "significant change legacy"], ["MDCG 2021-24", "Classification guidance", "Explains the Annex VIII rules with examples.", "e2", "kp", "mdcg2124", "classification"], ["MDCG 2021-25", "MDR requirements for legacy devices", "Which MDR requirements (PMS, vigilance, registration) apply to legacy devices.", "e4", "kp", "mdcg2125", "legacy"], ["MDCG 2022-21", "Periodic Safety Update Report", "PSUR structure, data and timelines.", "e3", "kp", "mdcg2221", "psur"], ["MDCG 2023-3", "Vigilance terms and concepts Q&A", "Clarifies serious incident, FSCA, awareness date and other vigilance terms.", "e3", "kp", "mdcg233", "vigilance"], ["MDCG 2025-7", "UDI implementation timelines", "Timelines for UDI obligations under the MDR.", "e4", "kp", "mdcg257", "udi"], ["MDCG 2025-10", "Post-market surveillance", "Guidance on setting up and running PMS under the MDR.", "e3", "kp", "mdcg2510", "pms"], ["ISO 14971", "Risk management for medical devices", "The process for identifying hazards, estimating and evaluating risk, controlling it, evaluating overall residual risk and using production and post-production information.", "ch3", "kp", "hstd", "risk management fmea"], ["IEC 62304", "Medical device software lifecycle", "Software development, maintenance, risk management, configuration and problem resolution processes by software safety class.", "ch4", "kp", "hstd", "software lifecycle samd"], ["IEC 62366-1", "Usability engineering", "Usability engineering process for user interface safety: use specification, hazard-related use scenarios, formative and summative evaluation.", "ch4", "kp", "hstd", "usability human factors"], ["ISO 11607", "Packaging for terminally sterilized devices", "Part 1 covers sterile barrier system materials and design. Part 2 covers validation of forming, sealing and assembly.", "ch7", "kp", "hstd", "packaging seal sterile barrier"], ["ISO 10993-1", "Biological evaluation", "Framework for biological evaluation of devices within a risk management process.", "ch7", "kp", "bio", "biocompatibility"], ["ISO 11135 / ISO 11137", "Sterilization (EtO / radiation)", "Requirements for development, validation and routine control of ethylene oxide (11135) and radiation (11137) sterilization.", "ch7", "kp", "sterPg", "eto gamma sterilization"], ["ISO 15223-1", "Symbols for labels", "Symbols for device labels, labeling and information to be supplied.", "ch8", "kp", "hstd", "symbols"], ["ISO 20417", "Information supplied by the manufacturer", "General requirements for labels and IFUs.", "ch8", "kp", "hstd", "ifu label content"]];
+let pendingTab=null, pendingHit=null, pendingFilter=null;
+const TABNAME={c:"Clauses",b:"Best practices",kp:"Takeaways",q:"Questions",d:"Debates",x:"Dilemmas",s:"Sources"};
+let IDX=null;
+function buildIndex(){
+  const d=[]; const add=(o)=>{ o.lc=(o.title+" • "+o.text).toLowerCase(); d.push(o); };
+  ARTS.forEach(([ref,title,sum,ch,tab,src,al])=>add({kind:"Regulation index",rank:0,ref,title:ref+" — "+title,text:sum+" "+(al||""),show:sum,ch,tab,src}));
+  CH.forEach(c=>{
+    const base=c.num+" · "+c.title;
+    add({kind:"Chapter",rank:1,title:base,text:c.sub,show:c.sub,ch:c.id,tab:""});
+    (c.clauses||[]).forEach(([n,t,req,bp,us])=>add({kind:"ISO 13485 clause",rank:1,title:"Clause "+n+" — "+t,text:[req,bp,us].join(" "),show:req,ch:c.id,tab:"c",filter:n}));
+    (c.best||[]).forEach(([t,x])=>add({kind:"Best practice",rank:2,title:t,text:x,show:x,ch:c.id,tab:"b",hit:t}));
+    c.kps.forEach(([k,x])=>add({kind:"Takeaway",rank:2,title:base,text:x,show:x,ch:c.id,tab:"kp",hit:x.slice(0,40)}));
+    c.qs.forEach(q=>add({kind:"Question",rank:3,title:q.q,text:q.o.join(" ")+" "+q.w,show:q.q,ch:c.id,tab:"q",hit:q.q.slice(0,40)}));
+    c.debates.forEach(x=>add({kind:"Debate",rank:3,title:x.t,text:[x.pro,x.con,x.anchor,x.take].join(" "),show:x.anchor,ch:c.id,tab:"d",hit:x.t}));
+    c.dils.forEach(x=>add({kind:"Dilemma",rank:3,title:x.t,text:[x.s,x.anchor,x.path].join(" "),show:x.s,ch:c.id,tab:"x",hit:x.t}));
+  });
+  return d;
+}
+function normQ(q){
+  return q.toLowerCase().trim()
+    .replace(/\bart(icle)?s?\.?\s*(\d)/g,"article $2")
+    .replace(/\bcfr\s*/g,"cfr ").replace(/\s+/g," ");
+}
+function esc(s){ return s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"); }
+function search(raw){
+  if(!IDX) IDX=buildIndex();
+  const q=normQ(raw); if(q.length<2) return [];
+  const phrase=new RegExp("(^|[^a-z0-9])"+esc(q)+"(?![a-z0-9])");
+  const words=q.split(" ").filter(w=>w.length>1);
+  const wres=words.map(w=>new RegExp("(^|[^a-z0-9])"+esc(w)+(/\d$/.test(w)?"(?![0-9a-z])":"")));
+  const out=[];
+  IDX.forEach(o=>{
+    let score=-1;
+    const tl=o.title.toLowerCase();
+    if(phrase.test(tl)) score=100; else if(phrase.test(o.lc)) score=60;
+    else if(words.length>1 && wres.every(r=>r.test(o.lc))) score=30;
+    if(score<0) return;
+    score-=o.rank*10;
+    out.push({o,score});
+  });
+  out.sort((a,b)=>b.score-a.score);
+  return out.map(x=>x.o);
+}
+function snippet(text,q){
+  const t=text||""; const i=t.toLowerCase().indexOf(normQ(q).split(" ")[0]);
+  if(t.length<=170) return t;
+  const s=Math.max(0,(i<0?0:i)-60); return (s?"…":"")+t.slice(s,s+170)+"…";
+}
+function markText(node,q){
+  const words=normQ(q).split(" ").filter(w=>w.length>1);
+  const html=node.textContent.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+  let out=html; words.forEach(w=>{ out=out.replace(new RegExp("("+esc(w)+")","ig"),"<mark>$1</mark>"); });
+  node.innerHTML=out;
+}
+const QMAX=40;
+function renderResults(){
+  const box=document.getElementById("qres"); const raw=document.getElementById("q").value;
+  box.innerHTML="";
+  if(normQ(raw).length<2){ box.classList.remove("open"); return; }
+  const res=search(raw);
+  box.classList.add("open");
+  const head=el("div",{class:"qhead"}, el("b",{},res.length?(res.length+" result"+(res.length>1?"s":"")):"No results"), res.length>QMAX?" · showing first "+QMAX:"");
+  head.append(el("button",{class:"qclose",type:"button","aria-label":"Close results",onclick:()=>{ document.getElementById("q").value=""; renderResults(); }},"×"));
+  box.append(head);
+  if(!res.length){ box.append(el("p",{class:"src"},"Try a clause number (7.4), a regulation section (803.50), an MDR article (Article 87) or a topic (purchasing, sterile, UDI).")); return; }
+  res.slice(0,QMAX).forEach(o=>{
+    const c=CH.find(x=>x.id===o.ch);
+    const where=c.num+" · "+c.title+(o.tab?" → "+TABNAME[o.tab]:"");
+    const t=el("b",{},o.title); const s=el("span",{class:"qs"},snippet(o.show,raw));
+    markText(t,raw); markText(s,raw);
+    const card=el("button",{class:"qitem",type:"button",onclick:()=>openHit(o,raw)},
+      el("span",{class:"qk"},o.kind), t, s, el("span",{class:"qw"},"Opens: "+where));
+    box.append(card);
+    if(o.src && SRC[o.src]) box.append(el("a",{class:"qsrc",href:SRC[o.src].u,target:"_blank",rel:"noopener"},"Official source: "+SRC[o.src].t));
+  });
+}
+function openHit(o,raw){
+  pendingTab=o.tab||""; pendingFilter=o.filter||null; pendingHit=o.hit?{text:o.hit,q:raw}:{text:null,q:raw};
+  document.getElementById("qres").classList.remove("open");
+  if(location.hash==="#"+o.ch) route(); else location.hash=o.ch;
+}
+function showHit(t){
+  let target=null;
+  if(t.text){ const needle=t.text.toLowerCase(); target=[...document.querySelectorAll("#main .panel .card")].find(n=>n.textContent.toLowerCase().includes(needle)); }
+  if(!target) target=document.querySelector("#main .tabs");
+  if(target){ const tb=document.querySelector("#main .tabs"); const off=((document.getElementById("dnav")||{}).offsetHeight||0)+(tb&&target!==tb&&getComputedStyle(tb).position==="sticky"?tb.offsetHeight:0)+12; const y=target.getBoundingClientRect().top+window.scrollY-off; window.scrollTo({top:y}); if(t.text){ target.classList.add("hit"); setTimeout(()=>target.classList.remove("hit"),2600); } }
+}
+(function(){ const i=document.getElementById("q"); let tm; i.addEventListener("input",()=>{ clearTimeout(tm); tm=setTimeout(renderResults,150); }); i.addEventListener("keydown",e=>{ if(e.key==="Enter"){ const f=document.querySelector("#qres .qitem"); if(f) f.click(); } }); })();
 function renderRail(active){ renderNav(active); }
 function _unusedRail(active){
   const rail=document.getElementById("rail"); rail.innerHTML="";
@@ -661,6 +784,7 @@ function renderChapter(id){
         if(us) card.append(el("div",{class:"crow us"}, el("i",{},"QMSR / FDA"), el("div",{},us)));
         list.append(card); });
       if(!list.children.length) list.append(el("div",{class:"card"},"No clause matches that filter.")); };
+    if(pendingFilter){ f.value=pendingFilter; pendingFilter=null; }
     f.addEventListener("input",draw); draw();
     panel.append(f, list);
     panel.append(el("div",{class:"src"},"Requirement summaries are paraphrased. ISO 13485:2016 is copyrighted. Read the clause text before you cite it."));
@@ -734,8 +858,9 @@ function route(){
   if(id==="home"||id==="dilemmas"){ closeModal(); renderNav(id); if(id==="home") renderHome(); else renderDilemmas(); totals(); try{ window.scrollTo({top:0}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
   if(id==="random"){ closeModal(); renderNav("random"); renderRandom(); totals(); try{ window.scrollTo({top:document.getElementById("dnav").offsetTop}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
   const valid=CH.some(c=>c.id===id)?id:CH[0].id;
-  currentTab="";
+  currentTab=pendingTab||""; pendingTab=null;
   renderRail(valid); renderChapter(valid); totals();
+  if(pendingHit){ const t=pendingHit; pendingHit=null; setTimeout(()=>showHit(t),60); return; }
   if(id){ try{ window.scrollTo({top:document.getElementById('dnav').offsetTop, behavior:'auto'}); }catch(e){} }
 }
 document.getElementById("resetAll").addEventListener("click",()=>{ state={}; save(); route(); });
