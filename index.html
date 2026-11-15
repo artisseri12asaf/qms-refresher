@@ -462,7 +462,7 @@ mark{background:#ffe58a; color:inherit; border-radius:3px; padding:0 1px}
 </div>
 
   <section class="about keyDates" aria-label="Key regulatory dates"><h2 class="srcHead">Key regulatory dates</h2><div id="tlAbout"></div></section>
-<footer>Sources are limited to official publications: for the US, the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases; for the EU, EUR-Lex and European Commission pages including MDCG guidance. Items tagged “Application” are my reasoning, not official statements. Check the linked source before you cite anything in an audit response. Answers are saved in this browser on this device.</footer>
+<footer>Sources are limited to official publications: for the US, the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases; for the EU, EUR-Lex and European Commission pages including MDCG guidance. Items tagged “Application” are my reasoning, not official statements. Check the linked source before you cite anything in an audit response. Answers are saved in this browser on this device. Version 2026-11-15b.</footer>
 </div>
 
 <script>
@@ -1288,7 +1288,9 @@ window.addEventListener("hashchange",route);
 route();
 try{ renderTimeline(document.getElementById("tlAbout")); }catch(e){}
 (function(){ let on=true; try{ on=localStorage.getItem(LKEY)!=="off"; }catch(e){} if(on) showLaunch(); })();
-if("serviceWorker" in navigator){ window.addEventListener("load",()=>{ navigator.serviceWorker.register("sw.js").catch(()=>{}); }); }
+if("serviceWorker" in navigator){ let reloaded=false; const hadCtl=!!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener("controllerchange",()=>{ if(hadCtl&&!reloaded){ reloaded=true; location.reload(); } });
+  window.addEventListener("load",()=>{ navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>{ r.update(); document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible") r.update(); }); }).catch(()=>{}); }); }
 </script>
 </body>
 </html>
