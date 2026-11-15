@@ -494,7 +494,7 @@ header.top{gap:12px; margin-bottom:16px}
 .readBtn{font:inherit; text-align:left; display:grid; gap:3px; padding:12px 14px; border-radius:12px; border:1px solid var(--line); border-top:4px solid var(--ac); background:var(--card); color:var(--ink); cursor:pointer; box-shadow:var(--shadow); transition:transform .12s, box-shadow .12s}
 .readBtn:hover{transform:translateY(-2px); box-shadow:var(--shadow2)}
 .readBtn b{font-size:17px; color:var(--ac)} .readBtn span{font-size:14px; color:var(--muted)}
-.readBtn.basics{--ac:var(--bas)} .readBtn.qms{--ac:var(--fda)} .readBtn.eu{--ac:var(--eu)}
+.readBtn.basics{--ac:var(--bas)} .readBtn.qms{--ac:var(--qms)} .readBtn.fda{--ac:var(--fda)} .readBtn.eu{--ac:var(--eu)}
 .searchBox input,.qIn{width:100%; font:inherit; font-size:16.5px; padding:11px 14px 11px 40px; border-radius:12px; border:1.5px solid var(--line); background:var(--paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%2364707d' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-4-4'/%3E%3C/svg%3E") no-repeat 13px 50%; color:var(--ink)}
 .searchBox input:focus{outline:none; border-color:#3b88b5; background-color:#fff}
 .secTitle{font-size:17px; margin:18px 2px 8px; color:var(--ink)}
@@ -532,6 +532,58 @@ header.top{gap:12px; margin-bottom:16px}
 .qres{border-radius:12px}
 .debate .side{border-radius:12px}
 .tlCard{overflow-x:auto} .tl2{min-width:880px}
+
+:root{--eu:#9b6a35; --eu-soft:#f6eee4}
+.tlDot.eu{background:#9b6a35} .tlLeg i.eu{background:#9b6a35} .tlReg.eu{background:#9b6a35} .chipBtn.eu[aria-pressed="true"]{background:#9b6a35;border-color:#9b6a35} .dateItem.eu{--ac:#9b6a35}
+.tl2 .tlDot.on{transform:translateX(-50%) scale(1.5); border-color:var(--ink); opacity:1}
+.selBar{display:flex; justify-content:space-between; align-items:center; gap:10px; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:8px 12px; margin-top:10px; font-size:14.5px; color:var(--muted)}
+.dSearch{margin:4px 0 8px}
+.stickyCtl{position:sticky; top:0; z-index:15; background:color-mix(in srgb,var(--paper) 94%,transparent); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); padding:8px 2px; margin:10px 0; border-bottom:1px solid var(--line)}
+.navBtn.n-audit{--ac:#7a4f2a;--ac-soft:#f5ece3}
+@media (min-width:900px){ .mainNav{grid-template-columns:repeat(6,1fr) 1.6fr 1fr} }
+.choiceBtn.auditc{border-left-color:#7a4f2a}
+.chHead.auditHead{--ac:#7a4f2a}
+.caseGrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:10px}
+.caseCard{font:inherit; text-align:left; display:grid; gap:6px; padding:14px; border-radius:14px; border:1px solid var(--line); background:var(--card); color:var(--ink); cursor:pointer; box-shadow:var(--shadow); transition:transform .12s, box-shadow .12s}
+.caseCard:hover{transform:translateY(-2px); box-shadow:var(--shadow2)}
+.caseCard b{font-size:16.5px} .caseCls{font-size:13px; color:var(--muted)}
+.caseTop{display:flex; justify-content:space-between; align-items:center}
+.caseTop .ico{width:30px; height:30px; fill:none; stroke:#7a4f2a; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round}
+.caseNo{font-family:ui-monospace,Menlo,Consolas,monospace; font-weight:800; font-size:13px; background:#f5ece3; color:#7a4f2a; border-radius:6px; padding:2px 7px}
+.caseBrief summary{cursor:pointer; font-weight:700; font-size:16px}
+.caseBrief dl{display:grid; grid-template-columns:max-content 1fr; gap:4px 12px; margin:10px 0 0; font-size:15px}
+.caseBrief dt{color:var(--muted); font-weight:700} .caseBrief dd{margin:0}
+.audBar{position:sticky; top:0; z-index:15; display:flex; align-items:center; gap:10px; background:color-mix(in srgb,var(--paper) 94%,transparent); backdrop-filter:blur(8px); padding:8px 2px; margin:10px 0; font-size:14.5px; border-bottom:1px solid var(--line)}
+.audTrail{display:flex; gap:3px; flex:1; flex-wrap:wrap}
+.audTrail i{width:12px; height:12px; border-radius:3px; background:var(--line); display:block}
+.audTrail i.ok{background:var(--good)} .audTrail i.no{background:var(--bad)} .audTrail i.cur{background:#7a4f2a; animation:pop .6s ease infinite alternate}
+.audScore{font-weight:800; color:var(--good)}
+.audQ{display:flex; gap:12px; align-items:flex-start; margin:8px 0 12px}
+.avatar{flex:0 0 auto; width:58px; height:58px} .avatar.sm{width:48px; height:48px} .avatar svg{width:100%; height:100%}
+.speech{position:relative; background:var(--card); border:1px solid var(--line); border-radius:4px 16px 16px 16px; padding:12px 14px; box-shadow:var(--shadow); flex:1; animation:fadeUp .3s ease both}
+.speech p{margin:4px 0 0; font-size:17px}
+.audTopic{font-size:12px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:#7a4f2a}
+.audOpts{display:grid; gap:8px}
+.audOpt{text-align:left}
+.audFb{margin-top:12px; border-radius:12px; padding:10px 14px; animation:fadeUp .25s ease both}
+.audFb.good{background:var(--good-soft); border:1px solid #c5e3d0} .audFb.bad{background:var(--bad-soft); border:1px solid #edcbc6}
+.audFb p{margin:4px 0 0; font-size:15px}
+.audReport{display:grid; gap:10px; animation:fadeUp .35s ease both}
+.repHead{display:flex; gap:14px; align-items:center; flex-wrap:wrap; position:relative}
+.repHead h3{font-size:20px}
+.stamp{margin-left:auto; font-weight:900; font-size:28px; letter-spacing:.12em; padding:6px 16px; border:4px solid; border-radius:10px; transform:rotate(-10deg); animation:stampIn .5s cubic-bezier(.2,1.6,.4,1) both .2s}
+.stamp.pass{color:var(--good); border-color:var(--good)} .stamp.fail{color:var(--bad); border-color:var(--bad)}
+@keyframes stampIn{from{opacity:0; transform:rotate(-10deg) scale(2.2)} to{opacity:1; transform:rotate(-10deg) scale(1)}}
+.topicRes{display:grid; gap:8px}
+.trow{display:grid; grid-template-columns:minmax(120px,1.2fr) 2fr auto; gap:10px; align-items:center; font-size:14.5px}
+.trow .track{margin:0}
+.audLog summary{cursor:pointer; font-weight:700}
+.logItem{display:grid; gap:2px; padding:8px 10px; border-left:4px solid; border-radius:6px; margin-top:6px; background:var(--paper); font-size:14.5px}
+.logItem.ok{border-color:var(--good)} .logItem.no{border-color:var(--bad)} .logItem small{color:var(--muted)}
+.tl2{height:100px} .tl2::before{top:36px} .tl2 .tlYear{top:74px} .tl2 .tlNow{top:86px} .tl2 .tlNow::before{top:-80px; height:78px}
+.tl2 .tlDot{width:18px; height:18px}
+.stickyCtl{gap:6px}
+.stickyCtl .tab{flex:1 1 0; min-width:0; padding:8px 4px; font-size:14.5px}
 </style>
 </head>
 <body>
@@ -556,7 +608,7 @@ header.top{gap:12px; margin-bottom:16px}
   <nav class="rail" id="rail" aria-label="Chapters"></nav>
   <main id="main"></main>
 </div>
-<footer>Sources are limited to official publications: for the US, the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases; for the EU, EUR-Lex and European Commission pages including MDCG guidance. Items tagged “Application” are my reasoning, not official statements. Check the linked source before you cite anything in an audit response. Answers are saved in this browser on this device. Version 2026-11-15c.</footer>
+<footer>Sources are limited to official publications: for the US, the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases; for the EU, EUR-Lex and European Commission pages including MDCG guidance. Items tagged “Application” are my reasoning, not official statements. Check the linked source before you cite anything in an audit response. Answers are saved in this browser on this device. Version 2026-11-15d.</footer>
 </div>
 
 <script>
@@ -676,7 +728,7 @@ function renderRandom(){
     el("div",{class:"eyebrow"},"Shuffle · random practice"),
     el("h2",{},"Random question"),
     el("p",{},"One question at a time from any chapter. Answers count toward your progress.")));
-  const ctl=el("div",{class:"randCtl"});
+  const ctl=el("div",{class:"randCtl stickyCtl"});
   [["all","All"],["basics","Basics"],["qms","A · QMS"],["fda","B · FDA"],["eu","C · MDR"]].forEach(([k,l])=>ctl.append(el("button",{class:"tab",type:"button","aria-pressed":String(rnd.scope===k),onclick:()=>{ rnd.scope=k; rnd.cur=null; pickRandom(); renderRandom(); }},l)));
   const un=el("label",{class:"unl"}, el("input",{type:"checkbox",id:"unans"}), " Unanswered only");
   ctl.append(un);
@@ -782,6 +834,7 @@ const CHOICES=[
  ["Training mode","Random questions from all parts, unanswered first","random","train"],
  ["Selected dilemmas","Real-life manufacturing dilemmas, one per chapter","dilemmas","dil"],
  ["QMS map","ISO 13485 ↔ 21 CFR 820 ↔ EU MDR, with exemptions","map","mapc"],
+ ["Audit mode","Practice a 20-question inspection on one of 11 device cases","audit","auditc"],
  ["Key dates","Regulatory milestones and transition dates","dates","datesc"],
  ["Sample size tool (ISO 2859-1:2026)","AQL sampling plans with switching rules, plus confidence/reliability","sampling","samp"]
 ];
@@ -809,7 +862,7 @@ function renderDilemmas(){
     el("div",{class:"eyebrow"},"Selected dilemmas"),
     el("h2",{},"Real-life dilemmas"),
     el("p",{},"The lead dilemma from every chapter: procedures, practices, conflicts, packaging, risk management and more. Pick an option to see the analysis.")));
-  const ctl=el("div",{class:"randCtl"});
+  const ctl=el("div",{class:"randCtl stickyCtl"});
   [["all","All"],["basics","Basics"],["qms","A · QMS"],["fda","B · FDA"],["eu","C · MDR"]].forEach(([k,l])=>ctl.append(el("button",{class:"tab",type:"button","aria-pressed":String(dsel.scope===k),onclick:()=>{ dsel.scope=k; renderDilemmas(); }},l)));
   m.append(ctl);
   const list=el("div",{class:"panel"});
@@ -1180,10 +1233,11 @@ const ICONS={
  map:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16M15 4v16"/>',
  dates:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
  samp:'<path d="M4 20V11M10 20V5M16 20v-8M3 20h18"/>',
- search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>'
+ search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>',
+ audit:'<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v3h6V3M8.5 12l2.5 2.5 4.5-5"/>'
 };
 function ico(k){ const s=document.createElementNS("http://www.w3.org/2000/svg","svg"); s.setAttribute("viewBox","0 0 24 24"); s.setAttribute("aria-hidden","true"); s.setAttribute("class","ico"); s.innerHTML=ICONS[k]; return s; }
-const NAV=[["home","Home","home"],["explore","Explore","explore"],["random","Training","train"],["dilemmas","Dilemmas","dil"],["map","QMS map","map"],["dates","Key dates","dates"],["sampling","Sample size tool (ISO 2859-1:2026)","samp"]];
+const NAV=[["home","Home","home"],["explore","Explore","explore"],["random","Training","train"],["dilemmas","Dilemmas","dil"],["map","QMS map","map"],["dates","Key dates","dates"],["sampling","Sample size tool (ISO 2859-1:2026)","samp"],["audit","Audit mode","audit"]];
 
 /* ---------- search widget (one component, used inside Explore) ---------- */
 function searchWidget(){
@@ -1214,10 +1268,10 @@ function renderResultsIn(inp,box){
 }
 
 /* ---------- Explore panel ---------- */
-const READS=[["Read · QMS","ISO 13485:2016, clause by clause, with best practices","b0","basics"],["Read · FDA","21 CFR: QMSR disciplines (Part A) and FDA requirements (Part B)","ch1","qms"],["Read · EU MDR","Regulation (EU) 2017/745 and MDCG guidance","e1","eu"]];
+const READS=[["Basics · ISO 13485:2016","Clause-by-clause ISO 13485 with best practices","b0","basics"],["A · QMS (FDA QMSR)","QMS disciplines under 21 CFR 820","ch1","qms"],["B · FDA requirements","Inspections, postmarket and premarket (21 CFR)","ch10","fda"],["C · EU MDR","Regulation (EU) 2017/745 and MDCG guidance","e1","eu"]];
 function explorePanel(open){
   const wrap=el("div",{class:"explore"+(open?" open":"")});
-  const btn=el("button",{class:"exploreBtn",type:"button","aria-expanded":String(!!open)}, ico("explore"), el("span",{}, el("b",{},"Explore"), el("small",{},"Search, or open ISO 13485, FDA 21 CFR or the EU MDR")), el("i",{class:"chev"},"›"));
+  const btn=el("button",{class:"exploreBtn",type:"button","aria-expanded":String(!!open)}, ico("explore"), el("span",{}, el("b",{},"Explore"), el("small",{},"Search, or open Basics, A · QMS, B · FDA or C · EU MDR")), el("i",{class:"chev"},"›"));
   const body=el("div",{class:"exploreBody"});
   const sw=searchWidget(); body.append(sw);
   const g=el("div",{class:"readGrid"});
@@ -1263,7 +1317,7 @@ function renderGlossaryHome(host){
 
 /* ---------- key dates view ---------- */
 const TL2=[["2021-05-26", "26 May 2021", "EU", "EU MDR applies", "Regulation (EU) 2017/745 becomes applicable. UDI carriers become mandatory on labels of implantable and Class III devices.", "mdr", null], ["2021-07-16", "16 Jul 2021", "Standards", "EN ISO 13485:2016/A11:2021 harmonised", "Implementing Decision (EU) 2021/1182 lists the standard, giving presumption of conformity with the MDR QMS requirements it covers.", "hstdDec", null], ["2022-05-26", "26 May 2022", "EU", "EU IVDR applies", "Regulation (EU) 2017/746 on in vitro diagnostic devices becomes applicable.", null, "https://eur-lex.europa.eu/eli/reg/2017/746/oj"], ["2023-03-20", "20 Mar 2023", "EU", "MDR transition extended", "Regulation (EU) 2023/607 extends the transition to 2027/2028 for legacy devices that meet conditions, and removes the sell-off date.", "q2023607", null], ["2023-03-29", "29 Mar 2023", "US", "Cyber device requirements (524B)", "FD&C Act section 524B, added by FDORA, applies to submissions for cyber devices: SBOM, vulnerability monitoring and patching plans.", "cyber", null], ["2023-05-26", "26 May 2023", "EU", "UDI carriers: Class IIa and IIb", "UDI carriers become mandatory on labels of Class IIa and IIb devices.", "mdcg257", null], ["2023-06-22", "22 Jun 2023", "EU", "Annex XVI products under the MDR", "Common specifications in Implementing Regulation (EU) 2022/2346 apply to products without an intended medical purpose.", null, "https://eur-lex.europa.eu/eli/reg_impl/2022/2346/oj"], ["2023-10-01", "1 Oct 2023", "US", "eSTAR mandatory for 510(k)s", "510(k) submissions must use the eSTAR template, unless exempted.", "estar", null], ["2024-02-02", "2 Feb 2024", "US", "QMSR final rule published", "FDA amends 21 CFR 820 to incorporate ISO 13485:2016 by reference (89 FR 7496).", "fr", null], ["2024-05-26", "26 May 2024", "EU", "Legacy devices: QMS and application deadline", "To use the extended transition, manufacturers needed an Article 10(9) QMS and a formal application to a notified body.", "q2023607", null], ["2024-08-01", "1 Aug 2024", "AI", "EU AI Act enters into force", "Regulation (EU) 2024/1689 enters into force; obligations apply in stages.", null, "https://eur-lex.europa.eu/eli/reg/2024/1689/oj"], ["2024-09-26", "26 Sep 2024", "EU", "Legacy devices: notified body agreement", "Deadline for a written agreement with a notified body to keep using the extended transition.", "q2023607", null], ["2024-12-04", "4 Dec 2024", "US", "Final PCCP guidance for AI-enabled devices", "FDA finalizes recommendations for predetermined change control plans for AI-enabled device software functions.", "pccp", null], ["2025-01-10", "10 Jan 2025", "EU", "Article 10a applies", "Regulation (EU) 2024/1860: advance notice of supply interruption or discontinuation where serious harm could result.", "reg1860", null], ["2025-05-26", "26 May 2025", "EU", "UDI carriers: Class I", "UDI carriers become mandatory on labels of Class I devices.", "mdcg257", null], ["2025-10-01", "1 Oct 2025", "US", "eSTAR mandatory for De Novo requests", "De Novo requests must use eSTAR, unless exempted.", "estar", null], ["2025-12-16", "16 Dec 2025", "EU", "Targeted MDR/IVDR revision proposed", "Commission proposal COM(2025) 1023. Not yet law; current rules still apply.", "proposal", null], ["2026-01-15", "Jan 2026", "Standards", "ISO 2859-1:2026 published", "Third edition of the AQL sampling standard; adds skip-lot inspection and replaces ISO 2859-1:1999 and its amendment.", null, "https://www.iso.org/standard/85464.html"], ["2026-02-02", "2 Feb 2026", "US", "QMSR effective", "QSIT withdrawn; FDA inspects under Compliance Program 7382.850.", "cp", null], ["2026-02-03", "3 Feb 2026", "US", "CSA and cybersecurity guidances reissued", "Final guidances updated to align with the QMSR.", "csa", null], ["2026-05-25", "25 May 2026", "Standards", "ISO 10993-1:2025 partially recognized by FDA", "FDA recognizes the new biological evaluation standard in part (recognition 2-313).", "bioStd", null], ["2026-05-28", "28 May 2026", "EU", "First four EUDAMED modules mandatory", "Use of the first four EUDAMED modules became mandatory under Commission Decision (EU) 2025/2371.", "eudamedNews", null], ["2026-08-01", "1 Aug 2026", "US", "Human factors content guidance in effect", "FDA expects marketing submissions to follow the final HF content guidance.", "hf", null], ["2026-08-02", "2 Aug 2026", "AI", "Most AI Act provisions apply", "General date of application of Regulation (EU) 2024/1689 under the current text.", null, "https://eur-lex.europa.eu/eli/reg/2024/1689/oj"], ["2027-08-02", "2 Aug 2027", "AI", "AI Act: AI in devices needing a notified body", "Under the current text, high-risk obligations apply to AI systems in products such as medical devices that need third-party conformity assessment. Commission proposals from late 2025 could change this timing; check status.", null, "https://eur-lex.europa.eu/eli/reg/2024/1689/oj"], ["2027-12-31", "31 Dec 2027", "EU", "Transition ends: legacy Class III and IIb implantables", "Last date to place these legacy devices on the market, if Regulation 2023/607 conditions are met (some implantables are excepted).", "q2023607", null], ["2028-12-31", "31 Dec 2028", "EU", "Transition ends: other legacy devices", "Other Class IIb, Class IIa, and Class I devices that need a notified body.", "q2023607", null], ["2029-07-01", "1 Jul 2029", "Standards", "Last date for ISO 10993-1:2018 declarations to FDA", "After this, FDA expects declarations of conformity to the 2025 edition.", "bioStd", null]];
-const dtsel={reg:"All"};
+const dtsel={reg:"All",q:"",sel:null};
 const REGC={US:"us",EU:"eu",Standards:"iso",AI:"ai"};
 function renderDates(){
   const m=document.getElementById("main"); m.innerHTML="";
@@ -1272,21 +1326,29 @@ function renderDates(){
     el("h2",{},"Regulatory milestones and transition dates"),
     el("p",{},"FDA, EU MDR, standards and AI Act dates that affect device QMS work. Tap a point or a card for details; every item links to its source.")));
   const ctl=el("div",{class:"chipRow"});
-  ["All","US","EU","Standards","AI"].forEach(r=>ctl.append(el("button",{class:"chipBtn "+(REGC[r]||""),type:"button","aria-pressed":String(dtsel.reg===r),onclick:()=>{ dtsel.reg=r; renderDates(); }},r==="US"?"FDA / US":r==="EU"?"EU MDR / IVDR":r==="AI"?"EU AI Act":r)));
+  ["All","US","EU","Standards","AI"].forEach(r=>ctl.append(el("button",{class:"chipBtn "+(REGC[r]||""),type:"button","aria-pressed":String(dtsel.reg===r),onclick:()=>{ dtsel.reg=r; dtsel.sel=null; renderDates(); }},r==="US"?"FDA / US":r==="EU"?"EU MDR / IVDR":r==="AI"?"EU AI Act":r)));
   m.append(ctl);
-  const items=TL2.map((x,i)=>({x,i})).filter(o=>dtsel.reg==="All"||o.x[2]===dtsel.reg);
+  const sIn=el("input",{type:"search",class:"cfilter dSearch",placeholder:"Search dates, e.g. UDI, eSTAR, AI Act, 2027","aria-label":"Search key dates",value:dtsel.q||""});
+  sIn.addEventListener("input",()=>{ dtsel.q=sIn.value; dtsel.sel=null; const p=sIn.selectionStart; renderDates(); const n=document.querySelector(".dSearch"); if(n){ n.focus(); n.setSelectionRange(p,p); } });
+  m.append(sIn);
+  const q=(dtsel.q||"").toLowerCase();
+  const items=TL2.map((x,i)=>({x,i})).filter(o=>(dtsel.reg==="All"||o.x[2]===dtsel.reg)&&(!q||o.x.join(" ").toLowerCase().includes(q)));
   const t0=new Date("2021-01-01").getTime(), t1=new Date("2030-01-01").getTime(), now=Date.now();
   const wrap=el("div",{class:"card tlCard"}); const bar=el("div",{class:"tl2"}); wrap.append(bar);
   for(let y=2021;y<=2029;y++){ const x=(new Date(y+"-01-01").getTime()-t0)/(t1-t0)*100; bar.append(el("span",{class:"tlYear",style:"left:"+x+"%"},String(y))); }
   const nx=(now-t0)/(t1-t0)*100; bar.append(el("span",{class:"tlNow",style:"left:"+nx+"%"},"Today"));
   const list=el("div",{class:"dateList"});
-  const focus=(i)=>{ list.querySelectorAll(".dateItem").forEach(n=>n.classList.toggle("on",+n.dataset.i===i)); bar.querySelectorAll(".tlDot").forEach(n=>n.classList.toggle("on",+n.dataset.i===i)); const n=list.querySelector('.dateItem[data-i="'+i+'"]'); if(n) n.scrollIntoView({behavior:"smooth",block:"center"}); };
-  items.forEach(({x,i})=>{ const [d,lab,reg,title]=x; const p=(new Date(d).getTime()-t0)/(t1-t0)*100;
-    const dot=el("button",{class:"tlDot "+REGC[reg]+(new Date(d).getTime()<now?" past":""),type:"button",style:"left:"+p+"%",title:lab+": "+title,"aria-label":lab+": "+title,onclick:()=>focus(i)}); dot.dataset.i=i; bar.append(dot); });
+  const focus=(i)=>{ dtsel.sel=(dtsel.sel===i?null:i); renderDates(); };
+  const laneEnd=[-9,-9,-9]; const laneTop=[30,8,52];
+  items.forEach(({x,i})=>{ const [d,lab,reg,title]=x; const p=(new Date(d).getTime()-t0)/(t1-t0)*100; let ln=laneEnd.findIndex(v=>p-v>2.1); if(ln<0) ln=0; laneEnd[ln]=p;
+    const dot=el("button",{class:"tlDot "+REGC[reg]+(new Date(d).getTime()<now?" past":"")+(dtsel.sel===i?" on":""),type:"button",style:"left:"+p+"%;top:"+laneTop[ln]+"px",title:lab+": "+title,"aria-label":lab+": "+title,onclick:()=>focus(i)}); dot.dataset.i=i; bar.append(dot); });
   wrap.append(el("div",{class:"tlLeg"}, ...["US","EU","Standards","AI"].map(r=>el("span",{}, el("i",{class:REGC[r]})," "+(r==="US"?"FDA / US":r==="EU"?"EU MDR / IVDR":r==="AI"?"EU AI Act":r))), el("span",{}, el("i",{class:"nowI"})," today")));
   m.append(wrap);
   let lastY=null;
-  items.forEach(({x,i})=>{ const [d,lab,reg,title,txt,src,url]=x; const y=d.slice(0,4);
+  const shown=dtsel.sel!==null&&dtsel.sel!==undefined?items.filter(o=>o.i===dtsel.sel):items;
+  if(shown.length!==items.length) m.append(el("div",{class:"selBar"}, el("span",{},"Showing 1 date selected on the timeline"), el("button",{class:"reset",type:"button",onclick:()=>{ dtsel.sel=null; renderDates(); }},"Show all "+items.length+" dates")));
+  if(!items.length) list.append(el("p",{class:"src"},"No dates match your search."));
+  shown.forEach(({x,i})=>{ const [d,lab,reg,title,txt,src,url]=x; const y=d.slice(0,4);
     if(y!==lastY){ list.append(el("div",{class:"yearHead"},y)); lastY=y; }
     const s=src&&SRC[src]?SRC[src]:{t:url.includes("iso.org")?"ISO — ISO 2859-1:2026":"EUR-Lex — official text",u:url};
     const past=new Date(d).getTime()<now;
@@ -1296,6 +1358,202 @@ function renderDates(){
     it.dataset.i=i; list.append(it); });
   m.append(list);
   m.append(el("p",{class:"src"},"Dates are taken from the linked official sources. Pending proposals may change future dates; check the source before relying on a date."));
+}
+/* ===== Audit mode data ===== */
+const AUD_CASES=[
+ {id:"AUD-101",dev:"drug-eluting coronary stent",name:"Coronary drug-eluting stent system",intended:"Treat de novo coronary artery lesions to improve luminal diameter in patients with symptomatic ischemic heart disease.",us:"Class III — PMA",eu:"Class III",path:"pma",ster:"ethylene oxide (EtO)",part:"the cobalt-chromium tubing",process:"laser cutting and electropolishing of the stent",failure:"difficulty withdrawing the delivery system",psur:"at least annually (Class III)",tool:"stent inspection image-analysis software",flags:["sterile","implant"],icon:"heart"},
+ {id:"AUD-102",dev:"insulin infusion pump",name:"Ambulatory insulin infusion pump",intended:"Continuous subcutaneous insulin delivery for people with diabetes requiring insulin.",us:"Class II — 510(k)",eu:"Class IIb",path:"510k",ster:"",part:"the motor-drive assembly",process:"automated pump-motor assembly and torque setting",failure:"occlusion alarms not triggering",psur:"at least annually (Class IIb)",tool:"automated final functional tester",flags:["software","connected"],icon:"pump"},
+ {id:"AUD-103",dev:"surgical stapler",name:"Single-use linear surgical stapler",intended:"Transection, resection and creation of anastomoses in open and laparoscopic surgery.",us:"Class II — 510(k)",eu:"Class IIb (implantable staples)",path:"510k",ster:"radiation (gamma)",part:"the staple cartridge",process:"ultrasonic welding of the cartridge housing",failure:"incomplete staple formation",psur:"at least annually (Class IIb)",tool:"label printing and verification system",flags:["sterile"],icon:"tool"},
+ {id:"AUD-104",dev:"total hip prosthesis",name:"Total hip replacement system",intended:"Replacement of the hip joint in patients with degenerative joint disease.",us:"Class II — 510(k)",eu:"Class III (joint replacement)",path:"510k",ster:"radiation (gamma)",part:"the forged titanium femoral stem",process:"plasma-spray coating of the stem",failure:"early loosening reported at revision surgery",psur:"at least annually (Class III)",tool:"coordinate-measuring machine software",flags:["sterile","implant"],icon:"bone"},
+ {id:"AUD-105",dev:"patient monitor",name:"Bedside multiparameter patient monitor",intended:"Monitoring of ECG, SpO2, NIBP and respiration for adult and pediatric patients in hospitals.",us:"Class II — 510(k)",eu:"Class IIb",path:"510k",ster:"",part:"the SpO2 sensor module",process:"PCB soldering and conformal coating",failure:"intermittent loss of the SpO2 signal",psur:"at least annually (Class IIb)",tool:"automated test equipment for boards",flags:["software","connected"],icon:"monitor"},
+ {id:"AUD-106",dev:"peripheral IV catheter",name:"Peripheral intravenous catheter",intended:"Short-term access to the peripheral venous system for fluids and medication.",us:"Class II — 510(k)",eu:"Class IIa",path:"510k",ster:"ethylene oxide (EtO)",part:"the polyurethane catheter tubing",process:"tip forming and needle bonding",failure:"catheter tip damage on insertion",psur:"at least every two years (Class IIa)",tool:"vision system for tip inspection",flags:["sterile"],icon:"drop"},
+ {id:"AUD-107",dev:"diagnostic ultrasound system",name:"General-purpose diagnostic ultrasound system",intended:"Diagnostic imaging of abdominal, cardiac and vascular structures by trained clinicians.",us:"Class II — 510(k)",eu:"Class IIa",path:"510k",ster:"",part:"the transducer array",process:"transducer lens bonding",failure:"image artifacts from damaged transducer elements",psur:"at least every two years (Class IIa)",tool:"image-quality test software",flags:["software","connected"],icon:"wave"},
+ {id:"AUD-108",dev:"implantable pacemaker",name:"Implantable cardiac pacemaker",intended:"Treatment of bradyarrhythmias by cardiac pacing.",us:"Class III — PMA",eu:"Class III",path:"pma",ster:"ethylene oxide (EtO)",part:"the lithium battery",process:"hermetic laser welding of the titanium can",failure:"premature battery depletion",psur:"at least annually (Class III)",tool:"automated hermeticity (leak) tester",flags:["sterile","implant","software","connected"],icon:"heart"},
+ {id:"AUD-109",dev:"orthopedic bone screw",name:"Cannulated orthopedic bone screw",intended:"Fixation of bone fractures and osteotomies.",us:"Class II — 510(k)",eu:"Class IIb",path:"510k",ster:"radiation (gamma)",part:"the titanium bar stock",process:"Swiss-type CNC machining and anodizing",failure:"screw breakage during insertion",psur:"at least annually (Class IIb)",tool:"CNC program management software",flags:["sterile","implant"],icon:"bone"},
+ {id:"AUD-110",dev:"AI chest X-ray triage software",name:"AI chest X-ray triage software (SaMD)",intended:"Flags suspected pneumothorax on chest X-rays to prioritize radiologist review; not for diagnosis.",us:"Class II — 510(k)",eu:"Class IIa (Rule 11)",path:"510k",ster:"",part:"the cloud hosting service",process:"model training and release pipeline",failure:"missed flags on portable X-ray images",psur:"at least every two years (Class IIa)",tool:"automated model-release test pipeline",flags:["software","connected"],icon:"chip"},
+ {id:"AUD-111",dev:"reusable surgical forceps",name:"Reusable stainless-steel surgical forceps",intended:"Grasping and holding tissue during general surgery; reprocessed by the hospital.",us:"Class I — 510(k)-exempt",eu:"Class Ir (reusable surgical)",path:"exempt",ster:"",part:"the stainless-steel blanks",process:"passivation after machining",failure:"corrosion spots after hospital reprocessing",psur:"PMS report updated when necessary (Class I)",tool:"laser-marking (UDI) system",flags:["reusable"],icon:"tool"}
+];
+const AUD_ICONS={heart:'<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>',pump:'<rect x="5" y="3" width="14" height="18" rx="3"/><rect x="8" y="6" width="8" height="5" rx="1"/><circle cx="12" cy="16" r="2"/>',tool:'<path d="M4 20l8-8M14 4l6 6-4 4-6-6z"/>',bone:'<path d="M7 17l10-10M5 15a2 2 0 1 0 4 4M15 5a2 2 0 1 1 4 4"/>',monitor:'<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M6 11h3l2-3 2 5 2-2h3M9 20h6"/>',drop:'<path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z"/>',wave:'<path d="M3 12h3l2-6 3 12 3-9 2 3h5"/>',chip:'<rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/>'};
+/* Node: q, correct option, 3 wrong options, next if correct, next if wrong, why. {dev} {part} {process} {failure} {ster} {tool} {psur} {sub} are filled from the case. */
+const AUD_NODES={
+ C1:{t:"complaint",q:"I pulled your complaint file for the {dev}. Several complaints report “{failure}”. How did you decide whether each one needed an investigation?",ok:"Every complaint is evaluated. We investigate unless a documented justification shows a similar complaint was already investigated.",bad:["We investigate only when the device is returned.","Sales decides which customers are important enough.","We wait until three similar complaints arrive."],n:"C2",w:"C1w",why:"21 CFR 820.35(a) and ISO 13485 8.2.2 require review, evaluation and investigation, or a documented justification for not investigating."},
+ C1w:{t:"complaint",q:"Many complaints have no returned device. How do you still investigate them?",ok:"We use the complaint details, production and distribution records, similar complaints and the risk file, and document the investigation or the justification for not investigating.",bad:["We close them as “unable to confirm”.","We ask the customer to file the complaint again.","We report them to FDA instead of investigating."],n:"C2",w:"C2",why:"An investigation doesn’t require a returned device. Records, trends and the risk file are valid evidence."},
+ C2:{t:"complaint",q:"One complaint involved a patient injury. How did you decide whether it was reportable?",ok:"We assessed it against the 21 CFR 803 criteria and, for the EU, MDR Article 87, and recorded the decision and rationale in the complaint record.",bad:["We waited for the root cause before deciding.","It wasn’t reportable because the physician didn’t blame the device.","Legal decided informally by email."],n:"C3",w:"C2w",why:"Reportability is decided on the information available, within the reporting deadlines, and documented."},
+ C2w:{t:"complaint",q:"When does the 30-day MDR reporting clock start?",ok:"When any employee becomes aware of information that reasonably suggests a reportable event.",bad:["When the investigation is complete.","When the device is returned.","When QA signs the complaint record."],n:"C3",w:"C3",why:"21 CFR 803.3 and 803.50: the clock starts at awareness, not at the end of the investigation."},
+ C3:{t:"complaint",q:"The investigation traced “{failure}” to {process}. What did you do?",ok:"Opened a CAPA, contained affected product, assessed units in the field, and fixed the process with verification that the fix creates no new risk.",bad:["Retrained the operator and closed the complaint.","Added a note to the IFU only.","Waited to see if more complaints arrived."],n:"C4",w:"C3w",why:"ISO 13485 8.5.2 requires root-cause action, containment and verification that the action doesn’t adversely affect the device."},
+ C3w:{t:"complaint",q:"Why is “retrain the operator” often rejected as a corrective action?",ok:"It rarely addresses the system cause. We need evidence that the root cause was analysed and the process changed.",bad:["Because training is too expensive.","Because operators can’t be retrained.","It is always acceptable."],n:"C4",w:"C4",why:"Repeated “operator error” usually hides process, fixture or instruction problems (ISO 13485 8.5.2(b))."},
+ C4:{t:"complaint",q:"Show me how you know the CAPA worked.",ok:"We set a measurable effectiveness criterion at opening — the complaint rate for this failure mode below baseline over a defined volume — and recorded the result.",bad:["All actions were completed on time.","There were no complaints in the 30 days after closure.","Everyone signed the training record."],n:null,w:null,why:"Effectiveness means the problem stopped recurring, shown with data (ISO 13485 8.5.2(f))."},
+ S1:{t:"supplier",q:"{part} is a critical purchased component. How did you approve that supplier?",ok:"We evaluated it against criteria based on its ability to meet requirements and the risk of the part: audit, first article inspection and a quality agreement, with records.",bad:["Its ISO 13485 certificate was enough.","It offered the lowest price.","Our sales team recommended it."],n:"S2",w:"S1w",why:"ISO 13485 7.4.1 requires supplier evaluation proportionate to the risk of the purchased product."},
+ S1w:{t:"supplier",q:"Is a supplier’s ISO 13485 certificate enough on its own?",ok:"No. It’s one input. Our controls must match the part’s risk and include performance monitoring.",bad:["Yes, certified suppliers need no other control.","Yes, if the certificate is from an EU notified body.","Only if the supplier is in the same country."],n:"S2",w:"S2",why:"You stay responsible for purchased product regardless of the supplier’s certificate."},
+ S2:{t:"supplier",q:"Last year the supplier of {part} changed one of its own sub-suppliers. How would you have known?",ok:"Our quality agreement requires notification before changes are implemented, and we evaluate the impact.",bad:["We would catch it at incoming inspection.","They would tell us eventually.","Sub-supplier changes don’t matter if the drawing is met."],n:"S3",w:"S2w",why:"ISO 13485 7.4.2 calls for a written agreement on change notification; 7.4.3 requires evaluating changes."},
+ S2w:{t:"supplier",q:"What can a sub-supplier change affect even if dimensions still pass?",ok:"Material properties, biocompatibility, sterilization compatibility and reliability, so it needs evaluation.",bad:["Nothing, if dimensions pass.","Only the price.","Only the packaging."],n:"S3",w:"S3",why:"Dimensional checks don’t detect material or process changes."},
+ S3:{t:"supplier",q:"How do you monitor this supplier now?",ok:"A scorecard with incoming results, nonconformances and CAPA timeliness, and re-evaluation frequency based on risk.",bad:["An annual questionnaire.","We don’t; the supplier is certified.","Only when a problem occurs."],n:null,w:null,why:"ISO 13485 7.4.1 requires monitoring and re-evaluation of suppliers, with records."},
+ V1:{t:"validation",q:"{process} can’t be fully checked by inspection. How is it controlled?",ok:"It is validated (IQ/OQ/PQ) including worst-case conditions and justified sample sizes, and critical parameters are monitored in production.",bad:["100% visual inspection.","Our operators are very experienced.","The equipment vendor validated the machine."],n:"V2",w:"V1w",why:"ISO 13485 7.5.6: processes whose output isn’t fully verified must be validated."},
+ V1w:{t:"validation",q:"When is process validation required instead of inspection?",ok:"When the output can’t be, or isn’t, fully verified by later monitoring or measurement.",bad:["Only for sterilization.","Only when a customer asks.","Never, if inspection is 100%."],n:"V2",w:"V2",why:"ISO 13485 7.5.6 defines when validation is needed."},
+ V2:{t:"validation",q:"Last month a parameter on {process} was adjusted. What happened?",ok:"It went through change control, was compared with the validated range, and revalidation was done because it was outside that range.",bad:["Operators adjust parameters as needed.","Maintenance changed it; there is no record.","It was within the drawing tolerance, so no record."],n:"V3",w:"V2w",why:"Changes to validated processes need evaluation and, where needed, revalidation."},
+ V2w:{t:"validation",q:"What should trigger revalidation?",ok:"Changes to process, equipment, materials or software, and trends showing drift, as defined in the procedure.",bad:["Only a calendar date every five years.","Only a customer complaint.","Nothing; validation is permanent."],n:"V3",w:"V3",why:"Revalidation triggers must be defined (ISO 13485 7.5.6)."},
+ V3:{t:"validation",q:"How did you choose the PQ sample size?",ok:"From documented confidence and reliability levels linked to the risk of the characteristic.",bad:["Three lots of ten is the industry standard.","Whatever parts were available.","Engineering judgment, not documented."],n:null,w:null,why:"Sample sizes need a statistical rationale (ISO 13485 7.5.6 and 8.1)."},
+ D1:{t:"design",q:"In 2025 you changed the material of {part}. How was that controlled?",ok:"Through design change control: effects on parts, product in process and delivered product, risk management, verification and approval before implementation.",bad:["Purchasing handled it.","A letter to file without analysis.","We implemented it and documented it later."],n:"D2",w:"D1w",why:"ISO 13485 7.3.9 requires evaluating and approving design changes before implementation."},
+ D1w:{t:"design",q:"What must a design change evaluation consider?",ok:"Effects on constituent parts, product in process or delivered, and on risk management and product realization.",bad:["Only cost.","Only the drawing revision.","Only supplier lead time."],n:"D2",w:"D2",why:"ISO 13485 7.3.9."},
+ D2:{t:"design",q:"Did that change need a regulatory submission?",ok:"We assessed it {sub} and documented the decision, and also checked notified body notification for the EU.",bad:["Changes never need a submission if specifications are met.","Regulatory affairs wasn’t involved.","Only if FDA asks for one."],n:"D3",w:"D2w",why:"Every design change needs a documented regulatory assessment."},
+ D2w:{t:"design",q:"What decides whether a change needs a new FDA submission?",ok:"Whether it could significantly affect safety or effectiveness (510(k)), or affects safety or effectiveness (PMA supplement), assessed with FDA guidance.",bad:["Whether marketing wants to announce it.","Whether the part number changes.","Whether the change costs more than $10,000."],n:"D3",w:"D3",why:"21 CFR 807.81(a)(3) and 814.39 set the triggers."},
+ D3:{t:"design",q:"Show me the risk file after the change.",ok:"The hazard analysis and verification of risk controls were updated and are traceable to the change record.",bad:["Not updated; the change was minor.","It will be updated at the annual review.","The risk file belongs to R&D; we don’t check it."],n:null,w:null,why:"Design changes must be assessed for risk impact (ISO 13485 7.3.9, ISO 14971)."},
+ R1:{t:"risk",q:"How does field data reach the risk file for the {dev}?",ok:"Complaint and NC codes map to hazards, and trends trigger review of occurrence estimates.",bad:["The risk file is closed after launch.","Only at the annual review.","Complaints and risk management are separate processes."],n:"R2",w:"R1w",why:"ISO 14971 clause 10: production and post-production information feeds the risk file."},
+ R1w:{t:"risk",q:"Which ISO 14971 activity covers information collected after launch?",ok:"Production and post-production activities (clause 10).",bad:["Risk analysis (clause 5) only.","None; that is marketing’s job.","Design validation."],n:"R2",w:"R2",why:"ISO 14971:2019 clause 10."},
+ R2:{t:"risk",q:"The field rate for “{failure}” is twice your estimate. What now?",ok:"Re-estimate, re-evaluate acceptability and benefit-risk, and consider further risk controls, all documented.",bad:["Keep the estimate; field data is noisy.","Add an IFU warning only.","Wait for the next annual review."],n:null,w:null,why:"New information must update risk estimates and decisions."},
+ L1:{t:"labeling",q:"Walk me through how labels are checked before release.",ok:"Labeling is examined for accuracy — UDI, expiry date, storage and handling instructions — release is documented, and line clearance prevents mix-ups.",bad:["The printer software prevents errors.","Weekly spot checks.","The distributor checks labels."],n:"L2",w:"L1w",why:"21 CFR 820.45 requires examination, documented release and mix-up prevention."},
+ L1w:{t:"labeling",q:"What must the labeling examination under 21 CFR 820.45(a) include?",ok:"UDI or UPC, expiration date, storage instructions, handling instructions and additional processing instructions.",bad:["Only the company logo.","Only the lot number.","Only the language."],n:"L2",w:"L2",why:"21 CFR 820.45(a)(1)–(5)."},
+ L2:{t:"labeling",q:"A label template changed last month. How was it controlled?",ok:"Through change control, approved against the MDF, label software checked where affected, and the old template retired.",bad:["IT updated it.","Marketing approved it.","No record is needed for templates."],n:null,w:null,why:"Labeling is controlled content; changes need approval and retirement of old versions."},
+ M1:{t:"mgmt",q:"May I see your last management review?",ok:"Yes. Here are the records with inputs, decisions, owners and dates.",bad:["Management review records are confidential.","Only a summary slide.","We don’t keep minutes."],n:"M2",w:"M1w",why:"Under the QMSR, management review records are inspectable."},
+ M1w:{t:"mgmt",q:"Under the QMSR, can FDA review management review records?",ok:"Yes. The old QSR exception no longer applies.",bad:["No, they are still protected.","Only with a warrant.","Only for Class III devices."],n:"M2",w:"M2",why:"FDA explained this change in the QMSR final rule."},
+ M2:{t:"mgmt",q:"Complaints about “{failure}” rose last quarter. What did management decide?",ok:"It allocated resources to the CAPA and set a review date, recorded as an output with an owner.",bad:["It noted the trend.","It asked QA to keep monitoring.","It wasn’t discussed."],n:null,w:null,why:"ISO 13485 5.6.3: outputs include decisions and resources needed."},
+ N1:{t:"nc",q:"This lot was released by concession. How was that decided?",ok:"Justified against design intent and risk, approved by authorised people, regulatory requirements confirmed, and recorded.",bad:["The production manager approved it to meet a shipment.","The customer asked for it.","Concessions aren’t recorded."],n:"N2",w:"N1w",why:"ISO 13485 8.3.2."},
+ N1w:{t:"nc",q:"What must a concession record show?",ok:"The justification, the approval, that regulatory requirements are still met, and who authorised it.",bad:["Only the lot number.","Only the customer’s name.","Nothing; a verbal OK is enough."],n:"N2",w:"N2",why:"ISO 13485 8.3.2."},
+ N2:{t:"nc",q:"Nonconforming product was found after shipment. What then?",ok:"Action proportionate to the effect: assess field risk, and consider an advisory notice, Part 806 reporting and EU vigilance.",bad:["Replace devices when customers ask.","Fix future lots only.","Wait for complaints."],n:null,w:null,why:"ISO 13485 8.3.3; 21 CFR 806; MDR Article 87."},
+ T1:{t:"training",q:"How do you know the operator doing {process} is competent?",ok:"Defined competence criteria, observed qualification, periodic requalification and records.",bad:["They signed the SOP.","They have years of experience.","The supervisor trusts them."],n:"T2",w:"T1w",why:"ISO 13485 6.2: competence, not just training attendance."},
+ T1w:{t:"training",q:"Why isn’t read-and-sign enough for {process}?",ok:"It shows the SOP was read, not that the person can do the task correctly.",bad:["It is always enough.","Because signatures can be forged.","Because SOPs are too long."],n:"T2",w:"T2",why:"Critical tasks need demonstrated competence."},
+ T2:{t:"training",q:"The SOP was revised last week. Was everyone trained before using it?",ok:"Yes. The effective date was set after training was complete, and the training matrix tracks it.",bad:["They’ll be trained over the next month.","Only the supervisors were trained.","Training isn’t needed for revisions."],n:null,w:null,why:"Untrained staff working to a new procedure is a common finding."},
+ K1:{t:"calibration",q:"This gauge was found out of tolerance at calibration. What did you do?",ok:"Assessed the validity of earlier results and the product measured since the last good calibration, and recorded the actions.",bad:["Recalibrated it and moved on.","Replaced the gauge.","Nothing; it was only slightly out."],n:"K2",w:"K1w",why:"ISO 13485 7.6."},
+ K1w:{t:"calibration",q:"What does ISO 13485 require when equipment is found not to conform?",ok:"Assess and record the validity of previous measurements and take action on the equipment and affected product.",bad:["Only a new calibration sticker.","Only a purchase order for a new gauge.","Nothing if the next reading passes."],n:"K2",w:"K2",why:"ISO 13485 7.6."},
+ K2:{t:"calibration",q:"How are your calibration intervals set?",ok:"Based on stability, use and risk, and adjusted using as-found calibration data.",bad:["One year for everything.","Whatever the vendor offers.","When someone remembers."],n:null,w:null,why:"Intervals should be justified by data."},
+ A1:{t:"audit",q:"Who last audited your complaint process?",ok:"A trained auditor independent of that area, on a risk-based schedule.",bad:["The complaint manager audited her own process.","Nobody; it’s a small process.","The certification body does that for us."],n:"A2",w:"A1w",why:"ISO 13485 8.2.4: auditors must not audit their own work."},
+ A1w:{t:"audit",q:"Can an auditor audit their own work?",ok:"No. Auditors must not audit their own work.",bad:["Yes, if trained.","Yes, in small companies.","Yes, if QA approves."],n:"A2",w:"A2",why:"ISO 13485 8.2.4."},
+ A2:{t:"audit",q:"An internal audit finding has recurred three times. What did you do?",ok:"Escalated it to CAPA with root-cause analysis and management visibility.",bad:["Closed it again with the same correction.","Stopped auditing that area.","Downgraded it to an observation."],n:null,w:null,why:"Recurrence shows the earlier action wasn’t effective."},
+ P1:{t:"software",q:"Your {tool} affects release decisions. How was it validated?",ok:"Risk-based assurance per FDA’s CSA approach: intended use defined, critical functions tested, changes controlled.",bad:["The vendor said it was validated.","It’s off-the-shelf, so no validation.","We tested every feature with scripted tests years ago."],n:"P2",w:"P1w",why:"ISO 13485 4.1.6 and 7.5.6; FDA Computer Software Assurance guidance."},
+ P1w:{t:"software",q:"What drives the level of assurance under CSA?",ok:"The process risk if the software fails to perform as intended.",bad:["The software’s price.","The vendor’s size.","The number of users."],n:"P2",w:"P2",why:"FDA CSA guidance."},
+ P2:{t:"software",q:"The vendor pushed an update to the {tool}. What happened?",ok:"We assessed the change and re-tested affected functions before use.",bad:["It updated automatically; we use it.","IT handled it.","We wait for problems."],n:null,w:null,why:"Changes to QMS and production software need controlled assessment."},
+ F1:{t:"field",q:"You sent a “product update” letter asking users to inspect devices. Was it reported?",ok:"We assessed it as a correction to reduce a risk to health and reported it under Part 806 within 10 working days, and as an FSCA in the EU.",bad:["No, it was an enhancement.","No, because it was voluntary.","Only if FDA asked."],n:"F2",w:"F1w",why:"21 CFR 806.10; MDR Articles 87 and 89."},
+ F1w:{t:"field",q:"When must a correction or removal be reported to FDA?",ok:"When it is made to reduce a risk to health or remedy a violation that may present a risk to health, within 10 working days of starting it.",bad:["Only for Class I recalls.","Only when FDA requests it.","Within one year."],n:"F2",w:"F2",why:"21 CFR 806.10."},
+ F2:{t:"field",q:"How do you know the field action reached the users?",ok:"Effectiveness checks at the defined depth, with tracked responses and follow-up.",bad:["We sent the letter; that’s enough.","Distributors confirm verbally.","We don’t track responses."],n:null,w:null,why:"21 CFR 7.42 and 7.49; recall effectiveness checks."},
+ St1:{t:"sterility",q:"Your {ster} sterilization validation is three years old. How do you know it is still valid?",ok:"Routine monitoring, bioburden trending, periodic requalification or dose audits, and change review.",bad:["Validation never expires.","The sterilizer is ISO certified.","No failures have been reported."],n:"St2",w:"St1w",why:"ISO 11135 / ISO 11137 require ongoing control and requalification."},
+ St1w:{t:"sterility",q:"What keeps a sterilization process in a validated state?",ok:"Routine control, bioburden monitoring, requalification or dose audits, and assessment of changes.",bad:["Nothing after the first validation.","Only the sterilizer’s certificate.","Only end-product sterility testing."],n:"St2",w:"St2",why:"ISO 11135 / 11137."},
+ St2:{t:"sterility",q:"Pouch seal strength is trending down. What do you do?",ok:"Investigate the sealing process and materials, and assess shelf life and released lots.",bad:["Nothing until results fail.","Increase the seal temperature without validation.","Change the pouch supplier immediately."],n:null,w:null,why:"ISO 11607-2; trend action before failure."},
+ Tr1:{t:"trace",q:"Show me traceability for an implanted {dev} back to raw material lots.",ok:"Records link the UDI or serial number to component and material lots, and to the consignee.",bad:["We trace only to the finished lot.","Hospitals keep that information.","We would need a week to find it."],n:"Tr2",w:"Tr1w",why:"ISO 13485 7.5.9.2 for implantable devices."},
+ Tr1w:{t:"trace",q:"What extra traceability do implantable devices need?",ok:"Records of components, materials and work environment conditions where they could cause nonconformity, plus consignee records.",bad:["None beyond normal lot records.","Only the patient’s name.","Only the sales invoice."],n:"Tr2",w:"Tr2",why:"ISO 13485 7.5.9.2."},
+ Tr2:{t:"trace",q:"How would you support a recall down to patient level?",ok:"Distribution records, implant cards for EU patients, and hospitals’ UDI records.",bad:["Ask hospitals to search their files.","Press release only.","We can’t reach patients."],n:null,w:null,why:"MDR Articles 18 and 27; distribution records."},
+ Cy1:{t:"cyber",q:"How do you manage vulnerabilities in the {dev}’s software components?",ok:"We maintain an SBOM, monitor and assess vulnerabilities, and release patches under change control.",bad:["The device isn’t connected to the internet, so no risk.","IT handles security.","We fix issues when customers complain."],n:"Cy2",w:"Cy1w",why:"FD&C Act 524B; FDA cybersecurity guidance."},
+ Cy1w:{t:"cyber",q:"What does FD&C Act section 524B require for cyber devices?",ok:"Plans to monitor and address vulnerabilities, secure design processes, and an SBOM.",bad:["Only a password.","Nothing for Class II.","Only antivirus software."],n:"Cy2",w:"Cy2",why:"FD&C Act 524B."},
+ Cy2:{t:"cyber",q:"A critical vulnerability is published for a library you use. What is your first step?",ok:"Assess exploitability and patient risk, plan a mitigation or patch, and consider reporting obligations.",bad:["Wait for the next release.","Tell customers to disconnect everything.","Nothing until it is exploited."],n:null,w:null,why:"Timely assessment ties cybersecurity to safety risk."},
+ E1:{t:"pms",q:"For the EU, how often must you update the PSUR (or PMS report) for the {dev}?",ok:"{psur}.",bad:["Every five years.","Only when the notified body asks.","Never, if there are no complaints."],n:"E2",w:"E1w",why:"MDR Articles 85 and 86."},
+ E1w:{t:"pms",q:"Which document summarizes post-market surveillance for Class IIa, IIb and III devices?",ok:"The periodic safety update report (PSUR).",bad:["The declaration of conformity.","The SSCP.","The quality manual."],n:"E2",w:"E2",why:"MDR Article 86."},
+ E2:{t:"pms",q:"A serious incident occurred in Germany. What is the default reporting deadline?",ok:"Within 15 days of awareness, or sooner: 2 days for a serious public health threat and 10 days for a death or unexpected serious deterioration in health.",bad:["30 days.","Within one year in the PSUR.","No deadline if the device was used off-label."],n:null,w:null,why:"MDR Article 87."},
+ Re1:{t:"reprocess",q:"Hospitals reprocess the {dev}. How did you validate your reprocessing instructions?",ok:"Cleaning and sterilization instructions were validated under worst-case conditions, following ISO 17664.",bad:["Hospitals validate their own processes.","We copied a competitor’s instructions.","We tested one cycle."],n:"Re2",w:"Re1w",why:"ISO 17664; MDR Annex I §23.4."},
+ Re1w:{t:"reprocess",q:"Who must validate the reprocessing instructions in your labeling?",ok:"The manufacturer, for the instructions it provides.",bad:["The hospital.","The notified body.","Nobody."],n:"Re2",w:"Re2",why:"ISO 17664."},
+ Re2:{t:"reprocess",q:"Complaints report “{failure}”. What do you check?",ok:"Material and passivation process data, hospital reprocessing conditions against our IFU, and whether the IFU or design needs to change.",bad:["Blame the hospital.","Replace the forceps without investigation.","Ignore cosmetic issues."],n:null,w:null,why:"Corrosion can signal material, process or IFU problems."}
+};
+const AUD_TOPICS={complaint:["Complaints, MDR reporting and CAPA","C1"],supplier:["Supplier controls","S1"],validation:["Process validation","V1"],design:["Design changes","D1"],risk:["Risk management","R1"],labeling:["Labeling and packaging (820.45)","L1"],mgmt:["Management review","M1"],nc:["Nonconforming product","N1"],training:["Training and competence","T1"],calibration:["Calibration","K1"],audit:["Internal audit","A1"],software:["Production and QMS software","P1"],field:["Corrections, removals and recalls","F1"],sterility:["Sterilization and packaging","St1"],trace:["Implant traceability","Tr1"],cyber:["Cybersecurity","Cy1"],pms:["EU post-market surveillance","E1"],reprocess:["Reprocessing instructions","Re1"]};
+const AUD_FB={
+ complaint:["complaint handling, reportability decisions and CAPA effectiveness were well controlled","complaint investigation, MDR reportability or CAPA effectiveness was weak; I would expect an observation against 21 CFR 820.35(a) / ISO 13485 8.2.2 and 8.5.2"],
+ supplier:["supplier evaluation, change notification and monitoring were risk-based","supplier controls relied too much on certificates or informal communication (ISO 13485 7.4)"],
+ validation:["process validation, revalidation triggers and sample-size rationale were convincing","validation and change control of special processes were not convincing (ISO 13485 7.5.6)"],
+ design:["design changes were controlled, assessed for regulatory impact and reflected in the risk file","design change control and regulatory assessment had gaps (ISO 13485 7.3.9)"],
+ risk:["field data clearly feeds the risk file","the risk file isn’t kept current with post-production information (ISO 14971 clause 10)"],
+ labeling:["labeling controls met 21 CFR 820.45","labeling examination and mix-up controls fell short of 21 CFR 820.45"],
+ mgmt:["management review is used to make real decisions","management oversight looked weak, with review outputs that don’t drive action (ISO 13485 5.6)"],
+ nc:["nonconforming product and concessions were properly justified","concessions and post-shipment nonconformities weren’t handled with enough rigour (ISO 13485 8.3)"],
+ training:["competence for critical tasks is demonstrated, not assumed","training relies on signatures rather than demonstrated competence (ISO 13485 6.2)"],
+ calibration:["measuring equipment control and out-of-tolerance assessments were sound","out-of-tolerance impact assessments were missing (ISO 13485 7.6)"],
+ audit:["internal audits are independent and findings are escalated","internal audit independence or follow-up was weak (ISO 13485 8.2.4)"],
+ software:["software used in production and the QMS is assured in proportion to risk","production and QMS software assurance had gaps (ISO 13485 4.1.6)"],
+ field:["field actions were assessed and reported correctly","field actions weren’t assessed against Part 806 and EU vigilance correctly"],
+ sterility:["sterilization and packaging stay in a validated state","sterilization or packaging control relied on old validation without ongoing monitoring"],
+ trace:["implant traceability supports recall to patient level","implant traceability was incomplete (ISO 13485 7.5.9.2)"],
+ cyber:["cybersecurity is handled as a patient-safety risk","vulnerability management fell short of FD&C Act 524B expectations"],
+ pms:["EU PMS and vigilance timelines were known and met","EU PMS and vigilance obligations weren’t well understood (MDR Articles 83–87)"],
+ reprocess:["reprocessing instructions are validated","reprocessing instructions weren’t adequately validated (ISO 17664)"]
+};
+function audTopicsFor(c){
+  const t=["complaint","supplier","validation","design","risk","labeling"];
+  if(c.flags.includes("sterile")) t.push("sterility");
+  if(c.flags.includes("implant")) t.push("trace");
+  if(c.flags.includes("connected")) t.push("cyber");
+  if(c.flags.includes("reusable")) t.push("reprocess");
+  t.push("mgmt","nc","training","software","field","calibration","audit","pms");
+  return t;
+}
+function audFill(s,c){ const sub=c.path==="pma"?"against the PMA supplement rules in 21 CFR 814.39":c.path==="exempt"?"against the 510(k) exemption limitations for the device classification":"with FDA’s guidance on deciding when to submit a 510(k) for a change";
+  return s.replace(/\{dev\}/g,c.dev).replace(/\{part\}/g,c.part).replace(/\{process\}/g,c.process).replace(/\{failure\}/g,c.failure).replace(/\{ster\}/g,c.ster||"sterilization").replace(/\{tool\}/g,c.tool).replace(/\{psur\}/g,c.psur).replace(/\{sub\}/g,sub).replace(/^./,m=>m.toUpperCase()); }
+function rngFrom(seed){ let a=seed>>>0; return ()=>{ a=(a+0x6D2B79F5)>>>0; let t=a; t=Math.imul(t^(t>>>15),t|1); t^=t+Math.imul(t^(t>>>7),t|61); return ((t^(t>>>14))>>>0)/4294967296; }; }
+/* Engine: state machine. answer(i) moves to next node chosen by correctness; stops at 20. */
+function audNew(caseId,seed){ const c=AUD_CASES.find(x=>x.id===caseId); seed=seed||Date.now()%100000; const r=rngFrom(seed+17);
+  const rest=audTopicsFor(c).slice(1); for(let i=rest.length-1;i>0;i--){ const j=Math.floor(r()*(i+1)); [rest[i],rest[j]]=[rest[j],rest[i]]; }
+  const topics=["complaint",...rest]; return {c,topics,ti:0,inTopic:0,node:AUD_TOPICS[topics[0]][1],asked:[],seed,done:false}; }
+const AUD_CAP={complaint:5};
+function audOptions(st){ const n=AUD_NODES[st.node]; const r=rngFrom(st.seed+st.asked.length*97+st.node.length*13); const o=[{t:audFill(n.ok,st.c),ok:true},...n.bad.map(b=>({t:audFill(b,st.c),ok:false}))]; for(let i=o.length-1;i>0;i--){ const j=Math.floor(r()*(i+1)); [o[i],o[j]]=[o[j],o[i]]; } return o; }
+function audAnswer(st,opt){ const n=AUD_NODES[st.node]; st.asked.push({id:st.node,t:n.t,ok:opt.ok,q:audFill(n.q,st.c),a:opt.t,why:n.why});
+  if(st.asked.length>=20){ st.done=true; return; }
+  st.inTopic=(st.inTopic||0)+1;
+  let nx=opt.ok?n.n:n.w;
+  if(st.inTopic>=(AUD_CAP[n.t]||3)) nx=null;
+  while(!nx){ st.ti++; st.inTopic=0; if(st.ti>=st.topics.length){ st.done=true; return; } nx=AUD_TOPICS[st.topics[st.ti]][1]; }
+  st.node=nx; }
+function audResult(st){ const right=st.asked.filter(a=>a.ok).length; const pct=Math.round(right/st.asked.length*100); const by={};
+  st.asked.forEach(a=>{ by[a.t]=by[a.t]||{n:0,ok:0}; by[a.t].n++; if(a.ok) by[a.t].ok++; });
+  const good=Object.keys(by).filter(k=>by[k].ok/by[k].n>=0.75), weak=Object.keys(by).filter(k=>by[k].ok/by[k].n<0.6);
+  let fb; const L=(arr,i)=>arr.map(k=>AUD_FB[k][i]);
+  const join=a=>a.length<=1?a.join(""):a.slice(0,-1).join("; ")+"; and "+a[a.length-1];
+  if(pct>=85) fb="Overall I am satisfied with your quality management system for the "+st.c.dev+". "+(good.length?"In particular, "+join(L(good,0))+". ":"")+(weak.length?"One area to tighten before the next inspection: "+join(L(weak,1))+". ":"")+"I don’t expect to issue significant observations from what I have seen today.";
+  else if(pct>=70) fb="Your QMS for the "+st.c.dev+" has a reasonable foundation, but I am not yet satisfied. "+(weak.length?"My concerns: "+join(L(weak,1))+". ":"")+(good.length?"On the positive side, "+join(L(good,0))+". ":"")+"I would expect to list observations and verify your corrective actions at a follow-up.";
+  else fb="I am not satisfied with the controls I reviewed for the "+st.c.dev+". "+(weak.length?"The main problems: "+join(L(weak,1))+". ":"")+"These gaps would likely lead to inspectional observations (Form 483) or major nonconformities, and I would want to see systemic corrective action, not isolated fixes."+(good.length?" Some areas were stronger: "+join(L(good,0))+".":"");
+  return {right,pct,pass:pct>=85,by,fb}; }
+/* ===== Audit mode UI ===== */
+let AUD=null;
+const AUDITOR='<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="31" fill="#e8f2f9"/><circle cx="32" cy="25" r="10" fill="#4b5b9a"/><path d="M14 54c2-10 9-15 18-15s16 5 18 15" fill="#4b5b9a"/><rect x="24" y="22" width="16" height="5" rx="2.5" fill="none" stroke="#fff" stroke-width="2"/><rect x="40" y="40" width="10" height="13" rx="1.5" fill="#fff" stroke="#b98a35" stroke-width="1.6"/><path d="M42 44h6M42 47h6M42 50h4" stroke="#b98a35" stroke-width="1.2"/></svg>';
+function audIco(k){ const s=document.createElementNS("http://www.w3.org/2000/svg","svg"); s.setAttribute("viewBox","0 0 24 24"); s.setAttribute("class","ico"); s.innerHTML=AUD_ICONS[k]||""; return s; }
+function renderAudit(){
+  const m=document.getElementById("main"); m.innerHTML="";
+  m.append(el("section",{class:"chHead auditHead"},
+    el("div",{class:"eyebrow"},"Audit mode"),
+    el("h2",{},"Practice an inspection"),
+    el("p",{},"Pick a case. The auditor asks 20 questions, and each follow-up depends on your answer, just like a real inspection trail. You need at least 85% to pass.")));
+  if(!AUD){
+    const g=el("div",{class:"caseGrid"});
+    AUD_CASES.forEach(c=>g.append(el("button",{class:"caseCard",type:"button",onclick:()=>{ AUD={st:audNew(c.id,Math.floor(Math.random()*1e6)),pick:null}; renderAudit(); window.scrollTo({top:0}); }},
+      el("div",{class:"caseTop"}, audIco(c.icon), el("span",{class:"caseNo"},c.id)), el("b",{},c.name), el("span",{class:"caseCls"},"US: "+c.us+" · EU: "+c.eu))));
+    m.append(el("h3",{class:"secTitle"},"Choose a case number"), g);
+    return;
+  }
+  const st=AUD.st, c=st.c;
+  const brief=el("details",{class:"card caseBrief"+(st.asked.length?"":" open"),open:st.asked.length?null:""}, el("summary",{}, el("span",{class:"caseNo"},c.id), " "+c.name),
+    el("dl",{}, el("dt",{},"Device"), el("dd",{},c.name), el("dt",{},"Intended use"), el("dd",{},c.intended), el("dt",{},"Classification"), el("dd",{},"US "+c.us+"; EU "+c.eu), el("dt",{},"Key process"), el("dd",{},audFill(c.process,c)), el("dt",{},"Critical purchased item"), el("dd",{},audFill(c.part,c))));
+  m.append(brief);
+  const trail=el("div",{class:"audTrail"});
+  for(let k=0;k<20;k++){ const a=st.asked[k]; trail.append(el("i",{class:a?(a.ok?"ok":"no"):(k===st.asked.length&&!st.done?"cur":""),title:a?AUD_TOPICS[a.t][0]:""})); }
+  const right=st.asked.filter(a=>a.ok).length;
+  m.append(el("div",{class:"audBar"}, el("span",{}, st.done?el("b",{},"Audit complete"):el("b",{},"Question "+(st.asked.length+1))," "+(st.done?"":"of 20")), trail, el("span",{class:"audScore"},right+" correct")));
+  if(st.done) return renderAuditReport(m);
+  const n=AUD_NODES[st.node]; const opts=audOptions(st);
+  const topic=AUD_TOPICS[n.t][0];
+  const bubble=el("div",{class:"audQ"}); const av=el("div",{class:"avatar"}); av.innerHTML=AUDITOR;
+  bubble.append(av, el("div",{class:"speech"}, el("span",{class:"audTopic"},topic), el("p",{},audFill(n.q,c))));
+  m.append(bubble);
+  const list=el("div",{class:"audOpts"});
+  opts.forEach((o,i)=>{ const b=el("button",{class:"opt audOpt",type:"button",onclick:()=>{ if(AUD.pick!==null) return; AUD.pick=i; renderAudit(); }}, el("b",{},String.fromCharCode(65+i)+". "), o.t);
+    if(AUD.pick!==null){ b.disabled=true; if(o.ok) b.classList.add("right"); else if(i===AUD.pick) b.classList.add("wrong"); }
+    list.append(b); });
+  m.append(list);
+  if(AUD.pick!==null){
+    const o=opts[AUD.pick];
+    m.append(el("div",{class:"audFb "+(o.ok?"good":"bad")}, el("b",{},o.ok?"The auditor nods and moves on.":"The auditor writes something down…"), el("p",{},n.why)));
+    m.append(el("div",{class:"mact"}, el("button",{class:"reset",type:"button",onclick:()=>{ if(confirm("Leave this audit? Progress will be lost.")){ AUD=null; renderAudit(); } }},"Leave audit"),
+      el("button",{class:"cta",type:"button",onclick:()=>{ audAnswer(st,o); AUD.pick=null; renderAudit(); window.scrollTo({top:document.querySelector(".audBar").offsetTop-10}); }},st.asked.length>=19?"Finish audit →":"Next question →")));
+  }
+}
+function renderAuditReport(m){
+  const st=AUD.st, r=audResult(st);
+  const rep=el("section",{class:"card audReport"});
+  const ring=el("div",{class:"bigRing"}); ring.innerHTML=ringSvg(r.pct,100,130);
+  rep.append(el("div",{class:"repHead"}, ring, el("div",{}, el("div",{class:"eyebrow"},"Audit report · "+st.c.id), el("h3",{},st.c.name), el("p",{}, el("b",{},r.right+" of 20")," answers acceptable · pass mark 85%")), el("div",{class:"stamp "+(r.pass?"pass":"fail")},r.pass?"PASS":"FAIL")));
+  const av=el("div",{class:"avatar sm"}); av.innerHTML=AUDITOR;
+  rep.append(el("div",{class:"audQ"}, av, el("div",{class:"speech"}, el("span",{class:"audTopic"},"Auditor’s feedback"), el("p",{},r.fb))));
+  const tb=el("div",{class:"topicRes"});
+  Object.entries(r.by).forEach(([k,v])=>{ const p=Math.round(v.ok/v.n*100); tb.append(el("div",{class:"trow"}, el("span",{},AUD_TOPICS[k][0]), el("div",{class:"track"}, el("i",{style:"width:"+p+"%;background:"+(p>=75?"var(--good)":p>=50?"var(--star)":"var(--bad)")})), el("b",{},v.ok+"/"+v.n))); });
+  rep.append(el("h3",{class:"secTitle"},"Results by area"), tb);
+  const log=el("details",{class:"audLog"}, el("summary",{},"Review the audit trail (20 questions)"));
+  st.asked.forEach((a,i)=>log.append(el("div",{class:"logItem "+(a.ok?"ok":"no")}, el("b",{},(i+1)+". "+a.q), el("span",{},"Your answer: "+a.a), el("small",{},a.why))));
+  rep.append(log);
+  rep.append(el("div",{class:"mact"}, el("button",{class:"reset",type:"button",onclick:()=>{ const id=st.c.id; AUD={st:audNew(id,Math.floor(Math.random()*1e6)),pick:null}; renderAudit(); }},"Repeat this case"), el("button",{class:"cta",type:"button",onclick:()=>{ AUD=null; renderAudit(); window.scrollTo({top:0}); }},"Choose another case")));
+  m.append(rep);
 }
 function renderRail(active){ renderNav(active); }
 function _unusedRail(active){
@@ -1419,7 +1677,7 @@ function renderChapter(id){
 
 function route(){
   const id=(location.hash||"").slice(1)||"home";
-  if(["home","explore","dilemmas","map","sampling","dates"].includes(id)){ closeModal(); renderNav(id); ({home:()=>renderHome(false),explore:()=>renderHome(true),dilemmas:renderDilemmas,map:renderMap,sampling:renderSampling,dates:renderDates})[id](); totals(); try{ window.scrollTo({top:0}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
+  if(["home","explore","dilemmas","map","sampling","dates","audit"].includes(id)){ closeModal(); renderNav(id); ({home:()=>renderHome(false),explore:()=>renderHome(true),dilemmas:renderDilemmas,map:renderMap,sampling:renderSampling,dates:renderDates,audit:renderAudit})[id](); totals(); try{ window.scrollTo({top:0}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
   if(id==="random"){ closeModal(); renderNav("random"); renderRandom(); totals(); try{ window.scrollTo({top:document.getElementById("dnav").offsetTop}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
   const valid=CH.some(c=>c.id===id)?id:CH[0].id;
   currentTab=pendingTab||""; pendingTab=null;
@@ -1428,6 +1686,39 @@ function route(){
   if(id){ try{ window.scrollTo({top:document.getElementById('dnav').offsetTop, behavior:'auto'}); }catch(e){} }
 }
 document.getElementById("resetAll").addEventListener("click",()=>{ state={}; save(); route(); });
+/* ===== Reference titles: add "(title)" after clause and regulation references ===== */
+const REFT=(function(){
+  const iso={"4.1":"General requirements","4.2":"Documentation requirements","5.1":"Management commitment","5.2":"Customer focus","5.3":"Quality policy","5.4":"Planning","5.5":"Responsibility, authority and communication","5.6":"Management review","6.1":"Provision of resources","6.2":"Human resources","6.3":"Infrastructure","6.4":"Work environment and contamination control","7.1":"Planning of product realization","7.2":"Customer-related processes","7.3":"Design and development","7.4":"Purchasing","7.5":"Production and service provision","7.6":"Control of monitoring and measuring equipment","8.1":"General","8.2":"Monitoring and measurement","8.3":"Control of nonconforming product","8.4":"Analysis of data","8.5":"Improvement"};
+  CH.forEach(c=>(c.clauses||[]).forEach(([n,t])=>{ if(/^[4-8]\.\d/.test(n)) iso[n]=t; }));
+  const cfr={"820.1":"Scope","820.3":"Definitions","820.7":"Incorporation by reference","820.10":"Requirements for a QMS","820.35":"Control of records","820.45":"Device labeling and packaging controls","803.3":"MDR definitions","803.17":"Written MDR procedures","803.50":"30-day reports","803.52":"Contents of 30-day reports","803.53":"5-day reports","803.56":"Supplemental reports","806.10":"Reports of corrections and removals","806.20":"Records of unreported corrections and removals","807.81":"When a 510(k) is required","807.87":"510(k) content","807.92":"510(k) summary","814.20":"PMA application","814.39":"PMA supplements","814.82":"PMA post-approval requirements","814.84":"PMA reports","801.15":"Prominence of required label statements","801.18":"Format of dates on labels","801.20":"Label to bear a UDI","801.40":"Form of a UDI","801.45":"Direct marking","801.109":"Prescription devices","830.20":"Requirements for a UDI","812.2":"IDE applicability","812.7":"IDE prohibited practices","812.150":"IDE reports","7.3":"Recall definitions","7.41":"Health hazard evaluation","7.42":"Recall strategy","7.46":"Firm-initiated recall","7.49":"Recall communications","7.53":"Recall status reports","7.55":"Recall termination","11.10":"Controls for closed systems","11.50":"Signature manifestations","11.70":"Signature/record linking","11.100":"Electronic signatures: general","11.300":"ID codes and passwords"};
+  const parts={"4":"Combination products","7":"Recalls","11":"Electronic records and signatures","801":"Labeling","803":"Medical Device Reporting","806":"Corrections and removals","807":"Registration, listing and 510(k)","812":"Investigational device exemptions","814":"Premarket approval","820":"Quality Management System Regulation","821":"Device tracking","822":"Postmarket surveillance","830":"Unique device identification","860":"Classification procedures"};
+  const art={}, annex={};
+  ARTS.forEach(([ref,t])=>{ let m=ref.match(/^MDR Article (\d+[a-z]?(?:\(\d+\))?)$/); if(m) art[m[1]]=t; m=ref.match(/^MDR Annex ([IVX]+)$/); if(m) annex[m[1]]=t; m=ref.match(/^21 CFR (\d+\.\d+)$/); if(m&&!cfr[m[1]]) cfr[m[1]]=t; });
+  Object.assign(annex,{"V":"CE marking","VII":"Requirements for notified bodies","X":"Type-examination","XI":"Product conformity verification","XII":"Certificates issued by notified bodies","XIII":"Custom-made devices","XVI":"Products without an intended medical purpose"});
+  return {iso,cfr,parts,art,annex};
+})();
+function shortT(t){ return t.length>48?t.slice(0,46).replace(/\s+\S*$/,"")+"…":t; }
+function annotateText(s){
+  const seen=new Set();
+  const near=(str,off,len,t)=>{ const k=t.toLowerCase().replace(/[^a-z0-9 ]/g,"").split(" ").filter(w=>w.length>3).slice(0,2).join(" "); if(!k) return false;
+    const after=str.slice(off+len,off+len+40).toLowerCase().replace(/[^a-z0-9 ]/g,"").trim(); const before=str.slice(Math.max(0,off-60),off).toLowerCase().replace(/[^a-z0-9 ]/g,"");
+    const a30=after.slice(0,30); return k.split(" ").some(w=>a30.includes(w))||before.includes(k); };
+  const ann=(str,off,m,key,t,head,tail)=>{ if(!t||seen.has(key)) return m; if(/^\s+\(/.test(str.slice(off+m.length,off+m.length+3))) return m; if(near(str,off,m.length,t)) return m; seen.add(key); return head+" ("+shortT(t)+")"+(tail||""); };
+  s=s.replace(/\b(?:21 CFR |CFR )?(8\d\d\.\d+)((?:\([a-z0-9]+\))*)/g,(m,sec,sub,off,str)=>REFT.cfr[sec]?ann(str,off,m,"c"+sec,REFT.cfr[sec],m):m);
+  s=s.replace(/\b(?:21 )?CFR (\d{1,2}\.\d+)/g,(m,sec,off,str)=>REFT.cfr[sec]?ann(str,off,m,"c"+sec,REFT.cfr[sec],m):m);
+  s=s.replace(/\bParts? (\d{1,3})\b(?![.\d])/g,(m,p,off,str)=>REFT.parts[p]?ann(str,off,m,"p"+p,REFT.parts[p],m):m);
+  s=s.replace(/\b(Art\.|Articles?) ?(\d+[a-z]?)(\(\d+\))?/g,(m,a,n,sub,off,str)=>{ const t=(sub&&REFT.art[n+sub])||REFT.art[n]; return t?ann(str,off,m,"a"+n+(sub||""),t,m):m; });
+  s=s.replace(/\bAnnex ([IVX]+)\b/g,(m,n,off,str)=>REFT.annex[n]?ann(str,off,m,"x"+n,REFT.annex[n],m):m);
+  s=s.replace(/(^|[\s(;,])([4-8]\.\d(?:\.\d{1,2})?)((?:\([a-z]\))*)(?![\d.%]*\d)(?!\s*%)/g,(m,pre,cl,sub,off,str)=>{ const t=REFT.iso[cl]; if(!t) return m; const prev=str.slice(Math.max(0,off-10),off+pre.length); if(/(AQL|Cpk|§|v|version|edition|rev\.?|clause)\s*$/i.test(prev)) return m; const r=ann(str,off+pre.length,cl+sub,"i"+cl,t,cl+sub); return pre+r; });
+  return s;
+}
+const annDone=new WeakSet();
+function annotate(root){
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>{ const p=n.parentElement; if(!p||annDone.has(n)) return NodeFilter.FILTER_REJECT; if(p.closest("input,textarea,script,style,svg,.cn,.clz,.qIn,.aqlBtn,.bs,.tlDot,.chipBtn,.audTrail,.navBtn,mark")) return NodeFilter.FILTER_REJECT; return /\d/.test(n.nodeValue)?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT; }});
+  const list=[]; while(w.nextNode()) list.push(w.currentNode);
+  list.forEach(n=>{ const v=annotateText(n.nodeValue); if(v!==n.nodeValue) n.nodeValue=v; annDone.add(n); });
+}
+(function(){ const main=document.getElementById("main"); let t; new MutationObserver(()=>{ clearTimeout(t); t=setTimeout(()=>annotate(main),30); }).observe(main,{childList:true,subtree:true}); })();
 window.addEventListener("hashchange",route);
 route();
 (function(){ let on=true; try{ on=localStorage.getItem(LKEY)!=="off"; }catch(e){} if(on) showLaunch(); })();

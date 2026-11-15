@@ -7,6 +7,7 @@ A pocket handbook for QA professionals working on Class II and III medical devic
 - QMS map: ISO 13485:2016 ↔ 21 CFR 820 (QMSR) ↔ EU MDR 2017/745, with coverage and exemptions
 - Sample size tool (ISO 2859-1:2026): normal and tightened single sampling plans with interactive switching rules, plus confidence/reliability sample sizes with a pass-probability chart
 - Key dates tab: FDA, EU MDR, standards and AI Act milestones with explanations and official sources
+- Audit mode: 11 device cases, 20 branching auditor questions per session, pass mark 85%, auditor feedback
 - Explore panel with search, and a glossary of terms and abbreviations on the home page
 
 Open the site, then use "Add to Home Screen" on your phone to install it as an app. It works offline after the first visit. Answers are saved in the browser.
