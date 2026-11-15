@@ -1,6 +1,6 @@
 {
-  "name": "Medical Device QMS Refresher",
-  "short_name": "QMS Refresher",
+  "name": "Medical Device QA Handbook",
+  "short_name": "QA Handbook",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#eef3f1",
