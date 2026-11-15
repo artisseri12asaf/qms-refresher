@@ -584,6 +584,10 @@ header.top{gap:12px; margin-bottom:16px}
 .tl2 .tlDot{width:18px; height:18px}
 .stickyCtl{gap:6px}
 .stickyCtl .tab{flex:1 1 0; min-width:0; padding:8px 4px; font-size:14.5px}
+.dilPager{display:flex; align-items:center; justify-content:space-between; gap:10px; margin:10px 0}
+.dilPager .reset:disabled{opacity:.35; cursor:default}
+@media (max-width:899px){ .navBtn.n-samp{grid-column:auto} .navBtn{font-size:12px} .navBtn.n-samp span{font-size:11px} }
+.stickyCtl .tab{white-space:nowrap; font-size:13.5px}
 </style>
 </head>
 <body>
@@ -608,7 +612,7 @@ header.top{gap:12px; margin-bottom:16px}
   <nav class="rail" id="rail" aria-label="Chapters"></nav>
   <main id="main"></main>
 </div>
-<footer>Sources are limited to official publications: for the US, the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases; for the EU, EUR-Lex and European Commission pages including MDCG guidance. Items tagged “Application” are my reasoning, not official statements. Check the linked source before you cite anything in an audit response. Answers are saved in this browser on this device. Version 2026-11-15d.</footer>
+<footer>Sources are limited to official publications: for the US, the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases; for the EU, EUR-Lex and European Commission pages including MDCG guidance. Items tagged “Application” are my reasoning, not official statements. Check the linked source before you cite anything in an audit response. Answers are saved in this browser on this device. Version 2026-11-15e.</footer>
 </div>
 
 <script>
@@ -855,19 +859,26 @@ function showLaunch(){
 }
 
 /* ---------- selected dilemmas ---------- */
-const dsel={scope:"all"};
+const dsel={scope:"all",i:0};
 function renderDilemmas(){
   const m=document.getElementById("main"); m.innerHTML="";
+  const list=CH.filter(c=>(dsel.scope==="all"||c.part===dsel.scope)&&c.dils.length);
+  if(dsel.i>=list.length) dsel.i=0;
   m.append(el("section",{class:"chHead dilHead"},
     el("div",{class:"eyebrow"},"Selected dilemmas"),
     el("h2",{},"Real-life dilemmas"),
-    el("p",{},"The lead dilemma from every chapter: procedures, practices, conflicts, packaging, risk management and more. Pick an option to see the analysis.")));
+    el("p",{},"The lead dilemma from every chapter. Pick an option to see the analysis, then move to the next one.")));
   const ctl=el("div",{class:"randCtl stickyCtl"});
-  [["all","All"],["basics","Basics"],["qms","A · QMS"],["fda","B · FDA"],["eu","C · MDR"]].forEach(([k,l])=>ctl.append(el("button",{class:"tab",type:"button","aria-pressed":String(dsel.scope===k),onclick:()=>{ dsel.scope=k; renderDilemmas(); }},l)));
+  [["all","All"],["basics","Basics"],["qms","A · QMS"],["fda","B · FDA"],["eu","C · MDR"]].forEach(([k,l])=>ctl.append(el("button",{class:"tab",type:"button","aria-pressed":String(dsel.scope===k),onclick:()=>{ dsel.scope=k; dsel.i=0; renderDilemmas(); }},l)));
   m.append(ctl);
-  const list=el("div",{class:"panel"});
-  CH.filter(c=>dsel.scope==="all"||c.part===dsel.scope).forEach(c=>{ if(c.dils.length) list.append(dilCard(c,0,()=>{ const y=window.scrollY; renderDilemmas(); window.scrollTo({top:y}); },true)); });
-  m.append(list);
+  const c=list[dsel.i];
+  const nav=()=>{ const pv=el("button",{class:"reset",type:"button",onclick:()=>{ dsel.i=Math.max(0,dsel.i-1); renderDilemmas(); }},"← Previous"); pv.disabled=dsel.i===0; return el("div",{class:"dilPager"},
+    pv,
+    el("span",{}, el("b",{},String(dsel.i+1))," of "+list.length),
+    el("button",{class:"cta",type:"button",onclick:()=>{ dsel.i=(dsel.i+1)%list.length; renderDilemmas(); }},dsel.i===list.length-1?"Start again ↺":"Next dilemma →")); };
+  m.append(nav());
+  m.append(el("div",{class:"panel"}, dilCard(c,0,()=>renderDilemmas(),true)));
+  m.append(nav());
 }
 
 /* ---------- search ---------- */
@@ -1686,39 +1697,6 @@ function route(){
   if(id){ try{ window.scrollTo({top:document.getElementById('dnav').offsetTop, behavior:'auto'}); }catch(e){} }
 }
 document.getElementById("resetAll").addEventListener("click",()=>{ state={}; save(); route(); });
-/* ===== Reference titles: add "(title)" after clause and regulation references ===== */
-const REFT=(function(){
-  const iso={"4.1":"General requirements","4.2":"Documentation requirements","5.1":"Management commitment","5.2":"Customer focus","5.3":"Quality policy","5.4":"Planning","5.5":"Responsibility, authority and communication","5.6":"Management review","6.1":"Provision of resources","6.2":"Human resources","6.3":"Infrastructure","6.4":"Work environment and contamination control","7.1":"Planning of product realization","7.2":"Customer-related processes","7.3":"Design and development","7.4":"Purchasing","7.5":"Production and service provision","7.6":"Control of monitoring and measuring equipment","8.1":"General","8.2":"Monitoring and measurement","8.3":"Control of nonconforming product","8.4":"Analysis of data","8.5":"Improvement"};
-  CH.forEach(c=>(c.clauses||[]).forEach(([n,t])=>{ if(/^[4-8]\.\d/.test(n)) iso[n]=t; }));
-  const cfr={"820.1":"Scope","820.3":"Definitions","820.7":"Incorporation by reference","820.10":"Requirements for a QMS","820.35":"Control of records","820.45":"Device labeling and packaging controls","803.3":"MDR definitions","803.17":"Written MDR procedures","803.50":"30-day reports","803.52":"Contents of 30-day reports","803.53":"5-day reports","803.56":"Supplemental reports","806.10":"Reports of corrections and removals","806.20":"Records of unreported corrections and removals","807.81":"When a 510(k) is required","807.87":"510(k) content","807.92":"510(k) summary","814.20":"PMA application","814.39":"PMA supplements","814.82":"PMA post-approval requirements","814.84":"PMA reports","801.15":"Prominence of required label statements","801.18":"Format of dates on labels","801.20":"Label to bear a UDI","801.40":"Form of a UDI","801.45":"Direct marking","801.109":"Prescription devices","830.20":"Requirements for a UDI","812.2":"IDE applicability","812.7":"IDE prohibited practices","812.150":"IDE reports","7.3":"Recall definitions","7.41":"Health hazard evaluation","7.42":"Recall strategy","7.46":"Firm-initiated recall","7.49":"Recall communications","7.53":"Recall status reports","7.55":"Recall termination","11.10":"Controls for closed systems","11.50":"Signature manifestations","11.70":"Signature/record linking","11.100":"Electronic signatures: general","11.300":"ID codes and passwords"};
-  const parts={"4":"Combination products","7":"Recalls","11":"Electronic records and signatures","801":"Labeling","803":"Medical Device Reporting","806":"Corrections and removals","807":"Registration, listing and 510(k)","812":"Investigational device exemptions","814":"Premarket approval","820":"Quality Management System Regulation","821":"Device tracking","822":"Postmarket surveillance","830":"Unique device identification","860":"Classification procedures"};
-  const art={}, annex={};
-  ARTS.forEach(([ref,t])=>{ let m=ref.match(/^MDR Article (\d+[a-z]?(?:\(\d+\))?)$/); if(m) art[m[1]]=t; m=ref.match(/^MDR Annex ([IVX]+)$/); if(m) annex[m[1]]=t; m=ref.match(/^21 CFR (\d+\.\d+)$/); if(m&&!cfr[m[1]]) cfr[m[1]]=t; });
-  Object.assign(annex,{"V":"CE marking","VII":"Requirements for notified bodies","X":"Type-examination","XI":"Product conformity verification","XII":"Certificates issued by notified bodies","XIII":"Custom-made devices","XVI":"Products without an intended medical purpose"});
-  return {iso,cfr,parts,art,annex};
-})();
-function shortT(t){ return t.length>48?t.slice(0,46).replace(/\s+\S*$/,"")+"…":t; }
-function annotateText(s){
-  const seen=new Set();
-  const near=(str,off,len,t)=>{ const k=t.toLowerCase().replace(/[^a-z0-9 ]/g,"").split(" ").filter(w=>w.length>3).slice(0,2).join(" "); if(!k) return false;
-    const after=str.slice(off+len,off+len+40).toLowerCase().replace(/[^a-z0-9 ]/g,"").trim(); const before=str.slice(Math.max(0,off-60),off).toLowerCase().replace(/[^a-z0-9 ]/g,"");
-    const a30=after.slice(0,30); return k.split(" ").some(w=>a30.includes(w))||before.includes(k); };
-  const ann=(str,off,m,key,t,head,tail)=>{ if(!t||seen.has(key)) return m; if(/^\s+\(/.test(str.slice(off+m.length,off+m.length+3))) return m; if(near(str,off,m.length,t)) return m; seen.add(key); return head+" ("+shortT(t)+")"+(tail||""); };
-  s=s.replace(/\b(?:21 CFR |CFR )?(8\d\d\.\d+)((?:\([a-z0-9]+\))*)/g,(m,sec,sub,off,str)=>REFT.cfr[sec]?ann(str,off,m,"c"+sec,REFT.cfr[sec],m):m);
-  s=s.replace(/\b(?:21 )?CFR (\d{1,2}\.\d+)/g,(m,sec,off,str)=>REFT.cfr[sec]?ann(str,off,m,"c"+sec,REFT.cfr[sec],m):m);
-  s=s.replace(/\bParts? (\d{1,3})\b(?![.\d])/g,(m,p,off,str)=>REFT.parts[p]?ann(str,off,m,"p"+p,REFT.parts[p],m):m);
-  s=s.replace(/\b(Art\.|Articles?) ?(\d+[a-z]?)(\(\d+\))?/g,(m,a,n,sub,off,str)=>{ const t=(sub&&REFT.art[n+sub])||REFT.art[n]; return t?ann(str,off,m,"a"+n+(sub||""),t,m):m; });
-  s=s.replace(/\bAnnex ([IVX]+)\b/g,(m,n,off,str)=>REFT.annex[n]?ann(str,off,m,"x"+n,REFT.annex[n],m):m);
-  s=s.replace(/(^|[\s(;,])([4-8]\.\d(?:\.\d{1,2})?)((?:\([a-z]\))*)(?![\d.%]*\d)(?!\s*%)/g,(m,pre,cl,sub,off,str)=>{ const t=REFT.iso[cl]; if(!t) return m; const prev=str.slice(Math.max(0,off-10),off+pre.length); if(/(AQL|Cpk|§|v|version|edition|rev\.?|clause)\s*$/i.test(prev)) return m; const r=ann(str,off+pre.length,cl+sub,"i"+cl,t,cl+sub); return pre+r; });
-  return s;
-}
-const annDone=new WeakSet();
-function annotate(root){
-  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>{ const p=n.parentElement; if(!p||annDone.has(n)) return NodeFilter.FILTER_REJECT; if(p.closest("input,textarea,script,style,svg,.cn,.clz,.qIn,.aqlBtn,.bs,.tlDot,.chipBtn,.audTrail,.navBtn,mark")) return NodeFilter.FILTER_REJECT; return /\d/.test(n.nodeValue)?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT; }});
-  const list=[]; while(w.nextNode()) list.push(w.currentNode);
-  list.forEach(n=>{ const v=annotateText(n.nodeValue); if(v!==n.nodeValue) n.nodeValue=v; annDone.add(n); });
-}
-(function(){ const main=document.getElementById("main"); let t; new MutationObserver(()=>{ clearTimeout(t); t=setTimeout(()=>annotate(main),30); }).observe(main,{childList:true,subtree:true}); })();
 window.addEventListener("hashchange",route);
 route();
 (function(){ let on=true; try{ on=localStorage.getItem(LKEY)!=="off"; }catch(e){} if(on) showLaunch(); })();
