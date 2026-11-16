@@ -793,6 +793,25 @@ table.rmMatrix th{font-weight:700; text-align:left; padding:4px; color:var(--mut
 .riskLink{display:grid; gap:6px; margin-top:10px; background:#fbf8f5; border:1px dashed #e2c9b8; border-radius:10px; padding:10px}
 .iaPrev h4{margin:14px 0 6px} .iaPrev .iaH3{display:block; margin:10px 0 4px}
 .okTxt{background:#eaf5ee; border:1px solid #bfe0ca; color:#1d6b3b; border-radius:10px; padding:10px 12px; font-weight:700}
+
+/* ---- 3-row grouped main navigation (Learn / Practice / Tools) ---- */
+.mainNav{display:grid !important; grid-template-columns:1fr !important; gap:6px; padding:8px; position:static !important; overflow:visible !important; border-radius:16px !important; border-width:1px !important}
+.navGroup{display:grid; grid-template-columns:78px 1fr; gap:8px; align-items:center}
+.navLab{font-size:11.5px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); padding-left:4px}
+.navRowG{display:grid; gap:6px} .navRowG.c4{grid-template-columns:repeat(4,1fr)} .navRowG.c3{grid-template-columns:repeat(3,1fr)} .navRowG.c2{grid-template-columns:repeat(2,1fr)}
+.mainNav .navBtn{flex-direction:row !important; justify-content:flex-start; gap:10px !important; padding:12px 14px !important; font-size:15.5px !important; border:1px solid var(--line); background:var(--card); border-radius:12px; min-height:52px; text-align:left; flex:none !important}
+.mainNav .navBtn span{font-size:inherit !important}
+.mainNav .navBtn .ico{width:26px !important; height:26px !important; flex:0 0 26px}
+.mainNav .navBtn[aria-current="true"]{box-shadow:inset 0 -3px 0 var(--ac,#2e7d74) !important; border-color:var(--ac,#2e7d74)}
+.navGroup + .navGroup{border-top:1px dashed var(--line); padding-top:6px}
+@media (max-width:640px){
+  body{padding-bottom:0 !important}
+  .mainNav{padding:6px !important; gap:5px}
+  .navGroup{grid-template-columns:1fr; gap:4px}
+  .navLab{font-size:10.5px}
+  .mainNav .navBtn{flex-direction:column !important; justify-content:center; text-align:center; gap:4px !important; padding:9px 4px !important; font-size:12.5px !important; min-height:62px; line-height:1.15}
+  .mainNav .navBtn .ico{width:24px !important; height:24px !important; flex:none}
+}
 </style>
 </head>
 <body>
@@ -809,7 +828,7 @@ table.rmMatrix th{font-weight:700; text-align:left; padding:4px; color:var(--mut
   <nav class="rail" id="rail" aria-label="Chapters"></nav>
   <main id="main"></main>
 </div>
-<footer>Sources are limited to official publications: for the US, the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases; for the EU, EUR-Lex and European Commission pages including MDCG guidance. Items tagged “Application” are my reasoning, not official statements. Check the linked source before you cite anything in an audit response. Answers are saved in this browser on this device. Version 2026-11-16g.</footer>
+<footer>Sources are limited to official publications: for the US, the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases; for the EU, EUR-Lex and European Commission pages including MDCG guidance. Items tagged “Application” are my reasoning, not official statements. Check the linked source before you cite anything in an audit response. Answers are saved in this browser on this device. Version 2026-11-16h.</footer>
 </div>
 
 <script>
@@ -893,7 +912,9 @@ function renderNav(active){
     ps.append(el("button",{class:"partBtn "+p,type:"button","aria-pressed":String(c.part===p),onclick:()=>{ if(c.part!==p) location.hash=CH.find(x=>x.part===p).id; }},l));
   });
   const r2=document.getElementById("navRow2"); r2.innerHTML="";
-  NAV.forEach(([k,l,ic])=>r2.append(el("button",{class:"navBtn n-"+ic,type:"button","aria-current":String(active===k||(k==="tools"&&["sampling","msa","grr","rmtools","impact"].includes(active))),onclick:()=>{ if(k==="random"){ rnd.cur=null; } if(location.hash==="#"+k) route(); else location.hash=k; }}, ico(ic), el("span",{},l))));
+  const NK=Object.fromEntries(NAV.map(x=>[x[0],x]));
+  const navBtn=([k,l,ic])=>el("button",{class:"navBtn n-"+ic,type:"button","aria-current":String(active===k||(k==="tools"&&["sampling","msa","grr","rmtools","impact"].includes(active))),onclick:()=>{ if(k==="random"){ rnd.cur=null; } if(location.hash==="#"+k) route(); else location.hash=k; }}, ico(ic), el("span",{},l));
+  [["Learn",["home","explore","map","dates"]],["Practice",["random","dilemmas","audit"]],["Tools",["tools","risk"]]].forEach(([lab,keys])=>r2.append(el("div",{class:"navGroup"}, el("span",{class:"navLab"},lab), el("div",{class:"navRowG c"+keys.length}, ...keys.map(k=>navBtn(NK[k]))))));
   const isCh=CH.some(x=>x.id===active); document.getElementById("dnav").style.display=isCh?"":"none";
   const ct=document.getElementById("chTabs"); ct.innerHTML=""; ct.style.display="";
   CH.filter(x=>x.part===c.part).forEach(x=>{
@@ -1798,7 +1819,7 @@ const ICONS={
  audit:'<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v3h6V3M8.5 12l2.5 2.5 4.5-5"/>'
 };
 function ico(k){ const s=document.createElementNS("http://www.w3.org/2000/svg","svg"); s.setAttribute("viewBox","0 0 24 24"); s.setAttribute("aria-hidden","true"); s.setAttribute("class","ico"); s.innerHTML=ICONS[k]; return s; }
-const NAV=[["home","Home","home"],["explore","Explore","explore"],["random","Training","train"],["dilemmas","Selected Dilemmas","dil"],["map","QMS map","map"],["risk","Risk management","risk"],["dates","Regulatory Timeline","dates"],["tools","Useful tools","samp"],["audit","Audit mode","audit"]];
+const NAV=[["home","Home","home"],["explore","Explore","explore"],["random","Training mode","train"],["dilemmas","Selected Dilemmas","dil"],["map","QMS map","map"],["risk","Risk management","risk"],["dates","Regulatory Timeline","dates"],["tools","Useful tools","samp"],["audit","Audit mode","audit"]];
 
 /* ---------- search widget (one component, used inside Explore) ---------- */
 function searchWidget(){
