@@ -809,7 +809,7 @@ table.rmMatrix th{font-weight:700; text-align:left; padding:4px; color:var(--mut
   <nav class="rail" id="rail" aria-label="Chapters"></nav>
   <main id="main"></main>
 </div>
-<footer>Sources are limited to official publications: for the US, the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases; for the EU, EUR-Lex and European Commission pages including MDCG guidance. Items tagged “Application” are my reasoning, not official statements. Check the linked source before you cite anything in an audit response. Answers are saved in this browser on this device. Version 2026-11-16f.</footer>
+<footer>Sources are limited to official publications: for the US, the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases; for the EU, EUR-Lex and European Commission pages including MDCG guidance. Items tagged “Application” are my reasoning, not official statements. Check the linked source before you cite anything in an audit response. Answers are saved in this browser on this device. Version 2026-11-16g.</footer>
 </div>
 
 <script>
@@ -3417,22 +3417,21 @@ function iaClass(a){ const r=raCalc(a); const safety=["P1.1","P2.2","P10.1","P10
 let IA_TAB="info";
 function renderImpact(){
   const m=document.getElementById("main"); m.innerHTML="";
-  m.append(toolHead("Change Impact Assessment","Part 1: the change originator and SMEs assess the impact, linked to the risk file. Part 2, after Part 1 is approved: regulatory affairs assesses FDA and EU MDR impact. Then generate the impact assessment output."));
+  m.append(toolHead("Change Impact Assessment","Part 1: the change originator and SMEs assess the impact, linked to the risk file. Part 2: regulatory affairs assesses FDA and EU MDR impact. Then generate the impact assessment output. Approvals stay in your eQMS change control."));
   const a=iaCur();
   const lst=el("div",{class:"card"}, el("div",{class:"wsHead"}, el("h3",{class:"secTitle"},"Assessments"), el("button",{class:"cta",type:"button",onclick:()=>{ iaNew(); IA_TAB="info"; renderImpact(); }},"+ New assessment")));
   if(!IA_STORE.list.length) lst.append(el("p",{class:"src"},"No assessments yet. Start a new one."));
-  IA_STORE.list.forEach(x=>{ const st=x.ra.by&&x.ra.date?"Complete":x.p1.status==="approved"?"Part 1 approved · RA pending":"Part 1 in progress";
+  IA_STORE.list.forEach(x=>{ const st=x.ra.by&&x.ra.date?"Complete":iaP1Missing(x).length?"Part 1 in progress":"Part 1 complete · RA pending";
     lst.append(el("div",{class:"iaRow"+(a&&x.id===a.id?" on":"")}, el("button",{class:"linkBtn",type:"button",onclick:()=>{ IA_STORE.cur=x.id; iaSave(); renderImpact(); }}, el("span",{class:"idTag"},x.id)," "+(x.info.cc?x.info.cc+" · ":"")+(x.info.title||"Untitled")), el("span",{class:"src"},st+" · saved "+x.updated),
       el("button",{class:"linkBtn del",type:"button",onclick:()=>modalConfirm("Delete "+x.id+"?","Delete this impact assessment? This cannot be undone.","Delete",()=>{ IA_STORE.list=IA_STORE.list.filter(y=>y!==x); if(IA_STORE.cur===x.id) IA_STORE.cur=IA_STORE.list[0]?IA_STORE.list[0].id:null; iaSave(); renderImpact(); })},"Delete"))); });
   m.append(lst);
   if(!a) return;
-  const p1ok=a.p1.status==="approved";
-  const tabs=[["info","1 · Change"],["p1","2 · Impact (SME)"],["ap","3 · Part 1 approval"],["ra","4 · Regulatory (RA)"],["out","5 · Output"]];
-  m.append(tabRow(tabs,IA_TAB,k=>{ if((k==="ra"||k==="out")&&!p1ok){ flash("Part 1 must be approved first."); return; } IA_TAB=k; renderImpact(); }));
+  if(IA_TAB==="ap") IA_TAB="ra";
+  const tabs=[["info","1 · Change"],["p1","2 · Impact (SME)"],["ra","3 · Regulatory (RA)"],["out","4 · Output"]];
+  m.append(tabRow(tabs,IA_TAB,k=>{ IA_TAB=k; renderImpact(); }));
   const p=el("div",{class:"panel"}); m.append(p);
-  const touch=()=>{ a.updated=nowTs(); iaSave(); const s=document.getElementById("iaStatus"); if(s&&IA_TAB==="p1"){ const miss=iaP1Missing(a); s.className=miss.length?"warn":"okTxt"; s.textContent=miss.length?miss.length+" item(s) still open: "+miss.slice(0,8).join("; ")+(miss.length>8?"…":""):"Part 1 is complete. Send it for approval in tab 3."; } };
-  const lock=p1ok&&IA_TAB!=="ra"&&IA_TAB!=="out"&&IA_TAB!=="ap";
-  if(lock) p.append(el("div",{class:"selBar draftBar"}, el("span",{},"Part 1 is approved and locked. To change it, re-open Part 1 in tab 3 (this clears the approval).")));
+  const touch=()=>{ a.updated=nowTs(); iaSave(); const s=document.getElementById("iaStatus"); if(s&&IA_TAB==="p1"){ const miss=iaP1Missing(a); s.className=miss.length?"warn":"okTxt"; s.textContent=miss.length?miss.length+" item(s) still open: "+miss.slice(0,8).join("; ")+(miss.length>8?"…":""):"Part 1 is complete. Continue with the regulatory assessment."; } };
+  const lock=false;
   ({info:iaInfo,p1:iaP1,ap:iaAp,ra:iaRa,out:iaOut})[IA_TAB](p,a,touch,lock);
 }
 function ynBtns(val,on,dis){ return el("div",{class:"gbTog"}, el("button",{type:"button",class:"gb g","aria-pressed":String(val==="Y"),onclick:()=>on("Y")},"Yes"), el("button",{type:"button",class:"gb n","aria-pressed":String(val==="N"),onclick:()=>on("N")},"No")); }
@@ -3491,8 +3490,8 @@ function iaP1(p,a,touch,lock){
   const miss=iaP1Missing(a);
   const techYes=["P2","P3","P4","P6","P7","P8","P9"].some(t=>{ const T=IA_P1.find(x=>x.id===t); return T.subs.some(S=>a.ans[S.id]==="Y"); });
   if(techYes&&["P10.1","P10.2","P10.3"].every(id=>a.ans[id]==="N")) p.append(el("p",{class:"warn"},"Check: you answered Yes in a design, software, material, process, supplier, sterility or quality topic, but No to all risk questions. That can be right, but the risk rationale should say which risk-file items were reviewed (add them under Linked risk-file items)."));
-  p.append(el("div",{class:"card"}, el("p",{id:"iaStatus",class:miss.length?"warn":"okTxt"},miss.length?miss.length+" item(s) still open: "+miss.slice(0,8).join("; ")+(miss.length>8?"…":""):"Part 1 is complete. Send it for approval in tab 3."),
-    el("div",{class:"mact"}, el("button",{class:"cta",type:"button",onclick:()=>{ IA_TAB="ap"; renderImpact(); }},"Next: Part 1 approval"))));
+  p.append(el("div",{class:"card"}, el("p",{id:"iaStatus",class:miss.length?"warn":"okTxt"},miss.length?miss.length+" item(s) still open: "+miss.slice(0,8).join("; ")+(miss.length>8?"…":""):"Part 1 is complete. Continue with the regulatory assessment."),
+    el("div",{class:"mact"}, el("button",{class:"cta",type:"button",onclick:()=>{ IA_TAB="ra"; renderImpact(); }},"Next: regulatory assessment"))));
 }
 function iaAp(p,a,touch){
   const miss=iaP1Missing(a); const P=a.p1;
@@ -3559,7 +3558,6 @@ function iaDocModel(a){
   const yes=IA_P1.flatMap(T=>T.subs.filter(S=>a.ans[S.id]==="Y"));
   blocks.push({h2:"3. Required deliverables"}); blocks.push(yes.length?{table:[["#","Deliverables","Details"],...yes.map(S=>[S.id,(a.dl[S.id]||[]).join("; ")||"-",a.txt[S.id]||""])],head:true}:{p:"No deliverables: the change does not modify design attributes, manufacturing processes, quality attributes or safety characteristics. Existing verification, validation and risk management evidence remains valid."});
   if(a.req.length) blocks.push({h2:"4. Impacted requirements and required tests"},{table:[["Change item","Impacted area","Requirement","Tests"],...a.req.map(r=>[r.item,r.area,r.req,r.test])],head:true});
-  blocks.push({h2:"Part 1 approval"},{p:"Approved by "+a.p1.by+" ("+a.p1.role+") on "+a.p1.date+"."});
   blocks.push({h2:"5. Regulatory impact assessment"});
   const rr=[]; if(cr.us) rr.push(["US decision",cr.us.t]); if(cr.eu) rr.push(["EU decision",cr.eu.t]); if(a.ra.markets.Other) rr.push(["Other markets",a.ra.other]); cr.notes.forEach(n=>rr.push(["Action",n]));
   const A=a.ra.ans; const ansRows=Object.keys(A).sort().map(k=>{ const q=[...RA_US510.flatMap(g=>g.q),...RA_PMA,...RA_EU_SUB.flatMap(g=>g.q),...RA_EU_DOCS].find(x=>x[0]===k); const lbl={US0:"PCCP covers change",USX:"Exceeds 510(k) exemption",US1:"Correction/removal (806)",US2:"New DI / GUDID",US3:"Listing update",EL1:"Significant change (MDCG 2020-3)"}[k]||(k.startsWith("UT")?"Change type "+k.slice(2):k.startsWith("EG")?"EU area "+k.slice(2):q?q[1]:k);
