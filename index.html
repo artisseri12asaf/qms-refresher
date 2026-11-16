@@ -812,6 +812,16 @@ table.rmMatrix th{font-weight:700; text-align:left; padding:4px; color:var(--mut
   .mainNav .navBtn{flex-direction:column !important; justify-content:center; text-align:center; gap:4px !important; padding:9px 4px !important; font-size:12.5px !important; min-height:62px; line-height:1.15}
   .mainNav .navBtn .ico{width:24px !important; height:24px !important; flex:none}
 }
+
+/* ---- page background: bright hospital corridor (Unsplash, Tasha Kostyuk, Unsplash License) ---- */
+html{background:#eef3f1}
+body{background:transparent !important; background-image:none !important; position:relative}
+body::before{content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background-image:linear-gradient(180deg,rgba(244,248,247,.50) 0%,rgba(244,248,247,.62) 45%,rgba(244,248,247,.72) 100%),url("https://images.unsplash.com/photo-1777269749032-d8d458ae594d?w=1600&q=60&fm=jpg");
+  background-size:cover; background-position:center; background-color:#eef3f1}
+@media (max-width:640px){ body::before{background-image:linear-gradient(180deg,rgba(244,248,247,.55) 0%,rgba(244,248,247,.70) 100%),url("https://images.unsplash.com/photo-1777269749032-d8d458ae594d?w=900&q=60&fm=jpg")} }
+.photoCredit{font-size:12px; color:var(--muted); margin-top:6px}
+.photoCredit a{color:inherit}
 </style>
 </head>
 <body>
@@ -828,7 +838,7 @@ table.rmMatrix th{font-weight:700; text-align:left; padding:4px; color:var(--mut
   <nav class="rail" id="rail" aria-label="Chapters"></nav>
   <main id="main"></main>
 </div>
-<footer>Sources are limited to official publications: for the US, the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases; for the EU, EUR-Lex and European Commission pages including MDCG guidance. Items tagged “Application” are my reasoning, not official statements. Check the linked source before you cite anything in an audit response. Answers are saved in this browser on this device. Version 2026-11-16h.</footer>
+<footer>Sources are limited to official publications: for the US, the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases; for the EU, EUR-Lex and European Commission pages including MDCG guidance. Items tagged “Application” are my reasoning, not official statements. Check the linked source before you cite anything in an audit response. Answers are saved in this browser on this device. Version 2026-11-16i. <div class="photoCredit">Background photo: Tasha Kostyuk on <a href="https://unsplash.com/photos/empty-hospital-corridor-with-benches-and-doors-Pk-KuizxQv8" target="_blank" rel="noopener">Unsplash</a>.</div></footer>
 </div>
 
 <script>
