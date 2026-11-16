@@ -668,6 +668,23 @@ button.mRingSvg{cursor:pointer}
 .crRes{margin-top:16px; border-top:1px solid var(--line); padding-top:14px}
 .statCell.wide{grid-column:1/-1}
 .statCell.wide b{font-size:14.5px; font-weight:600}
+
+.choiceBtn.sbtn.on{border:2.5px solid var(--fda)!important; border-left-width:6px!important; box-shadow:0 0 0 4px rgba(47,74,160,.18); background:#f4f6fd; position:relative}
+.choiceBtn.sbtn.on::after{content:"✓ Selected"; position:absolute; top:8px; right:10px; font-size:11.5px; font-weight:800; color:var(--fda); background:#fff; border:1px solid #c9d0ec; border-radius:20px; padding:1px 8px}
+.choiceBtn.sbtn.on b{padding-right:84px}
+.aqlBtn.on{box-shadow:0 0 0 3px rgba(47,74,160,.25); outline:2px solid #fff; outline-offset:-4px}
+.stp.can{cursor:pointer; background:none; border:0; font:inherit; color:var(--muted); padding:0}
+.stp.can:hover i,.stp.can:focus-visible i{box-shadow:0 0 0 4px rgba(46,125,116,.22)}
+.stp.can span{text-decoration:underline; text-underline-offset:2px; text-decoration-color:var(--line)}
+.stepper{gap:2px} .stp span{font-size:11px; line-height:1.2}
+.valChips{display:flex; flex-wrap:wrap; gap:5px; margin-top:8px}
+.vSum{flex:0 0 100%; font-size:13.5px; font-weight:700; color:var(--good)}
+.vSum.oos{color:var(--bad)}
+.vChip{display:inline-flex; gap:5px; align-items:baseline; font-size:13px; padding:3px 8px; border-radius:8px; background:var(--paper); border:1px solid var(--line); font-variant-numeric:tabular-nums}
+.vChip i{font-style:normal; font-size:10.5px; color:var(--muted)}
+.vChip.oos{background:#fbeceb; border-color:#e6a9a1; color:#9b2f25; font-weight:800}
+.vChip.oos i{color:#9b2f25}
+.plotCard .eyebrow{text-transform:none; letter-spacing:.01em; font-size:12.5px}
 </style>
 </head>
 <body>
@@ -684,7 +701,7 @@ button.mRingSvg{cursor:pointer}
   <nav class="rail" id="rail" aria-label="Chapters"></nav>
   <main id="main"></main>
 </div>
-<footer>Sources are limited to official publications: for the US, the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases; for the EU, EUR-Lex and European Commission pages including MDCG guidance. Items tagged “Application” are my reasoning, not official statements. Check the linked source before you cite anything in an audit response. Answers are saved in this browser on this device. Version 2026-11-16a.</footer>
+<footer>Sources are limited to official publications: for the US, the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases; for the EU, EUR-Lex and European Commission pages including MDCG guidance. Items tagged “Application” are my reasoning, not official statements. Check the linked source before you cite anything in an audit response. Answers are saved in this browser on this device. Version 2026-11-16b.</footer>
 </div>
 
 <script>
@@ -1109,9 +1126,11 @@ function pAt(c,n,pa){ let lo=0,hi=1; for(let k=0;k<60;k++){ const mid=(lo+hi)/2;
 function crN(C,R,c){ for(let n=c+1;n<200000;n++){ if(binCdf(c,n,1-R)<=1-C) return n; } return null; }
 const ss={mode:null,step:0,cont:null,lot:null,level:"II",cls:null,aql:null,C:0.95,R:0.95,sev:"normal",dtype:null};
 function sampBtn(label,sub,on,act,cls){ return el("button",{class:"choiceBtn sbtn"+(on?" on":"")+(cls?" "+cls:""),type:"button",onclick:act}, el("b",{},label), sub?el("span",{},sub):""); }
-function stepper(total,cur,labels){ const d=el("div",{class:"stepper"}); for(let k=0;k<total;k++) d.append(el("div",{class:"stp"+(k<cur?" done":"")+(k===cur?" cur":"")}, el("i",{},String(k+1)), el("span",{},labels[k]))); return d; }
+function stepper(total,cur,labels){ const d=el("div",{class:"stepper",style:"grid-template-columns:repeat("+total+",1fr)"}); const mx=Math.max(ss.maxStep||0,cur);
+  for(let k=0;k<total;k++){ const can=k!==cur&&k<=mx; const node=el(can?"button":"div",{class:"stp"+(k<cur?" done":"")+(k===cur?" cur":"")+(can?" can":""),type:can?"button":null,"aria-label":can?"Go to step "+(k+1)+": "+labels[k]:null,"aria-current":k===cur?"step":null,onclick:can?()=>{ ss.step=k; renderSampling(); }:null}, el("i",{},String(k+1)), el("span",{},labels[k])); if(!can) node.removeAttribute("type"); d.append(node); } return d; }
 function countUp(node,to,dec){ const t0=performance.now(); const f=(t)=>{ const k=Math.min(1,(t-t0)/700); const v=to*(1-Math.pow(1-k,3)); node.textContent=dec?v.toFixed(dec):Math.round(v).toLocaleString("en-US"); if(k<1) requestAnimationFrame(f); }; requestAnimationFrame(f); }
 function renderSampling(){
+  if(ss.mode==="aql") ss.maxStep=Math.max(ss.maxStep||0,ss.step); else ss.maxStep=0;
   const m=document.getElementById("main"); m.innerHTML="";
   m.append(el("section",{class:"chHead sampHead"},
     el("div",{class:"eyebrow"},"Useful tools · Sample size tool (ISO 2859-1:2026)"),
@@ -1121,7 +1140,7 @@ function renderSampling(){
   if(!ss.mode){
     box.append(el("h3",{class:"srcHead"},"What do you need?"));
     const g=el("div",{class:"choiceGrid"});
-    g.append(sampBtn("Lot acceptance (ISO 2859-1, AQL)","Incoming, in-process or final inspection of a continuing series of lots",false,()=>{ ss.mode="aql"; ss.step=0; ss.res.done=false; renderSampling(); },"qms"));
+    g.append(sampBtn("Lot acceptance (ISO 2859-1, AQL)","Incoming, in-process or final inspection of a continuing series of lots",false,()=>{ ss.mode="aql"; ss.step=0; ss.maxStep=0; ss.res.done=false; renderSampling(); },"qms"));
     g.append(sampBtn("Design verification (confidence and reliability)","Pass/fail test samples for verification or validation, based on the binomial distribution",false,()=>{ ss.mode="cr"; ss.step=0; renderSampling(); },"eu"));
     box.append(g);
     box.append(el("p",{class:"src"},"Current edition: ISO 2859-1:2026 (third edition, January 2026), which replaced ISO 2859-1:1999 and its 2011 amendment and added skip-lot inspection. ANSI/ASQ Z1.4 uses the same code letters and master tables."));
@@ -1192,9 +1211,9 @@ function renderSampling(){
 function renderDataType(body,back){
   body.append(el("h3",{},"What will you record for each sampled unit?"));
   const g=el("div",{class:"choiceGrid"});
-  [["items","Pass or fail (nonconforming items)","Each unit conforms or doesn’t. AQL is in percent nonconforming. ISO 2859-1.","qms"],
-   ["defects","Number of nonconformities per unit","A unit can have several nonconformities, e.g. cosmetic defects. AQL is in nonconformities per 100 items. ISO 2859-1.","fda"],
-   ["vars","Measured values (variables)","Dimensions, forces or other measurements against specification limits.","eu"]].forEach(([k,t,s,c])=>g.append(sampBtn(t,s,ss.dtype===k,()=>{ ss.dtype=k; ss.res.method=k==="vars"?"values":"count"; ss.res.done=false; renderSampling(); },c)));
+  [["items","Pass or fail","Each unit conforms or doesn’t. AQL is in percent nonconforming. ISO 2859-1.","qms"],
+   ["vars","Measured values (variables)","Dimensions, forces or other measurements against specification limits.","eu"],
+   ["defects","Number of nonconformities per unit","A unit can have several nonconformities, e.g. cosmetic defects. AQL is in nonconformities per 100 items. ISO 2859-1.","fda"]].forEach(([k,t,s,c])=>g.append(sampBtn(t,s,ss.dtype===k,()=>{ ss.dtype=k; ss.res.method=k==="vars"?"values":"count"; ss.res.done=false; ss.maxStep=0; renderSampling(); },c)));
   body.append(g);
   if(ss.dtype==="vars") body.append(el("div",{class:"warn"}, el("b",{},"ISO 2859-1 is for inspection by attributes only. "),"Sampling plans for measured data are in ISO 3951-1 (variables), which uses smaller samples but needs a normal distribution and a known or estimated standard deviation. This tool applies ISO 2859-1 by classifying each measurement against the specification limits, then also gives you the statistics of the measurements."));
   if(ss.dtype==="defects") body.append(el("p",{class:"src"},"For AQLs of 10 or less, the plans are the same for both ways of counting. ISO 2859-1 also lists AQLs above 10 (up to 1000) for nonconformities per 100 items; read those plans from Table 2-A."));
@@ -1273,7 +1292,7 @@ function renderPlan(body,back){
   const sum="ISO 2859-1 single sampling, "+sevName.toLowerCase()+" inspection. Lot "+ss.lot+", level "+ss.level+", code letter "+L+", AQL "+ss.aql+"% → "+(!p?"inspection discontinued":(p.n>=ss.lot?"100% inspection":"n = "+p.n+(p.ac!==null?", Ac = "+p.ac+", Re = "+p.re:" (Ac/Re from Table 2-C)")))+".";
   const cp=el("button",{class:"reset",type:"button",onclick:()=>{ try{ navigator.clipboard.writeText(sum); cp.textContent="Copied ✓"; }catch(e){ cp.textContent=sum; } }},"Copy plan summary");
   const goRes=el("button",{class:"cta",type:"button",onclick:()=>{ ss.step=6; ss.res.done=false; renderSampling(); window.scrollTo({top:0}); }},"Continue: enter results →"); goRes.disabled=!p;
-  body.append(el("div",{class:"mact"}, el("button",{class:"reset",type:"button",onclick:back},"← Back"), cp, el("button",{class:"reset",type:"button",onclick:()=>{ Object.assign(ss,{mode:null,step:0,cont:null,lot:null,level:"II",cls:null,aql:null,sev:"normal",dtype:null}); ss.res={method:"count",count:"",raw:"",LSL:"",USL:"",ac:"",re:"",fname:"",done:false}; renderSampling(); }},"Start over"), goRes));
+  body.append(el("div",{class:"mact"}, el("button",{class:"reset",type:"button",onclick:back},"← Back"), cp, el("button",{class:"reset",type:"button",onclick:()=>{ Object.assign(ss,{mode:null,step:0,maxStep:0,cont:null,lot:null,level:"II",cls:null,aql:null,sev:"normal",dtype:null}); ss.res={method:"count",count:"",raw:"",LSL:"",USL:"",ac:"",re:"",fname:"",done:false}; renderSampling(); }},"Start over"), goRes));
   body.append(el("p",{class:"src"},"Tables: ISO 2859-1 Table 1 (code letters) and Tables 2-A/2-B (single sampling), which use the same structure as ANSI/ASQ Z1.4 and public-domain MIL-STD-105E. Check plans against your controlled copy of ISO 2859-1:2026 before using them in a procedure."));
 }
 function crChart(C,R){
@@ -1357,8 +1376,11 @@ function chi2Inv(q,nu){ const z=normInv(q); const h=2/(9*nu); return nu*Math.pow
 function kTwoSided(n,C,R){ const nu=n-1; const z=normInv((1+R)/2); return Math.sqrt(nu*(1+1/n)*z*z/chi2Inv(1-C,nu)); }
 function relLower(f,n,C){ let lo=0,hi=1; for(let k=0;k<60;k++){ const m=(lo+hi)/2; if(binCdf(f,n,1-m)<=1-C) lo=m; else hi=m; } return lo; }
 function fmt(v,d){ if(v===null||v===undefined||!Number.isFinite(v)) return "—"; const a=Math.abs(v); if(d!==undefined) return v.toFixed(d); return a!==0&&(a<0.001||a>=1e6)?v.toExponential(3):(+v.toPrecision(5)).toString(); }
-function capStats(D,LSL,USL){
+function sigmaWithin(xs){ if(xs.length<2) return null; let s=0; for(let i=1;i<xs.length;i++) s+=Math.abs(xs[i]-xs[i-1]); return s/(xs.length-1)/1.128; }
+function capStats(D,LSL,USL,xs){
   const r={}; const s=D.sd; if(!s) return r;
+  const sw=xs?sigmaWithin(xs):null; r.sw=sw;
+  if(sw){ if(LSL!==null&&USL!==null) r.Cp=(USL-LSL)/(6*sw); const lo=LSL!==null?(D.mean-LSL)/(3*sw):Infinity, hi=USL!==null?(USL-D.mean)/(3*sw):Infinity; if(LSL!==null||USL!==null) r.Cpk=Math.min(lo,hi); }
   if(LSL!==null&&USL!==null){ r.Pp=(USL-LSL)/(6*s); }
   const lo=LSL!==null?(D.mean-LSL)/(3*s):Infinity, hi=USL!==null?(USL-D.mean)/(3*s):Infinity;
   if(LSL!==null||USL!==null) r.Ppk=Math.min(lo,hi);
@@ -1368,13 +1390,14 @@ function capStats(D,LSL,USL){
 /* ---------- plots (SVG strings, also reused for the PDF) ---------- */
 function histBins(D){ const k=Math.max(5,Math.min(20,Math.ceil(Math.log2(D.n)+1))); const lo=D.min, hi=D.max===D.min?D.min+1:D.max; const w=(hi-lo)/k; const c=new Array(k).fill(0); D.sorted.forEach(x=>{ c[Math.min(k-1,Math.floor((x-lo)/w))]++; }); return {k,lo,w,c}; }
 function plotHist(D,LSL,USL){
-  const W=340,H=200,P=30; const B=histBins(D);
+  const W=340,H=214,P=44; const B=histBins(D);
   let x0=Math.min(B.lo,LSL??B.lo), x1=Math.max(B.lo+B.k*B.w,USL??-Infinity, B.lo+B.k*B.w); const pad=(x1-x0)*0.06; x0-=pad; x1+=pad;
   const ymax=Math.max(...B.c)*1.18; const X=v=>P+(W-P-8)*(v-x0)/(x1-x0), Y=v=>8+(H-P-8)*(1-v/ymax);
   let bars=B.c.map((c,i)=>`<rect x="${X(B.lo+i*B.w)+1}" y="${Y(c)}" width="${Math.max(1,X(B.lo+(i+1)*B.w)-X(B.lo+i*B.w)-2)}" height="${Y(0)-Y(c)}" fill="var(--qms)" opacity=".75"/>`).join("");
   let curve=""; if(D.sd>0){ let d=""; for(let k=0;k<=60;k++){ const v=x0+(x1-x0)*k/60; const f=D.n*B.w*Math.exp(-(((v-D.mean)/D.sd)**2)/2)/(D.sd*Math.sqrt(2*Math.PI)); d+=(k?"L":"M")+X(v).toFixed(1)+" "+Y(f).toFixed(1); } curve=`<path d="${d}" fill="none" stroke="var(--fda)" stroke-width="2"/>`; }
   const spec=[[LSL,"LSL"],[USL,"USL"]].filter(a=>a[0]!==null).map(([v,l])=>`<line x1="${X(v)}" y1="8" x2="${X(v)}" y2="${Y(0)}" stroke="var(--bad)" stroke-dasharray="4 3"/><text x="${X(v)}" y="18" text-anchor="middle" font-size="10" fill="var(--bad)">${l}</text>`).join("");
-  return `<svg viewBox="0 0 ${W} ${H}" class="oc" role="img" aria-label="Histogram with fitted normal curve"><line x1="${P}" y1="${Y(0)}" x2="${W-8}" y2="${Y(0)}" stroke="var(--line)"/>${bars}${curve}${spec}<text x="${P}" y="${H-8}" font-size="10" fill="var(--muted)">${fmt(x0)}</text><text x="${W-8}" y="${H-8}" text-anchor="end" font-size="10" fill="var(--muted)">${fmt(x1)}</text></svg>`;
+  let sig=""; if(D.sd>0){ [-3,-2,-1,0,1,2,3].forEach(k=>{ const v=D.mean+k*D.sd; if(v<x0||v>x1) return; const xx=X(v).toFixed(1); sig+=`<line x1="${xx}" y1="${Y(0)}" x2="${xx}" y2="${Y(0)+6}" stroke="${k?"#6b5a9a":"var(--ink)"}" stroke-width="${k?1.4:2}"/><text x="${xx}" y="${Y(0)+16}" text-anchor="middle" font-size="9" fill="${k?"#6b5a9a":"var(--ink)"}">${k?(k>0?"+":"−")+Math.abs(k)+"σ":"x̄"}</text>`; if(Math.abs(k)===3) sig+=`<line x1="${xx}" y1="22" x2="${xx}" y2="${Y(0)}" stroke="#6b5a9a" stroke-dasharray="2 3" opacity=".7"/>`; }); }
+  return `<svg viewBox="0 0 ${W} ${H}" class="oc" role="img" aria-label="Histogram with fitted normal curve, mean and standard deviation marks"><line x1="${P}" y1="${Y(0)}" x2="${W-8}" y2="${Y(0)}" stroke="var(--line)"/>${bars}${curve}${spec}${sig}<text x="${W-8}" y="12" text-anchor="end" font-size="10" fill="#6b5a9a">σ = ${fmt(D.sd)}</text><text x="${P-26}" y="${H-6}" font-size="10" fill="var(--muted)">${fmt(x0)}</text><text x="${W-8}" y="${H-6}" text-anchor="end" font-size="10" fill="var(--muted)">${fmt(x1)}</text></svg>`;
 }
 function plotProb(D){
   const W=340,H=200,P=34; const n=D.n; const pts=D.sorted.map((x,i)=>[x,normInv((i+1-0.375)/(n+0.25))]);
@@ -1382,16 +1405,17 @@ function plotProb(D){
   const X=v=>P+(W-P-10)*(v-x0)/(x1-x0||1), Y=z=>8+(H-P-8)*(1-(z-z0)/(z1-z0));
   const dots=pts.map(([x,z])=>`<circle cx="${X(x).toFixed(1)}" cy="${Y(z).toFixed(1)}" r="3" fill="var(--fda)"/>`).join("");
   const line=D.sd>0?`<line x1="${X(D.mean+z0*D.sd)}" y1="${Y(z0)}" x2="${X(D.mean+z1*D.sd)}" y2="${Y(z1)}" stroke="var(--qms)" stroke-width="2"/>`:"";
-  return `<svg viewBox="0 0 ${W} ${H}" class="oc" role="img" aria-label="Normal probability plot"><rect x="${P}" y="8" width="${W-P-10}" height="${H-P-8}" fill="none" stroke="var(--line)"/>${line}${dots}<text x="${P-4}" y="14" text-anchor="end" font-size="10" fill="var(--muted)">z</text><text x="${W-10}" y="${H-8}" text-anchor="end" font-size="10" fill="var(--muted)">value →</text></svg>`;
+  let sg=""; if(D.sd>0) [-1,0,1].forEach(z=>{ if(z<z0||z>z1) return; const xv=X(D.mean+z*D.sd); if(xv<P||xv>W-10) return; sg+=`<line x1="${P}" y1="${Y(z)}" x2="${xv}" y2="${Y(z)}" stroke="#6b5a9a" stroke-dasharray="2 3"/><line x1="${xv}" y1="${Y(z)}" x2="${xv}" y2="${H-P}" stroke="#6b5a9a" stroke-dasharray="2 3"/><text x="${xv}" y="${H-P+12}" text-anchor="middle" font-size="9" fill="#6b5a9a">${z?(z>0?"+1σ":"−1σ"):"x̄"}</text>`; });
+  return `<svg viewBox="0 0 ${W} ${H}" class="oc" role="img" aria-label="Normal probability plot with mean and one standard deviation marked"><rect x="${P}" y="8" width="${W-P-10}" height="${H-P-8}" fill="none" stroke="var(--line)"/>${sg}${line}${dots}<text x="${W-14}" y="22" text-anchor="end" font-size="10" fill="#6b5a9a">σ = ${fmt(D.sd)}</text><text x="${P-4}" y="14" text-anchor="end" font-size="10" fill="var(--muted)">z</text><text x="${W-10}" y="${H-8}" text-anchor="end" font-size="10" fill="var(--muted)">value →</text></svg>`;
 }
 function plotRun(xs,D,LSL,USL){
-  const W=340,H=180,P=34; const n=xs.length; const lo=Math.min(D.min,LSL??D.min), hi=Math.max(D.max,USL??D.max); const pad=(hi-lo||1)*0.08;
+  const W=340,H=180,P=34; const n=xs.length; const lo=Math.min(D.min,LSL??D.min,D.mean-3*D.sd), hi=Math.max(D.max,USL??D.max,D.mean+3*D.sd); const pad=(hi-lo||1)*0.08;
   const X=i=>P+(W-P-10)*(n>1?i/(n-1):0.5), Y=v=>8+(H-P-8)*(1-(v-(lo-pad))/((hi+pad)-(lo-pad)));
   const d=xs.map((v,i)=>(i?"L":"M")+X(i).toFixed(1)+" "+Y(v).toFixed(1)).join(" ");
   const out=v=>(LSL!==null&&v<LSL)||(USL!==null&&v>USL);
   const dots=xs.map((v,i)=>`<circle cx="${X(i).toFixed(1)}" cy="${Y(v).toFixed(1)}" r="2.6" fill="${out(v)?"var(--bad)":"var(--fda)"}"/>`).join("");
   const hl=(v,col,l)=>`<line x1="${P}" y1="${Y(v)}" x2="${W-10}" y2="${Y(v)}" stroke="${col}" stroke-dasharray="4 3"/><text x="${W-12}" y="${Y(v)-3}" text-anchor="end" font-size="10" fill="${col}">${l}</text>`;
-  return `<svg viewBox="0 0 ${W} ${H}" class="oc" role="img" aria-label="Run chart of results in entry order"><rect x="${P}" y="8" width="${W-P-10}" height="${H-P-8}" fill="none" stroke="var(--line)"/>${hl(D.mean,"var(--qms)","mean")}${LSL!==null?hl(LSL,"var(--bad)","LSL"):""}${USL!==null?hl(USL,"var(--bad)","USL"):""}<path d="${d}" fill="none" stroke="var(--muted)" stroke-width="1"/>${dots}<text x="${W-10}" y="${H-8}" text-anchor="end" font-size="10" fill="var(--muted)">sample order →</text></svg>`;
+  return `<svg viewBox="0 0 ${W} ${H}" class="oc" role="img" aria-label="Run chart of results in entry order"><rect x="${P}" y="8" width="${W-P-10}" height="${H-P-8}" fill="none" stroke="var(--line)"/>${hl(D.mean,"var(--qms)","x̄")}${D.sd>0?hl(D.mean+3*D.sd,"#6b5a9a","+3σ")+hl(D.mean-3*D.sd,"#6b5a9a","−3σ"):""}${LSL!==null?hl(LSL,"var(--bad)","LSL"):""}${USL!==null?hl(USL,"var(--bad)","USL"):""}<path d="${d}" fill="none" stroke="var(--muted)" stroke-width="1"/>${dots}<text x="${W-10}" y="${H-8}" text-anchor="end" font-size="10" fill="var(--muted)">sample order →</text></svg>`;
 }
 /* ---------- export: minimal XLSX and PDF writers, no libraries ---------- */
 const CRC_T=(()=>{ const t=new Uint32Array(256); for(let n=0;n<256;n++){ let c=n; for(let k=0;k<8;k++) c=c&1?0xEDB88320^(c>>>1):c>>>1; t[n]=c>>>0; } return t; })();
@@ -1422,7 +1446,7 @@ function buildXlsx(sheets){
   const sty=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="2"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="2"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
   return zipStore([["[Content_Types].xml",ct],["_rels/.rels",rels],["xl/workbook.xml",wb],["xl/_rels/workbook.xml.rels",wbr],["xl/styles.xml",sty],...sheets.map((s,i)=>["xl/worksheets/sheet"+(i+1)+".xml",sheetXml(s.rows,s.widths)])]);
 }
-function pdfTxt(s){ return String(s).replace(/≤/g,"<=").replace(/≥/g,">=").replace(/[–—]/g,"-").replace(/[’‘]/g,"'").replace(/[“”]/g,'"').replace(/·/g,"-").replace(/²/g,"^2").replace(/→/g,"->").replace(/±/g,"+/-").replace(/×/g,"x").replace(/[^\x20-\x7E]/g,"").replace(/\\/g,"\\\\").replace(/\(/g,"\\(").replace(/\)/g,"\\)"); }
+function pdfTxt(s){ return String(s).replace(/≤/g,"<=").replace(/≥/g,">=").replace(/[–—]/g,"-").replace(/[’‘]/g,"'").replace(/[“”]/g,'"').replace(/·/g,"-").replace(/²/g,"^2").replace(/σ/g,"s").replace(/x̄/g,"mean").replace(/R̄/g,"R-bar").replace(/→/g,"->").replace(/±/g,"+/-").replace(/×/g,"x").replace(/[^\x20-\x7E]/g,"").replace(/\\/g,"\\\\").replace(/\(/g,"\\(").replace(/\)/g,"\\)"); }
 function buildPdf(doc){
   // doc: {title, subtitle, sections:[{h, rows:[[k,v]]}], decision:{text,ok}, hist:{bins,lo,w,mean,sd,n,LSL,USL}|null, data:[numbers]}
   const pages=[]; let ops=[]; let y=800; const L=50, R=545;
@@ -1442,7 +1466,9 @@ function buildPdf(doc){
     H.bins.forEach((c,i)=>{ if(!c) return; const a=X(H.lo+i*H.w)+1, b=X(H.lo+(i+1)*H.w)-1; ops.push(`0.33 0.6 0.56 rg ${a.toFixed(1)} ${gy} ${(b-a).toFixed(1)} ${(Y(c)-gy).toFixed(1)} re f`); });
     if(H.sd>0){ let d=""; for(let k=0;k<=60;k++){ const v=x0+(x1-x0)*k/60; const f=H.n*H.w*Math.exp(-(((v-H.mean)/H.sd)**2)/2)/(H.sd*Math.sqrt(2*Math.PI)); d+=`${X(v).toFixed(1)} ${Math.min(gy+gh,Y(f)).toFixed(1)} ${k?"l":"m"} `; } ops.push(`0.29 0.36 0.6 RG 1.4 w ${d}S`); }
     [[H.LSL,"LSL"],[H.USL,"USL"]].forEach(([v,l])=>{ if(v===null) return; ops.push(`0.66 0.27 0.23 RG 0.9 w [3 2] 0 d ${X(v).toFixed(1)} ${gy} m ${X(v).toFixed(1)} ${gy+gh} l S [] 0 d`); text(X(v)-8,gy+gh+4,l,8,true,"0.66 0.27 0.23"); });
-    text(gx,gy-12,fmt(x0),8,false,"0.4 0.45 0.5"); text(gx+gw-30,gy-12,fmt(x1),8,false,"0.4 0.45 0.5"); y=gy-30; }
+    if(H.sd>0) [-3,-2,-1,0,1,2,3].forEach(k=>{ const v=H.mean+k*H.sd; if(v<x0||v>x1) return; const xx=X(v).toFixed(1); ops.push(`0.42 0.35 0.6 RG 1 w ${xx} ${gy} m ${xx} ${gy-5} l S`); text(+xx-6,gy-13,k?(k>0?"+":"-")+Math.abs(k)+"s":"mean",7,false,"0.42 0.35 0.6"); });
+    text(gx+gw-90,gy+gh+4,"s = "+fmt(H.sd),8,true,"0.42 0.35 0.6");
+    text(gx,gy-24,fmt(x0),8,false,"0.4 0.45 0.5"); text(gx+gw-30,gy-24,fmt(x1),8,false,"0.4 0.45 0.5"); y=gy-40; }
   if(doc.data&&doc.data.length){ need(40); text(L,y,"Raw data ("+doc.data.length+" values, in entry order)",11.5,true); y-=16;
     const perRow=6; for(let i=0;i<doc.data.length;i+=perRow){ need(14); doc.data.slice(i,i+perRow).forEach((v,j)=>text(L+6+j*82,y,(i+j+1)+". "+v,9,false)); y-=13; } }
   newPage();
@@ -1480,17 +1506,17 @@ const numOrNull=v=>{ const x=parseFloat(v); return Number.isFinite(x)?x:null; };
 function field(lab,val,on,attrs){ const i=el("input",Object.assign({type:"text",inputmode:"decimal",class:"rIn",value:val??""},attrs||{})); i.addEventListener("input",()=>on(i.value)); return el("label",{class:"rField"}, el("span",{},lab), i); }
 function dataBox(val,on,ph){ const t=el("textarea",{class:"rData",rows:"5",placeholder:ph||"Paste or type values: one per line, or separated by commas or spaces"}); t.value=val||""; const cnt=el("small",{class:"src"}); const upd=()=>{ cnt.textContent=parseNums(t.value).length+" values entered"; }; t.addEventListener("input",()=>{ on(t.value); upd(); }); upd(); return el("div",{class:"rDataWrap"}, t, cnt); }
 function statsBlock(xs,LSL,USL){
-  const D=describe(xs); const AD=andersonDarling(xs); const cap=capStats(D,LSL,USL);
+  const D=describe(xs); const AD=andersonDarling(xs); const cap=capStats(D,LSL,USL,xs);
   const outCount=xs.filter(v=>(LSL!==null&&v<LSL)||(USL!==null&&v>USL)).length;
-  const rows=[["n",D.n],["Mean",fmt(D.mean)],["Standard deviation",fmt(D.sd)],["Median",fmt(D.median)],["Minimum",fmt(D.min)],["Maximum",fmt(D.max)],["Range",fmt(D.max-D.min)]];
-  if(LSL!==null||USL!==null){ rows.push(["Out of specification",outCount+" of "+D.n]); if(cap.Pp!==undefined) rows.push(["Pp",fmt(cap.Pp,2)]); if(cap.Ppk!==undefined) rows.push(["Ppk",fmt(cap.Ppk,2)]); if(cap.pOut!==undefined) rows.push(["Expected out of spec (normal model)",(cap.pOut*100<0.001?"<0.001":fmt(cap.pOut*100,3))+"%"]); }
+  const rows=[["n",D.n],["Mean",fmt(D.mean)],["Standard deviation (overall)",fmt(D.sd)],["Standard deviation (within, MR̄/1.128)",fmt(cap.sw)],["Median",fmt(D.median)],["Minimum",fmt(D.min)],["Maximum",fmt(D.max)],["Range",fmt(D.max-D.min)]];
+  if(LSL!==null||USL!==null){ rows.push(["Out of specification",outCount+" of "+D.n]); if(cap.Cp!==undefined) rows.push(["Cp",fmt(cap.Cp,2)]); if(cap.Cpk!==undefined) rows.push(["Cpk",fmt(cap.Cpk,2)]); if(cap.Pp!==undefined) rows.push(["Pp",fmt(cap.Pp,2)]); if(cap.Ppk!==undefined) rows.push(["Ppk",fmt(cap.Ppk,2)]); if(cap.pOut!==undefined) rows.push(["Expected out of spec (normal model)",(cap.pOut*100<0.001?"<0.001":fmt(cap.pOut*100,3))+"%"]); }
   rows.push(["Normality (Anderson-Darling)",AD?("A² = "+fmt(AD.A2,3)+", p = "+(AD.p<0.005?"<0.005":fmt(AD.p,3))):"needs at least 8 values"]);
   rows.push(["Distribution",AD?(AD.p>=0.05?"Consistent with a normal distribution (p ≥ 0.05)":"Not consistent with normal (p < 0.05): check for outliers, mixed lots or a skewed process"):"Not assessed"]);
   const g=el("div",{class:"statGrid"}); rows.forEach(([k,v])=>g.append(el("div",{class:"statCell"+(String(v).length>28?" wide":"")}, el("span",{},k), el("b",{},String(v)))));
   const plots=el("div",{class:"plotGrid"});
   const card=(t,svg)=>{ const c=el("div",{class:"plotCard"}, el("div",{class:"eyebrow"},t)); const h=el("div",{}); h.innerHTML=svg; c.append(h); return c; };
-  plots.append(card("Histogram and fitted normal curve",plotHist(D,LSL,USL)), card("Normal probability plot",plotProb(D)), card("Run chart (entry order)",plotRun(xs,D,LSL,USL)));
-  return {D,AD,cap,outCount,rows,node:el("div",{}, el("h3",{class:"secTitle"},"Statistics"), g, plots, el("p",{class:"src"},"Standard deviation uses n − 1. Pp and Ppk use the overall standard deviation and assume a normal distribution. The Anderson-Darling p-value uses the Stephens/D’Agostino approximation for an estimated mean and standard deviation."))};
+  plots.append(card("Histogram, normal curve, mean and ±1σ to ±3σ",plotHist(D,LSL,USL)), card("Normal probability plot (mean ±1σ marked)",plotProb(D)), card("Run chart with mean and ±3σ (entry order)",plotRun(xs,D,LSL,USL)));
+  return {D,AD,cap,outCount,rows,node:el("div",{}, el("h3",{class:"secTitle"},"Statistics"), g, plots, el("p",{class:"src"},"Overall standard deviation uses n − 1. Cp and Cpk use the within (short-term) standard deviation, estimated from the average moving range of consecutive values (MR̄/1.128), so enter the values in production order. Pp and Ppk use the overall standard deviation and show actual performance. All four assume a normal distribution; with fewer than about 30 values, treat them as rough estimates. The Anderson-Darling p-value uses the Stephens/D’Agostino approximation for an estimated mean and standard deviation."))};
 }
 function exportPanel(holder,getDoc,key){
   const st=key==="cr"?ss.cr:ss.res; if(!st.fname) st.fname=(key==="cr"?"Design-verification":"Lot-acceptance")+"_"+new Date().toISOString().slice(0,10);
@@ -1511,6 +1537,9 @@ function docFrom(title,sections,decision,xs,LSL,USL,dataStatus){
   return {sheets:[{name:"Summary",rows:sumRows,widths:[38,70]},{name:"Raw data",rows:raw,widths:[8,16,18]}],
     pdf:{title,subtitle:"Medical Device QA Handbook - Sample size tool - "+stamp,footer:title+" - "+stamp,sections,decision,hist,data:xs||[]}};
 }
+function drawChips(box,raw,LSL,USL){ box.innerHTML=""; const xs=parseNums(raw); if(!xs.length) return; let bad=0;
+  xs.forEach((v,i)=>{ const out=(LSL!==null&&v<LSL)||(USL!==null&&v>USL); if(out) bad++; box.append(el("span",{class:"vChip"+(out?" oos":""),title:out?"Out of specification":"Within specification"}, el("i",{},String(i+1)), String(v))); });
+  box.prepend(el("div",{class:"vSum"+(bad?" oos":"")}, (LSL===null&&USL===null)?xs.length+" values. Enter a limit to check them.":bad?bad+" of "+xs.length+" values out of specification (red)":"All "+xs.length+" values within specification")); }
 function verdict(ok,text,sub){ return el("div",{class:"verdict "+(ok?"ok":"no")}, el("b",{},text), sub?el("span",{},sub):""); }
 /* lot acceptance results */
 function renderLotResults(body,back){
@@ -1526,15 +1555,14 @@ function renderLotResults(body,back){
     body.append(el("p",{class:"src"},full?"For 100% inspection, enter the acceptance criterion your procedure uses (often zero nonconforming).":"Enter Ac and Re for this plan from Table 2-C of ISO 2859-1:2026."));
     const g=el("div",{class:"rRow"}); g.append(field("Accept if ≤ (Ac)",R.ac,v=>R.ac=v,{inputmode:"numeric"}), field("Reject if ≥ (Re)",R.re,v=>R.re=v,{inputmode:"numeric"})); body.append(g);
   }
-  const methods=ss.dtype==="defects"?[["count","Enter the total count"],["units","Enter the count per unit"]]:[["count","Enter the number of nonconforming units"],["values","Enter measured values"]];
-  if(ss.dtype==="vars"&&R.method==="count") R.method="values";
+  const methods=ss.dtype==="defects"?[["count","Enter the total count"],["units","Enter the count per unit"]]:ss.dtype==="vars"?[["values","Measured values"]]:[["count","Number of nonconforming units"]];
   const mt=el("div",{class:"randCtl"}); methods.forEach(([k,l])=>mt.append(el("button",{class:"tab",type:"button","aria-pressed":String(R.method===k),onclick:()=>{ R.method=k; R.done=false; renderSampling(); }},l)));
-  if(!methods.some(m=>m[0]===R.method)) R.method="count";
-  body.append(mt);
+  if(!methods.some(m=>m[0]===R.method)) R.method=methods[0][0];
+  if(methods.length>1) body.append(mt);
   const inBox=el("div",{class:"rInputs"});
   if(R.method==="count") inBox.append(field("Number of "+unit+" found in the sample of "+n,R.count,v=>{ R.count=v; },{inputmode:"numeric"}));
   if(R.method==="units") inBox.append(el("p",{class:"src"},"Enter the number of nonconformities found on each sampled unit (0 for a good unit)."), dataBox(R.raw,v=>R.raw=v,"e.g. 0 0 1 0 2 0 …"));
-  if(R.method==="values"){ const g=el("div",{class:"rRow"}); g.append(field("Lower spec limit (LSL)",R.LSL,v=>R.LSL=v), field("Upper spec limit (USL)",R.USL,v=>R.USL=v)); inBox.append(el("p",{class:"src"},"Each value outside the limits counts as a nonconforming unit. Leave a limit blank for a one-sided specification."), g, dataBox(R.raw,v=>R.raw=v)); }
+  if(R.method==="values"){ const g=el("div",{class:"rRow"}); const chips=el("div",{class:"valChips"}); const draw=()=>drawChips(chips,R.raw,numOrNull(R.LSL),numOrNull(R.USL)); g.append(field("Lower spec limit (LSL)",R.LSL,v=>{ R.LSL=v; draw(); }), field("Upper spec limit (USL)",R.USL,v=>{ R.USL=v; draw(); })); inBox.append(el("p",{class:"src"},"Each value outside the limits counts as a nonconforming unit and is shown in red. Leave a limit blank for a one-sided specification."), g, dataBox(R.raw,v=>{ R.raw=v; draw(); }), chips); draw(); }
   body.append(inBox);
   const out=el("div",{class:"rOut"});
   body.append(el("div",{class:"mact"}, el("button",{class:"reset",type:"button",onclick:back},"← Back to plan"), el("button",{class:"cta",type:"button",onclick:()=>{ R.done=true; renderSampling(); }},"Calculate result →")), out);
@@ -1568,10 +1596,10 @@ function renderCRResults(box){
     const cs=el("div",{class:"randCtl"}); [0,1,2].forEach(c=>cs.append(el("button",{class:"tab",type:"button","aria-pressed":String(S0.c===c),onclick:()=>{ S0.c=c; S0.n=String(crN(C,Rr,c)); S0.done=false; renderSampling(); }},"Plan allows "+c+" failure"+(c===1?"":"s"))));
     const g=el("div",{class:"rRow"}); g.append(field("Units tested",S0.n,v=>S0.n=v,{inputmode:"numeric"}), field("Failures observed",S0.fails,v=>S0.fails=v,{inputmode:"numeric"}));
     sec.append(cs, g, el("p",{class:"src"},"Optional: paste the measured values with their spec limits to get statistics and count failures automatically."));
-    const g2=el("div",{class:"rRow"}); g2.append(field("Lower spec limit (LSL)",S0.LSL,v=>S0.LSL=v), field("Upper spec limit (USL)",S0.USL,v=>S0.USL=v)); sec.append(g2, dataBox(S0.raw,v=>S0.raw=v));
+    const g2=el("div",{class:"rRow"}); const chips=el("div",{class:"valChips"}); const draw=()=>drawChips(chips,S0.raw,numOrNull(S0.LSL),numOrNull(S0.USL)); g2.append(field("Lower spec limit (LSL)",S0.LSL,v=>{ S0.LSL=v; draw(); }), field("Upper spec limit (USL)",S0.USL,v=>{ S0.USL=v; draw(); })); sec.append(g2, dataBox(S0.raw,v=>{ S0.raw=v; draw(); }), chips); draw();
   } else {
     sec.append(el("p",{},"For measured data that follow a normal distribution, a tolerance interval can show the same confidence and reliability with fewer units than a pass/fail test. The test passes if mean − k·s ≥ LSL and mean + k·s ≤ USL."));
-    const g=el("div",{class:"rRow"}); g.append(field("Lower spec limit (LSL)",S0.LSL,v=>S0.LSL=v), field("Upper spec limit (USL)",S0.USL,v=>S0.USL=v)); sec.append(g, dataBox(S0.raw,v=>S0.raw=v));
+    const g=el("div",{class:"rRow"}); const chips=el("div",{class:"valChips"}); const draw=()=>drawChips(chips,S0.raw,numOrNull(S0.LSL),numOrNull(S0.USL)); g.append(field("Lower spec limit (LSL)",S0.LSL,v=>{ S0.LSL=v; draw(); }), field("Upper spec limit (USL)",S0.USL,v=>{ S0.USL=v; draw(); })); sec.append(g, dataBox(S0.raw,v=>{ S0.raw=v; draw(); }), chips); draw();
   }
   const out=el("div",{class:"rOut"});
   sec.append(el("div",{class:"mact"}, el("button",{class:"cta",type:"button",onclick:()=>{ S0.done=true; renderSampling(); }},"Calculate result →")), out);
