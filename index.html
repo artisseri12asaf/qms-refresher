@@ -762,6 +762,17 @@ table.rmMatrix th{font-weight:700; text-align:left; padding:4px; color:var(--mut
 .ftaSvg text{fill:var(--ink)}
 .panel,.panel>*,.card>*,.twoCol>*,.scRow>*,.grid2>*,.grid3>*,.wsRisk>*,.evRow>*,.sampRow>*{min-width:0}
 .tblWrap,.ftaWrap{max-width:100%}
+.idTag{display:inline-block; font-size:11.5px; font-weight:800; font-variant-numeric:tabular-nums; background:#f7ece5; color:#a0522d; border-radius:6px; padding:2px 7px; white-space:nowrap}
+.traceRow{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:10px; background:#fbf8f5; border:1px dashed #e2c9b8; border-radius:10px; padding:8px 10px}
+.detIn{font-size:13.5px}
+.subTabs{margin-top:4px}
+.sysTree{display:grid; gap:6px; margin-top:10px}
+.sysRow{display:grid; grid-template-columns:auto 1fr auto auto; gap:8px; align-items:center} .sysRow.d1{margin-left:18px} .sysRow.d2{margin-left:36px}
+.linkBtn.del{color:var(--bad)}
+.sysSvg .sysB{fill:#fbeceb; stroke:#a0522d} .sysSvg .ssB{fill:#f4f6fd; stroke:#2f4aa0} .sysSvg .cB{fill:#fff; stroke:#6b7785} .sysSvg .ln{fill:none; stroke:#8a96a3} .sysSvg text{fill:var(--ink)} .sysSvg .sid{fill:#a0522d} .sysSvg .lk{fill:#2e7d74} .sysSvg .nolk{fill:#9aa4ae}
+.evRow .evTr{grid-column:1/-1}
+.rField.wide{grid-column:1/-1}
+.hero .heroTag{font-weight:700; font-style:italic; color:var(--ac,#2e7d74); margin:0 0 4px}
 </style>
 </head>
 <body>
@@ -778,7 +789,7 @@ table.rmMatrix th{font-weight:700; text-align:left; padding:4px; color:var(--mut
   <nav class="rail" id="rail" aria-label="Chapters"></nav>
   <main id="main"></main>
 </div>
-<footer>Sources are limited to official publications: for the US, the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases; for the EU, EUR-Lex and European Commission pages including MDCG guidance. Items tagged “Application” are my reasoning, not official statements. Check the linked source before you cite anything in an audit response. Answers are saved in this browser on this device. Version 2026-11-16c.</footer>
+<footer>Sources are limited to official publications: for the US, the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases; for the EU, EUR-Lex and European Commission pages including MDCG guidance. Items tagged “Application” are my reasoning, not official statements. Check the linked source before you cite anything in an audit response. Answers are saved in this browser on this device. Version 2026-11-16d.</footer>
 </div>
 
 <script>
@@ -862,7 +873,7 @@ function renderNav(active){
     ps.append(el("button",{class:"partBtn "+p,type:"button","aria-pressed":String(c.part===p),onclick:()=>{ if(c.part!==p) location.hash=CH.find(x=>x.part===p).id; }},l));
   });
   const r2=document.getElementById("navRow2"); r2.innerHTML="";
-  NAV.forEach(([k,l,ic])=>r2.append(el("button",{class:"navBtn n-"+ic,type:"button","aria-current":String(active===k||(k==="tools"&&["sampling","msa","grr"].includes(active))),onclick:()=>{ if(k==="random"){ rnd.cur=null; } if(location.hash==="#"+k) route(); else location.hash=k; }}, ico(ic), el("span",{},l))));
+  NAV.forEach(([k,l,ic])=>r2.append(el("button",{class:"navBtn n-"+ic,type:"button","aria-current":String(active===k||(k==="tools"&&["sampling","msa","grr","rmtools"].includes(active))),onclick:()=>{ if(k==="random"){ rnd.cur=null; } if(location.hash==="#"+k) route(); else location.hash=k; }}, ico(ic), el("span",{},l))));
   const isCh=CH.some(x=>x.id===active); document.getElementById("dnav").style.display=isCh?"":"none";
   const ct=document.getElementById("chTabs"); ct.innerHTML=""; ct.style.display="";
   CH.filter(x=>x.part===c.part).forEach(x=>{
@@ -1019,7 +1030,7 @@ const CHOICES=[
  ["Risk management","ISO 14971 and ISO/TR 24971: glossary, risk analysis, acceptability, xFMEA, FTA and URRA (IEC 62366-1), tailored to your device type","risk","riskc"],
  ["Audit mode","Test your knowledge in a demo audit and practice with a virtual investigator (a 20-question inspection chatbot)","audit","auditc"],
  ["Regulatory Timeline","Regulatory milestones and transition dates","dates","datesc"],
- ["Useful tools","Sample size (ISO 2859-1:2026), MSA and Gauge R&R / Kappa tools; templates coming soon","tools","samp"]
+ ["Useful tools","Sample size (ISO 2859-1:2026), Risk Management Tools, MSA and Gauge R&R / Kappa; templates coming soon","tools","samp"]
 ];
 function go(target){ closeModal(); if(target==="random"){ rnd.unanswered=true; rnd.cur=null; } if(location.hash==="#"+target) route(); else location.hash=target; }
 function choiceGrid(){
@@ -1034,7 +1045,7 @@ function showLaunch(){
   const cb=el("input",{type:"checkbox",id:"launchPref"}); cb.checked=on;
   cb.addEventListener("change",()=>{ try{ localStorage.setItem(LKEY, cb.checked?"on":"off"); }catch(e){} });
   body.append(el("div",{class:"mact"}, el("label",{class:"unl"}, cb, " Show this menu when the app opens"), el("button",{class:"reset",type:"button",onclick:()=>go("home")},"Go to the home page")));
-  modal("Welcome to the QA Handbook",body);
+  modal("Welcome to the Quality Handbook, a guide to Medical Device Requirements",body);
 }
 
 /* ---------- selected dilemmas ---------- */
@@ -1577,6 +1588,7 @@ async function saveFile(name,blob,statusEl){
 /* ---------- Useful tools page ---------- */
 const TOOLS=[["sampling","Sample size tool (ISO 2859-1:2026)","Lot acceptance plans with switching rules, and design-verification sample sizes from confidence and reliability. Enter your results, see the statistics and export a report.","samp",true],
  ["msa","Measurement System Analysis (MSA)","Resolution, Type 1 gauge study (Cg, Cgk), bias and linearity, and stability charts, with Excel and PDF export.","chart",true],
+ ["rmtools","Risk Management Tools","Create a PHA, risk analysis, risk acceptability matrix, FTA, system risk analysis, dFMEA, pFMEA, uFMEA, sFMEA or URRA, with IDs and traceability.","risk",true],
  ["grr","Gauge R&R / Kappa test","A guide to choose between variable Gauge R&R and attribute agreement (Kappa), sample definitions with defect notes and photos, analysis, and the test protocol and report.","gauge",true]];
 function renderTools(){
   const m=document.getElementById("main"); m.innerHTML="";
@@ -1815,8 +1827,9 @@ function renderHome(openExplore){
   const m=document.getElementById("main"); m.innerHTML="";
   const nq=CH.reduce((a,c)=>a+c.qs.length,0), nd=CH.reduce((a,c)=>a+c.dils.length,0);
   m.append(el("section",{class:"hero"},
-    el("h2",{class:"heroTitle"},"Medical Device QA Handbook"),
-    el("p",{},"A working handbook for QA professionals on Class II and III devices: requirements, real-world dilemmas and practice questions, all linked to official sources."),
+    el("h2",{class:"heroTitle"},"Quality Handbook and Training Guide"),
+    el("p",{class:"heroTag"},"The Hitchhiker’s QA Guide assistant to the Medical Devices Universe"),
+    el("p",{},"A working handbook for QA professionals on Class II and III devices: requirements, real-world dilemmas and practice questions."),
     el("div",{class:"heroStats"}, ...[[CH.length,"chapters"],[nq,"questions"],[nd,"dilemmas"],[GLOSS.length,"glossary terms"]].map(([n,l])=>el("span",{}, el("b",{},String(n)), " "+l)))));
   m.append(explorePanel(openExplore));
   const gc=el("section",{class:"card glossCard",id:"glossary"}, el("h3",{class:"secTitle"},"Glossary and abbreviations"));
@@ -2760,9 +2773,9 @@ function grrReportExport(p,kind,R,V){
 /* ===================== Risk management (ISO 14971:2019, ISO/TR 24971:2020, IEC 62366-1) ===================== */
 const rm=lsGet("sc-rm-v1",{tab:"over",dev:"generic",gq:"",gsrc:"All",
   sevN:5,probN:5,sev:null,prob:null,cells:null,ws:{dfmea:[],pfmea:[],ufmea:[],sfmea:[],urra:[]},wsType:"dfmea",
-  chain:{hz:"",seq:"",hs:"",harm:"",p1:"",p2:"",s:""},fta:null,fname:""});
+  chain:{hz:"",seq:"",hs:"",harm:"",p1:"",p2:"",s:""},fta:null,fname:"",anaSub:"q",seq:{},sys:{nodes:[],c:{}}});
 rm._save=()=>lsSet("sc-rm-v1",rm);
-const RM_TABS=[["over","Process"],["gloss","Glossary"],["ana","Risk analysis"],["acc","Acceptability"],["fmea","xFMEA"],["fta","FTA & techniques"],["urra","URRA (IEC 62366-1)"]];
+const RM_TABS=[["over","Process"],["gloss","Glossary"],["pha","PHA"],["ana","Risk analysis"],["acc","Acceptability"],["fmea","xFMEA"],["fta","FTA & techniques"],["urra","URRA (IEC 62366-1)"]];
 /* device types: adapts hazards, questions, analyses and examples */
 const DEVT={
  generic:{l:"General (any device)",d:"A neutral starting point. Pick a device type to tailor the hazards, questions and examples.",q:[1,3,4,13,19,22,28,29,31,33],
@@ -2824,7 +2837,7 @@ function renderRisk(){
   m.append(dv);
   m.append(tabRow(RM_TABS,rm.tab,k=>{ rm.tab=k; rm._save(); renderRisk(); }));
   const p=el("div",{class:"panel"}); m.append(p);
-  ({over:rmOver,gloss:rmGloss,ana:rmAna,acc:rmAcc,fmea:rmFmea,fta:rmFta,urra:rmUrra})[rm.tab](p);
+  ({over:rmOver,gloss:rmGloss,pha:rmPha,ana:rmAna,acc:rmAcc,fmea:rmFmea,fta:rmFta,urra:rmUrra})[rm.tab](p);
   p.append(el("p",{class:"src"},"Content is a paraphrased summary for training. It does not replace the standards: ISO 14971:2019 (with EN ISO 14971:2019+A11:2021 for the EU), ISO/TR 24971:2020 and IEC 62366-1:2015+A1:2020. Use your licensed copies for exact requirements."));
 }
 /* ---- process overview ---- */
@@ -2945,39 +2958,41 @@ function rmGloss(p){
   p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Risk management glossary"), sIn, ctl, cnt, list, el("p",{class:"src"},"Definitions are paraphrased for orientation, with the clause number of the source. Use the standards for the exact wording.")));
   draw();
 }
-/* ---- risk analysis ---- */
+/* ---- risk analysis (sub-tabs) ---- */
+const ANA_SUB=[["q","1 · Safety characteristics"],["hz","2 · Hazards"],["ev","3 · Events"],["ha","4 · Hazard analysis"],["tips","Tips"]];
 function rmAna(p){
-  const d=DEVT[rm.dev];
-  const qs=el("div",{class:"qList"}); RM_Q.forEach(([n,t,h])=>{ const hl=d.q.includes(n); qs.append(el("div",{class:"qItem"+(hl?" hl":"")}, el("span",{class:"qn"},"A.2."+n), el("div",{}, el("b",{},t), el("small",{},h)), hl?el("span",{class:"tag focus"},"focus"):"")); });
-  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"1 · Safety characteristics checklist (ISO/TR 24971 Annex A)"), el("p",{class:"src"},"Answer each question for your device and record the answer in the risk management file. Questions marked “focus” matter most for: "+d.l+"."), qs));
-  const hz=el("div",{class:"hzGrid"}); RM_HZ.forEach(([cat,items])=>hz.append(el("div",{class:"hzCol"}, el("b",{},cat), el("ul",{}, ...items.map(([n,e])=>el("li",{}, el("i",{},n+": "), e))))));
-  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"2 · Hazard categories (ISO 14971 Annex C)"), hz, el("h3",{class:"secTitle"},"Typical hazards for "+d.l), el("ul",{}, ...d.hz.map(x=>el("li",{},x)))));
-  const ev=el("div",{class:"statGrid"}); RM_EV.forEach(([n,e])=>ev.append(el("div",{class:"statCell"}, el("span",{},n), el("b",{class:"lite"},e))));
-  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"3 · Events and circumstances that start a sequence (Annex C)"), ev));
-  // chain builder
-  const c=rm.chain; const out=el("div",{});
-  const draw=()=>{ rm._save(); out.innerHTML=""; const p1=numOrNull(c.p1), p2=numOrNull(c.p2); const s=parseInt(c.s)||0;
-    const P=(p1!==null&&p2!==null)?p1*p2:p1!==null?p1:null; let pl=null; if(P!==null&&rm.probN===5){ pl=P<1e-6?1:P<1e-5?2:P<1e-4?3:P<1e-3?4:5; }
-    const chain=el("div",{class:"chain"}, ...[["Hazard",c.hz],["Sequence of events",c.seq],["Hazardous situation",c.hs],["Harm",c.harm]].map(([l,v],i)=>el("div",{class:"chainBox c"+i}, el("small",{},l), el("b",{},v||"—"))));
-    out.append(chain);
-    const rows=[["P1 (hazardous situation occurs)",p1===null?"—":fmt(p1)],["P2 (situation leads to harm)",p2===null?"— (set to 1 if unknown)":fmt(p2)],["P = P1 × P2",P===null?"—":fmt(P)]];
-    if(pl) rows.push(["Probability level (default 5-level scale)",rm.prob[pl-1][0]]); if(s) rows.push(["Severity",rm.sev[s-1][0]]);
-    if(pl&&s){ const lv=riskLevel(s,pl); rows.push(["Risk (from your matrix)",ACC[lv][0]]); }
-    out.append(statGrid(rows)); };
-  const f=(lab,key,ph)=>txtField(lab,c[key],v=>{ c[key]=v; draw(); },ph);
-  const ex=d.ex;
-  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"4 · Build a hazard chain and estimate the risk"),
-    el("p",{class:"src"},"Write one chain per hazardous situation. Probability per use (or per device, per hour, per patient: state the unit in your plan). Severity and risk use the scales in the Acceptability tab."),
-    el("div",{class:"rInputs grid2"}, f("Hazard","hz",ex.hz), f("Sequence of events","seq",ex.seq), f("Hazardous situation","hs",ex.hs), f("Harm","harm",ex.harm),
-      field("P1",c.p1,v=>{ c.p1=v; draw(); },{placeholder:"e.g. 1e-4"}), field("P2",c.p2,v=>{ c.p2=v; draw(); },{placeholder:"e.g. 0.1"}),
-      el("label",{class:"rField"}, el("span",{},"Severity"), selectEl([["","Choose…"],...rm.sev.map((s,i)=>[i+1,s[0]+" — "+s[1]])],c.s,v=>{ c.s=v; draw(); }))),
-    el("div",{class:"mact"}, el("button",{class:"cta alt",type:"button",onclick:()=>{ Object.assign(c,{hz:ex.hz,seq:ex.seq,hs:ex.hs,harm:ex.harm}); rm._save(); renderRisk(); }},"Load the example for "+d.l)), out));
-  draw();
-  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Estimation tips (ISO/TR 24971, 5.5)"),
+  const d=DEVT[rm.dev]; if(!ANA_SUB.some(s=>s[0]===rm.anaSub)) rm.anaSub="q";
+  p.append(el("div",{class:"chipRow subTabs"}, ...ANA_SUB.map(([k,l])=>el("button",{class:"chipBtn",type:"button","aria-pressed":String(rm.anaSub===k),onclick:()=>{ rm.anaSub=k; rm._save(); renderRisk(); }},l))));
+  if(rm.anaSub==="q"){ const qs=el("div",{class:"qList"}); RM_Q.forEach(([n,t,h])=>{ const hl=d.q.includes(n); qs.append(el("div",{class:"qItem"+(hl?" hl":"")}, el("span",{class:"qn"},"A.2."+n), el("div",{}, el("b",{},t), el("small",{},h)), hl?el("span",{class:"tag focus"},"focus"):"")); });
+    p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"1 · Safety characteristics checklist (ISO/TR 24971 Annex A)"), el("p",{class:"src"},"Answer each question for your device and record the answer in the risk management file. Questions marked “focus” matter most for: "+d.l+"."), qs)); }
+  if(rm.anaSub==="hz"){ const hz=el("div",{class:"hzGrid"}); RM_HZ.forEach(([cat,items])=>hz.append(el("div",{class:"hzCol"}, el("b",{},cat), el("ul",{}, ...items.map(([n,e])=>el("li",{}, el("i",{},n+": "), e))))));
+    p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"2 · Hazard categories (ISO 14971 Annex C)"), hz, el("h3",{class:"secTitle"},"Typical hazards for "+d.l), el("ul",{}, ...d.hz.map(x=>el("li",{},x))))); }
+  if(rm.anaSub==="ev"){ const ev=el("div",{class:"statGrid"}); RM_EV.forEach(([n,e])=>ev.append(el("div",{class:"statCell"}, el("span",{},n), el("b",{class:"lite"},e))));
+    p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"3 · Events and circumstances that start a sequence (Annex C)"), el("p",{class:"src"},"Use these categories to find the initiating events for each hazard: they become the “sequence of events” in the hazard analysis."), ev)); }
+  if(rm.anaSub==="ha"){
+    p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"4 · Hazard analysis: from hazard to harm, with a risk estimate"),
+      el("p",{},"Record each hazardous scenario as one row. Describe how the hazard turns into harm (hazard → sequence of events → hazardous situation → harm), then estimate severity and probability of occurrence of harm and read the risk level from your matrix. This is the core of ISO 14971 clauses 5.4 and 5.5; risk control and residual risk follow in the same row."),
+      el("p",{class:"src"},"Does it apply to a PHA? Partly. A PHA uses the same hazard → hazardous situation → harm chain, but at concept stage, with little design detail and a preliminary, mostly qualitative estimate. Use the PHA tab for that early screen; use this worksheet once the design is defined and you can estimate P1 and P2 with data.")));
+    if(rm.chain&&rm.chain.hz&&!(rm.ws.ha||[]).length){ const c=rm.chain; wsRowsFor("ha").push(wsBlank("ha",{who:c.hz,fm:c.seq,hs:c.hs,harm:c.harm,p1:c.p1,p2v:c.p2,s:c.s})); rm.chain.hz=""; }
+    rmWorksheet(p,"ha"); }
+  if(rm.anaSub==="tips") p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Estimation tips (ISO/TR 24971, 5.5)"),
     el("ul",{}, el("li",{},"Use quantitative probability only when the data support it; otherwise a qualitative scale agreed by experts is better than a precise-looking guess."),
       el("li",{},"Sources: history of similar devices, complaint and vigilance data, reliability predictions, test data, simulation, literature, expert judgment. Combine more than one."),
+      el("li",{},"P = P1 × P2: P1 is the probability that the hazardous situation occurs, P2 the probability that it leads to harm. If one is unknown, set it to 1 to stay conservative."),
       el("li",{},"Several harms can follow one hazardous situation (discomfort, burn, death), each with its own P2. Record the relevant ones, not only the worst."),
-      el("li",{},"When probability cannot be estimated (software faults, sabotage, novel hazards), evaluate on severity and rely on risk control and verification; for software, assume the failure will occur (P = 1) unless a hardware or independent control limits it."))));
+      el("li",{},"When probability cannot be estimated (software faults, sabotage, novel hazards), evaluate on severity and rely on risk control and verification; for software, assume the failure will occur (P = 1) unless an independent control limits it."),
+      el("li",{},"State the unit of probability (per use, per device, per hour, per patient) in the risk management plan and use it consistently."))));
+}
+/* ---- PHA ---- */
+function rmPha(p){
+  const d=DEVT[rm.dev];
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Preliminary Hazard Analysis (PHA)"),
+    el("p",{},"A PHA is the first, broad hazard screen (ISO/TR 24971 Annex B.2). Do it at concept or feasibility stage, when the intended use is known but the design is not. It lists hazards, how they could cause harm, a preliminary estimate, and the design requirements or later analyses each hazard needs."),
+    el("div",{class:"twoCol"}, el("div",{}, el("b",{},"Inputs"), el("ul",{}, el("li",{},"Intended use, user, patient and environment"), el("li",{},"Safety characteristics (Annex A questions)"), el("li",{},"Hazard categories (ISO 14971 Annex C)"), el("li",{},"Known problems of similar devices: complaints, recalls, MAUDE, literature"))),
+      el("div",{}, el("b",{},"Outputs"), el("ul",{}, el("li",{},"Hazard list with preliminary risk ranking"), el("li",{},"Safety-related design inputs and requirements"), el("li",{},"Plan of follow-up analyses: DFMEA, PFMEA, URRA, FTA"), el("li",{},"Input to the risk management plan")))),
+    el("p",{class:"src"},"Keep the estimate qualitative and conservative. Refine every PHA row later in the hazard analysis and the xFMEAs, and record the follow-up ID in the row so nothing is lost.")));
+  p.append(el("div",{class:"mact"}, el("button",{class:"cta alt",type:"button",onclick:()=>{ const rows=wsRowsFor("pha"); d.hz.forEach(h=>{ const [a,b]=h.split(":"); rows.push(wsBlank("pha",{who:b?a.trim()+": "+b.trim():a})); }); rm._save(); renderRisk(); }},"Add the typical hazards for "+d.l)));
+  rmWorksheet(p,"pha");
 }
 /* ---- acceptability ---- */
 function rmAcc(p){
@@ -3012,59 +3027,135 @@ function rmAcc(p){
       el("li",{},"Check combined effects: different harms from one sequence, one harm from many situations (use FTA), conflicting instructions, too many warnings, and risk trade-offs between users and patients."),
       el("li",{},"Disclose significant residual risks in the accompanying documentation."))));
 }
-/* ---- worksheets (xFMEA and URRA) ---- */
+/* ---- worksheets with IDs and traceability (PHA, hazard analysis, system, xFMEA, URRA) ---- */
 const WS={
- dfmea:{l:"Design FMEA",who:"Item / function",fm:"Failure mode",cause:"Cause",eff:"Effect",d:"Bottom-up analysis of components and functions of the design. Start from the design architecture or BOM.",when:"From early design through design transfer; update with design changes and field data.",tips:["Severity is the severity of the harm (your ISO 14971 scale), not of the failure.","Occurrence should reflect the probability of harm (P1 × P2), or document how it maps to it.","Do not use RPN to accept a risk; use the acceptability matrix.","A single-fault method: add FTA for combinations of failures and redundancy."]},
- pfmea:{l:"Process FMEA",who:"Process step",fm:"Failure mode (process)",cause:"Cause (5M)",eff:"Effect on the product",d:"Bottom-up analysis of each step in the process flow chart: what can go wrong, why, and what the patient or user would experience.",when:"Before process validation (IQ/OQ/PQ); update with NCRs, CAPAs and process changes.",tips:["Link each step to the process flow chart and the control plan.","Detection (inspection, test) is a control only if it reliably prevents the defect reaching the user.","Special processes (sealing, sterilization, bonding, welding) need validation as the risk control.","Use the same harm severity as the DFMEA for the same end effect."]},
- ufmea:{l:"Use FMEA",who:"Task / step",fm:"Use error",cause:"Cause (perception, cognition, action)",eff:"Effect",d:"Bottom-up analysis of each user task for possible use errors. Often merged into the URRA.",when:"With the task analysis, before formative evaluation; update after each evaluation.",tips:["Base tasks on a task analysis of the use specification.","Include reasonably foreseeable misuse; exclude abnormal use.","Probability of use error is hard to estimate; many teams evaluate on severity and verify controls by usability testing.","Training and labelling are the weakest controls."]},
- sfmea:{l:"Software FMEA",who:"Software item / function",fm:"Software failure mode",cause:"Cause (logic, data, timing, interface)",eff:"Effect on the system",d:"Analysis of software items for failure modes such as wrong output, no output, late output, corrupted data or unexpected state.",when:"With the software architecture (IEC 62304 clause 7); update with anomalies and changes.",tips:["Assume the software failure can occur; reduce risk by architecture (segregation, hardware interlocks) and verification.","Include cybersecurity threats that can lead to harm.","Link controls to software requirements and to tests.","Software safety class (A, B, C) follows from the harm, before considering external controls."]},
- urra:{l:"URRA",who:"Task / step",fm:"Potential use error",cause:"PCA (perception, cognition, action)",eff:"Hazardous situation",d:"Use-related risk analysis per IEC 62366-1 clauses 5.1–5.5, in the format FDA expects in human factors submissions.",when:"From the use specification through summative evaluation.",tips:["List every task from the task analysis, then each way it can go wrong.","Flag critical tasks (serious harm possible). All of them must be in the summative evaluation.","Record how each risk control will be evaluated (formative and summative).","Use known use problems of similar devices as input."]}};
-function wsRowsFor(type){ if(!rm.ws[type]) rm.ws[type]=[]; return rm.ws[type]; }
-function wsExample(type){ const d=DEVT[rm.dev], e=d.ex; const base={who:"",fm:"",cause:"",eff:"",hs:e.hs,harm:e.harm,s:"",p:"",ctl:"",ct:"Design",ver:"",p2:"",crit:false,eval:""};
-  const E={dfmea:{who:"Main function of the "+d.l.toLowerCase(),fm:"Function fails or degrades",cause:e.seq.split(";")[0],eff:"Loss or degradation of the intended function"},
-   pfmea:{who:"Special process (e.g. sealing, bonding, sterilization)",fm:"Process output out of specification",cause:"Process parameter drift; operator set-up error",eff:"Nonconforming device reaches the user"},
-   ufmea:{who:"Set-up and first use",fm:"User skips or misreads a step",cause:"Cognition: instruction unclear",eff:"Device not ready or wrongly configured"},
-   sfmea:{who:"Result calculation / control logic",fm:"Wrong output shown without warning",cause:"Logic or data error",eff:"Wrong information or wrong therapy delivered"},
-   urra:{who:"Critical step of use",fm:"Step omitted or done wrongly",cause:"Perception: indicator not noticed",eff:e.hs}};
-  return Object.assign(base,E[type]); }
+ pha:{l:"PHA",pre:"PHA",f:[["who","Hazard"],["fm","Cause / initiating event"],["hs","Hazardous situation"],["harm","Harm"]],pLab:"P (preliminary)",ctlLab:"Recommended control / design requirement",verLab:"Follow-up analysis (e.g. DF-003, UR-002)",noAfter:true,d:"Preliminary hazard analysis at concept stage.",when:"Concept and feasibility; revisit when the intended use or concept changes.",tips:["Screen broadly: every hazard category, not only the obvious ones.","Use severity and a qualitative probability; avoid false precision.","Turn each significant hazard into a design input or a follow-up analysis."]},
+ ha:{l:"Hazard analysis",pre:"HA",f:[["who","Hazard"],["fm","Sequence of events",true],["hs","Hazardous situation"],["harm","Harm"]],p1p2:true,d:"Hazard → sequence of events → hazardous situation → harm, with severity and probability.",when:"From design input through design transfer; update with production and post-production data.",tips:["One row per hazardous situation and harm.","Trace each row to the system element it concerns and to the FMEA rows that detail its causes.","Record the data source for each probability estimate."]},
+ sra:{l:"System Risk Analysis",pre:"SRA",f:[["who","System / sub-system function"],["fm","Functional failure"],["cause","Cause (sub-system, interface, environment)"],["eff","System effect"],["hs","Hazardous situation"],["harm","Harm"]],sys:true,d:"Top-level analysis of the system and its sub-systems and interfaces. Each row is detailed further in the DFMEA, SFMEA, PFMEA or URRA rows that trace back to it.",when:"Once the architecture is defined; before detailed FMEAs.",tips:["Analyse functions and interfaces between sub-systems, not single components.","Allocate risk controls to sub-systems as requirements.","Every SRA row should be detailed by at least one lower-level row (see “Detailed in”)."]},
+ dfmea:{l:"Design FMEA",pre:"DF",f:[["who","Item / function"],["fm","Failure mode"],["cause","Cause"],["eff","Effect"],["hs","Hazardous situation"],["harm","Harm"]],d:"Bottom-up analysis of components and functions of the design. Start from the design architecture or BOM.",when:"From early design through design transfer; update with design changes and field data.",tips:["Severity is the severity of the harm (your ISO 14971 scale), not of the failure.","Occurrence should reflect the probability of harm (P1 × P2), or document how it maps to it.","Do not use RPN to accept a risk; use the acceptability matrix.","A single-fault method: add FTA for combinations of failures and redundancy."]},
+ pfmea:{l:"Process FMEA",pre:"PF",f:[["who","Process step"],["fm","Failure mode (process)"],["cause","Cause (5M)"],["eff","Effect on the product"],["hs","Hazardous situation"],["harm","Harm"]],d:"Bottom-up analysis of each step in the process flow chart: what can go wrong, why, and what the patient or user would experience.",when:"Before process validation (IQ/OQ/PQ); update with NCRs, CAPAs and process changes.",tips:["Link each step to the process flow chart and the control plan.","Detection (inspection, test) is a control only if it reliably prevents the defect reaching the user.","Special processes (sealing, sterilization, bonding, welding) need validation as the risk control.","Use the same harm severity as the DFMEA for the same end effect."]},
+ ufmea:{l:"Use FMEA",pre:"UF",f:[["who","Task / step"],["fm","Use error"],["cause","Cause (perception, cognition, action)"],["eff","Effect"],["hs","Hazardous situation"],["harm","Harm"]],d:"Bottom-up analysis of each user task for possible use errors. Often merged into the URRA.",when:"With the task analysis, before formative evaluation; update after each evaluation.",tips:["Base tasks on a task analysis of the use specification.","Include reasonably foreseeable misuse; exclude abnormal use.","Probability of use error is hard to estimate; many teams evaluate on severity and verify controls by usability testing.","Training and labelling are the weakest controls."]},
+ sfmea:{l:"Software FMEA",pre:"SF",f:[["who","Software item / function"],["fm","Software failure mode"],["cause","Cause (logic, data, timing, interface)"],["eff","Effect on the system"],["hs","Hazardous situation"],["harm","Harm"]],d:"Analysis of software items for failure modes such as wrong output, no output, late output, corrupted data or unexpected state.",when:"With the software architecture (IEC 62304 clause 7); update with anomalies and changes.",tips:["Assume the software failure can occur; reduce risk by architecture (segregation, hardware interlocks) and verification.","Include cybersecurity threats that can lead to harm.","Link controls to software requirements and to tests.","Software safety class (A, B, C) follows from the harm, before considering external controls."]},
+ urra:{l:"URRA",pre:"UR",f:[["who","Task / step"],["fm","Potential use error"],["cause","PCA (perception, cognition, action)"],["eff","Hazardous situation"],["harm","Harm"]],crit:true,verLab:"Evaluation (formative / summative)",d:"Use-related risk analysis per IEC 62366-1 clauses 5.1–5.5, in the format FDA expects in human factors submissions.",when:"From the use specification through summative evaluation.",tips:["List every task from the task analysis, then each way it can go wrong.","Flag critical tasks (serious harm possible). All of them must be in the summative evaluation.","Record how each risk control will be evaluated (formative and summative).","Use known use problems of similar devices as input."]}};
+const WS_ORDER=["pha","ha","sra","dfmea","pfmea","ufmea","sfmea","urra"];
+function wsRowsFor(type){ if(!rm.ws[type]) rm.ws[type]=[]; const rows=rm.ws[type]; rows.forEach(r=>{ if(!r.id) r.id=nextId(type); }); return rows; }
+function nextId(type){ rm.seq=rm.seq||{}; let n=(rm.seq[type]||0)+1; const used=new Set((rm.ws[type]||[]).map(r=>r.id)); while(used.has(WS[type].pre+"-"+String(n).padStart(3,"0"))) n++; rm.seq[type]=n; return WS[type].pre+"-"+String(n).padStart(3,"0"); }
+function wsBlank(type,o){ return Object.assign({id:nextId(type),who:"",fm:"",cause:"",eff:"",hs:"",harm:"",s:"",p:"",p1:"",p2v:"",ctl:"",ct:"Design",ver:"",p2:"",crit:false,node:"",sra:""},o||{}); }
+function allRows(){ const out=[]; WS_ORDER.forEach(t=>wsRowsFor(t).forEach(r=>out.push({t,r}))); return out; }
+function sysNodes(){ rm.sys=rm.sys||{nodes:[],c:{}}; return rm.sys.nodes; }
+function nodeLabel(id){ const n=sysNodes().find(x=>x.id===id); return n?n.id+" "+n.name:id; }
+function wsExample(type){ const d=DEVT[rm.dev], e=d.ex;
+  const E={pha:{who:e.hz,fm:e.seq.split(";")[0],hs:e.hs,harm:e.harm,ver:"Detail in DFMEA / URRA"},
+   ha:{who:e.hz,fm:e.seq,hs:e.hs,harm:e.harm},
+   sra:{who:"Main system function of the "+d.l.toLowerCase(),fm:"Function lost or wrong",cause:"Sub-system failure or interface error",eff:"System does not deliver its intended function",hs:e.hs,harm:e.harm},
+   dfmea:{who:"Main function of the "+d.l.toLowerCase(),fm:"Function fails or degrades",cause:e.seq.split(";")[0],eff:"Loss or degradation of the intended function",hs:e.hs,harm:e.harm},
+   pfmea:{who:"Special process (e.g. sealing, bonding, sterilization)",fm:"Process output out of specification",cause:"Process parameter drift; operator set-up error",eff:"Nonconforming device reaches the user",hs:e.hs,harm:e.harm},
+   ufmea:{who:"Set-up and first use",fm:"User skips or misreads a step",cause:"Cognition: instruction unclear",eff:"Device not ready or wrongly configured",hs:e.hs,harm:e.harm},
+   sfmea:{who:"Result calculation / control logic",fm:"Wrong output shown without warning",cause:"Logic or data error",eff:"Wrong information or wrong therapy delivered",hs:e.hs,harm:e.harm},
+   urra:{who:"Critical step of use",fm:"Step omitted or done wrongly",cause:"Perception: indicator not noticed",eff:e.hs,harm:e.harm}};
+  return wsBlank(type,E[type]); }
+function probFromP(P){ if(!(P>0)) return ""; const lv5=P<1e-6?1:P<1e-5?2:P<1e-4?3:P<1e-3?4:5; if(rm.probN===5) return String(lv5); if(rm.probN===4) return String([1,2,2,3,4][lv5-1]); return String([1,1,2,3,3][lv5-1]); }
 function rmWorksheet(p,type){
-  const W=WS[type]; const rows=wsRowsFor(type); const isU=type==="urra";
+  const W=WS[type]; const rows=wsRowsFor(type); const isU=!!W.crit; const nodes=sysNodes(); const sraRows=type==="sra"?[]:wsRowsFor("sra");
   const sevOpts=[["","S"],...rm.sev.map((s,i)=>[i+1,(i+1)+" "+s[0]])], probOpts=[["","P"],...rm.prob.map((s,i)=>[i+1,(i+1)+" "+s[0]])];
+  const critMin=()=>rm.sevN>=4?3:2;
   const wrap=el("div",{class:"wsList"});
   const lvlChip=(s,pp)=>{ const v=riskLevel(parseInt(s),parseInt(pp)); return v===null?el("span",{class:"lvl"},"—"):el("span",{class:"lvl "+ACC[v][1]},ACC[v][0]); };
   const draw=()=>{ rm._save(); wrap.innerHTML="";
     if(!rows.length) wrap.append(el("p",{class:"src"},"No rows yet. Add a row, or load an example for "+DEVT[rm.dev].l+"."));
-    rows.forEach((r,i)=>{ const card=el("div",{class:"wsRow"}); const head=el("div",{class:"wsHead"}, el("b",{},"#"+(i+1)+" "+(r.who||"")), el("button",{class:"linkBtn",type:"button",onclick:()=>{ rows.splice(i,1); draw(); }},"Delete"));
-      const t=(lab,k,area)=>txtField(lab,r[k],v=>{ r[k]=v; rm._save(); if(k==="who") head.firstChild.textContent="#"+(i+1)+" "+v; },"",area);
+    rows.forEach((r,i)=>{ const card=el("div",{class:"wsRow"}); const ttl=el("span",{},r.who||"");
+      const head=el("div",{class:"wsHead"}, el("b",{}, el("span",{class:"idTag"},r.id)," ",ttl), el("button",{class:"linkBtn",type:"button",onclick:()=>{ if(type==="sra") allRows().forEach(x=>{ if(x.r.sra===r.id) x.r.sra=""; }); rows.splice(i,1); draw(); }},"Delete"));
+      const t=(lab,k,area)=>txtField(lab,r[k],v=>{ r[k]=v; rm._save(); if(k==="who") ttl.textContent=v; if(type==="ha") drawChain(); },"",area);
       const before=el("span",{}), after=el("span",{}); const upd=()=>{ before.replaceChildren(lvlChip(r.s,r.p)); after.replaceChildren(lvlChip(r.s,r.p2)); };
+      card.append(head);
+      // traceability
+      const tr=el("div",{class:"traceRow"});
+      if(nodes.length) tr.append(el("label",{class:"rField"}, el("span",{},"System element"), selectEl([["","— not linked —"],...nodes.map(n=>[n.id,n.id+" "+n.name])],r.node,v=>{ r.node=v; rm._save(); },{"aria-label":"System element"})));
+      if(sraRows.length) tr.append(el("label",{class:"rField"}, el("span",{},"System Risk Analysis row"), selectEl([["","— not linked —"],...sraRows.map(s=>[s.id,s.id+" "+(s.who||"").slice(0,40)])],r.sra,v=>{ r.sra=v; rm._save(); },{"aria-label":"System Risk Analysis row"})));
+      if(type==="sra"){ const det=allRows().filter(x=>x.r.sra===r.id).map(x=>x.r.id); tr.append(el("div",{class:"rField"}, el("span",{},"Detailed in"), el("b",{class:"detIn"},det.length?det.join(", "):"no lower-level rows linked yet"))); }
+      if(tr.childNodes.length) card.append(tr);
+      let drawChain=()=>{};
+      if(type==="ha"){ const ch=el("div",{class:"chain"}); card.append(ch); drawChain=()=>{ ch.replaceChildren(...[["Hazard",r.who],["Sequence of events",r.fm],["Hazardous situation",r.hs],["Harm",r.harm]].map(([l,v],k)=>el("div",{class:"chainBox c"+k}, el("small",{},l), el("b",{},v||"—")))); }; drawChain(); }
+      card.append(el("div",{class:"rInputs grid2"}, ...W.f.map(([k,l,a])=>t(l,k,a))));
       const sSel=selectEl(sevOpts,r.s,v=>{ r.s=v; if(isU){ r.crit=parseInt(v)>=critMin(); const cb=card.querySelector(".chk input"); if(cb) cb.checked=r.crit; } rm._save(); upd(); },{"aria-label":"Severity"});
-      card.append(head, el("div",{class:"rInputs grid2"}, t(W.who,"who"), t(W.fm,"fm"), t(W.cause,"cause"), t(W.eff,"eff"), isU?"":t("Hazardous situation","hs"), t("Harm","harm")),
-        el("div",{class:"wsRisk"}, el("label",{class:"rField"}, el("span",{},"Severity"), sSel), el("label",{class:"rField"}, el("span",{},"P before"), selectEl(probOpts,r.p,v=>{ r.p=v; rm._save(); upd(); },{"aria-label":"Probability before control"})), el("div",{class:"rField"}, el("span",{},"Risk before"), before)),
-        el("div",{class:"rInputs grid2"}, t("Risk control measure","ctl",true), el("label",{class:"rField"}, el("span",{},"Control type"), selectEl(["Design","Protective","Information / training"],r.ct||"Design",v=>{ r.ct=v; rm._save(); })), t(isU?"Evaluation (formative / summative)":"Verification of implementation and effectiveness","ver")),
-        el("div",{class:"wsRisk"}, el("label",{class:"rField"}, el("span",{},"P after"), selectEl(probOpts,r.p2,v=>{ r.p2=v; rm._save(); upd(); },{"aria-label":"Probability after control"})), el("div",{class:"rField"}, el("span",{},"Residual risk"), after),
-          isU?el("label",{class:"chk"}, (()=>{ const c=el("input",{type:"checkbox"}); c.checked=!!r.crit; c.addEventListener("change",()=>{ r.crit=c.checked; rm._save(); }); return c; })(), " Critical task"):""));
+      const pSel=selectEl(probOpts,r.p,v=>{ r.p=v; rm._save(); upd(); },{"aria-label":"Probability before control"});
+      const riskRow=el("div",{class:"wsRisk"});
+      if(W.p1p2){ const pOut=el("small",{class:"src"}); const calc=()=>{ const a=numOrNull(r.p1), b=numOrNull(r.p2v); const P=a!==null?a*(b===null?1:b):null; pOut.textContent=P===null?"Enter P1 (and P2) to suggest the level":"P = "+fmt(P)+(b===null?" (P2 taken as 1)":""); if(P!==null){ r.p=probFromP(P); pSel.value=r.p; upd(); } };
+        riskRow.append(field("P1 (situation occurs)",r.p1,v=>{ r.p1=v; rm._save(); calc(); },{placeholder:"e.g. 1e-4"}), field("P2 (leads to harm)",r.p2v,v=>{ r.p2v=v; rm._save(); calc(); },{placeholder:"e.g. 0.1"})); calc(); riskRow.append(el("div",{class:"rField wide"},pOut)); }
+      riskRow.append(el("label",{class:"rField"}, el("span",{},"Severity"), sSel), el("label",{class:"rField"}, el("span",{},W.pLab||"P before"), pSel), el("div",{class:"rField"}, el("span",{},W.noAfter?"Preliminary risk":"Risk before"), before));
+      card.append(riskRow);
+      card.append(el("div",{class:"rInputs grid2"}, t(W.ctlLab||"Risk control measure","ctl",true), el("label",{class:"rField"}, el("span",{},"Control type"), selectEl(["Design","Protective","Information / training"],r.ct||"Design",v=>{ r.ct=v; rm._save(); })), t(W.verLab||"Verification of implementation and effectiveness","ver")));
+      if(!W.noAfter) card.append(el("div",{class:"wsRisk"}, el("label",{class:"rField"}, el("span",{},"P after"), selectEl(probOpts,r.p2,v=>{ r.p2=v; rm._save(); upd(); },{"aria-label":"Probability after control"})), el("div",{class:"rField"}, el("span",{},"Residual risk"), after),
+        isU?el("label",{class:"chk"}, (()=>{ const c=el("input",{type:"checkbox"}); c.checked=!!r.crit; c.addEventListener("change",()=>{ r.crit=c.checked; rm._save(); }); return c; })(), " Critical task"):""));
       upd(); wrap.append(card); }); };
-  const critMin=()=>rm.sevN>=4?3:2;
-  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},W.l+" worksheet"), el("p",{class:"src"},W.d+" Severity and probability use your matrix from the Acceptability tab."+(isU?" A task is flagged critical automatically when severity is “"+rm.sev[critMin()-1][0]+"” or higher; you can change the flag.":"")),
-    el("div",{class:"mact"}, el("button",{class:"cta",type:"button",onclick:()=>{ rows.push({who:"",fm:"",cause:"",eff:"",hs:"",harm:"",s:"",p:"",ctl:"",ct:"Design",ver:"",p2:"",crit:false}); draw(); }},"+ Add row"), el("button",{class:"cta alt",type:"button",onclick:()=>{ rows.push(wsExample(type)); draw(); }},"Load example row")), wrap));
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},W.l+" worksheet"), el("p",{class:"src"},W.d+" Rows get an ID ("+W.pre+"-001…) for traceability. Severity and probability use your matrix from the Acceptability tab."+(isU?" A task is flagged critical automatically when severity is “"+rm.sev[critMin()-1][0]+"” or higher; you can change the flag.":"")+(nodes.length||sraRows.length?"":" Build a system diagram (xFMEA → System Risk Analysis) to link rows to system elements; it is optional.")),
+    el("div",{class:"mact"}, el("button",{class:"cta",type:"button",onclick:()=>{ rows.push(wsBlank(type)); draw(); }},"+ Add row"), el("button",{class:"cta alt",type:"button",onclick:()=>{ rows.push(wsExample(type)); draw(); }},"Load example row")), wrap));
   draw();
   const lab=(arr,v)=>{ const i=parseInt(v); return i>=1&&arr[i-1]?i+" "+arr[i-1][0]:""; };
   const lvT=(s,pp)=>{ const v=riskLevel(parseInt(s),parseInt(pp)); return v===null?"":ACC[v][0]; };
-  const xRows=()=>{ const h=["#",W.who,W.fm,W.cause,W.eff,...(isU?[]:["Hazardous situation"]),"Harm","Severity","P before","Risk before","Risk control","Control type",isU?"Evaluation":"Verification","P after","Residual risk",...(isU?["Critical task"]:[])].map(v=>({v,b:true}));
-    return [h,...rows.map((r,i)=>[i+1,r.who,r.fm,r.cause,r.eff,...(isU?[]:[r.hs]),r.harm,lab(rm.sev,r.s),lab(rm.prob,r.p),lvT(r.s,r.p),r.ctl,r.ct,r.ver,lab(rm.prob,r.p2),lvT(r.s,r.p2),...(isU?[r.crit?"Yes":"No"]:[])])]; };
-  const secs=()=>rows.map((r,i)=>({h:"#"+(i+1)+" "+(r.who||""),rows:[[W.fm,r.fm||"-"],[W.cause,r.cause||"-"],[W.eff,r.eff||"-"],...(isU?[]:[["Hazardous situation",r.hs||"-"]]),["Harm",r.harm||"-"],["Severity / P before",(lab(rm.sev,r.s)||"-")+" / "+(lab(rm.prob,r.p)||"-")+" -> "+(lvT(r.s,r.p)||"-")],["Risk control ("+(r.ct||"")+")",r.ctl||"-"],[isU?"Evaluation":"Verification",r.ver||"-"],["P after / residual",(lab(rm.prob,r.p2)||"-")+" -> "+(lvT(r.s,r.p2)||"-")],...(isU?[["Critical task",r.crit?"Yes":"No"]]:[])]}));
+  const xRows=()=>{ const h=["ID","System element","SRA row",...W.f.map(f=>f[1]),...(W.p1p2?["P1","P2"]:[]),"Severity",W.pLab||"P before",W.noAfter?"Preliminary risk":"Risk before",W.ctlLab||"Risk control","Control type",W.verLab||"Verification",...(W.noAfter?[]:["P after","Residual risk"]),...(isU?["Critical task"]:[]),...(type==="sra"?["Detailed in"]:[])].map(v=>({v,b:true}));
+    return [h,...rows.map(r=>[r.id,r.node?nodeLabel(r.node):"",r.sra||"",...W.f.map(f=>r[f[0]]),...(W.p1p2?[r.p1,r.p2v]:[]),lab(rm.sev,r.s),lab(rm.prob,r.p),lvT(r.s,r.p),r.ctl,r.ct,r.ver,...(W.noAfter?[]:[lab(rm.prob,r.p2),lvT(r.s,r.p2)]),...(isU?[r.crit?"Yes":"No"]:[]),...(type==="sra"?[allRows().filter(x=>x.r.sra===r.id).map(x=>x.r.id).join(", ")]:[])])]; };
+  const secs=()=>rows.map(r=>({h:r.id+" "+(r.who||""),rows:[...(r.node?[["System element",nodeLabel(r.node)]]:[]),...(r.sra?[["SRA row",r.sra]]:[]),...W.f.slice(1).map(f=>[f[1],r[f[0]]||"-"]),...(W.p1p2?[["P1 / P2",(r.p1||"-")+" / "+(r.p2v||"-")]]:[]),["Severity / P",(lab(rm.sev,r.s)||"-")+" / "+(lab(rm.prob,r.p)||"-")+" -> "+(lvT(r.s,r.p)||"-")],[(W.ctlLab||"Risk control")+" ("+(r.ct||"")+")",r.ctl||"-"],[W.verLab||"Verification",r.ver||"-"],...(W.noAfter?[]:[["P after / residual",(lab(rm.prob,r.p2)||"-")+" -> "+(lvT(r.s,r.p2)||"-")]]),...(isU?[["Critical task",r.crit?"Yes":"No"]]:[]),...(type==="sra"?[["Detailed in",allRows().filter(x=>x.r.sra===r.id).map(x=>x.r.id).join(", ")||"-"]]:[])]}));
   const ttl=W.l+" - "+DEVT[rm.dev].l;
-  toolExport(p,rm,W.l.replace(/\s+/g,"-"),[["Export Excel (.xlsx)","xlsx",()=>buildXlsx(mkDoc("Risk management",ttl,[{h:"Scales",rows:[["Severity",rm.sev.map((s,i)=>(i+1)+" "+s[0]).join(", ")],["Probability",rm.prob.map((s,i)=>(i+1)+" "+s[0]).join(", ")]]}],null,[{name:W.l.slice(0,28),rows:xRows(),widths:[5,24,24,24,24,24,22,14,14,18,30,16,26,14,18,10]}]).sheets)],["Export PDF","pdf",()=>buildPdf(mkDoc("Risk management",ttl,secs(),null).pdf)]]);
+  toolExport(p,rm,W.l.replace(/\s+/g,"-"),[["Export Excel (.xlsx)","xlsx",()=>buildXlsx(mkDoc("Risk management",ttl,[{h:"Scales",rows:[["Severity",rm.sev.map((s,i)=>(i+1)+" "+s[0]).join(", ")],["Probability",rm.prob.map((s,i)=>(i+1)+" "+s[0]).join(", ")]]}],null,[{name:W.l.slice(0,28),rows:xRows(),widths:[9,20,9,...W.f.map(()=>24),14,14,18,30,16,26,14,18,10]}]).sheets)],["Export PDF","pdf",()=>buildPdf(mkDoc("Risk management",ttl,secs(),null).pdf)]]);
   p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Good practice for the "+W.l), el("p",{}, el("b",{},"When: "),W.when), el("ul",{}, ...W.tips.map(x=>el("li",{},x)))));
 }
+/* ---- system architecture diagram ---- */
+function sysAdd(kind,parent){ const S=rm.sys; S.c=S.c||{}; const nodes=S.nodes; let id;
+  if(kind==="sys") id="SYS-1"; else if(kind==="ss"){ S.c.ss=(S.c.ss||0)+1; id="SS-"+S.c.ss; } else { const pn=parent.replace(/^SS-/,""); S.c[parent]=(S.c[parent]||0)+1; id="C-"+pn+"."+S.c[parent]; }
+  nodes.push({id,name:kind==="sys"?"Device / system":kind==="ss"?"Sub-system "+id.slice(3):"Component "+id.slice(2),kind,parent:parent||null,desc:""}); rm._save(); }
+function sysDel(id){ const kids=sysNodes().filter(n=>n.parent===id).map(n=>n.id); kids.forEach(sysDel); rm.sys.nodes=rm.sys.nodes.filter(n=>n.id!==id); allRows().forEach(x=>{ if(x.r.node===id) x.r.node=""; }); }
+function sysLinks(id){ return allRows().filter(x=>x.r.node===id).map(x=>x.r.id); }
+function sysSvg(){ const N=sysNodes(); const root=N.find(n=>n.kind==="sys"); if(!root) return ""; const ss=N.filter(n=>n.parent===root.id);
+  const cw=170, W=Math.max(360,ss.length*cw+20), maxC=Math.max(0,...ss.map(s=>N.filter(n=>n.parent===s.id).length)); const H=150+maxC*58+20;
+  const box=(x,y,w,n,cls)=>{ const L=sysLinks(n.id); const lt=L.length?(L.slice(0,3).join(" · ")+(L.length>3?" +"+(L.length-3):"")):"no analyses linked"; return `<g><rect x="${x}" y="${y}" width="${w}" height="46" rx="7" class="${cls}"/><text x="${x+8}" y="${y+14}" font-size="9.5" font-weight="800" class="sid">${xesc(n.id)}</text><text x="${x+8}" y="${y+27}" font-size="10.5" font-weight="700">${xesc(n.name.slice(0,24))}</text><text x="${x+8}" y="${y+40}" font-size="8.5" class="${L.length?"lk":"nolk"}">${xesc(lt)}</text></g>`; };
+  let s=`<svg viewBox="0 0 ${W} ${H}" class="oc sysSvg" ${W>380?`style="min-width:${Math.min(W,700)}px"`:""} role="img" aria-label="System architecture diagram">`;
+  s+=box(W/2-95,8,190,root,"sysB");
+  ss.forEach((n,i)=>{ const x=10+i*cw+(W-20-ss.length*cw)/2; s+=`<path d="M${W/2} 54 V72 H${x+(cw-14)/2} V90" class="ln"/>`+box(x,90,cw-14,n,"ssB");
+    N.filter(c=>c.parent===n.id).forEach((c,j)=>{ const y=150+j*58; s+=`<path d="M${x+8} ${y-14} V${y+23} H${x+16}" class="ln"/>`+box(x+16,y,cw-30,c,"cB"); }); });
+  return s+"</svg>"; }
+function rmSystem(p){
+  const N=sysNodes(); const root=N.find(n=>n.kind==="sys");
+  const c=el("div",{class:"card"}, el("h3",{class:"secTitle"},"System architecture diagram (optional)"), el("p",{class:"src"},"Break the device into sub-systems and components. Each element gets an ID (SYS-1, SS-1, C-1.1). Link worksheet rows to elements; the diagram shows which analyses cover each element."));
+  if(!root){ c.append(el("div",{class:"mact"}, el("button",{class:"cta",type:"button",onclick:()=>{ sysAdd("sys"); renderRisk(); }},"Create the system (top level)"))); p.append(c); return; }
+  const h=el("div",{class:"ftaWrap"}); h.innerHTML=sysSvg(); c.append(h);
+  const tree=el("div",{class:"sysTree"});
+  const row=(n,depth)=>{ const r=el("div",{class:"sysRow d"+depth}, el("span",{class:"idTag"},n.id));
+    const nm=el("input",{type:"text",class:"rIn sm","aria-label":n.id+" name"}); nm.value=n.name; nm.addEventListener("input",()=>{ n.name=nm.value; rm._save(); }); nm.addEventListener("change",()=>{ h.innerHTML=sysSvg(); });
+    r.append(nm);
+    if(n.kind==="sys") r.append(el("button",{class:"linkBtn",type:"button",onclick:()=>{ sysAdd("ss",n.id); renderRisk(); }},"+ Sub-system"));
+    if(n.kind==="ss") r.append(el("button",{class:"linkBtn",type:"button",onclick:()=>{ sysAdd("c",n.id); renderRisk(); }},"+ Component"));
+    r.append(el("button",{class:"linkBtn del",type:"button",onclick:()=>{ sysDel(n.id); rm._save(); renderRisk(); }},"Delete"));
+    tree.append(r); N.filter(x=>x.parent===n.id).forEach(x=>row(x,depth+1)); };
+  row(root,0); c.append(tree);
+  const tm=el("table",{class:"map rmTbl"}, el("thead",{}, el("tr",{}, ...["Element","Name","Linked analysis rows"].map(x=>el("th",{},x))))); const tb=el("tbody",{});
+  const order=[]; const walk=n=>{ order.push(n); N.filter(x=>x.parent===n.id).forEach(walk); }; walk(root);
+  order.forEach(n=>{ const L=sysLinks(n.id); tb.append(el("tr",{class:L.length?"":"bad"}, el("td",{},n.id), el("td",{},n.name), el("td",{},L.join(", ")||"none"))); }); tm.append(tb);
+  c.append(el("h3",{class:"secTitle"},"Traceability: element → analyses"), el("div",{class:"tblWrap"},tm), el("p",{class:"src"},"Rows in red have no analysis linked yet."));
+  p.append(c);
+  const secs=()=>[{h:"Architecture",rows:order.map(n=>[n.id+" ("+(n.kind==="sys"?"system":n.kind==="ss"?"sub-system":"component")+")",n.name+(n.parent?"  [parent "+n.parent+"]":"")])},{h:"Traceability",rows:order.map(n=>[n.id+" "+n.name,sysLinks(n.id).join(", ")||"none"])}];
+  toolExport(p,rm,"System-architecture",[["Export Excel (.xlsx)","xlsx",()=>buildXlsx(mkDoc("Risk management","System architecture and traceability",secs(),null,[{name:"Traceability",rows:[[{v:"ID",b:true},{v:"Type",b:true},{v:"Name",b:true},{v:"Parent",b:true},{v:"Linked rows",b:true}],...order.map(n=>[n.id,n.kind,n.name,n.parent||"",sysLinks(n.id).join(", ")])],widths:[10,12,30,10,50]}]).sheets)],["Export PDF","pdf",()=>buildPdf(mkDoc("Risk management","System architecture and traceability",secs(),null).pdf)]]);
+}
 function rmFmea(p){
-  const types=["dfmea","pfmea","ufmea","sfmea"]; if(!types.includes(rm.wsType)) rm.wsType="dfmea";
+  const types=["sra","dfmea","pfmea","ufmea","sfmea"]; if(!types.includes(rm.wsType)) rm.wsType="dfmea";
   const cmp=el("table",{class:"map rmTbl"}, el("thead",{}, el("tr",{}, ...["Approach","Looks at","Best for","Watch out for"].map(h=>el("th",{},h)))), el("tbody",{},
-    ...[["Design FMEA","Components and functions of the design","Hardware design, materials, mechanical and electrical failures","Single-fault only; severity must be the harm"],["Process FMEA","Each step of the manufacturing process","Process validation, control plans, supplier processes","Detection is not a design control; link to the DFMEA end effects"],["Use FMEA","Each user task and its possible use errors","Early usability input; feeds the URRA","Probability of use error is uncertain; verify by usability testing"],["Software FMEA","Software items, data and interfaces","Embedded software, SaMD, cybersecurity effects","Software failure probability cannot be estimated; rely on architecture"],["FMECA","FMEA plus a criticality ranking","Reliability programs, complex systems","Criticality ranking is not ISO 14971 acceptability"]].map(r=>el("tr",{}, ...r.map((c,i)=>i?el("td",{},c):el("td",{}, el("b",{},c)))))));
+    ...[["System Risk Analysis","The system, its sub-systems and interfaces","Top-level view; allocating controls to sub-systems","Must be detailed by lower-level analyses"],["Design FMEA","Components and functions of the design","Hardware design, materials, mechanical and electrical failures","Single-fault only; severity must be the harm"],["Process FMEA","Each step of the manufacturing process","Process validation, control plans, supplier processes","Detection is not a design control; link to the DFMEA end effects"],["Use FMEA","Each user task and its possible use errors","Early usability input; feeds the URRA","Probability of use error is uncertain; verify by usability testing"],["Software FMEA","Software items, data and interfaces","Embedded software, SaMD, cybersecurity effects","Software failure probability cannot be estimated; rely on architecture"]].map(r=>el("tr",{}, ...r.map((c,i)=>i?el("td",{},c):el("td",{}, el("b",{},c)))))));
   const d=DEVT[rm.dev]; p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Choosing an xFMEA approach"), el("div",{class:"tblWrap"},cmp),
     el("p",{class:"src"},"For "+d.l+": "+d.an.join("; ")+". FMEA is described in ISO/TR 24971 Annex B.5 and IEC 60812. Use FMEA results as input to the ISO 14971 risk analysis, not as a substitute for it.")));
   p.append(el("div",{class:"chipRow"}, ...types.map(t=>el("button",{class:"chipBtn",type:"button","aria-pressed":String(rm.wsType===t),onclick:()=>{ rm.wsType=t; rm._save(); renderRisk(); }},WS[t].l))));
+  if(rm.wsType==="sra") rmSystem(p);
   rmWorksheet(p,rm.wsType);
+}
+/* ---- Risk Management Tools picker (from Useful tools) ---- */
+const RM_TOOLS=[["PHA","Preliminary hazard analysis at concept stage",{tab:"pha"}],["Risk analysis","Hazard analysis: hazard → harm with severity and probability",{tab:"ana",anaSub:"ha"}],["Risk Acceptability Matrix","Severity and probability scales and acceptability regions",{tab:"acc"}],["FTA","Fault tree calculator with AND/OR gates",{tab:"fta"}],["System diagram & System Risk Analysis","Sub-systems and components with IDs; top-level risk analysis",{tab:"fmea",wsType:"sra"}],["dFMEA","Design FMEA",{tab:"fmea",wsType:"dfmea"}],["pFMEA","Process FMEA",{tab:"fmea",wsType:"pfmea"}],["uFMEA","Use FMEA",{tab:"fmea",wsType:"ufmea"}],["sFMEA","Software FMEA",{tab:"fmea",wsType:"sfmea"}],["URRA","Use-related risk analysis (IEC 62366-1)",{tab:"urra"}]];
+function renderRmTools(){
+  const m=document.getElementById("main"); m.innerHTML="";
+  m.append(toolHead("Risk Management Tools","Choose what you want to create. Every worksheet gives each row an ID and can trace it to the system diagram and the System Risk Analysis."));
+  const dv=el("div",{class:"card devCard"}, el("label",{class:"rField"}, el("span",{},"Device type"), selectEl(Object.entries(DEVT).map(([k,v])=>[k,v.l]),rm.dev,v=>{ rm.dev=v; rm._save(); },{"aria-label":"Device type"})));
+  m.append(dv);
+  const g=el("div",{class:"choiceGrid toolGrid"});
+  RM_TOOLS.forEach(([t,s,o])=>g.append(el("button",{class:"choiceBtn riskc toolCard",type:"button",onclick:()=>{ Object.assign(rm,o); rm._save(); location.hash="risk"; }}, el("b",{},t), el("span",{},s))));
+  m.append(g);
 }
 /* ---- FTA and other techniques ---- */
 function ftaDefault(){ return {top:"Patient harmed by over-delivery",tg:"OR",g:[{n:"Control fault not detected",gate:"AND",e:[{n:"Control software fault",p:"1e-3"},{n:"Independent watchdog fails",p:"1e-3"}]},{n:"Use error not caught",gate:"AND",e:[{n:"Wrong value entered",p:"1e-2"},{n:"Confirmation screen ignored",p:"5e-2"}]},{n:"Hardware runaway",gate:"OR",e:[{n:"Motor driver short",p:"1e-6"}]}]}; }
@@ -3075,22 +3166,23 @@ function ftaSvg(f,R){
   const box=(x,y,t,sub,cls)=>{ const w=136; return `<rect x="${x-w/2}" y="${y}" width="${w}" height="34" rx="6" class="${cls}"/><text x="${x}" y="${y+14}" text-anchor="middle" font-size="9.5" font-weight="700">${xesc(t.slice(0,26))}</text><text x="${x}" y="${y+27}" text-anchor="middle" font-size="9">${sub}</text>`; };
   const gate=(x,y,type)=>type==="AND"?`<path d="M${x-11} ${y+16} v-8 a11 11 0 0 1 22 0 v8 z" class="gate"/><text x="${x}" y="${y+14}" text-anchor="middle" font-size="7">AND</text>`:`<path d="M${x-11} ${y+16} q11 -6 22 0 q-2 -12 -11 -18 q-9 6 -11 18 z" class="gate"/><text x="${x}" y="${y+13}" text-anchor="middle" font-size="7">OR</text>`;
   s+=box(cx,6,f.top,"P = "+fmt(R.top),"topB")+gate(cx,40,f.tg);
-  f.g.forEach((g,i)=>{ const x=W*(i+0.5)/n; s+=`<path d="M${cx} 56 V70 H${x} V84" class="ln"/>`+box(x,84,g.n,"P = "+fmt(R.gp[i]),"midB")+gate(x,118,g.gate);
-    const m=g.e.length; g.e.forEach((e,j)=>{ const ex=x+(j-(m-1)/2)*Math.min(70,140/m); s+=`<path d="M${x} 134 V146 H${ex} V160" class="ln"/><circle cx="${ex}" cy="${178}" r="17" class="${g.gate==="OR"&&f.tg==="OR"?"evtB spf":"evtB"}"/><text x="${ex}" y="${176}" text-anchor="middle" font-size="7.5">${xesc(e.n.slice(0,12))}</text><text x="${ex}" y="${186}" text-anchor="middle" font-size="7.5">${xesc(String(e.p))}</text>`; }); });
+  f.g.forEach((g,i)=>{ const x=W*(i+0.5)/n; s+=`<path d="M${cx} 56 V70 H${x} V84" class="ln"/>`+box(x,84,"G"+(i+1)+" "+g.n,"P = "+fmt(R.gp[i]),"midB")+gate(x,118,g.gate);
+    const m=g.e.length; g.e.forEach((e,j)=>{ const ex=x+(j-(m-1)/2)*Math.min(70,140/m); s+=`<path d="M${x} 134 V146 H${ex} V160" class="ln"/><circle cx="${ex}" cy="${178}" r="17" class="${g.gate==="OR"&&f.tg==="OR"?"evtB spf":"evtB"}"/><text x="${ex}" y="${170}" text-anchor="middle" font-size="7" font-weight="700">E${i+1}.${j+1}</text><text x="${ex}" y="${179}" text-anchor="middle" font-size="7.5">${xesc(e.n.slice(0,12))}</text><text x="${ex}" y="${188}" text-anchor="middle" font-size="7.5">${xesc(String(e.p))}</text>`; }); });
   return s+`<text x="6" y="${H-8}" font-size="9" fill="var(--bad)">Red circles: a single basic event reaches the top event (single point of failure)</text></svg>`;
 }
+function traceOpts(){ return [["","— not traced —"],...sysNodes().map(n=>[n.id,n.id+" "+n.name]),...allRows().map(x=>[x.r.id,x.r.id+" "+(x.r.who||"").slice(0,36)])]; }
 function rmFta(p){
-  if(!rm.fta) rm.fta=ftaDefault(); const f=rm.fta; const out=el("div",{}); const ed=el("div",{});
-  const draw=()=>{ rm._save(); const R=ftaCalc(f); out.innerHTML=""; const h=el("div",{class:"ftaWrap"}); h.innerHTML=ftaSvg(f,R); out.append(h,statGrid([["Top event probability",fmt(R.top)],...f.g.map((g,i)=>[g.n+" ("+g.gate+")",fmt(R.gp[i])])])); };
-  const build=()=>{ ed.innerHTML=""; ed.append(el("div",{class:"rInputs grid2"}, txtField("Top event (harm or hazardous situation)",f.top,v=>{ f.top=v; draw(); }), el("label",{class:"rField"}, el("span",{},"Top gate"), selectEl(["OR","AND"],f.tg,v=>{ f.tg=v; draw(); }))));
-    f.g.forEach((g,gi)=>{ const c=el("div",{class:"wsRow"}, el("div",{class:"wsHead"}, el("b",{},"Branch "+(gi+1)), el("button",{class:"linkBtn",type:"button",onclick:()=>{ f.g.splice(gi,1); build(); draw(); }},"Delete branch")),
+  if(!rm.fta) rm.fta=ftaDefault(); const f=rm.fta; const TO=traceOpts(); const tl=v=>{ const o=TO.find(x=>x[0]===v); return v&&o?o[1]:v||""; }; const out=el("div",{}); const ed=el("div",{});
+  const draw=()=>{ rm._save(); const R=ftaCalc(f); out.innerHTML=""; const h=el("div",{class:"ftaWrap"}); h.innerHTML=ftaSvg(f,R); out.append(h,statGrid([["Top event probability",fmt(R.top)],...f.g.map((g,i)=>["FT-G"+(i+1)+" "+g.n+" ("+g.gate+")",fmt(R.gp[i])])])); };
+  const build=()=>{ ed.innerHTML=""; ed.append(el("div",{class:"rInputs grid2"}, txtField("FT-TOP · Top event (harm or hazardous situation)",f.top,v=>{ f.top=v; draw(); }), el("label",{class:"rField"}, el("span",{},"Top gate"), selectEl(["OR","AND"],f.tg,v=>{ f.tg=v; draw(); })), el("label",{class:"rField"}, el("span",{},"Traced to (hazard analysis, SRA row or element)"), selectEl(TO,f.ttr||"",v=>{ f.ttr=v; rm._save(); }))));
+    f.g.forEach((g,gi)=>{ const c=el("div",{class:"wsRow"}, el("div",{class:"wsHead"}, el("b",{}, el("span",{class:"idTag"},"FT-G"+(gi+1))," Branch "+(gi+1)), el("button",{class:"linkBtn",type:"button",onclick:()=>{ f.g.splice(gi,1); build(); draw(); }},"Delete branch")),
       el("div",{class:"rInputs grid2"}, txtField("Intermediate event",g.n,v=>{ g.n=v; draw(); }), el("label",{class:"rField"}, el("span",{},"Gate"), selectEl(["AND","OR"],g.gate,v=>{ g.gate=v; draw(); }))));
-      g.e.forEach((e,ei)=>c.append(el("div",{class:"evRow"}, txtField("Basic event",e.n,v=>{ e.n=v; draw(); }), field("Probability",e.p,v=>{ e.p=v; draw(); }), el("button",{class:"linkBtn",type:"button",onclick:()=>{ g.e.splice(ei,1); build(); draw(); }},"×"))));
+      g.e.forEach((e,ei)=>c.append(el("div",{class:"evRow"}, txtField("FT-E"+(gi+1)+"."+(ei+1)+" · Basic event",e.n,v=>{ e.n=v; draw(); }), field("Probability",e.p,v=>{ e.p=v; draw(); }), el("button",{class:"linkBtn",type:"button",onclick:()=>{ g.e.splice(ei,1); build(); draw(); }},"×"), el("label",{class:"rField evTr"}, el("span",{},"Traced to (element or FMEA row)"), selectEl(TO,e.tr||"",v=>{ e.tr=v; rm._save(); })))));
       c.append(el("button",{class:"linkBtn",type:"button",onclick:()=>{ g.e.push({n:"New event",p:"1e-3"}); build(); draw(); }},"+ Add basic event")); ed.append(c); });
     ed.append(el("div",{class:"mact"}, el("button",{class:"cta",type:"button",onclick:()=>{ f.g.push({n:"New branch",gate:"AND",e:[{n:"Event",p:"1e-3"}]}); build(); draw(); }},"+ Add branch"), el("button",{class:"cta alt",type:"button",onclick:()=>{ rm.fta=ftaDefault(); rm._save(); renderRisk(); }},"Reset example"))); };
   p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Fault tree calculator"), el("p",{class:"src"},"Two-level tree: a top event, branches (intermediate events) and basic events. Assumes independent events: AND multiplies probabilities; OR = 1 − Π(1 − p). Watch for common-cause failures, which break the independence assumption."), out, ed));
   build(); draw();
-  const secs=()=>{ const R=ftaCalc(f); return [{h:"Top event",rows:[[f.top,f.tg+" gate, P = "+fmt(R.top)]]},...f.g.map((g,i)=>({h:"Branch "+(i+1)+": "+g.n+" ("+g.gate+", P = "+fmt(R.gp[i])+")",rows:g.e.map(e=>[e.n,String(e.p)])}))]; };
+  const secs=()=>{ const R=ftaCalc(f); return [{h:"FT-TOP Top event",rows:[[f.top,f.tg+" gate, P = "+fmt(R.top)+(f.ttr?" | traced to "+tl(f.ttr):"")]]},...f.g.map((g,i)=>({h:"FT-G"+(i+1)+" "+g.n+" ("+g.gate+", P = "+fmt(R.gp[i])+")",rows:g.e.map((e,j)=>["FT-E"+(i+1)+"."+(j+1)+" "+e.n,"P = "+String(e.p)+(e.tr?" | traced to "+tl(e.tr):"")])}))]; };
   toolExport(p,rm,"FTA",[["Export Excel (.xlsx)","xlsx",()=>buildXlsx(mkDoc("Risk management","Fault tree - "+f.top,secs(),null).sheets)],["Export PDF","pdf",()=>buildPdf(mkDoc("Risk management","Fault tree - "+f.top,secs(),null).pdf)]]);
   const T=[["PHA","Top-down, early","Concept phase, few design details","Finds hazards early and steers design; refine later with FMEA/FTA","24971 B.2"],["FTA","Top-down (deductive)","Severe harms, redundancy, combined faults, software and use errors together","Shows combinations and single points of failure; needs good data for probabilities","24971 B.3, IEC 61025"],["ETA","Forward (inductive)","An initiating event with several safeguards (e.g. power loss, use error)","Probability of each outcome path; complements FTA","24971 B.4, IEC 62502"],["FMEA","Bottom-up (inductive)","Components, process steps, tasks, software items","Systematic and thorough; single-fault only","24971 B.5, IEC 60812"],["HAZOP","Guide-word team review","Fluid, energy or information flows; processes","Finds deviations from design intent early","24971 B.6, IEC 61882"],["HACCP","Process control points","Manufacturing contamination, sterility, biological risks","Defines critical limits, monitoring and corrective actions","24971 B.7"]];
   p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Risk analysis techniques (ISO/TR 24971 Annex B)"), el("div",{class:"tblWrap"}, el("table",{class:"map rmTbl"}, el("thead",{}, el("tr",{}, ...["Technique","Direction","Use it for","Strengths and limits","Reference"].map(h=>el("th",{},h)))), el("tbody",{}, ...T.map(r=>el("tr",{}, ...r.map((c,i)=>i?el("td",{},c):el("td",{}, el("b",{},c)))))))),
@@ -3115,7 +3207,7 @@ function rmUrra(p){
 
 function route(){
   const id=(location.hash||"").slice(1)||"home";
-  if(["home","explore","dilemmas","map","sampling","tools","dates","audit","risk","msa","grr"].includes(id)){ closeModal(); renderNav(id); ({home:()=>renderHome(false),explore:()=>renderHome(true),dilemmas:renderDilemmas,map:renderMap,sampling:renderSampling,tools:renderTools,risk:renderRisk,msa:renderMsa,grr:renderGrr,dates:renderDates,audit:renderAudit})[id](); totals(); try{ window.scrollTo({top:0}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
+  if(["home","explore","dilemmas","map","sampling","tools","dates","audit","risk","msa","grr","rmtools"].includes(id)){ closeModal(); renderNav(id); ({home:()=>renderHome(false),explore:()=>renderHome(true),dilemmas:renderDilemmas,map:renderMap,sampling:renderSampling,tools:renderTools,risk:renderRisk,msa:renderMsa,grr:renderGrr,rmtools:renderRmTools,dates:renderDates,audit:renderAudit})[id](); totals(); try{ window.scrollTo({top:0}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
   if(id==="random"){ closeModal(); renderNav("random"); renderRandom(); totals(); try{ window.scrollTo({top:document.getElementById("dnav").offsetTop}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
   const valid=CH.some(c=>c.id===id)?id:CH[0].id;
   currentTab=pendingTab||""; pendingTab=null;
