@@ -637,6 +637,37 @@ button.mRingSvg{cursor:pointer}
 .randCtl{flex-wrap:wrap; row-gap:8px}
 .randCtl .tab{flex:0 0 auto; white-space:nowrap}
 .randCtl .unl{flex:0 0 auto}
+
+/* ---- home title, tools, results ---- */
+.hero .heroTitle{font-size:clamp(30px,5.4vw,46px); line-height:1.08; letter-spacing:-.01em; margin:2px 0 4px}
+.toolGrid{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.toolCard{display:grid; gap:6px; text-align:left; padding:18px}
+.toolCard .toolIco{width:38px; height:38px; border-radius:10px; background:#e6f1f5; display:grid; place-items:center; color:#2f6f86}
+.toolCard .toolIco .ico{width:22px; height:22px}
+.toolCard.soon{opacity:.6; cursor:default; border-style:dashed}
+.rRow{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:10px; margin:8px 0}
+.rField{display:grid; gap:4px; font-size:13px; color:var(--muted); font-weight:600}
+.rIn{font:inherit; font-size:16px; color:var(--ink); padding:10px 12px; border:1px solid var(--line); border-radius:10px; background:var(--card); width:100%; box-sizing:border-box}
+.rIn:focus,.rData:focus{outline:2px solid var(--qms); outline-offset:1px}
+.rData{font:inherit; font-size:15px; width:100%; box-sizing:border-box; padding:10px 12px; border:1px solid var(--line); border-radius:10px; background:var(--card); color:var(--ink); resize:vertical; font-variant-numeric:tabular-nums}
+.rInputs{margin:10px 0}
+.rOut{margin-top:12px; display:grid; gap:12px}
+.verdict{border-radius:14px; padding:14px 16px; display:grid; gap:4px; border:1px solid}
+.verdict b{font-size:20px; letter-spacing:.01em}
+.verdict span{font-size:14.5px}
+.verdict.ok{background:#eaf5ee; border-color:#bfe0ca; color:#1d6b3b}
+.verdict.no{background:#fbeceb; border-color:#efc6c1; color:#9b2f25}
+.statGrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:8px}
+.statCell{background:var(--paper); border:1px solid var(--line); border-radius:10px; padding:8px 10px; display:grid; gap:2px}
+.statCell span{font-size:12px; color:var(--muted); font-weight:600}
+.statCell b{font-size:15.5px; font-variant-numeric:tabular-nums}
+.plotGrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:10px; margin-top:10px}
+.plotCard{border:1px solid var(--line); border-radius:12px; padding:10px; background:var(--card)}
+.exportBox{display:grid; gap:10px}
+.cta.alt{background:#2f6f86}
+.crRes{margin-top:16px; border-top:1px solid var(--line); padding-top:14px}
+.statCell.wide{grid-column:1/-1}
+.statCell.wide b{font-size:14.5px; font-weight:600}
 </style>
 </head>
 <body>
@@ -653,7 +684,7 @@ button.mRingSvg{cursor:pointer}
   <nav class="rail" id="rail" aria-label="Chapters"></nav>
   <main id="main"></main>
 </div>
-<footer>Sources are limited to official publications: for the US, the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases; for the EU, EUR-Lex and European Commission pages including MDCG guidance. Items tagged “Application” are my reasoning, not official statements. Check the linked source before you cite anything in an audit response. Answers are saved in this browser on this device. Version 2026-11-15g.</footer>
+<footer>Sources are limited to official publications: for the US, the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases; for the EU, EUR-Lex and European Commission pages including MDCG guidance. Items tagged “Application” are my reasoning, not official statements. Check the linked source before you cite anything in an audit response. Answers are saved in this browser on this device. Version 2026-11-16a.</footer>
 </div>
 
 <script>
@@ -737,7 +768,7 @@ function renderNav(active){
     ps.append(el("button",{class:"partBtn "+p,type:"button","aria-pressed":String(c.part===p),onclick:()=>{ if(c.part!==p) location.hash=CH.find(x=>x.part===p).id; }},l));
   });
   const r2=document.getElementById("navRow2"); r2.innerHTML="";
-  NAV.forEach(([k,l,ic])=>r2.append(el("button",{class:"navBtn n-"+ic,type:"button","aria-current":String(active===k||(k==="explore"&&false)),onclick:()=>{ if(k==="random"){ rnd.cur=null; } if(location.hash==="#"+k) route(); else location.hash=k; }}, ico(ic), el("span",{},l))));
+  NAV.forEach(([k,l,ic])=>r2.append(el("button",{class:"navBtn n-"+ic,type:"button","aria-current":String(active===k||(k==="tools"&&active==="sampling")),onclick:()=>{ if(k==="random"){ rnd.cur=null; } if(location.hash==="#"+k) route(); else location.hash=k; }}, ico(ic), el("span",{},l))));
   const isCh=CH.some(x=>x.id===active); document.getElementById("dnav").style.display=isCh?"":"none";
   const ct=document.getElementById("chTabs"); ct.innerHTML=""; ct.style.display="";
   CH.filter(x=>x.part===c.part).forEach(x=>{
@@ -888,12 +919,12 @@ function openPerf(){
 /* ---------- launch menu ---------- */
 const LKEY="sc-qmsr-launch";
 const CHOICES=[
- ["Training mode","Random questions from all parts, unanswered first","random","train"],
- ["Selected dilemmas","Six real-life dilemmas per chapter","dilemmas","dil"],
- ["QMS map","ISO 13485 ↔ 21 CFR 820 ↔ EU MDR, with exemptions","map","mapc"],
- ["Audit mode","Practice a 20-question inspection on one of 11 device cases","audit","auditc"],
- ["Key dates","Regulatory milestones and transition dates","dates","datesc"],
- ["Sample size tool (ISO 2859-1:2026)","AQL sampling plans with switching rules, plus confidence/reliability","sampling","samp"]
+ ["Training mode","Random questions to enhance and refresh your memory","random","train"],
+ ["Selected Dilemmas","Real-life dilemmas for selected QMS chapters","dilemmas","dil"],
+ ["QMS map","ISO 13485 ↔ 21 CFR 820 ↔ EU MDR","map","mapc"],
+ ["Audit mode","Test your knowledge in a demo audit and practice with a virtual investigator (a 20-question inspection chatbot)","audit","auditc"],
+ ["Regulatory Timeline","Regulatory milestones and transition dates","dates","datesc"],
+ ["Useful tools","Sample size tool (ISO 2859-1:2026), with more tools to come","tools","samp"]
 ];
 function go(target){ closeModal(); if(target==="random"){ rnd.unanswered=true; rnd.cur=null; } if(location.hash==="#"+target) route(); else location.hash=target; }
 function choiceGrid(){
@@ -918,7 +949,7 @@ function renderDilemmas(){
   const list=[]; CH.filter(c=>(dsel.scope==="all"||c.part===dsel.scope)&&c.dils.length).forEach(c=>{ const L=c.dils.length; [0,L-5,L-4,L-3,L-2,L-1].filter((v,k,a)=>v>0||k===0).forEach(di=>list.push({c,di})); });
   if(dsel.i>=list.length) dsel.i=0;
   m.append(el("section",{class:"chHead dilHead withRing"},
-    el("div",{class:"hTxt"}, el("div",{class:"eyebrow"},"Selected dilemmas"),
+    el("div",{class:"hTxt"}, el("div",{class:"eyebrow"},"Selected Dilemmas"),
     el("h2",{},"Real-life dilemmas"),
     el("p",{},"Six real-life dilemmas from every chapter, one at a time. Pick an option to see the analysis, then move on.")), moduleRing("dil")));
   const ctl=el("div",{class:"randCtl stickyCtl"});
@@ -1076,34 +1107,36 @@ function lnC(n,k){ let s=0; for(let x=1;x<=k;x++) s+=Math.log(n-k+x)-Math.log(x)
 function binCdf(c,n,p){ if(p<=0) return 1; if(p>=1) return c>=n?1:0; let t=0; for(let k=0;k<=c;k++) t+=Math.exp(lnC(n,k)+k*Math.log(p)+(n-k)*Math.log(1-p)); return Math.min(1,t); }
 function pAt(c,n,pa){ let lo=0,hi=1; for(let k=0;k<60;k++){ const mid=(lo+hi)/2; if(binCdf(c,n,mid)>pa) lo=mid; else hi=mid; } return (lo+hi)/2; }
 function crN(C,R,c){ for(let n=c+1;n<200000;n++){ if(binCdf(c,n,1-R)<=1-C) return n; } return null; }
-const ss={mode:null,step:0,cont:null,lot:null,level:"II",cls:null,aql:null,C:0.95,R:0.95,sev:"normal"};
+const ss={mode:null,step:0,cont:null,lot:null,level:"II",cls:null,aql:null,C:0.95,R:0.95,sev:"normal",dtype:null};
 function sampBtn(label,sub,on,act,cls){ return el("button",{class:"choiceBtn sbtn"+(on?" on":"")+(cls?" "+cls:""),type:"button",onclick:act}, el("b",{},label), sub?el("span",{},sub):""); }
 function stepper(total,cur,labels){ const d=el("div",{class:"stepper"}); for(let k=0;k<total;k++) d.append(el("div",{class:"stp"+(k<cur?" done":"")+(k===cur?" cur":"")}, el("i",{},String(k+1)), el("span",{},labels[k]))); return d; }
 function countUp(node,to,dec){ const t0=performance.now(); const f=(t)=>{ const k=Math.min(1,(t-t0)/700); const v=to*(1-Math.pow(1-k,3)); node.textContent=dec?v.toFixed(dec):Math.round(v).toLocaleString("en-US"); if(k<1) requestAnimationFrame(f); }; requestAnimationFrame(f); }
 function renderSampling(){
   const m=document.getElementById("main"); m.innerHTML="";
   m.append(el("section",{class:"chHead sampHead"},
-    el("div",{class:"eyebrow"},"Sample size tool (ISO 2859-1:2026)"),
+    el("div",{class:"eyebrow"},"Useful tools · Sample size tool (ISO 2859-1:2026)"),
     el("h2",{},"Sample size assistant"),
     el("p",{},"Answer a few questions to get a lot-acceptance sampling plan per ISO 2859-1, or a design-verification sample size from confidence and reliability.")));
   const box=el("div",{class:"card sampBox"}); m.append(box);
   if(!ss.mode){
     box.append(el("h3",{class:"srcHead"},"What do you need?"));
     const g=el("div",{class:"choiceGrid"});
-    g.append(sampBtn("Lot acceptance (ISO 2859-1, AQL)","Incoming, in-process or final inspection of a continuing series of lots",false,()=>{ ss.mode="aql"; ss.step=0; renderSampling(); },"qms"));
+    g.append(sampBtn("Lot acceptance (ISO 2859-1, AQL)","Incoming, in-process or final inspection of a continuing series of lots",false,()=>{ ss.mode="aql"; ss.step=0; ss.res.done=false; renderSampling(); },"qms"));
     g.append(sampBtn("Design verification (confidence and reliability)","Pass/fail test samples for verification or validation, based on the binomial distribution",false,()=>{ ss.mode="cr"; ss.step=0; renderSampling(); },"eu"));
     box.append(g);
     box.append(el("p",{class:"src"},"Current edition: ISO 2859-1:2026 (third edition, January 2026), which replaced ISO 2859-1:1999 and its 2011 amendment and added skip-lot inspection. ANSI/ASQ Z1.4 uses the same code letters and master tables."));
     return;
   }
-  const back=()=>{ if(ss.step===0){ ss.mode=null; } else ss.step--; renderSampling(); };
+  const back=()=>{ if(st===0){ ss.mode=null; } else ss.step--; renderSampling(); };
   const nav=(canNext,next)=>{ const nb=next?el("button",{class:"cta",type:"button",onclick:next},"Next →"):""; if(nb) nb.disabled=!canNext; return el("div",{class:"mact"}, el("button",{class:"reset",type:"button",onclick:back},"← Back"), nb); };
   if(ss.mode==="cr") return renderCR(box,back);
-  const labels=["Lot series","Lot size","Inspection level","Defect class and AQL","Your plan"];
-  box.append(stepper(5,ss.step,labels));
+  const labels=["Data type","Lot series","Lot size","Inspection level","Class and AQL","Your plan","Results"];
+  box.append(stepper(7,ss.step,labels));
   const body=el("div",{class:"sstep"}); box.append(body);
-  const go=(k)=>{ ss.step=k; renderSampling(); };
-  if(ss.step===0){
+  const go=(k)=>{ ss.step=k+1; renderSampling(); window.scrollTo({top:box.offsetTop-80}); };
+  const st=ss.step-1;
+  if(ss.step===0) return renderDataType(body,back);
+  if(st===0){
     body.append(el("h3",{},"Is this a continuing series of lots from the same source?"));
     const g=el("div",{class:"choiceGrid"});
     g.append(sampBtn("Yes, a continuing series","For example, regular deliveries from a supplier or routine production lots",ss.cont==="y",()=>{ ss.cont="y"; go(1); }));
@@ -1112,7 +1145,7 @@ function renderSampling(){
     if(ss.cont==="n") body.append(el("div",{class:"warn"}, el("b",{},"Note. "),"ISO 2859-1 switching rules assume a continuing series. For isolated lots, ISO 2859-2 (plans indexed by limiting quality, LQ) is the better fit. You can still continue to see the ISO 2859-1 normal plan."), nav(true,()=>go(1)));
     else body.append(nav(false,null));
   }
-  if(ss.step===1){
+  if(st===1){
     body.append(el("h3",{},"How many units are in the lot?"));
     const inp=el("input",{type:"number",min:"2",inputmode:"numeric",class:"bigNum",placeholder:"e.g. 1200",value:ss.lot||""});
     const chips=el("div",{class:"chips"}); [50,200,500,1000,3200,10000].forEach(v=>chips.append(el("button",{class:"chip tapChip",type:"button",onclick:()=>{ inp.value=v; ss.lot=v; nb.disabled=false; }},v.toLocaleString("en-US"))));
@@ -1121,7 +1154,7 @@ function renderSampling(){
     body.append(inp, el("p",{class:"src"},"Lot or batch: units of one type, made under essentially the same conditions."), chips, el("div",{class:"mact"}, el("button",{class:"reset",type:"button",onclick:back},"← Back"), nb));
     setTimeout(()=>inp.focus(),50);
   }
-  if(ss.step===2){
+  if(st===2){
     body.append(el("h3",{},"How will the units be inspected?"));
     const g=el("div",{class:"choiceGrid"});
     [["II","Standard, non-destructive inspection","General inspection level II: the default unless something else is specified"],
@@ -1138,7 +1171,7 @@ function renderSampling(){
     body.append(el("div",{class:"pill"},"Selected: inspection level "+ss.level+" → code letter "+codeLetter(ss.lot,ss.level)));
     body.append(nav(true,()=>go(3)));
   }
-  if(ss.step===3){
+  if(st===3){
     body.append(el("h3",{},"What class of nonconformity is this plan for?"));
     const g=el("div",{class:"choiceGrid"});
     const CL={crit:["Critical","Could cause serious harm or death, or loss of a critical function",[0.010,0.015,0.025,0.040,0.065],"dil"],maj:["Major","Likely to cause failure or materially reduce usability",[0.25,0.40,0.65,1.0],"qms"],min:["Minor","Unlikely to reduce usability; cosmetic or minor deviation",[1.5,2.5,4.0,6.5],"basics"]};
@@ -1146,21 +1179,34 @@ function renderSampling(){
     body.append(g);
     if(ss.cls){
       if(ss.cls==="crit") body.append(el("div",{class:"warn"}, el("b",{},"Critical characteristics. "),"An AQL plan still accepts lots containing some nonconforming units. For defects that could cause serious harm, use 100% inspection, a validated process with in-process controls, or an acceptance-number-zero plan, justified in your risk file (ISO 14971)."));
-      body.append(el("h3",{},"Choose the AQL (% nonconforming)"));
+      body.append(el("h3",{},ss.dtype==="defects"?"Choose the AQL (nonconformities per 100 items)":"Choose the AQL (% nonconforming)"));
       const rec=CL[ss.cls][2]; const ch=el("div",{class:"aqlGrid"});
       AQLS.forEach(a=>ch.append(el("button",{class:"aqlBtn"+(rec.includes(a)?" rec":"")+(ss.aql===a?" on":""),type:"button",onclick:()=>{ ss.aql=a; renderSampling(); }},String(a))));
       body.append(ch, el("p",{class:"src"},"Highlighted values are common industry practice for this class, not values set by ISO 2859-1. Base your AQL on product risk and supplier agreements."));
     }
     body.append(nav(!!ss.aql,()=>go(4)));
   }
-  if(ss.step===4) renderPlan(body,back);
+  if(st===4) renderPlan(body,back);
+  if(st===5) renderLotResults(body,back);
+}
+function renderDataType(body,back){
+  body.append(el("h3",{},"What will you record for each sampled unit?"));
+  const g=el("div",{class:"choiceGrid"});
+  [["items","Pass or fail (nonconforming items)","Each unit conforms or doesn’t. AQL is in percent nonconforming. ISO 2859-1.","qms"],
+   ["defects","Number of nonconformities per unit","A unit can have several nonconformities, e.g. cosmetic defects. AQL is in nonconformities per 100 items. ISO 2859-1.","fda"],
+   ["vars","Measured values (variables)","Dimensions, forces or other measurements against specification limits.","eu"]].forEach(([k,t,s,c])=>g.append(sampBtn(t,s,ss.dtype===k,()=>{ ss.dtype=k; ss.res.method=k==="vars"?"values":"count"; ss.res.done=false; renderSampling(); },c)));
+  body.append(g);
+  if(ss.dtype==="vars") body.append(el("div",{class:"warn"}, el("b",{},"ISO 2859-1 is for inspection by attributes only. "),"Sampling plans for measured data are in ISO 3951-1 (variables), which uses smaller samples but needs a normal distribution and a known or estimated standard deviation. This tool applies ISO 2859-1 by classifying each measurement against the specification limits, then also gives you the statistics of the measurements."));
+  if(ss.dtype==="defects") body.append(el("p",{class:"src"},"For AQLs of 10 or less, the plans are the same for both ways of counting. ISO 2859-1 also lists AQLs above 10 (up to 1000) for nonconformities per 100 items; read those plans from Table 2-A."));
+  const nb=el("button",{class:"cta",type:"button",onclick:()=>{ ss.step=1; renderSampling(); }},"Next →"); nb.disabled=!ss.dtype;
+  body.append(el("div",{class:"mact"}, el("button",{class:"reset",type:"button",onclick:back},"← Back"), nb));
 }
 function ocCurve(n,ac,aql){
-  const W=320,H=190,P=34; const pmax=Math.min(1,Math.max(pAt(ac,n,0.02)*1.15,aql/100*3)); const pts=[];
-  for(let k=0;k<=60;k++){ const p=pmax*k/60; pts.push([p,binCdf(ac,n,p)]); }
+  const W=320,H=190,P=34; const pmax=Math.min(1,Math.max(pAt(ac,n,0.02)*1.15,aql/100*3)); const pts=[]; const cdf=(c,nn,p)=>ss.dtype==="defects"?poisCdf(c,nn*p):binCdf(c,nn,p);
+  for(let k=0;k<=60;k++){ const p=pmax*k/60; pts.push([p,cdf(ac,n,p)]); }
   const x=p=>P+(W-P-8)*p/pmax, y=v=>8+(H-P-8)*(1-v);
   const d=pts.map((q,k)=>(k?"L":"M")+x(q[0]).toFixed(1)+" "+y(q[1]).toFixed(1)).join(" ");
-  const pa=binCdf(ac,n,aql/100); const lq=pAt(ac,n,0.10);
+  const pa=cdf(ac,n,aql/100); const lq=pAt(ac,n,0.10);
   const svg=`<svg viewBox="0 0 ${W} ${H}" class="oc" role="img" aria-label="Operating characteristic curve">
    <line x1="${P}" y1="${y(0)}" x2="${W-8}" y2="${y(0)}" stroke="var(--line)"/><line x1="${P}" y1="8" x2="${P}" y2="${y(0)}" stroke="var(--line)"/>
    ${[0,.25,.5,.75,1].map(v=>`<text x="${P-5}" y="${y(v)+4}" text-anchor="end" font-size="10" fill="var(--muted)">${Math.round(v*100)}%</text>`).join("")}
@@ -1170,7 +1216,7 @@ function ocCurve(n,ac,aql){
    <circle cx="${x(lq)}" cy="${y(.10)}" r="5" fill="var(--bad)"/><text x="${Math.min(x(lq)+8,W-150)}" y="${y(.10)-8}" font-size="11" fill="var(--ink)">${(lq*100).toFixed(2)}%: 10% accepted</text></svg>`;
   const w=el("div",{class:"card ocCard"}, el("h3",{class:"srcHead"},"How well does this plan protect you?"));
   const holder=el("div",{}); holder.innerHTML=svg; w.append(holder,
-    el("p",{class:"src"},"Operating characteristic (OC) curve, calculated with the binomial distribution. At the AQL, about "+(pa*100).toFixed(0)+"% of lots are accepted. Lots with "+(lq*100).toFixed(2)+"% nonconforming are still accepted 10% of the time (limiting quality, LQ10)."));
+    el("p",{class:"src"},"Operating characteristic (OC) curve, calculated with the "+(ss.dtype==="defects"?"Poisson":"binomial")+" distribution. At the AQL, about "+(pa*100).toFixed(0)+"% of lots are accepted. Lots with "+(lq*100).toFixed(2)+"% nonconforming are still accepted 10% of the time (limiting quality, LQ10)."));
   return w;
 }
 const TIGHT={first:15,cells:[[0,1],"D","D",[1,2],[2,3],[3,4],[5,6],[8,9],[12,13],[18,19]]};
@@ -1226,7 +1272,8 @@ function renderPlan(body,back){
   body.append(el("p",{class:"src"},"ISO 2859-1:2026 also adds skip-lot inspection for producers with an excellent quality history; see the standard for qualification rules."));
   const sum="ISO 2859-1 single sampling, "+sevName.toLowerCase()+" inspection. Lot "+ss.lot+", level "+ss.level+", code letter "+L+", AQL "+ss.aql+"% → "+(!p?"inspection discontinued":(p.n>=ss.lot?"100% inspection":"n = "+p.n+(p.ac!==null?", Ac = "+p.ac+", Re = "+p.re:" (Ac/Re from Table 2-C)")))+".";
   const cp=el("button",{class:"reset",type:"button",onclick:()=>{ try{ navigator.clipboard.writeText(sum); cp.textContent="Copied ✓"; }catch(e){ cp.textContent=sum; } }},"Copy plan summary");
-  body.append(el("div",{class:"mact"}, el("button",{class:"reset",type:"button",onclick:back},"← Back"), cp, el("button",{class:"cta",type:"button",onclick:()=>{ Object.assign(ss,{mode:null,step:0,cont:null,lot:null,level:"II",cls:null,aql:null,sev:"normal"}); renderSampling(); }},"Start over")));
+  const goRes=el("button",{class:"cta",type:"button",onclick:()=>{ ss.step=6; ss.res.done=false; renderSampling(); window.scrollTo({top:0}); }},"Continue: enter results →"); goRes.disabled=!p;
+  body.append(el("div",{class:"mact"}, el("button",{class:"reset",type:"button",onclick:back},"← Back"), cp, el("button",{class:"reset",type:"button",onclick:()=>{ Object.assign(ss,{mode:null,step:0,cont:null,lot:null,level:"II",cls:null,aql:null,sev:"normal",dtype:null}); ss.res={method:"count",count:"",raw:"",LSL:"",USL:"",ac:"",re:"",fname:"",done:false}; renderSampling(); }},"Start over"), goRes));
   body.append(el("p",{class:"src"},"Tables: ISO 2859-1 Table 1 (code letters) and Tables 2-A/2-B (single sampling), which use the same structure as ANSI/ASQ Z1.4 and public-domain MIL-STD-105E. Check plans against your controlled copy of ISO 2859-1:2026 before using them in a procedure."));
 }
 function crChart(C,R){
@@ -1255,9 +1302,11 @@ function crChart(C,R){
 }
 function renderCR(box,back){
   box.append(el("h3",{class:"srcHead"},"Design verification: confidence and reliability"));
+  const tt=el("div",{class:"randCtl"}); [["attr","Pass/fail results (attributes)"],["var","Measured values (variables)"]].forEach(([k,l])=>tt.append(el("button",{class:"tab",type:"button","aria-pressed":String(ss.cr.type===k),onclick:()=>{ ss.cr.type=k; ss.cr.done=false; renderSampling(); }},l)));
+  box.append(el("div",{class:"eyebrow"},"What kind of results will the test give?"), tt);
   box.append(el("p",{},"Find the smallest number of samples that demonstrates a reliability R with confidence C for a pass/fail test, allowing c failures. Based on the binomial distribution: the smallest n where P(failures ≤ c | n, 1 − R) ≤ 1 − C."));
   const grid=el("div",{class:"crGrid"}); const left=el("div",{class:"crRow"});
-  const opt=(lab,vals,key)=>{ const w=el("div",{}, el("div",{class:"eyebrow"},lab)); const g=el("div",{class:"aqlGrid"}); vals.forEach(v=>g.append(el("button",{class:"aqlBtn"+(ss[key]===v?" on":""),type:"button",onclick:()=>{ ss[key]=v; renderSampling(); }},(v*100)+"%"))); w.append(g); return w; };
+  const opt=(lab,vals,key)=>{ const w=el("div",{}, el("div",{class:"eyebrow"},lab)); const g=el("div",{class:"aqlGrid"}); vals.forEach(v=>g.append(el("button",{class:"aqlBtn"+(ss[key]===v?" on":""),type:"button",onclick:()=>{ ss[key]=v; ss.cr.done=false; ss.cr.n=""; renderSampling(); }},(v*100)+"%"))); w.append(g); return w; };
   left.append(opt("Confidence C",[0.90,0.95,0.99],"C"), opt("Reliability R",[0.90,0.95,0.99,0.999],"R"));
   const big=el("div",{class:"bigStats"});
   [0,1,2].forEach(c=>{ const n=crN(ss.C,ss.R,c); const v=el("b",{},"0"); big.append(el("div",{class:"bs "+(c?"":"n")}, el("span",{},c===0?"Zero failures allowed":c+" failure"+(c>1?"s":"")+" allowed"), v)); setTimeout(()=>countUp(v,n),50); });
@@ -1266,8 +1315,303 @@ function renderCR(box,back){
   const n0=crN(ss.C,ss.R,0);
   box.append(el("p",{},"With zero failures (success-run), test ",el("b",{},n0+" units"),". If all pass, you can state with "+(ss.C*100)+"% confidence that reliability is at least "+(ss.R*100)+"%. Formula: n = ln(1 − C) / ln(R), rounded up."));
   box.append(el("div",{class:"warn"}, el("b",{},"Tie C and R to risk. "),"Many companies set higher confidence and reliability for characteristics linked to higher-severity hazards, and document the rationale in a statistical-methods procedure. Samples must be representative of production (or justified otherwise)."));
+  renderCRResults(box);
   box.append(el("div",{class:"mact"}, el("button",{class:"reset",type:"button",onclick:back},"← Back")));
 }
+
+/* ---------- statistics for the sample size tool ---------- */
+function normCdf(z){ const t=1/(1+0.2316419*Math.abs(z)); const d=0.3989422804*Math.exp(-z*z/2); let p=d*t*(0.3193815+t*(-0.3565638+t*(1.781478+t*(-1.821256+t*1.330274)))); return z>0?1-p:p; }
+function normInv(p){ if(p<=0) return -Infinity; if(p>=1) return Infinity;
+  const a=[-3.969683028665376e+01,2.209460984245205e+02,-2.759285104469687e+02,1.383577518672690e+02,-3.066479806614716e+01,2.506628277459239e+00],
+        b=[-5.447609879822406e+01,1.615858368580409e+02,-1.556989798598866e+02,6.680131188771972e+01,-1.328068155288572e+01],
+        c=[-7.784894002430293e-03,-3.223964580411365e-01,-2.400758277161838e+00,-2.549732539343734e+00,4.374664141464968e+00,2.938163982698783e+00],
+        d=[7.784695709041462e-03,3.224671290700398e-01,2.445134137142996e+00,3.754408661907416e+00];
+  const pl=0.02425; let q,r;
+  if(p<pl){ q=Math.sqrt(-2*Math.log(p)); return (((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1); }
+  if(p>1-pl){ q=Math.sqrt(-2*Math.log(1-p)); return -(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1); }
+  q=p-0.5; r=q*q; return (((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q/(((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1); }
+function poisCdf(c,lam){ let t=0,term=Math.exp(-lam); for(let k=0;k<=c;k++){ if(k>0) term*=lam/k; t+=term; } return Math.min(1,t); }
+function parseNums(s){ return String(s||"").split(/[\s,;\t]+/).map(x=>x.trim()).filter(Boolean).map(Number).filter(v=>Number.isFinite(v)); }
+function describe(xs){
+  const n=xs.length; if(!n) return null; const s=[...xs].sort((a,b)=>a-b);
+  const mean=xs.reduce((a,b)=>a+b,0)/n; const sd=n>1?Math.sqrt(xs.reduce((a,b)=>a+(b-mean)**2,0)/(n-1)):0;
+  const med=n%2?s[(n-1)/2]:(s[n/2-1]+s[n/2])/2;
+  return {n,mean,sd,min:s[0],max:s[n-1],median:med,sorted:s};
+}
+function andersonDarling(xs){
+  const D=describe(xs); if(!D||D.n<8||D.sd===0) return null; const n=D.n;
+  const F=D.sorted.map(x=>Math.min(1-1e-12,Math.max(1e-12,normCdf((x-D.mean)/D.sd))));
+  let S=0; for(let i=0;i<n;i++) S+=(2*(i+1)-1)*(Math.log(F[i])+Math.log(1-F[n-1-i]));
+  const A2=-n-S/n; const As=A2*(1+0.75/n+2.25/(n*n)); let p;
+  if(As>=0.6) p=Math.exp(1.2937-5.709*As+0.0186*As*As);
+  else if(As>=0.34) p=Math.exp(0.9177-4.279*As-1.38*As*As);
+  else if(As>=0.2) p=1-Math.exp(-8.318+42.796*As-59.938*As*As);
+  else p=1-Math.exp(-13.436+101.14*As-223.73*As*As);
+  return {A2,As,p:Math.max(0,Math.min(1,p))};
+}
+function lnGamma(z){ const g=7,c=[0.99999999999980993,676.5203681218851,-1259.1392167224028,771.32342877765313,-176.61502916214059,12.507343278686905,-0.13857109526572012,9.9843695780195716e-6,1.5056327351493116e-7]; if(z<0.5) return Math.log(Math.PI/Math.sin(Math.PI*z))-lnGamma(1-z); z-=1; let x=c[0]; for(let i=1;i<g+2;i++) x+=c[i]/(z+i); const t=z+g+0.5; return 0.5*Math.log(2*Math.PI)+(z+0.5)*Math.log(t)-t+Math.log(x); }
+function nctCdf(t,nu,delta){ const lo=Math.max(1e-9,nu-12*Math.sqrt(2*nu)), hi=nu+14*Math.sqrt(2*nu)+20, N=800, hstep=(hi-lo)/N; const lc=-(nu/2)*Math.log(2)-lnGamma(nu/2); let s=0;
+  for(let i=0;i<=N;i++){ const x=lo+i*hstep; const w=(i===0||i===N)?1:(i%2?4:2); const pdf=Math.exp(lc+(nu/2-1)*Math.log(x)-x/2); s+=w*normCdf(t*Math.sqrt(x/nu)-delta)*pdf; } return s*hstep/3; }
+function kOneSided(n,C,R){ if(n<3) return null; const nu=n-1, delta=normInv(R)*Math.sqrt(n); let lo=delta, hi=delta*6+20; for(let k=0;k<70;k++){ const m=(lo+hi)/2; if(nctCdf(m,nu,delta)<C) lo=m; else hi=m; } return (lo+hi)/2/Math.sqrt(n); }
+function chi2Inv(q,nu){ const z=normInv(q); const h=2/(9*nu); return nu*Math.pow(1-h+z*Math.sqrt(h),3); }
+function kTwoSided(n,C,R){ const nu=n-1; const z=normInv((1+R)/2); return Math.sqrt(nu*(1+1/n)*z*z/chi2Inv(1-C,nu)); }
+function relLower(f,n,C){ let lo=0,hi=1; for(let k=0;k<60;k++){ const m=(lo+hi)/2; if(binCdf(f,n,1-m)<=1-C) lo=m; else hi=m; } return lo; }
+function fmt(v,d){ if(v===null||v===undefined||!Number.isFinite(v)) return "—"; const a=Math.abs(v); if(d!==undefined) return v.toFixed(d); return a!==0&&(a<0.001||a>=1e6)?v.toExponential(3):(+v.toPrecision(5)).toString(); }
+function capStats(D,LSL,USL){
+  const r={}; const s=D.sd; if(!s) return r;
+  if(LSL!==null&&USL!==null){ r.Pp=(USL-LSL)/(6*s); }
+  const lo=LSL!==null?(D.mean-LSL)/(3*s):Infinity, hi=USL!==null?(USL-D.mean)/(3*s):Infinity;
+  if(LSL!==null||USL!==null) r.Ppk=Math.min(lo,hi);
+  r.pOut=(LSL!==null?normCdf((LSL-D.mean)/s):0)+(USL!==null?1-normCdf((USL-D.mean)/s):0);
+  return r;
+}
+/* ---------- plots (SVG strings, also reused for the PDF) ---------- */
+function histBins(D){ const k=Math.max(5,Math.min(20,Math.ceil(Math.log2(D.n)+1))); const lo=D.min, hi=D.max===D.min?D.min+1:D.max; const w=(hi-lo)/k; const c=new Array(k).fill(0); D.sorted.forEach(x=>{ c[Math.min(k-1,Math.floor((x-lo)/w))]++; }); return {k,lo,w,c}; }
+function plotHist(D,LSL,USL){
+  const W=340,H=200,P=30; const B=histBins(D);
+  let x0=Math.min(B.lo,LSL??B.lo), x1=Math.max(B.lo+B.k*B.w,USL??-Infinity, B.lo+B.k*B.w); const pad=(x1-x0)*0.06; x0-=pad; x1+=pad;
+  const ymax=Math.max(...B.c)*1.18; const X=v=>P+(W-P-8)*(v-x0)/(x1-x0), Y=v=>8+(H-P-8)*(1-v/ymax);
+  let bars=B.c.map((c,i)=>`<rect x="${X(B.lo+i*B.w)+1}" y="${Y(c)}" width="${Math.max(1,X(B.lo+(i+1)*B.w)-X(B.lo+i*B.w)-2)}" height="${Y(0)-Y(c)}" fill="var(--qms)" opacity=".75"/>`).join("");
+  let curve=""; if(D.sd>0){ let d=""; for(let k=0;k<=60;k++){ const v=x0+(x1-x0)*k/60; const f=D.n*B.w*Math.exp(-(((v-D.mean)/D.sd)**2)/2)/(D.sd*Math.sqrt(2*Math.PI)); d+=(k?"L":"M")+X(v).toFixed(1)+" "+Y(f).toFixed(1); } curve=`<path d="${d}" fill="none" stroke="var(--fda)" stroke-width="2"/>`; }
+  const spec=[[LSL,"LSL"],[USL,"USL"]].filter(a=>a[0]!==null).map(([v,l])=>`<line x1="${X(v)}" y1="8" x2="${X(v)}" y2="${Y(0)}" stroke="var(--bad)" stroke-dasharray="4 3"/><text x="${X(v)}" y="18" text-anchor="middle" font-size="10" fill="var(--bad)">${l}</text>`).join("");
+  return `<svg viewBox="0 0 ${W} ${H}" class="oc" role="img" aria-label="Histogram with fitted normal curve"><line x1="${P}" y1="${Y(0)}" x2="${W-8}" y2="${Y(0)}" stroke="var(--line)"/>${bars}${curve}${spec}<text x="${P}" y="${H-8}" font-size="10" fill="var(--muted)">${fmt(x0)}</text><text x="${W-8}" y="${H-8}" text-anchor="end" font-size="10" fill="var(--muted)">${fmt(x1)}</text></svg>`;
+}
+function plotProb(D){
+  const W=340,H=200,P=34; const n=D.n; const pts=D.sorted.map((x,i)=>[x,normInv((i+1-0.375)/(n+0.25))]);
+  const x0=D.min, x1=D.max===D.min?D.min+1:D.max; const z0=pts[0][1]-0.3, z1=pts[n-1][1]+0.3;
+  const X=v=>P+(W-P-10)*(v-x0)/(x1-x0||1), Y=z=>8+(H-P-8)*(1-(z-z0)/(z1-z0));
+  const dots=pts.map(([x,z])=>`<circle cx="${X(x).toFixed(1)}" cy="${Y(z).toFixed(1)}" r="3" fill="var(--fda)"/>`).join("");
+  const line=D.sd>0?`<line x1="${X(D.mean+z0*D.sd)}" y1="${Y(z0)}" x2="${X(D.mean+z1*D.sd)}" y2="${Y(z1)}" stroke="var(--qms)" stroke-width="2"/>`:"";
+  return `<svg viewBox="0 0 ${W} ${H}" class="oc" role="img" aria-label="Normal probability plot"><rect x="${P}" y="8" width="${W-P-10}" height="${H-P-8}" fill="none" stroke="var(--line)"/>${line}${dots}<text x="${P-4}" y="14" text-anchor="end" font-size="10" fill="var(--muted)">z</text><text x="${W-10}" y="${H-8}" text-anchor="end" font-size="10" fill="var(--muted)">value →</text></svg>`;
+}
+function plotRun(xs,D,LSL,USL){
+  const W=340,H=180,P=34; const n=xs.length; const lo=Math.min(D.min,LSL??D.min), hi=Math.max(D.max,USL??D.max); const pad=(hi-lo||1)*0.08;
+  const X=i=>P+(W-P-10)*(n>1?i/(n-1):0.5), Y=v=>8+(H-P-8)*(1-(v-(lo-pad))/((hi+pad)-(lo-pad)));
+  const d=xs.map((v,i)=>(i?"L":"M")+X(i).toFixed(1)+" "+Y(v).toFixed(1)).join(" ");
+  const out=v=>(LSL!==null&&v<LSL)||(USL!==null&&v>USL);
+  const dots=xs.map((v,i)=>`<circle cx="${X(i).toFixed(1)}" cy="${Y(v).toFixed(1)}" r="2.6" fill="${out(v)?"var(--bad)":"var(--fda)"}"/>`).join("");
+  const hl=(v,col,l)=>`<line x1="${P}" y1="${Y(v)}" x2="${W-10}" y2="${Y(v)}" stroke="${col}" stroke-dasharray="4 3"/><text x="${W-12}" y="${Y(v)-3}" text-anchor="end" font-size="10" fill="${col}">${l}</text>`;
+  return `<svg viewBox="0 0 ${W} ${H}" class="oc" role="img" aria-label="Run chart of results in entry order"><rect x="${P}" y="8" width="${W-P-10}" height="${H-P-8}" fill="none" stroke="var(--line)"/>${hl(D.mean,"var(--qms)","mean")}${LSL!==null?hl(LSL,"var(--bad)","LSL"):""}${USL!==null?hl(USL,"var(--bad)","USL"):""}<path d="${d}" fill="none" stroke="var(--muted)" stroke-width="1"/>${dots}<text x="${W-10}" y="${H-8}" text-anchor="end" font-size="10" fill="var(--muted)">sample order →</text></svg>`;
+}
+/* ---------- export: minimal XLSX and PDF writers, no libraries ---------- */
+const CRC_T=(()=>{ const t=new Uint32Array(256); for(let n=0;n<256;n++){ let c=n; for(let k=0;k<8;k++) c=c&1?0xEDB88320^(c>>>1):c>>>1; t[n]=c>>>0; } return t; })();
+function crc32(u){ let c=0xFFFFFFFF; for(let i=0;i<u.length;i++) c=CRC_T[(c^u[i])&255]^(c>>>8); return (c^0xFFFFFFFF)>>>0; }
+function zipStore(files){
+  const enc=new TextEncoder(); const parts=[], central=[]; let off=0;
+  files.forEach(([name,txt])=>{ const nb=enc.encode(name), data=typeof txt==="string"?enc.encode(txt):txt; const crc=crc32(data);
+    const h=new DataView(new ArrayBuffer(30)); h.setUint32(0,0x04034b50,true); h.setUint16(4,20,true); h.setUint16(6,0x0800,true); h.setUint16(8,0,true); h.setUint16(10,0,true); h.setUint16(12,0x21,true); h.setUint32(14,crc,true); h.setUint32(18,data.length,true); h.setUint32(22,data.length,true); h.setUint16(26,nb.length,true); h.setUint16(28,0,true);
+    parts.push(new Uint8Array(h.buffer),nb,data);
+    const c=new DataView(new ArrayBuffer(46)); c.setUint32(0,0x02014b50,true); c.setUint16(4,20,true); c.setUint16(6,20,true); c.setUint16(8,0x0800,true); c.setUint16(10,0,true); c.setUint16(12,0,true); c.setUint16(14,0x21,true); c.setUint32(16,crc,true); c.setUint32(20,data.length,true); c.setUint32(24,data.length,true); c.setUint16(28,nb.length,true); c.setUint32(42,off,true);
+    central.push(new Uint8Array(c.buffer),nb); off+=30+nb.length+data.length; });
+  const cs=central.reduce((a,b)=>a+b.length,0); const e=new DataView(new ArrayBuffer(22)); e.setUint32(0,0x06054b50,true); e.setUint16(8,files.length,true); e.setUint16(10,files.length,true); e.setUint32(12,cs,true); e.setUint32(16,off,true);
+  return new Blob([...parts,...central,new Uint8Array(e.buffer)],{type:"application/zip"});
+}
+function xesc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g,""); }
+function colName(i){ let s=""; i++; while(i>0){ const m=(i-1)%26; s=String.fromCharCode(65+m)+s; i=Math.floor((i-1)/26); } return s; }
+function sheetXml(rows,widths){
+  const cols=widths?"<cols>"+widths.map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join("")+"</cols>":"";
+  const body=rows.map((r,ri)=>"<row r=\""+(ri+1)+"\">"+r.map((v,ci)=>{ const ref=colName(ci)+(ri+1); const bold=typeof v==="object"&&v&&v.b; const val=typeof v==="object"&&v?v.v:v; const st=bold?' s="1"':"";
+    if(val===null||val===undefined||val==="") return ""; if(typeof val==="number"&&Number.isFinite(val)) return `<c r="${ref}"${st}><v>${val}</v></c>`; return `<c r="${ref}" t="inlineStr"${st}><is><t xml:space="preserve">${xesc(val)}</t></is></c>`; }).join("")+"</row>").join("");
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">${cols}<sheetData>${body}</sheetData></worksheet>`;
+}
+function buildXlsx(sheets){
+  const ct=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>${sheets.map((s,i)=>`<Override PartName="/xl/worksheets/sheet${i+1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join("")}</Types>`;
+  const rels=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>`;
+  const wb=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>${sheets.map((s,i)=>`<sheet name="${xesc(s.name)}" sheetId="${i+1}" r:id="rId${i+1}"/>`).join("")}</sheets></workbook>`;
+  const wbr=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${sheets.map((s,i)=>`<Relationship Id="rId${i+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${i+1}.xml"/>`).join("")}<Relationship Id="rId${sheets.length+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`;
+  const sty=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="2"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="2"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
+  return zipStore([["[Content_Types].xml",ct],["_rels/.rels",rels],["xl/workbook.xml",wb],["xl/_rels/workbook.xml.rels",wbr],["xl/styles.xml",sty],...sheets.map((s,i)=>["xl/worksheets/sheet"+(i+1)+".xml",sheetXml(s.rows,s.widths)])]);
+}
+function pdfTxt(s){ return String(s).replace(/≤/g,"<=").replace(/≥/g,">=").replace(/[–—]/g,"-").replace(/[’‘]/g,"'").replace(/[“”]/g,'"').replace(/·/g,"-").replace(/²/g,"^2").replace(/→/g,"->").replace(/±/g,"+/-").replace(/×/g,"x").replace(/[^\x20-\x7E]/g,"").replace(/\\/g,"\\\\").replace(/\(/g,"\\(").replace(/\)/g,"\\)"); }
+function buildPdf(doc){
+  // doc: {title, subtitle, sections:[{h, rows:[[k,v]]}], decision:{text,ok}, hist:{bins,lo,w,mean,sd,n,LSL,USL}|null, data:[numbers]}
+  const pages=[]; let ops=[]; let y=800; const L=50, R=545;
+  const newPage=()=>{ if(ops.length) pages.push(ops.join("\n")); ops=[]; y=800; };
+  const text=(x,yy,s,size,bold,col)=>{ ops.push(`${col||"0.12 0.16 0.2"} rg BT /${bold?"F2":"F1"} ${size} Tf ${x} ${yy} Td (${pdfTxt(s)}) Tj ET`); };
+  const need=h=>{ if(y-h<50) newPage(); };
+  const wrap=(s,max)=>{ const w=String(s).split(/\s+/); const out=[]; let line=""; w.forEach(t=>{ if((line+" "+t).trim().length>max){ out.push(line.trim()); line=t; } else line+=" "+t; }); if(line.trim()) out.push(line.trim()); return out; };
+  text(L,y,doc.title,16,true,"0.05 0.42 0.37"); y-=20; text(L,y,doc.subtitle,9.5,false,"0.4 0.45 0.5"); y-=10;
+  ops.push(`0.8 0.84 0.86 RG 0.8 w ${L} ${y} m ${R} ${y} l S`); y-=22;
+  if(doc.decision){ need(40); ops.push(`${doc.decision.ok?"0.88 0.95 0.91":"0.98 0.9 0.89"} rg ${L} ${y-12} ${R-L} 26 re f`); text(L+10,y-3,doc.decision.text,12,true,doc.decision.ok?"0.1 0.45 0.25":"0.6 0.18 0.15"); y-=36; }
+  doc.sections.forEach(sec=>{ need(40); text(L,y,sec.h,11.5,true); y-=16;
+    sec.rows.forEach(([k,v])=>{ const lines=wrap(v,62); need(14*lines.length+2); text(L+6,y,k,9.5,false,"0.35 0.4 0.45"); lines.forEach((ln,i)=>text(L+190,y-i*13,ln,9.5,false)); y-=13*lines.length+3; }); y-=8; });
+  if(doc.hist){ const H=doc.hist; need(200); text(L,y,"Histogram with fitted normal curve",11.5,true); y-=12; const gx=L+10, gy=y-150, gw=R-L-20, gh=140;
+    let x0=Math.min(H.lo,H.LSL??H.lo), x1=Math.max(H.lo+H.bins.length*H.w,H.USL??-Infinity); const pad=(x1-x0)*0.06||1; x0-=pad; x1+=pad; const ymax=Math.max(...H.bins)*1.18||1;
+    const X=v=>gx+gw*(v-x0)/(x1-x0), Y=v=>gy+gh*v/ymax;
+    ops.push(`0.6 0.65 0.7 RG 0.6 w ${gx} ${gy} m ${gx+gw} ${gy} l S`);
+    H.bins.forEach((c,i)=>{ if(!c) return; const a=X(H.lo+i*H.w)+1, b=X(H.lo+(i+1)*H.w)-1; ops.push(`0.33 0.6 0.56 rg ${a.toFixed(1)} ${gy} ${(b-a).toFixed(1)} ${(Y(c)-gy).toFixed(1)} re f`); });
+    if(H.sd>0){ let d=""; for(let k=0;k<=60;k++){ const v=x0+(x1-x0)*k/60; const f=H.n*H.w*Math.exp(-(((v-H.mean)/H.sd)**2)/2)/(H.sd*Math.sqrt(2*Math.PI)); d+=`${X(v).toFixed(1)} ${Math.min(gy+gh,Y(f)).toFixed(1)} ${k?"l":"m"} `; } ops.push(`0.29 0.36 0.6 RG 1.4 w ${d}S`); }
+    [[H.LSL,"LSL"],[H.USL,"USL"]].forEach(([v,l])=>{ if(v===null) return; ops.push(`0.66 0.27 0.23 RG 0.9 w [3 2] 0 d ${X(v).toFixed(1)} ${gy} m ${X(v).toFixed(1)} ${gy+gh} l S [] 0 d`); text(X(v)-8,gy+gh+4,l,8,true,"0.66 0.27 0.23"); });
+    text(gx,gy-12,fmt(x0),8,false,"0.4 0.45 0.5"); text(gx+gw-30,gy-12,fmt(x1),8,false,"0.4 0.45 0.5"); y=gy-30; }
+  if(doc.data&&doc.data.length){ need(40); text(L,y,"Raw data ("+doc.data.length+" values, in entry order)",11.5,true); y-=16;
+    const perRow=6; for(let i=0;i<doc.data.length;i+=perRow){ need(14); doc.data.slice(i,i+perRow).forEach((v,j)=>text(L+6+j*82,y,(i+j+1)+". "+v,9,false)); y-=13; } }
+  newPage();
+  const objs=[]; const add=s=>{ objs.push(s); return objs.length; };
+  const fontR=add("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>"), fontB=add("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>");
+  const pagesId=objs.length+1; objs.push(null); const kids=[];
+  pages.forEach((content,i)=>{ const foot=`0.5 0.55 0.6 rg BT /F1 8 Tf 50 30 Td (${pdfTxt(doc.footer+"  |  page "+(i+1)+" of "+pages.length)}) Tj ET`; const s=content+"\n"+foot;
+    const cid=add(`<< /Length ${s.length} >>\nstream\n${s}\nendstream`); kids.push(add(`<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 ${fontR} 0 R /F2 ${fontB} 0 R >> >> /Contents ${cid} 0 R >>`)); });
+  objs[pagesId-1]=`<< /Type /Pages /Kids [${kids.map(k=>k+" 0 R").join(" ")}] /Count ${kids.length} >>`;
+  const cat=add(`<< /Type /Catalog /Pages ${pagesId} 0 R >>`);
+  let out="%PDF-1.4\n"; const offs=[]; objs.forEach((o,i)=>{ offs.push(out.length); out+=`${i+1} 0 obj\n${o}\nendobj\n`; });
+  const xref=out.length; out+=`xref\n0 ${objs.length+1}\n0000000000 65535 f \n`+offs.map(o=>String(o).padStart(10,"0")+" 00000 n \n").join("")+`trailer\n<< /Size ${objs.length+1} /Root ${cat} 0 R >>\nstartxref\n${xref}\n%%EOF`;
+  const bytes=new Uint8Array(out.length); for(let i=0;i<out.length;i++) bytes[i]=out.charCodeAt(i)&255; return new Blob([bytes],{type:"application/pdf"});
+}
+function safeName(s,ext){ let b=String(s||"").trim().replace(/[\\/:*?"<>|]+/g,"-").replace(/\s+/g," ").replace(/\.(xlsx|pdf)$/i,""); if(!b) b="sample-size-run"; return b.slice(0,120)+"."+ext; }
+async function saveFile(name,blob,statusEl){
+  const say=t=>{ if(statusEl) statusEl.textContent=t; };
+  try{ if(window.claude&&typeof window.claude.use==="function"){ const dl=await window.claude.use("downloads"); if(dl){ try{ await dl.save({filename:name,data:blob}); say("Saved as "+name); } catch(e){ say(e&&e.code==="declined"?"Save cancelled.":"Couldn’t save here ("+(e&&e.code||"error")+")."); } return; } } }catch(e){}
+  try{ const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download=name; document.body.append(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),4000); say("Downloaded "+name); }catch(e){ say("Download isn’t available in this view."); }
+}
+/* ---------- Useful tools page ---------- */
+const TOOLS=[["sampling","Sample size tool (ISO 2859-1:2026)","Lot acceptance plans with switching rules, and design-verification sample sizes from confidence and reliability. Enter your results, see the statistics and export a report.","samp",true]];
+function renderTools(){
+  const m=document.getElementById("main"); m.innerHTML="";
+  m.append(el("section",{class:"chHead"}, el("div",{class:"eyebrow"},"Useful tools"), el("h2",{},"Tools for daily QA work"), el("p",{},"Pick a tool. More tools will be added here.")));
+  const g=el("div",{class:"choiceGrid toolGrid"});
+  TOOLS.forEach(([t,lab,s,ic])=>{ const b=el("button",{class:"choiceBtn samp toolCard",type:"button",onclick:()=>{ location.hash=t; }}, el("span",{class:"toolIco"},ico(ic)), el("b",{},lab), el("span",{},s)); g.append(b); });
+  g.append(el("div",{class:"choiceBtn toolCard soon","aria-disabled":"true"}, el("b",{},"More tools coming"), el("span",{},"New calculators and checklists will appear here.")));
+  m.append(g);
+}
+/* ---------- results entry, statistics and export ---------- */
+if(!ss.res) ss.res={method:"count",count:"",raw:"",LSL:"",USL:"",ac:"",re:"",fname:"",done:false};
+if(!ss.cr) ss.cr={type:"attr",n:"",fails:"",c:0,raw:"",LSL:"",USL:"",fname:"",done:false};
+const numOrNull=v=>{ const x=parseFloat(v); return Number.isFinite(x)?x:null; };
+function field(lab,val,on,attrs){ const i=el("input",Object.assign({type:"text",inputmode:"decimal",class:"rIn",value:val??""},attrs||{})); i.addEventListener("input",()=>on(i.value)); return el("label",{class:"rField"}, el("span",{},lab), i); }
+function dataBox(val,on,ph){ const t=el("textarea",{class:"rData",rows:"5",placeholder:ph||"Paste or type values: one per line, or separated by commas or spaces"}); t.value=val||""; const cnt=el("small",{class:"src"}); const upd=()=>{ cnt.textContent=parseNums(t.value).length+" values entered"; }; t.addEventListener("input",()=>{ on(t.value); upd(); }); upd(); return el("div",{class:"rDataWrap"}, t, cnt); }
+function statsBlock(xs,LSL,USL){
+  const D=describe(xs); const AD=andersonDarling(xs); const cap=capStats(D,LSL,USL);
+  const outCount=xs.filter(v=>(LSL!==null&&v<LSL)||(USL!==null&&v>USL)).length;
+  const rows=[["n",D.n],["Mean",fmt(D.mean)],["Standard deviation",fmt(D.sd)],["Median",fmt(D.median)],["Minimum",fmt(D.min)],["Maximum",fmt(D.max)],["Range",fmt(D.max-D.min)]];
+  if(LSL!==null||USL!==null){ rows.push(["Out of specification",outCount+" of "+D.n]); if(cap.Pp!==undefined) rows.push(["Pp",fmt(cap.Pp,2)]); if(cap.Ppk!==undefined) rows.push(["Ppk",fmt(cap.Ppk,2)]); if(cap.pOut!==undefined) rows.push(["Expected out of spec (normal model)",(cap.pOut*100<0.001?"<0.001":fmt(cap.pOut*100,3))+"%"]); }
+  rows.push(["Normality (Anderson-Darling)",AD?("A² = "+fmt(AD.A2,3)+", p = "+(AD.p<0.005?"<0.005":fmt(AD.p,3))):"needs at least 8 values"]);
+  rows.push(["Distribution",AD?(AD.p>=0.05?"Consistent with a normal distribution (p ≥ 0.05)":"Not consistent with normal (p < 0.05): check for outliers, mixed lots or a skewed process"):"Not assessed"]);
+  const g=el("div",{class:"statGrid"}); rows.forEach(([k,v])=>g.append(el("div",{class:"statCell"+(String(v).length>28?" wide":"")}, el("span",{},k), el("b",{},String(v)))));
+  const plots=el("div",{class:"plotGrid"});
+  const card=(t,svg)=>{ const c=el("div",{class:"plotCard"}, el("div",{class:"eyebrow"},t)); const h=el("div",{}); h.innerHTML=svg; c.append(h); return c; };
+  plots.append(card("Histogram and fitted normal curve",plotHist(D,LSL,USL)), card("Normal probability plot",plotProb(D)), card("Run chart (entry order)",plotRun(xs,D,LSL,USL)));
+  return {D,AD,cap,outCount,rows,node:el("div",{}, el("h3",{class:"secTitle"},"Statistics"), g, plots, el("p",{class:"src"},"Standard deviation uses n − 1. Pp and Ppk use the overall standard deviation and assume a normal distribution. The Anderson-Darling p-value uses the Stephens/D’Agostino approximation for an estimated mean and standard deviation."))};
+}
+function exportPanel(holder,getDoc,key){
+  const st=key==="cr"?ss.cr:ss.res; if(!st.fname) st.fname=(key==="cr"?"Design-verification":"Lot-acceptance")+"_"+new Date().toISOString().slice(0,10);
+  const status=el("small",{class:"src",role:"status"});
+  const inp=el("input",{type:"text",class:"rIn fname",value:st.fname,"aria-label":"File name"}); inp.addEventListener("input",()=>{ st.fname=inp.value; });
+  const go=async(kind)=>{ const doc=getDoc(); const name=safeName(st.fname,kind); status.textContent="Preparing "+name+"…"; const blob=kind==="xlsx"?buildXlsx(doc.sheets):buildPdf(doc.pdf); await saveFile(name,blob,status); };
+  holder.append(el("div",{class:"card exportBox"}, el("h3",{class:"secTitle"},"Export this run"), el("label",{class:"rField"}, el("span",{},"File name"), inp),
+    el("div",{class:"mact"}, el("button",{class:"cta",type:"button",onclick:()=>go("xlsx")},"Export Excel (.xlsx)"), el("button",{class:"cta alt",type:"button",onclick:()=>go("pdf")},"Export PDF")), status,
+    el("p",{class:"src"},"The Excel file has a Summary sheet and a Raw data sheet. The PDF has the summary, the decision, a histogram and the raw data.")));
+}
+function docFrom(title,sections,decision,xs,LSL,USL,dataStatus){
+  const stamp=new Date().toLocaleString("en-GB");
+  const sumRows=[[{v:title,b:true}],["Created",stamp],["Tool","Medical Device QA Handbook · Sample size tool"],[]];
+  if(decision) sumRows.push([{v:"Decision",b:true},{v:decision.text,b:true}],[]);
+  sections.forEach(s=>{ sumRows.push([{v:s.h,b:true}]); s.rows.forEach(r=>sumRows.push([r[0],r[1]])); sumRows.push([]); });
+  const raw=[[{v:"#",b:true},{v:"Value",b:true},{v:"Status",b:true}]]; (xs||[]).forEach((v,i)=>raw.push([i+1,v,dataStatus?dataStatus(v):""]));
+  let hist=null; if(xs&&xs.length>1){ const D=describe(xs); const B=histBins(D); hist={bins:B.c,lo:B.lo,w:B.w,mean:D.mean,sd:D.sd,n:D.n,LSL,USL}; }
+  return {sheets:[{name:"Summary",rows:sumRows,widths:[38,70]},{name:"Raw data",rows:raw,widths:[8,16,18]}],
+    pdf:{title,subtitle:"Medical Device QA Handbook - Sample size tool - "+stamp,footer:title+" - "+stamp,sections,decision,hist,data:xs||[]}};
+}
+function verdict(ok,text,sub){ return el("div",{class:"verdict "+(ok?"ok":"no")}, el("b",{},text), sub?el("span",{},sub):""); }
+/* lot acceptance results */
+function renderLotResults(body,back){
+  const R=ss.res; const L=codeLetter(ss.lot,ss.level); const p=planFor(ss.sev,L,ss.aql);
+  const sevName=SEVS.find(x=>x[0]===ss.sev)[1];
+  body.append(el("h3",{},"Enter your inspection results"));
+  if(!p){ body.append(el("div",{class:"warn"},"Inspection is discontinued in this state, so there is nothing to enter. Go back and pick another state."), el("div",{class:"mact"}, el("button",{class:"reset",type:"button",onclick:back},"← Back"))); return; }
+  const full=p.n>=ss.lot; const n=full?ss.lot:p.n;
+  let ac=p.ac, re=p.re;
+  const unit=ss.dtype==="defects"?"nonconformities":"nonconforming units";
+  body.append(el("div",{class:"pill"},"Plan: "+sevName+" inspection, code letter "+L+", AQL "+ss.aql+(ss.dtype==="defects"?" nonconformities per 100 items":"% nonconforming")+", sample n = "+n+(full?" (100% inspection)":"")+(ac!==null?", Ac = "+ac+", Re = "+re:"")+"."));
+  if(ac===null||full){
+    body.append(el("p",{class:"src"},full?"For 100% inspection, enter the acceptance criterion your procedure uses (often zero nonconforming).":"Enter Ac and Re for this plan from Table 2-C of ISO 2859-1:2026."));
+    const g=el("div",{class:"rRow"}); g.append(field("Accept if ≤ (Ac)",R.ac,v=>R.ac=v,{inputmode:"numeric"}), field("Reject if ≥ (Re)",R.re,v=>R.re=v,{inputmode:"numeric"})); body.append(g);
+  }
+  const methods=ss.dtype==="defects"?[["count","Enter the total count"],["units","Enter the count per unit"]]:[["count","Enter the number of nonconforming units"],["values","Enter measured values"]];
+  if(ss.dtype==="vars"&&R.method==="count") R.method="values";
+  const mt=el("div",{class:"randCtl"}); methods.forEach(([k,l])=>mt.append(el("button",{class:"tab",type:"button","aria-pressed":String(R.method===k),onclick:()=>{ R.method=k; R.done=false; renderSampling(); }},l)));
+  if(!methods.some(m=>m[0]===R.method)) R.method="count";
+  body.append(mt);
+  const inBox=el("div",{class:"rInputs"});
+  if(R.method==="count") inBox.append(field("Number of "+unit+" found in the sample of "+n,R.count,v=>{ R.count=v; },{inputmode:"numeric"}));
+  if(R.method==="units") inBox.append(el("p",{class:"src"},"Enter the number of nonconformities found on each sampled unit (0 for a good unit)."), dataBox(R.raw,v=>R.raw=v,"e.g. 0 0 1 0 2 0 …"));
+  if(R.method==="values"){ const g=el("div",{class:"rRow"}); g.append(field("Lower spec limit (LSL)",R.LSL,v=>R.LSL=v), field("Upper spec limit (USL)",R.USL,v=>R.USL=v)); inBox.append(el("p",{class:"src"},"Each value outside the limits counts as a nonconforming unit. Leave a limit blank for a one-sided specification."), g, dataBox(R.raw,v=>R.raw=v)); }
+  body.append(inBox);
+  const out=el("div",{class:"rOut"});
+  body.append(el("div",{class:"mact"}, el("button",{class:"reset",type:"button",onclick:back},"← Back to plan"), el("button",{class:"cta",type:"button",onclick:()=>{ R.done=true; renderSampling(); }},"Calculate result →")), out);
+  if(!R.done) return;
+  if(ac===null||full){ ac=parseInt(R.ac,10); re=parseInt(R.re,10); if(!(ac>=0&&re>ac)){ out.append(el("div",{class:"warn"},"Enter valid Ac and Re values (Re must be greater than Ac).")); return; } }
+  let xs=null, cnt=null, LSL=null, USL=null, warnN=null;
+  if(R.method==="count"){ cnt=parseInt(R.count,10); if(!(cnt>=0)){ out.append(el("div",{class:"warn"},"Enter the number found (0 or more).")); return; } }
+  if(R.method==="units"){ xs=parseNums(R.raw); if(!xs.length){ out.append(el("div",{class:"warn"},"Enter the counts per unit.")); return; } cnt=xs.reduce((a,b)=>a+b,0); if(xs.length!==n) warnN=xs.length; }
+  if(R.method==="values"){ xs=parseNums(R.raw); LSL=numOrNull(R.LSL); USL=numOrNull(R.USL); if(xs.length<2){ out.append(el("div",{class:"warn"},"Enter at least 2 measured values.")); return; } if(LSL===null&&USL===null){ out.append(el("div",{class:"warn"},"Enter at least one specification limit.")); return; } if(LSL!==null&&USL!==null&&LSL>=USL){ out.append(el("div",{class:"warn"},"LSL must be below USL.")); return; } cnt=xs.filter(v=>(LSL!==null&&v<LSL)||(USL!==null&&v>USL)).length; if(xs.length!==n) warnN=xs.length; }
+  const okLot=cnt<=ac;
+  out.append(verdict(okLot,okLot?"ACCEPT the lot":"DO NOT ACCEPT the lot",cnt+" "+unit+" found; accept if ≤ "+ac+", reject if ≥ "+re+"."));
+  if(warnN!==null) out.append(el("div",{class:"warn"}, el("b",{},"Sample size mismatch. "),"You entered "+warnN+" results, but the plan calls for "+n+". The decision above uses the results you entered; complete the sample before deciding."));
+  if(!okLot) out.append(el("p",{class:"src"},"Handle the lot as nonconforming product (ISO 13485 8.3) and record it for the switching rules: 2 lots not accepted out of 5 or fewer consecutive lots moves normal inspection to tightened."));
+  let S=null; if(xs&&R.method==="values"){ S=statsBlock(xs,LSL,USL); out.append(S.node); }
+  if(xs&&R.method==="units"){ const D=describe(xs); out.append(el("div",{class:"statGrid"}, ...[["Units entered",D.n],["Total nonconformities",cnt],["Nonconformities per 100 units",fmt(cnt/D.n*100,2)],["Units with at least one",xs.filter(v=>v>0).length]].map(([k,v])=>el("div",{class:"statCell"}, el("span",{},k), el("b",{},String(v)))))); }
+  const getDoc=()=>{
+    const sec=[{h:"Sampling plan",rows:[["Standard","ISO 2859-1:2026, single sampling"],["Data recorded",ss.dtype==="defects"?"Nonconformities per unit (AQL per 100 items)":ss.dtype==="vars"?"Measured values classified against spec limits":"Nonconforming items (pass/fail)"],["Lot size",ss.lot],["Inspection level",ss.level],["Code letter",L],["AQL",ss.aql+(ss.dtype==="defects"?" per 100 items":" %")],["Severity",sevName],["Sample size n",n],["Ac / Re",ac+" / "+re]]},
+      {h:"Results",rows:[["Results entered",xs?xs.length:"count only"],["Found",cnt+" "+unit],...(LSL!==null?[["LSL",LSL]]:[]),...(USL!==null?[["USL",USL]]:[])]}];
+    if(S) sec.push({h:"Statistics",rows:S.rows.map(r=>[r[0],String(r[1])])});
+    return docFrom("Lot acceptance - ISO 2859-1",sec,{text:(okLot?"ACCEPT":"DO NOT ACCEPT")+": "+cnt+" "+unit+" (Ac "+ac+", Re "+re+")",ok:okLot},xs,LSL,USL,R.method==="values"?(v=>((LSL!==null&&v<LSL)||(USL!==null&&v>USL))?"Out of spec":"In spec"):null);
+  };
+  exportPanel(out,getDoc,"res");
+}
+/* design verification results */
+function renderCRResults(box){
+  const S0=ss.cr; const C=ss.C, Rr=ss.R;
+  const sec=el("div",{class:"crRes"}); box.append(sec);
+  sec.append(el("h3",{class:"secTitle"},S0.type==="attr"?"Enter your test results":"Enter your measured results"));
+  if(S0.type==="attr"){
+    if(!S0.n) S0.n=String(crN(C,Rr,S0.c));
+    const cs=el("div",{class:"randCtl"}); [0,1,2].forEach(c=>cs.append(el("button",{class:"tab",type:"button","aria-pressed":String(S0.c===c),onclick:()=>{ S0.c=c; S0.n=String(crN(C,Rr,c)); S0.done=false; renderSampling(); }},"Plan allows "+c+" failure"+(c===1?"":"s"))));
+    const g=el("div",{class:"rRow"}); g.append(field("Units tested",S0.n,v=>S0.n=v,{inputmode:"numeric"}), field("Failures observed",S0.fails,v=>S0.fails=v,{inputmode:"numeric"}));
+    sec.append(cs, g, el("p",{class:"src"},"Optional: paste the measured values with their spec limits to get statistics and count failures automatically."));
+    const g2=el("div",{class:"rRow"}); g2.append(field("Lower spec limit (LSL)",S0.LSL,v=>S0.LSL=v), field("Upper spec limit (USL)",S0.USL,v=>S0.USL=v)); sec.append(g2, dataBox(S0.raw,v=>S0.raw=v));
+  } else {
+    sec.append(el("p",{},"For measured data that follow a normal distribution, a tolerance interval can show the same confidence and reliability with fewer units than a pass/fail test. The test passes if mean − k·s ≥ LSL and mean + k·s ≤ USL."));
+    const g=el("div",{class:"rRow"}); g.append(field("Lower spec limit (LSL)",S0.LSL,v=>S0.LSL=v), field("Upper spec limit (USL)",S0.USL,v=>S0.USL=v)); sec.append(g, dataBox(S0.raw,v=>S0.raw=v));
+  }
+  const out=el("div",{class:"rOut"});
+  sec.append(el("div",{class:"mact"}, el("button",{class:"cta",type:"button",onclick:()=>{ S0.done=true; renderSampling(); }},"Calculate result →")), out);
+  if(!S0.done) return;
+  let xs=parseNums(S0.raw); const LSL=numOrNull(S0.LSL), USL=numOrNull(S0.USL);
+  if(LSL!==null&&USL!==null&&LSL>=USL){ out.append(el("div",{class:"warn"},"LSL must be below USL.")); return; }
+  let St=null, decision, secs;
+  if(S0.type==="attr"){
+    let n=parseInt(S0.n,10), f=parseInt(S0.fails,10);
+    if(xs.length&&(LSL!==null||USL!==null)){ n=xs.length; f=xs.filter(v=>(LSL!==null&&v<LSL)||(USL!==null&&v>USL)).length; out.append(el("p",{class:"src"},"Units and failures were taken from the "+xs.length+" values you entered.")); }
+    if(!(n>=1&&f>=0&&f<=n)){ out.append(el("div",{class:"warn"},"Enter the units tested and the failures observed.")); return; }
+    const need=crN(C,Rr,S0.c); const okN=n>=need, okF=f<=S0.c; const ok=okN&&okF; const rl=relLower(f,n,C);
+    out.append(verdict(ok,ok?"PASS: requirement demonstrated":"NOT DEMONSTRATED",f+" failure"+(f===1?"":"s")+" in "+n+" units. Plan: up to "+S0.c+" failure"+(S0.c===1?"":"s")+" in at least "+need+" units."));
+    out.append(el("div",{class:"statGrid"}, ...[["Confidence",(C*100)+"%"],["Target reliability",(Rr*100)+"%"],["Demonstrated reliability (lower bound)",fmt(rl*100,2)+"%"],["Observed failure rate",fmt(f/n*100,2)+"%"]].map(([k,v])=>el("div",{class:"statCell"}, el("span",{},k), el("b",{},v)))));
+    if(!okN) out.append(el("div",{class:"warn"},"Fewer units than the plan requires. Test at least "+need+" units, or accept a lower demonstrated reliability."));
+    out.append(el("p",{class:"src"},"Demonstrated reliability is the one-sided Clopper-Pearson (exact binomial) lower bound at "+(C*100)+"% confidence."));
+    if(xs.length>1) { St=statsBlock(xs,LSL,USL); out.append(St.node); }
+    decision={text:(ok?"PASS":"NOT DEMONSTRATED")+": "+f+" failures in "+n+" units (C "+(C*100)+"%, R "+(Rr*100)+"%)",ok};
+    secs=[{h:"Test plan",rows:[["Method","Attribute (pass/fail), binomial"],["Confidence C",(C*100)+"%"],["Reliability R",(Rr*100)+"%"],["Failures allowed c",S0.c],["Required sample size",need]]},{h:"Results",rows:[["Units tested",n],["Failures",f],["Demonstrated reliability (lower bound)",fmt(rl*100,2)+"%"]]}];
+  } else {
+    if(xs.length<5){ out.append(el("div",{class:"warn"},"Enter at least 5 measured values.")); return; }
+    if(LSL===null&&USL===null){ out.append(el("div",{class:"warn"},"Enter at least one specification limit.")); return; }
+    St=describe(xs); const n=St.n; const two=LSL!==null&&USL!==null; const k=two?kTwoSided(n,C,Rr):kOneSided(n,C,Rr);
+    if(!k){ out.append(el("div",{class:"warn"},"Too few values for this confidence and reliability.")); return; }
+    const lo=St.mean-k*St.sd, hi=St.mean+k*St.sd; const okL=LSL===null||lo>=LSL, okU=USL===null||hi<=USL; const ok=okL&&okU;
+    out.append(verdict(ok,ok?"PASS: requirement demonstrated":"NOT DEMONSTRATED",(two?"Two-sided":"One-sided")+" tolerance interval: "+(LSL!==null?"mean − k·s = "+fmt(lo):"")+(two?", ":"")+(USL!==null?"mean + k·s = "+fmt(hi):"")+" with k = "+fmt(k,3)+"."));
+    const blk=statsBlock(xs,LSL,USL); St=blk;
+    if(blk.AD&&blk.AD.p<0.05) out.append(el("div",{class:"warn"}, el("b",{},"Normality not supported. "),"The tolerance interval assumes a normal distribution, and these data fail the Anderson-Darling test (p < 0.05). Investigate, transform the data, or use the pass/fail method."));
+    if(!blk.AD) out.append(el("div",{class:"warn"},"With fewer than 8 values the normality assumption can’t be checked. Justify it from earlier data, or test more units."));
+    out.append(el("div",{class:"statGrid"}, ...[["Confidence",(C*100)+"%"],["Reliability",(Rr*100)+"%"],["k factor",fmt(k,3)],["Interval",(LSL!==null?fmt(lo):"−∞")+" to "+(USL!==null?fmt(hi):"+∞")]].map(([a,b])=>el("div",{class:"statCell"}, el("span",{},a), el("b",{},b)))));
+    out.append(blk.node);
+    out.append(el("p",{class:"src"},"One-sided k is exact (noncentral t distribution). Two-sided k uses Howe’s method with a Wilson-Hilferty chi-square quantile, which is close to the exact tables; check critical cases against ISO 16269-6."));
+    decision={text:(ok?"PASS":"NOT DEMONSTRATED")+": tolerance interval "+(LSL!==null?fmt(lo):"-inf")+" to "+(USL!==null?fmt(hi):"+inf")+" (k "+fmt(k,3)+")",ok};
+    secs=[{h:"Test plan",rows:[["Method","Variables, normal tolerance interval"],["Confidence C",(C*100)+"%"],["Reliability R",(Rr*100)+"%"],["Sides",two?"Two-sided":"One-sided"],["LSL",LSL??"-"],["USL",USL??"-"]]},{h:"Results",rows:[["n",n],["k factor",fmt(k,3)],["Mean − k·s",LSL!==null?fmt(lo):"-"],["Mean + k·s",USL!==null?fmt(hi):"-"]]}];
+  }
+  if(St&&St.rows) secs.push({h:"Statistics",rows:St.rows.map(r=>[r[0],String(r[1])])});
+  const getDoc=()=>docFrom("Design verification - confidence and reliability",secs,decision,xs.length?xs:null,LSL,USL,(LSL!==null||USL!==null)?(v=>((LSL!==null&&v<LSL)||(USL!==null&&v>USL))?"Out of spec":"In spec"):null);
+  exportPanel(out,getDoc,"cr");
+}
+
 /* ---------- glossary ---------- */
 const GLOSS=[["510(k)", "Premarket notification", "US submission showing a device is substantially equivalent to a legally marketed predicate (21 CFR 807 Subpart E).", "FDA"], ["ALCOA+", "Attributable, Legible, Contemporaneous, Original, Accurate (+ Complete, Consistent, Enduring, Available)", "Principles for data integrity in records.", "QMS"], ["AQL", "Acceptance quality limit", "Worst tolerable quality level, in percent nonconforming or nonconformities per 100 units, used to index ISO 2859-1 sampling plans.", "Sampling"], ["Ac / Re", "Acceptance number / rejection number", "In a sampling plan: accept the lot if nonconforming units ≤ Ac; reject if ≥ Re.", "Sampling"], ["AIMDD", "Active Implantable Medical Devices Directive 90/385/EEC", "EU directive replaced by the MDR.", "EU"], ["AR", "Authorised representative", "EU-based person mandated by a non-EU manufacturer to act on its behalf (MDR Art. 11).", "EU"], ["ASTM F1980", "Standard guide for accelerated aging", "Method for estimating shelf life of sterile barrier systems using elevated temperature.", "Packaging"], ["Basic UDI-DI", "Basic unique device identifier – device identifier", "Primary EU identifier for a device model group with the same intended purpose, risk class and essential design; links to certificates and technical documentation.", "EU"], ["BI", "Biological indicator", "Test system with resistant microorganisms used to challenge a sterilization process.", "Sterilization"], ["CA", "Competent authority", "National regulator of an EU Member State responsible for medical devices.", "EU"], ["CAPA", "Corrective and preventive action", "Actions to remove causes of nonconformities (8.5.2) or potential nonconformities (8.5.3).", "QMS"], ["CE marking", "Conformité Européenne", "Mark showing a device conforms to the MDR (Art. 20).", "EU"], ["CEP / CER", "Clinical evaluation plan / report", "Plan and report of the clinical evaluation under MDR Art. 61 and Annex XIV.", "EU"], ["CFR", "Code of Federal Regulations", "Codified US federal regulations; Title 21 covers food and drugs, including devices (Parts 800–898).", "FDA"], ["Code letter", "Sample size code letter", "Letter (A–R) from ISO 2859-1 Table 1, set by lot size and inspection level, that leads to the sample size.", "Sampling"], ["Complaint", "—", "Written, electronic or oral communication alleging deficiencies in identity, quality, durability, reliability, usability, safety or performance of a released device (ISO 13485 3.4).", "QMS"], ["Concession", "—", "Permission to use or release product that doesn’t conform to requirements (ISO 13485 8.3.2).", "QMS"], ["CP 7382.850", "Compliance Program 7382.850", "FDA program for inspecting device manufacturers under the QMSR, replacing QSIT from 2 Feb 2026.", "FDA"], ["Cpk", "Process capability index", "Measure of how well a process fits within specification limits, accounting for centering.", "Statistics"], ["CS", "Common specifications", "Technical or clinical requirements adopted by the Commission under MDR Art. 9.", "EU"], ["CSA", "Computer Software Assurance", "FDA’s risk-based approach to assuring production and QMS software.", "FDA"], ["D&D", "Design and development", "ISO 13485 clause 7.3 activities, formerly “design controls” under 820.30.", "QMS"], ["De Novo", "De Novo classification request", "US pathway for novel low-to-moderate risk devices without a predicate (FD&C Act 513(f)(2)).", "FDA"], ["DHF / DMR / DHR", "Design history file / device master record / device history record", "QSR-era terms. Under the QMSR they map to the design and development file (7.3.10), the medical device file (4.2.3) and production records (7.5.1).", "FDA"], ["DI / PI", "Device identifier / production identifier", "The two parts of a UDI: the fixed model identifier and the variable lot, serial or date data.", "UDI"], ["DoC", "Declaration of conformity", "Manufacturer’s statement that a device meets the MDR (Art. 19, Annex IV).", "EU"], ["DOE", "Design of experiments", "Structured testing of several factors at once to find effects and interactions.", "Statistics"], ["DV / DVal", "Design verification / design validation", "Verification: outputs meet inputs (7.3.6). Validation: the device meets user needs and intended use (7.3.7).", "QMS"], ["eIFU", "Electronic instructions for use", "IFU provided electronically; in the EU limited by Regulation (EU) 2021/2226.", "Labeling"], ["EIR", "Establishment inspection report", "FDA investigator’s report of an inspection.", "FDA"], ["eMDR", "Electronic Medical Device Reporting", "Electronic submission of MDR reports to FDA.", "FDA"], ["EMDN", "European Medical Device Nomenclature", "EU coding system used in EUDAMED registration.", "EU"], ["eSTAR", "Electronic Submission Template And Resource", "FDA’s required template for 510(k) and De Novo submissions.", "FDA"], ["EtO / EO", "Ethylene oxide", "Gas sterilization method (ISO 11135).", "Sterilization"], ["EUDAMED", "European database on medical devices", "EU IT system for registration, UDI, certificates, vigilance and more (MDR Art. 33).", "EU"], ["FAI", "First article inspection", "Full inspection of the first parts from a new supplier, tool or process.", "Suppliers"], ["FD&C Act", "Federal Food, Drug, and Cosmetic Act", "US law under which FDA regulates devices.", "FDA"], ["FMEA", "Failure mode and effects analysis", "Bottom-up analysis of how parts or steps can fail and the effects.", "Risk"], ["FSCA / FSN", "Field safety corrective action / field safety notice", "EU action to reduce risk from a marketed device, and the notice to users (MDR Art. 2, 89).", "EU"], ["Form 483", "FDA Form 483, Inspectional Observations", "List of observations given at the end of an FDA inspection.", "FDA"], ["GDP", "Good documentation practice", "Rules for completing and correcting records.", "QMS"], ["GSPR", "General safety and performance requirements", "MDR Annex I requirements every device must meet.", "EU"], ["GUDID", "Global Unique Device Identification Database", "FDA database of device identifier data (21 CFR 830 Subpart E).", "UDI"], ["HF / HFE", "Human factors (engineering)", "Study of how users interact with a device to reduce use errors; see IEC 62366-1.", "Design"], ["HHE", "Health hazard evaluation", "FDA’s assessment of the health risk from a recalled product (21 CFR 7.41).", "FDA"], ["IDE", "Investigational device exemption", "Allows a device to be used in a US clinical study (21 CFR 812).", "FDA"], ["IFU", "Instructions for use", "Information from the manufacturer on proper use of the device.", "Labeling"], ["Inspection level", "—", "ISO 2859-1 setting (general I, II, III; special S-1 to S-4) that sets the relationship between lot size and sample size.", "Sampling"], ["IQ / OQ / PQ", "Installation / operational / performance qualification", "Stages of process or equipment validation.", "Validation"], ["ISO 13485", "Medical devices — Quality management systems", "International QMS standard; the 2016 edition is incorporated into 21 CFR 820.", "Standard"], ["ISO 14971", "Application of risk management to medical devices", "Risk management standard (2019 edition).", "Standard"], ["ISO 2859-1", "Sampling procedures for inspection by attributes — Part 1", "AQL-indexed sampling schemes; third edition ISO 2859-1:2026.", "Standard"], ["LQ", "Limiting quality", "Quality level that a sampling plan accepts with low probability (often 10%).", "Sampling"], ["MAUDE", "Manufacturer and User Facility Device Experience", "FDA public database of MDR reports.", "FDA"], ["MDCG", "Medical Device Coordination Group", "EU group of Member State experts that issues guidance on the MDR and IVDR.", "EU"], ["MDD", "Medical Devices Directive 93/42/EEC", "EU directive replaced by the MDR.", "EU"], ["MDF", "Medical device file", "File of documents defining a device type (ISO 13485 4.2.3).", "QMS"], ["MDR (EU)", "Medical Device Regulation (EU) 2017/745", "EU regulation for medical devices, applicable since 26 May 2021.", "EU"], ["MDR (US)", "Medical Device Reporting", "US adverse event reporting under 21 CFR 803.", "FDA"], ["MDSAP", "Medical Device Single Audit Program", "Single audit accepted by Australia, Brazil, Canada, Japan and the US.", "International"], ["NAI / VAI / OAI", "No / Voluntary / Official Action Indicated", "FDA inspection outcome classifications.", "FDA"], ["NB", "Notified body", "Organization designated to assess conformity under the MDR.", "EU"], ["NC / NCR", "Nonconformity / nonconformance report", "Failure to meet a requirement, and its record.", "QMS"], ["OC curve", "Operating characteristic curve", "Probability of accepting a lot versus its true quality for a given sampling plan.", "Sampling"], ["PCCP", "Predetermined change control plan", "Plan authorized in a submission for future device modifications (FD&C Act 515C).", "FDA"], ["PMA", "Premarket approval", "US approval for Class III devices (21 CFR 814).", "FDA"], ["PMCF", "Post-market clinical follow-up", "Ongoing collection of clinical data after CE marking (MDR Annex XIV Part B).", "EU"], ["PMS", "Post-market surveillance", "Proactive collection and review of experience from marketed devices (MDR Art. 83–86).", "EU"], ["PRRC", "Person responsible for regulatory compliance", "Qualified person required by MDR Art. 15.", "EU"], ["PSUR", "Periodic safety update report", "Summary of PMS results for Class IIa, IIb and III devices (MDR Art. 86).", "EU"], ["Q-Sub", "Q-Submission (Pre-Submission)", "Request for FDA feedback before a submission or study.", "FDA"], ["QMS", "Quality management system", "System to direct and control an organization with regard to quality.", "QMS"], ["QMSR", "Quality Management System Regulation", "21 CFR 820 as amended, effective 2 Feb 2026, incorporating ISO 13485:2016.", "FDA"], ["QSIT", "Quality System Inspection Technique", "FDA’s former inspection approach, withdrawn 2 Feb 2026.", "FDA"], ["QSR", "Quality System Regulation", "Previous 21 CFR 820, replaced by the QMSR.", "FDA"], ["RA / QA", "Regulatory affairs / quality assurance", "Functions responsible for regulatory compliance and the QMS.", "General"], ["RACI", "Responsible, Accountable, Consulted, Informed", "Matrix that clarifies roles in a process.", "General"], ["RFD", "Request for designation", "Request to FDA to decide which center regulates a combination product (21 CFR 3).", "FDA"], ["RPN", "Risk priority number", "Severity × occurrence × detection in FMEA; used for ranking, not ISO 14971 acceptability.", "Risk"], ["RRA", "Remote regulatory assessment", "FDA’s remote review of records or operations, including 704(a)(4) records requests.", "FDA"], ["RWE / RWD", "Real-world evidence / data", "Clinical evidence derived from data collected in routine care.", "FDA"], ["SAL", "Sterility assurance level", "Probability of a viable microorganism on a unit after sterilization; typically 10⁻⁶.", "Sterilization"], ["SaMD", "Software as a medical device", "Software intended for medical purposes without being part of a hardware device.", "Software"], ["SBOM", "Software bill of materials", "List of software components in a device, required for cyber devices (FD&C Act 524B).", "Software"], ["SE", "Substantial equivalence", "510(k) standard: as safe and effective as a predicate (FD&C Act 513(i)).", "FDA"], ["Special controls", "—", "Device-specific requirements for Class II devices, set in classification regulations or De Novo orders.", "FDA"], ["SPC", "Statistical process control", "Use of control charts to detect process shifts.", "Statistics"], ["SRN", "Single registration number", "EU identifier for a registered economic operator (MDR Art. 31).", "EU"], ["SSCP", "Summary of safety and clinical performance", "Public summary for implantable and Class III devices (MDR Art. 32).", "EU"], ["Switching rules", "—", "ISO 2859-1 rules for moving between normal, tightened, reduced and skip-lot inspection based on lot results.", "Sampling"], ["TPLC", "Total product life cycle", "FDA view of a device from design through postmarket.", "FDA"], ["UDI", "Unique device identification", "System of device identifiers on labels and in databases (21 CFR 830; MDR Art. 27).", "UDI"], ["URRA", "Use-related risk analysis", "Risk analysis focused on use errors and user tasks.", "Risk"], ["Vigilance", "—", "EU system for reporting and analyzing serious incidents and FSCAs (MDR Art. 87–92).", "EU"], ["VH2O2", "Vaporized hydrogen peroxide", "Low-temperature sterilization method recognized by FDA as Established Category A since January 2024.", "Sterilization"]];
 const gsel={all:false,q:""};
@@ -1296,12 +1640,13 @@ const ICONS={
  dil:'<path d="M12 3v6"/><path d="M12 9l-6 6v5"/><path d="M12 9l6 6v5"/>',
  map:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16M15 4v16"/>',
  dates:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
- samp:'<path d="M4 20V11M10 20V5M16 20v-8M3 20h18"/>',
+ samp:'<path d="M14.7 6.3a4 4 0 0 0-5.4 5.2L3.5 17.3a1.6 1.6 0 0 0 2.2 2.2l5.8-5.8a4 4 0 0 0 5.2-5.4l-2.6 2.6-2.2-.4-.4-2.2z"/>',
+ chart:'<path d="M4 20V11M10 20V5M16 20v-8M3 20h18"/>',
  search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>',
  audit:'<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v3h6V3M8.5 12l2.5 2.5 4.5-5"/>'
 };
 function ico(k){ const s=document.createElementNS("http://www.w3.org/2000/svg","svg"); s.setAttribute("viewBox","0 0 24 24"); s.setAttribute("aria-hidden","true"); s.setAttribute("class","ico"); s.innerHTML=ICONS[k]; return s; }
-const NAV=[["home","Home","home"],["explore","Explore","explore"],["random","Training","train"],["dilemmas","Dilemmas","dil"],["map","QMS map","map"],["dates","Key dates","dates"],["sampling","Sample size tool (ISO 2859-1:2026)","samp"],["audit","Audit mode","audit"]];
+const NAV=[["home","Home","home"],["explore","Explore","explore"],["random","Training","train"],["dilemmas","Selected Dilemmas","dil"],["map","QMS map","map"],["dates","Regulatory Timeline","dates"],["tools","Useful tools","samp"],["audit","Audit mode","audit"]];
 
 /* ---------- search widget (one component, used inside Explore) ---------- */
 function searchWidget(){
@@ -1352,8 +1697,7 @@ function renderHome(openExplore){
   const m=document.getElementById("main"); m.innerHTML="";
   const nq=CH.reduce((a,c)=>a+c.qs.length,0), nd=CH.reduce((a,c)=>a+c.dils.length,0);
   m.append(el("section",{class:"hero"},
-    el("div",{class:"eyebrow"},"Medical Device QA Handbook"),
-    el("h2",{},"ISO 13485, the FDA QMSR and the EU MDR in one place"),
+    el("h2",{class:"heroTitle"},"Medical Device QA Handbook"),
     el("p",{},"A working handbook for QA professionals on Class II and III devices: requirements, real-world dilemmas and practice questions, all linked to official sources."),
     el("div",{class:"heroStats"}, ...[[CH.length,"chapters"],[nq,"questions"],[nd,"dilemmas"],[GLOSS.length,"glossary terms"]].map(([n,l])=>el("span",{}, el("b",{},String(n)), " "+l)))));
   m.append(explorePanel(openExplore));
@@ -1386,13 +1730,13 @@ const REGC={US:"us",EU:"eu",Standards:"iso",AI:"ai"};
 function renderDates(){
   const m=document.getElementById("main"); m.innerHTML="";
   m.append(el("section",{class:"chHead datesHead"},
-    el("div",{class:"eyebrow"},"Key dates"),
+    el("div",{class:"eyebrow"},"Regulatory Timeline"),
     el("h2",{},"Regulatory milestones and transition dates"),
     el("p",{},"FDA, EU MDR, standards and AI Act dates that affect device QMS work. Tap a point or a card for details; every item links to its source.")));
   const ctl=el("div",{class:"chipRow"});
   ["All","US","EU","Standards","AI"].forEach(r=>ctl.append(el("button",{class:"chipBtn "+(REGC[r]||""),type:"button","aria-pressed":String(dtsel.reg===r),onclick:()=>{ dtsel.reg=r; dtsel.sel=null; renderDates(); }},r==="US"?"FDA / US":r==="EU"?"EU MDR / IVDR":r==="AI"?"EU AI Act":r)));
   m.append(ctl);
-  const sIn=el("input",{type:"search",class:"cfilter dSearch",placeholder:"Search dates, e.g. UDI, eSTAR, AI Act, 2027","aria-label":"Search key dates",value:dtsel.q||""});
+  const sIn=el("input",{type:"search",class:"cfilter dSearch",placeholder:"Search dates, e.g. UDI, eSTAR, AI Act, 2027","aria-label":"Search the regulatory timeline",value:dtsel.q||""});
   sIn.addEventListener("input",()=>{ dtsel.q=sIn.value; dtsel.sel=null; const p=sIn.selectionStart; renderDates(); const n=document.querySelector(".dSearch"); if(n){ n.focus(); n.setSelectionRange(p,p); } });
   m.append(sIn);
   const q=(dtsel.q||"").toLowerCase();
@@ -1866,7 +2210,7 @@ function renderChapter(id){
 
 function route(){
   const id=(location.hash||"").slice(1)||"home";
-  if(["home","explore","dilemmas","map","sampling","dates","audit"].includes(id)){ closeModal(); renderNav(id); ({home:()=>renderHome(false),explore:()=>renderHome(true),dilemmas:renderDilemmas,map:renderMap,sampling:renderSampling,dates:renderDates,audit:renderAudit})[id](); totals(); try{ window.scrollTo({top:0}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
+  if(["home","explore","dilemmas","map","sampling","tools","dates","audit"].includes(id)){ closeModal(); renderNav(id); ({home:()=>renderHome(false),explore:()=>renderHome(true),dilemmas:renderDilemmas,map:renderMap,sampling:renderSampling,tools:renderTools,dates:renderDates,audit:renderAudit})[id](); totals(); try{ window.scrollTo({top:0}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
   if(id==="random"){ closeModal(); renderNav("random"); renderRandom(); totals(); try{ window.scrollTo({top:document.getElementById("dnav").offsetTop}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
   const valid=CH.some(c=>c.id===id)?id:CH[0].id;
   currentTab=pendingTab||""; pendingTab=null;
