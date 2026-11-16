@@ -781,6 +781,18 @@ table.rmMatrix th{font-weight:700; text-align:left; padding:4px; color:var(--mut
 .draftRow{display:grid; gap:8px} .draftRow.act{border-left:5px solid #a0522d}
 .tsRow{display:flex; flex-wrap:wrap; gap:6px 18px; font-size:13px; color:var(--muted); font-variant-numeric:tabular-nums}
 .docPick{display:grid; gap:8px} .docPick .choiceBtn{text-align:left}
+.iaRow{display:grid; grid-template-columns:1fr auto auto; gap:8px; align-items:center; padding:6px 0; border-top:1px solid var(--line)} .iaRow.on{background:#f7ece5; border-radius:8px; padding:6px 8px}
+@media (max-width:640px){ .iaRow{grid-template-columns:1fr auto} .iaRow .src{grid-column:1/-1} }
+.iaQ{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:start; padding:10px 0; border-top:1px solid var(--line)}
+.iaQ small{display:block; color:var(--muted); font-size:12.5px; margin-top:2px}
+.iaQ.gate{background:#f4f6fd; border:1px solid #d6dcf0; border-radius:10px; padding:10px 12px}
+.iaQ.sub.yes{background:#fffaf2}
+.iaDet{grid-column:1/-1; display:grid; gap:6px}
+.gb.n[aria-pressed="true"]{background:#5a6d69; color:#fff}
+.naTxt{background:#eef3f1; border-radius:8px; padding:8px 10px; font-size:14px; color:var(--muted)}
+.riskLink{display:grid; gap:6px; margin-top:10px; background:#fbf8f5; border:1px dashed #e2c9b8; border-radius:10px; padding:10px}
+.iaPrev h4{margin:14px 0 6px} .iaPrev .iaH3{display:block; margin:10px 0 4px}
+.okTxt{background:#eaf5ee; border:1px solid #bfe0ca; color:#1d6b3b; border-radius:10px; padding:10px 12px; font-weight:700}
 </style>
 </head>
 <body>
@@ -797,7 +809,7 @@ table.rmMatrix th{font-weight:700; text-align:left; padding:4px; color:var(--mut
   <nav class="rail" id="rail" aria-label="Chapters"></nav>
   <main id="main"></main>
 </div>
-<footer>Sources are limited to official publications: for the US, the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases; for the EU, EUR-Lex and European Commission pages including MDCG guidance. Items tagged “Application” are my reasoning, not official statements. Check the linked source before you cite anything in an audit response. Answers are saved in this browser on this device. Version 2026-11-16e.</footer>
+<footer>Sources are limited to official publications: for the US, the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases; for the EU, EUR-Lex and European Commission pages including MDCG guidance. Items tagged “Application” are my reasoning, not official statements. Check the linked source before you cite anything in an audit response. Answers are saved in this browser on this device. Version 2026-11-16f.</footer>
 </div>
 
 <script>
@@ -881,7 +893,7 @@ function renderNav(active){
     ps.append(el("button",{class:"partBtn "+p,type:"button","aria-pressed":String(c.part===p),onclick:()=>{ if(c.part!==p) location.hash=CH.find(x=>x.part===p).id; }},l));
   });
   const r2=document.getElementById("navRow2"); r2.innerHTML="";
-  NAV.forEach(([k,l,ic])=>r2.append(el("button",{class:"navBtn n-"+ic,type:"button","aria-current":String(active===k||(k==="tools"&&["sampling","msa","grr","rmtools"].includes(active))),onclick:()=>{ if(k==="random"){ rnd.cur=null; } if(location.hash==="#"+k) route(); else location.hash=k; }}, ico(ic), el("span",{},l))));
+  NAV.forEach(([k,l,ic])=>r2.append(el("button",{class:"navBtn n-"+ic,type:"button","aria-current":String(active===k||(k==="tools"&&["sampling","msa","grr","rmtools","impact"].includes(active))),onclick:()=>{ if(k==="random"){ rnd.cur=null; } if(location.hash==="#"+k) route(); else location.hash=k; }}, ico(ic), el("span",{},l))));
   const isCh=CH.some(x=>x.id===active); document.getElementById("dnav").style.display=isCh?"":"none";
   const ct=document.getElementById("chTabs"); ct.innerHTML=""; ct.style.display="";
   CH.filter(x=>x.part===c.part).forEach(x=>{
@@ -1038,7 +1050,7 @@ const CHOICES=[
  ["Risk management","ISO 14971 and ISO/TR 24971: glossary, risk analysis, acceptability, xFMEA, FTA and URRA (IEC 62366-1), tailored to your device type","risk","riskc"],
  ["Audit mode","Test your knowledge in a demo audit and practice with a virtual investigator (a 20-question inspection chatbot)","audit","auditc"],
  ["Regulatory Timeline","Regulatory milestones and transition dates","dates","datesc"],
- ["Useful tools","Sample size (ISO 2859-1:2026), Risk Management Tools, MSA and Gauge R&R / Kappa; templates coming soon","tools","samp"]
+ ["Useful tools","Sample size (ISO 2859-1:2026), Risk Management Tools, Change Impact Assessment, MSA and Gauge R&R / Kappa; templates coming soon","tools","samp"]
 ];
 function go(target){ closeModal(); if(target==="random"){ rnd.unanswered=true; rnd.cur=null; } if(location.hash==="#"+target) route(); else location.hash=target; }
 function choiceGrid(){
@@ -1597,6 +1609,7 @@ async function saveFile(name,blob,statusEl){
 const TOOLS=[["sampling","Sample size tool (ISO 2859-1:2026)","Lot acceptance plans with switching rules, and design-verification sample sizes from confidence and reliability. Enter your results, see the statistics and export a report.","samp",true],
  ["msa","Measurement System Analysis (MSA)","Resolution, Type 1 gauge study (Cg, Cgk), bias and linearity, and stability charts, with Excel and PDF export.","chart",true],
  ["rmtools","Risk Management Tools","Create a PHA, risk analysis, risk acceptability matrix, FTA, system risk analysis, dFMEA, pFMEA, uFMEA, sFMEA or URRA, with IDs and traceability.","risk",true],
+ ["impact","Change Impact Assessment","Generator for change impact assessments: SME impact with risk-file links, then FDA and EU MDR regulatory assessment, with Word and PDF output.","change",true],
  ["grr","Gauge R&R / Kappa test","A guide to choose between variable Gauge R&R and attribute agreement (Kappa), sample definitions with defect notes and photos, analysis, and the test protocol and report.","gauge",true]];
 function renderTools(){
   const m=document.getElementById("main"); m.innerHTML="";
@@ -1778,6 +1791,7 @@ const ICONS={
  samp:'<path d="M14.7 6.3a4 4 0 0 0-5.4 5.2L3.5 17.3a1.6 1.6 0 0 0 2.2 2.2l5.8-5.8a4 4 0 0 0 5.2-5.4l-2.6 2.6-2.2-.4-.4-2.2z"/>',
  chart:'<path d="M4 20V11M10 20V5M16 20v-8M3 20h18"/>',
  gauge:'<path d="M4 17a8 8 0 1 1 16 0"/><path d="M12 17l4-5"/><circle cx="12" cy="17" r="1.3"/>',
+ change:'<path d="M4 7h11l-3-3M20 17H9l3 3"/>',
  tmpl:'<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/>',
  risk:'<path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17v.5"/>',
  search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>',
@@ -3299,9 +3313,295 @@ function rmDrafts(p){
         el("button",{class:"linkBtn del",type:"button",onclick:()=>modalConfirm("Delete "+d.id+"?","Delete “"+d.name+"” from drafts? This cannot be undone.","Delete",()=>{ drafts.docs=drafts.docs.filter(x=>x!==d); if(rm.active&&rm.active[d.type]===d.id) delete rm.active[d.type]; saveDrafts(); rm._save(); renderRisk(); })},"Delete")))); });
   p.append(st);
 }
+/* ===================== Change Impact Assessment generator ===================== */
+/* Part 1: change originator / SME impact assessment, linked to the risk file. Part 2: regulatory impact assessment (FDA, EU MDR). */
+const IA_P1=[
+ {id:"P1",t:"Intended use and claims",area:"Design",always:true,subs:[
+  {id:"P1.1",q:"Does the change affect the intended use or purpose, indications, contraindications, patient population, user profile, use environment or clinical claims?",dl:["Update user needs / design inputs","Update IFU and labeling","Update the risk management file","Update the clinical evaluation","RA to assess classification and submission"],no:"The change does not affect the intended purpose, indications, contraindications, patient population, user profile, use environment or clinical claims. The intended use remains valid and unchanged."}]},
+ {id:"P2",t:"Design and performance",area:"Design",gate:"Does the change affect the product design: design inputs or outputs, specifications, architecture, interfaces, components or accessories?",na:"The change does not affect design inputs, design outputs, specifications, system architecture, interfaces or accessories. Design documentation and existing design verification and validation evidence remain valid.",subs:[
+  {id:"P2.1",q:"Does it change user requirements, design inputs, product specifications or design outputs (drawings, BOM, system/sub-system requirements)?",dl:["Update design inputs / requirements","Update design outputs (drawings, BOM, specifications)","Update traceability matrix"],no:"Design inputs, product specifications and design outputs are not changed."},
+  {id:"P2.2",q:"Does it affect basic safety, essential performance, safety-related functions, alarms or existing risk control measures?",dl:["Evaluate impact on essential performance and safety functions","Update the risk management file","Define safety and performance testing"],no:"Safety-related functions, essential performance, alarms and risk control measures are not affected."},
+  {id:"P2.3",q:"Does it affect compliance with applicable standards (e.g. IEC 60601-1, IEC 60601-1-2 EMC, collateral or particular standards, wireless, product standards)?",dl:["Gap analysis against the applicable standards","Update the standards compliance matrix / test reports","Additional testing (electrical safety, EMC, other)"],no:"Conformity with the applicable standards is not affected. Existing compliance evidence remains valid."},
+  {id:"P2.4",q:"Does it affect interfaces or compatibility with the drug, disposables, accessories, other system components, or backward compatibility with the installed base?",dl:["Update interface specifications","Compatibility / interoperability verification","Backward-compatibility assessment for the installed base"],no:"Interfaces and compatibility with the drug, disposables, accessories, system components and the installed base are not affected."},
+  {id:"P2.5",q:"Does it affect reliability, durability, service life or the specified operating environment?",dl:["Evaluate reliability and lifetime assumptions","Reliability / durability / ageing testing"],no:"Reliability, durability, service life and the specified operating environment are not affected."},
+  {id:"P2.6",q:"Does it invalidate existing design verification or validation evidence, or require new or regression testing (including the V&V plan or protocols)?",dl:["Design verification (new or regression)","Design validation","Update the V&V plan and protocols"],no:"Existing design verification and validation evidence remains valid. No additional V&V is required."}]},
+ {id:"P3",t:"Software and cybersecurity",area:"Design",gate:"Does the change involve device software or firmware (embedded software, SaMD, apps, or software tools that are part of the device)?",na:"No device software or firmware is changed. The released software version, its life-cycle documentation and cybersecurity controls remain unchanged.",subs:[
+  {id:"P3.1",q:"Does it change software requirements, architecture, functionality, interfaces or SOUP/OTS components?",dl:["Update software requirements and architecture (IEC 62304)","Update the SOUP list","Software change impact analysis"],no:"Software requirements, architecture, functionality, interfaces and SOUP are not changed."},
+  {id:"P3.2",q:"Does it affect cybersecurity: threat model, security controls, SBOM, or connectivity?",dl:["Update threat model and security risk assessment","Update SBOM","Security testing"],no:"Cybersecurity controls, threat model, SBOM and connectivity are not affected."},
+  {id:"P3.3",q:"Does it require software verification, regression testing or a new software release version?",dl:["Software verification and regression testing","Software release notes and new version","Check impact on UDI-DI / labeling of the software version"],no:"No software verification or new software release is required."}]},
+ {id:"P4",t:"Materials and components",area:"Design / Manufacturing",gate:"Does the change introduce new, alternative or modified materials or components (including EOL replacements and supplier-initiated changes)?",na:"No materials or components are added, replaced or modified. Existing material and component specifications remain valid.",subs:[
+  {id:"P4.1",q:"Is the changed material in direct or indirect contact with the patient or user, or does it affect the drug path or chemical characterization?",dl:["Biological evaluation per ISO 10993-1 (update the BEP/BER)","Chemical characterization (ISO 10993-18) / toxicological risk assessment","Drug compatibility, if applicable"],no:"The changed material has no direct or indirect patient or user contact and does not affect the drug path. The biological evaluation conclusion remains valid."},
+  {id:"P4.2",q:"Could the change introduce CMR substances or endocrine disruptors above 0.1% w/w in invasive or body-contact parts, or substances that need labeling (e.g. latex, phthalates)? (EU MDR Annex I 10.4)",dl:["Substance of concern assessment (MDR Annex I 10.4)","Justification and labeling, if present above 0.1% w/w","REACH / RoHS check"],no:"The change does not introduce CMR substances, endocrine disruptors or other substances that require justification or labeling."},
+  {id:"P4.3",q:"Does the change require proof of equivalence or re-qualification of the component or material (form, fit, function, specification)?",dl:["Equivalence assessment / first article inspection","Update component and supplier specifications","Update incoming inspection criteria"],no:"The component or material is equivalent in form, fit and function to the approved one; existing specifications and incoming controls remain valid."}]},
+ {id:"P5",t:"Usability, labeling and handling",area:"Design",gate:"Does the change affect how users interact with, handle, clean, reprocess, store or service the device, or any labeling, IFU, training or service information?",na:"The change does not affect user interaction, handling, cleaning, reprocessing, storage, servicing, labeling, IFU or training. The usability engineering file and labeling remain valid.",subs:[
+  {id:"P5.1",q:"Does it affect the user interface, use scenarios or critical tasks (URRA, formative or summative evaluation)?",dl:["Update the URRA / use specification","Formative and/or summative (HF validation) evaluation","Update training material"],no:"The user interface, hazard-related use scenarios and critical tasks are not affected; usability evidence remains valid."},
+  {id:"P5.2",q:"Does it require changes to labels, IFU / user manual, UDI carrier, symbols or training content?",dl:["Update labels and IFU (and translations)","Labeling review and approval","Check UDI-DI triggers (RA)"],no:"Labels, IFU, UDI carrier, symbols and training content are not changed."},
+  {id:"P5.3",q:"Does it affect handling, cleaning or reprocessing, storage, transport, disposal or servicing instructions?",dl:["Update handling / reprocessing / service instructions","Cleaning or reprocessing validation","Update service procedures and spare parts"],no:"Handling, cleaning, reprocessing, storage, transport, disposal and servicing instructions are not affected."}]},
+ {id:"P6",t:"Manufacturing process and production controls",area:"Manufacturing",gate:"Does the change affect how the product is manufactured, assembled, inspected, tested, packaged, labeled or released?",na:"The approved manufacturing process, equipment, environment, inspection and release controls remain unchanged and continue to operate under validated conditions.",subs:[
+  {id:"P6.1",q:"Does it require updates to manufacturing documentation (medical device file / DMR, BOM, drawings, work instructions, batch / device history records)?",dl:["Update MDF/DMR, BOM, drawings and work instructions","Update batch / device history record templates"],no:"Controlled manufacturing documentation remains valid and unchanged."},
+  {id:"P6.2",q:"Does it change the process, process parameters, equipment, tooling, fixtures, utilities or the controlled environment (cleanroom, ESD)?",dl:["Update process flow and parameters","Equipment / tooling qualification","Environmental qualification or monitoring update"],no:"Process, parameters, equipment, tooling and the controlled environment are unchanged."},
+  {id:"P6.3",q:"Does it require new or repeated process validation, IQ/OQ/PQ, test method validation, or validation of production software?",dl:["Process validation / revalidation (IQ/OQ/PQ)","Test method validation (TMV)","Production / QMS software validation (CSA)"],no:"Existing validation evidence remains valid; no revalidation is required."},
+  {id:"P6.4",q:"Does it change inspection or test methods, acceptance criteria, sampling plans, in-process controls or final release?",dl:["Update inspection procedures and acceptance criteria","Update sampling plans","Update release procedure"],no:"Inspection methods, acceptance criteria, sampling plans and release controls are unchanged."},
+  {id:"P6.5",q:"Does it affect packaging or labeling operations (label printing, barcode / UDI verification, line clearance, label reconciliation)?",dl:["Update labeling and packaging procedures","Label / barcode verification qualification"],no:"Packaging and labeling operations and their controls are unchanged."},
+  {id:"P6.6",q:"Does it require training, procedure updates or a defined implementation (cut-in) plan before routine production?",dl:["Training and competency records","Implementation / cut-in plan","Update procedures"],no:"No training, procedure update or special implementation plan is required."}]},
+ {id:"P7",t:"Suppliers, sites and supply chain",area:"Manufacturing",gate:"Does the change involve a supplier, contract manufacturer, sterilizer, logistics provider or manufacturing site (new, changed, transferred, or a supplier-initiated change)?",na:"No change to approved suppliers, contract manufacturers, sterilizers, logistics providers or manufacturing sites. Supplier controls and quality agreements remain valid.",subs:[
+  {id:"P7.1",q:"Does it require qualification or re-qualification of a supplier or contract manufacturer, or an update to the quality agreement?",dl:["Supplier / CMO qualification or audit","Update the quality agreement and approved supplier list"],no:"Supplier and CMO qualification status and quality agreements are unchanged."},
+  {id:"P7.2",q:"Does it change or add a manufacturing, assembly, sterilization or critical subcontractor site, or transfer production?",dl:["Manufacturing transfer plan","Site qualification / process revalidation","Flag to RA: site change"],no:"Manufacturing, sterilization and critical subcontractor sites are unchanged."},
+  {id:"P7.3",q:"Does it affect storage, distribution, transport or logistics (including third-party logistics and stock)?",dl:["Update storage / distribution procedures","Shipping or transport validation","Stock disposition plan"],no:"Storage, distribution, transport and logistics controls are unchanged."}]},
+ {id:"P8",t:"Sterility, packaging and shelf life",area:"Manufacturing / Quality",gate:"Is the device supplied sterile, or does the change affect packaging, the sterile barrier, shelf life or storage conditions?",na:"The device is not affected in its sterilization, packaging, sterile barrier, shelf life or storage conditions. Existing validations remain valid.",subs:[
+  {id:"P8.1",q:"Does it affect the sterilization method, process, parameters, equipment, load configuration, provider or bioburden, or make the device harder to sterilize?",dl:["Sterilization validation / adoption assessment","Bioburden assessment","EO residuals (ISO 10993-7), if applicable"],no:"Sterilization method, parameters, load, provider and bioburden are not affected; the validated sterility assurance level is maintained."},
+  {id:"P8.2",q:"Does it affect the sterile barrier system or protective packaging (materials, seals, configuration)?",dl:["Packaging validation (ISO 11607-1/-2)","Transport simulation"],no:"The sterile barrier and protective packaging are not affected."},
+  {id:"P8.3",q:"Could it affect shelf life, stability or storage conditions?",dl:["Shelf-life / stability study (accelerated and real-time)","Update the expiry date or storage conditions"],no:"Shelf life, stability and storage conditions are not affected."}]},
+ {id:"P9",t:"Product quality",area:"Quality",gate:"Could the change affect critical quality attributes, finished product specifications, or introduce contamination or particulate risk?",na:"The change does not affect critical quality attributes, finished product specifications, cleanliness or particulate levels.",subs:[
+  {id:"P9.1",q:"Does it change critical quality attributes or physical, chemical or functional properties of the finished product?",dl:["Update product specifications","Analytical / functional testing"],no:"Critical quality attributes and finished product properties are unchanged."},
+  {id:"P9.2",q:"Does it introduce a risk of contamination, cross-contamination or particulates?",dl:["Contamination / particulate risk assessment","Particulate or bioburden testing","Cleaning validation update"],no:"No new contamination, cross-contamination or particulate risk is introduced."}]},
+ {id:"P10",t:"Risk management",area:"Risk",always:true,risk:true,subs:[
+  {id:"P10.1",q:"Does the change introduce new hazards, hazardous situations or sequences of events, or change the severity or probability of existing ones?",dl:["Update hazard analysis / SRA","Update the relevant xFMEA (DFMEA, PFMEA, UFMEA, SFMEA)","Update the URRA, if use-related"],no:"No new hazards, hazardous situations or sequences of events are introduced, and the severity and probability of existing ones are unchanged."},
+  {id:"P10.2",q:"Does it add, remove or modify a risk control measure, or affect the effectiveness of an existing one?",dl:["Update risk control measures and their verification of implementation and effectiveness","Update traceability (risk control ↔ requirement ↔ test)"],no:"Risk control measures and their effectiveness are not affected."},
+  {id:"P10.3",q:"Does it affect residual risk acceptability, the overall residual risk or the benefit-risk conclusion?",dl:["Update the risk management report","Benefit-risk analysis"],no:"Residual risks, overall residual risk and the benefit-risk conclusion remain acceptable and unchanged."}]},
+ {id:"P11",t:"Distributed product and quality records",area:"Quality",always:true,subs:[
+  {id:"P11.1",q:"Does the change affect product in process, in stock or already distributed (installed base), e.g. rework, retrofit, upgrade or replacement? (ISO 13485 7.3.9)",dl:["Disposition of WIP and stock","Field upgrade / retrofit plan","Flag to RA: assess correction or removal"],no:"Product in process, in stock and already distributed is not affected; no disposition, rework or field action is needed."},
+  {id:"P11.2",q:"Is the change linked to a CAPA, nonconformance trend, complaint, vigilance event, recall or field action?",dl:["Cross-reference CAPA / NC / complaint IDs","Define the effectiveness check","Flag to RA: recall vs enhancement decision"],no:"The change is not linked to a CAPA, nonconformance trend, complaint, vigilance event or field action."}]}
+];
+const IA_STORE=lsGet("sc-ia-v1",{seq:0,list:[],cur:null});
+const iaSave=()=>{ if(!lsSet("sc-ia-v1",IA_STORE)) flash("Browser storage is full: export and delete older assessments."); };
+function iaNew(){ IA_STORE.seq=(IA_STORE.seq||0)+1; const ts=nowTs(); const a={id:"IA-"+String(IA_STORE.seq).padStart(3,"0"),created:ts,updated:ts,step:"info",
+  info:{cc:"",title:"",desc:"",reason:"",originator:"",product:"",usClass:"",euClass:"",euCert:"",source:"Internal",refs:"",immediate:""},
+  g:{},ans:{},txt:{},dl:{},risk:{items:[],docs:[],other:""},req:[],p1:{status:"draft",by:"",role:"",date:""},
+  ra:{markets:{US:false,EU:false,Other:false},ans:{},txt:{},other:"",by:"",date:""},cls:{override:"",why:""}}; IA_STORE.list.unshift(a); IA_STORE.cur=a.id; iaSave(); return a; }
+function iaCur(){ return IA_STORE.list.find(a=>a.id===IA_STORE.cur)||null; }
+/* ---- completeness of Part 1 ---- */
+function iaP1Visible(a){ const out=[]; IA_P1.forEach(T=>{ const on=T.always||a.g[T.id]==="Y"; out.push({T,on,gated:!T.always}); }); return out; }
+function iaP1Missing(a){ const m=[]; const I=a.info; if(!I.cc.trim()) m.push("Change control ID"); if(!I.title.trim()) m.push("Change title"); if(!I.desc.trim()) m.push("Description of the change"); if(!I.usClass&&!I.euClass) m.push("Device class (US or EU)"); if(!I.immediate) m.push("Immediate action question");
+  IA_P1.forEach(T=>{ if(!T.always&&!a.g[T.id]) { m.push(T.t+": topic question"); return; } if(T.always||a.g[T.id]==="Y") T.subs.forEach(S=>{ if(!a.ans[S.id]) m.push(S.id+" answer"); else if(a.ans[S.id]==="Y"&&!String(a.txt[S.id]||"").trim()) m.push(S.id+" impact description"); else if(a.ans[S.id]==="N"&&!String(a.txt[S.id]||"").trim()) m.push(S.id+" rationale"); }); });
+  return m; }
+/* ---- Part 2: regulatory questions ---- */
+const RA_US510=[
+ {id:"L",t:"Labeling change",q:[["L1","Does it change the indications for use (including single-use → reusable, Rx → OTC, a new disease, condition or patient population)?","2"],["L2","Does it add or delete a contraindication? (If only adding a contraindication, FDA’s guidance allows a “changes being effected” 510(k), implemented on submission.)","2"],["L3","Does it change warnings, precautions or directions for use in a way that a risk assessment shows creates new or significantly modified risks?","2"],["L4","Is it only a change of device name, or to improve readability or clarity?","1x"]]},
+ {id:"T",t:"Technology, engineering, performance or manufacturing change",q:[["T1","Does it change the control mechanism, operating principle or energy type?","2"],["T2","Does it change sterilization, cleaning or disinfection to a Category B or novel method, lower the SAL, or change how the device is supplied (sterile/non-sterile)?","2"],["T3","For packaging or expiration dating: is a method or protocol different from the one in the cleared 510(k) used to support it?","2"],["T4","Does it significantly affect use of the device?","2"],["T5","Does a risk assessment identify new risks or significantly modified existing risks?","2"],["T6","Are clinical data needed to evaluate safety or effectiveness for design validation?","2"],["T7","Did verification or validation raise unexpected issues of safety or effectiveness?","2"]]},
+ {id:"M",t:"Materials change",q:[["M1","Does the changed material contact the body, and is it new or not used before in a similar legally marketed device with the same contact type and duration, with new or increased biocompatibility concerns?","2"],["M2","Could the material change affect performance specifications in a way that is significant per the technology questions?","2"]]},
+ {id:"S",t:"Software change",q:[["S1","Is the change solely to strengthen cybersecurity, with no other impact on the software or device?","1x"],["S2","Is it solely to return the system to the specification of the most recently cleared device?","1x"],["S3","Does it introduce or modify a risk, or create or modify a risk control measure, for a hazardous situation that could result in significant harm?","2"],["S4","Could it significantly affect clinical functionality or performance specifications directly associated with the intended use?","2"]]}];
+const RA_PMA=[["A1","Does it need substantial clinical data, e.g. a new indication or a significant change in design or performance?","Panel-track PMA supplement (21 CFR 814.39(a); panel-track)"],["A2","Does it affect safety or effectiveness: design, specifications, components, principle of operation, labeling, sterilization, packaging, expiry dating (outside an approved protocol) or a new manufacturing / sterilization facility?","180-day PMA supplement (21 CFR 814.39(a)); a real-time review supplement may apply to minor design or labeling changes"],["A3","Is it solely a change to manufacturing procedures or the method of manufacture that affects safety or effectiveness?","30-day notice (21 CFR 814.39(f)); 135-day supplement if FDA finds the notice inadequate"],["A4","Does it only add or strengthen a contraindication, warning, precaution or adverse-reaction statement, or add a QC test or specification that increases assurance?","Special PMA supplement – Changes Being Effected (21 CFR 814.39(d)); may be implemented on submission"]];
+const RA_EU_SUB=[
+ {id:"EP",t:"Product",q:[["EP1","Change of intended purpose, indications, contraindications, claims, users or manner of use?"],["EP2","Change of design or performance specifications that could affect safety or performance?"],["EP3","New or changed patient-contacting materials, or new hazards / changed risks?"],["EP4","Existing clinical data no longer sufficient to show conformity with the GSPRs?"],["EP5","New or changed warnings or safety information needed?"]]},
+ {id:"EQ",t:"Quality system and manufacturing",q:[["EQ1","Change of manufacturing technology, process or equipment that could affect safety or performance?"],["EQ2","Change of manufacturing site, critical subcontractor or crucial supplier?"],["EQ3","Change of organization, QMS arrangements, or product range (new or deleted generic device group)?"]]},
+ {id:"ES",t:"Sterilization",q:[["ES1","Change of sterilization method, process, cycle parameters, equipment or service provider?"],["ES2","Change that raises bioburden levels, makes the device harder to sterilize, changes load density or configuration, or introduces parametric release?"]]}];
+const RA_EU_DOCS=[["ED1","Technical documentation and GSPR checklist (MDR Annex II and III)","Technical documentation and GSPR checklist remain valid."],["ED2","EU declaration of conformity (Art. 19, Annex IV)","The EU declaration of conformity remains valid (no change of devices, standards or classification)."],["ED3","Clinical evaluation report and PMCF plan (Art. 61, Annex XIV)","Clinical evaluation conclusions and the PMCF plan remain valid."],["ED4","SSCP (Art. 32; Class III and implantable devices)","The SSCP is not affected or not applicable."],["ED5","PMS plan / PSUR (Art. 84–86)","PMS plan and PSUR content are not affected."],["ED6","UDI-DI or Basic UDI-DI and EUDAMED data (Art. 27–29; Annex VI Part C 3.9 triggers: name, version or model, single use, sterile packaging, quantity, critical warnings)","No UDI-DI, Basic UDI-DI or EUDAMED data change is triggered."],["ED7","Labels, IFU and translations (Annex I Chapter III)","Labels, IFU and translations are not affected."],["ED8","Field safety corrective action and FSN (Art. 89)","No field safety corrective action is required."]];
+function raCalc(a){
+  const R=a.ra, A=R.ans, I=a.info, out={us:null,eu:null,preapproval:false,notes:[]};
+  if(R.markets.US){ let d=null;
+    if(A.US0==="Y") d={k:"PCCP",t:"Implement under the authorized PCCP; document in the medical device file. No new marketing submission.",pre:false};
+    else if(I.usClass==="I-exempt") d=A.USX==="Y"?{k:"510k",t:"New 510(k) required: the change exceeds the exemption limitations or raises new safety or effectiveness issues.",pre:true}:{k:"LTF",t:"Letter to file: the device remains within its 510(k) exemption.",pre:false};
+    else if(I.usClass==="III"){ const hit=RA_PMA.find(([id])=>A[id]==="Y"); d=hit?{k:"PMA",t:hit[2],pre:hit[0]!=="A4"}:{k:"AR",t:"No PMA supplement: report in the PMA annual report (21 CFR 814.84; 814.39(b)).",pre:false}; }
+    else if(I.usClass){ const types=RA_US510.filter(g=>A["UT"+g.id]==="Y"); const hits=[]; types.forEach(g=>g.q.forEach(([id,q,r])=>{ if(r==="2"&&A[id]==="Y") hits.push(id); }));
+      const solely=types.length===1&&types[0].id==="S"&&(A.S1==="Y"||A.S2==="Y");
+      d=(hits.length&&!solely)?{k:"510k",t:"New 510(k) required before implementation (21 CFR 807.81(a)(3)). Triggered by: "+hits.join(", ")+".",pre:true}:{k:"LTF",t:"Letter to file: the change does not significantly affect safety or effectiveness and does not change the intended use (21 CFR 807.81(a)(3); FDA guidance on deciding when to submit a 510(k) for a change, 2017).",pre:false}; }
+    out.us=d; if(d&&d.pre) out.preapproval=true;
+    if(A.US1==="Y") out.notes.push("US: report the correction or removal to FDA within 10 working days (21 CFR 806.10) and document the recall vs enhancement decision.");
+    if(A.US2==="Y") out.notes.push("US: assign a new device identifier and update GUDID (21 CFR 830.50, Part 830 Subpart E).");
+    if(A.US3==="Y") out.notes.push("US: update the device listing (21 CFR 807.28).");
+  }
+  if(R.markets.EU){ let d;
+    if(I.euCert==="legacy") d=A.EL1==="Y"?{k:"SIG",t:"Significant change under MDR Art. 120 (MDCG 2020-3 rev.1): the device cannot be placed on the market under the legacy certificate after the change. MDR conformity assessment is needed before implementation.",pre:true}:{k:"NSIG",t:"Not a significant change under MDCG 2020-3 rev.1. Document the assessment and inform the notified body per its procedure.",pre:false};
+    else if(I.euCert==="self") d={k:"SELF",t:"Self-declared device (no notified body): update technical documentation and the declaration of conformity as needed.",pre:false};
+    else { const hits=[]; RA_EU_SUB.forEach(g=>{ if(A["EG"+g.id]==="Y") g.q.forEach(([id])=>{ if(A[id]==="Y") hits.push(id); }); });
+      d=hits.length?{k:"SUB",t:"Substantial change: notify the notified body before implementation and implement only after its approval where required (MDR Annex IX 2.4 and 4.10, Annex X 5.2 or Annex XI). Triggered by: "+hits.join(", ")+".",pre:true}:{k:"NSUB",t:"Non-substantial change: document in the technical documentation; no prior notified body approval. Report per the notified body's change notification procedure.",pre:false}; }
+    out.eu=d; if(d.pre) out.preapproval=true;
+    RA_EU_DOCS.forEach(([id,t])=>{ if(A[id]==="Y") out.notes.push("EU: update "+t.split(" (")[0]+"."); }); }
+  return out;
+}
+function iaClass(a){ const r=raCalc(a); const safety=["P1.1","P2.2","P10.1","P10.2","P10.3"].some(id=>a.ans[id]==="Y");
+  let c=a.info.immediate==="Y"?"Critical":(r.preapproval||safety)?"Major":"Minor"; if(a.cls.override) c=a.cls.override; return {c,auto:a.info.immediate==="Y"?"Critical":(r.preapproval||safety)?"Major":"Minor",r,safety}; }
+/* ---- UI ---- */
+let IA_TAB="info";
+function renderImpact(){
+  const m=document.getElementById("main"); m.innerHTML="";
+  m.append(toolHead("Change Impact Assessment","Part 1: the change originator and SMEs assess the impact, linked to the risk file. Part 2, after Part 1 is approved: regulatory affairs assesses FDA and EU MDR impact. Then generate the impact assessment output."));
+  const a=iaCur();
+  const lst=el("div",{class:"card"}, el("div",{class:"wsHead"}, el("h3",{class:"secTitle"},"Assessments"), el("button",{class:"cta",type:"button",onclick:()=>{ iaNew(); IA_TAB="info"; renderImpact(); }},"+ New assessment")));
+  if(!IA_STORE.list.length) lst.append(el("p",{class:"src"},"No assessments yet. Start a new one."));
+  IA_STORE.list.forEach(x=>{ const st=x.ra.by&&x.ra.date?"Complete":x.p1.status==="approved"?"Part 1 approved · RA pending":"Part 1 in progress";
+    lst.append(el("div",{class:"iaRow"+(a&&x.id===a.id?" on":"")}, el("button",{class:"linkBtn",type:"button",onclick:()=>{ IA_STORE.cur=x.id; iaSave(); renderImpact(); }}, el("span",{class:"idTag"},x.id)," "+(x.info.cc?x.info.cc+" · ":"")+(x.info.title||"Untitled")), el("span",{class:"src"},st+" · saved "+x.updated),
+      el("button",{class:"linkBtn del",type:"button",onclick:()=>modalConfirm("Delete "+x.id+"?","Delete this impact assessment? This cannot be undone.","Delete",()=>{ IA_STORE.list=IA_STORE.list.filter(y=>y!==x); if(IA_STORE.cur===x.id) IA_STORE.cur=IA_STORE.list[0]?IA_STORE.list[0].id:null; iaSave(); renderImpact(); })},"Delete"))); });
+  m.append(lst);
+  if(!a) return;
+  const p1ok=a.p1.status==="approved";
+  const tabs=[["info","1 · Change"],["p1","2 · Impact (SME)"],["ap","3 · Part 1 approval"],["ra","4 · Regulatory (RA)"],["out","5 · Output"]];
+  m.append(tabRow(tabs,IA_TAB,k=>{ if((k==="ra"||k==="out")&&!p1ok){ flash("Part 1 must be approved first."); return; } IA_TAB=k; renderImpact(); }));
+  const p=el("div",{class:"panel"}); m.append(p);
+  const touch=()=>{ a.updated=nowTs(); iaSave(); const s=document.getElementById("iaStatus"); if(s&&IA_TAB==="p1"){ const miss=iaP1Missing(a); s.className=miss.length?"warn":"okTxt"; s.textContent=miss.length?miss.length+" item(s) still open: "+miss.slice(0,8).join("; ")+(miss.length>8?"…":""):"Part 1 is complete. Send it for approval in tab 3."; } };
+  const lock=p1ok&&IA_TAB!=="ra"&&IA_TAB!=="out"&&IA_TAB!=="ap";
+  if(lock) p.append(el("div",{class:"selBar draftBar"}, el("span",{},"Part 1 is approved and locked. To change it, re-open Part 1 in tab 3 (this clears the approval).")));
+  ({info:iaInfo,p1:iaP1,ap:iaAp,ra:iaRa,out:iaOut})[IA_TAB](p,a,touch,lock);
+}
+function ynBtns(val,on,dis){ return el("div",{class:"gbTog"}, el("button",{type:"button",class:"gb g","aria-pressed":String(val==="Y"),onclick:()=>on("Y")},"Yes"), el("button",{type:"button",class:"gb n","aria-pressed":String(val==="N"),onclick:()=>on("N")},"No")); }
+function yn(val,on,lock){ const t=ynBtns(val,on); if(lock) [...t.children].forEach(b=>b.disabled=true); return t; }
+function iaInfo(p,a,touch,lock){
+  const I=a.info; const f=(lab,k,ph,area)=>{ const x=txtField(lab,I[k],v=>{ I[k]=v; touch(); },ph,area); if(lock) x.querySelector("input,textarea").disabled=true; return x; };
+  const sel=(lab,k,opts)=>{ const s=selectEl(opts,I[k],v=>{ I[k]=v; touch(); renderImpact(); }); if(lock) s.disabled=true; return el("label",{class:"rField"}, el("span",{},lab), s); };
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Description of the change"),
+    el("div",{class:"rInputs grid2"}, f("Change control ID (CC / DCN / ECO)","cc","e.g. CC-2026-041"), f("Change title","title"), f("Product / device family","product"), f("Change originator","originator")),
+    f("Description: current state, proposed change and the problem it solves","desc","",true), f("Reason for change","reason","",true),
+    el("div",{class:"rInputs grid3"}, sel("US class / pathway","usClass",[["","—"],["I-exempt","Class I (510(k)-exempt)"],["II","Class II / Class I non-exempt (510(k) or De Novo)"],["III","Class III (PMA)"],["NA","Not marketed in the US"]]),
+      sel("EU class","euClass",[["","—"],["I","Class I"],["IIa","Class IIa"],["IIb","Class IIb"],["III","Class III"],["NA","Not marketed in the EU"]]),
+      sel("EU certificate","euCert",[["","—"],["mdr","MDR certificate (notified body)"],["legacy","Legacy MDD/AIMDD certificate (MDR Art. 120)"],["self","Self-declared (no notified body)"]]),
+      sel("Change source","source",["Internal","External (supplier, customer, regulator)","CAPA / NC","Complaint / vigilance","End of life (EOL)"])),
+    f("Related CAPA / NC / complaint / supplier change IDs","refs","optional"),
+    el("div",{class:"iaQ"}, el("div",{}, el("b",{},"Does the change have an actual impact on safety, efficacy, quality or market access that needs immediate action?"), el("small",{},"Yes = potential Critical change: escalate to the CCB / steering committee now.")), yn(I.immediate,v=>{ I.immediate=v; touch(); renderImpact(); },lock))));
+  p.append(el("div",{class:"mact"}, el("button",{class:"cta",type:"button",onclick:()=>{ IA_TAB="p1"; renderImpact(); }},"Next: impact assessment")));
+}
+function riskPicker(a,touch,lock){
+  const opts=[]; try{ allRows().forEach(x=>opts.push([x.r.id,x.r.id+" "+(x.r.who||"").slice(0,40)])); drafts.docs.forEach(d=>(d.rows||[]).forEach(r=>{ const k=d.id+"/"+r.id; opts.push([k,k+" "+(r.who||"").slice(0,36)]); })); }catch(e){}
+  const box=el("div",{class:"riskLink"});
+  const draw=()=>{ box.innerHTML=""; box.append(el("b",{},"Linked risk-file items"), el("small",{class:"src"},"Pick rows from your risk worksheets and drafts, or type IDs from your own risk file."));
+    const chips=el("div",{class:"chipRow"}); a.risk.items.forEach((id,i)=>chips.append(el("span",{class:"chipBtn",title:"Remove"}, id, lock?"":el("button",{class:"linkBtn",type:"button","aria-label":"Remove "+id,onclick:()=>{ a.risk.items.splice(i,1); touch(); draw(); }}," ×")))); box.append(chips);
+    if(!lock){ if(opts.length) box.append(el("label",{class:"rField"}, el("span",{},"Add from the app’s risk worksheets"), selectEl([["","Choose a row…"],...opts.filter(o=>!a.risk.items.includes(o[0]))],"",v=>{ if(v){ a.risk.items.push(v); touch(); draw(); } })));
+      const inp=el("input",{type:"text",class:"rIn",placeholder:"Type an ID, e.g. DFMEA-0123, then Enter","aria-label":"Add risk file ID"}); inp.addEventListener("keydown",e=>{ if(e.key==="Enter"&&inp.value.trim()){ a.risk.items.push(inp.value.trim()); inp.value=""; touch(); draw(); } }); box.append(inp); }
+    const docs=["SRA","Hazard analysis","DFMEA","PFMEA","UFMEA / URRA","SFMEA","Risk management report","Benefit-risk analysis"]; const dg=el("div",{class:"chipRow"});
+    docs.forEach(d=>dg.append(el("button",{class:"chipBtn",type:"button","aria-pressed":String(a.risk.docs.includes(d)),onclick:()=>{ const i=a.risk.docs.indexOf(d); if(i>=0) a.risk.docs.splice(i,1); else a.risk.docs.push(d); touch(); draw(); }},d)));
+    if(lock) [...dg.children].forEach(b=>b.disabled=true); box.append(el("b",{},"Risk-file documents to update"), dg); };
+  draw(); return box;
+}
+function qBlock(S,a,touch,lock){
+  const v=a.ans[S.id]; const w=el("div",{class:"iaQ sub"+(v==="Y"?" yes":"")});
+  w.append(el("div",{}, el("span",{class:"idTag"},S.id)," ",el("span",{},S.q)), yn(v,x=>{ a.ans[S.id]=x; if(x==="N"&&!a.txt[S.id]) a.txt[S.id]=S.no; if(x==="Y"&&a.txt[S.id]===S.no) a.txt[S.id]=""; touch(); renderImpact(); },lock));
+  if(v==="Y"){ const dl=a.dl[S.id]=a.dl[S.id]||[]; const g=el("div",{class:"chipRow"});
+    S.dl.forEach(d=>g.append(el("button",{class:"chipBtn",type:"button","aria-pressed":String(dl.includes(d)),onclick:e=>{ const i=dl.indexOf(d); if(i>=0) dl.splice(i,1); else dl.push(d); e.target.setAttribute("aria-pressed",String(i<0)); touch(); }},d)));
+    const t=txtField("Impact and specific deliverables (required)",a.txt[S.id],x=>{ a.txt[S.id]=x; touch(); },"What changes, which documents / tests, owners",true); if(lock) t.querySelector("textarea").disabled=true;
+    if(lock) [...g.children].forEach(b=>b.disabled=true); w.append(el("div",{class:"iaDet"}, el("small",{class:"src"},"Required deliverables (select all that apply):"), g, t)); }
+  if(v==="N"){ const t=txtField("Rationale (proposed text; edit if needed)",a.txt[S.id],x=>{ a.txt[S.id]=x; touch(); },"",true); if(lock) t.querySelector("textarea").disabled=true; w.append(el("div",{class:"iaDet"},t)); }
+  return w;
+}
+function iaP1(p,a,touch,lock){
+  p.append(el("p",{class:"src"},"Answer the topic question first. If a topic is not affected, answer No: its questions are skipped and the fixed rationale is used. Topics marked “always” are mandatory for every change (ISO 13485 7.3.9 and ISO 14971)."));
+  IA_P1.forEach(T=>{ const c=el("div",{class:"card iaTopic"}); const on=T.always||a.g[T.id]==="Y";
+    c.append(el("div",{class:"wsHead"}, el("h3",{class:"secTitle"}, el("span",{class:"idTag"},T.id)," "+T.t), el("span",{class:"tag"+(T.always?" focus":"")},T.always?"always":T.area)));
+    if(!T.always){ c.append(el("div",{class:"iaQ gate"}, el("b",{},T.gate), yn(a.g[T.id],x=>{ a.g[T.id]=x; touch(); renderImpact(); },lock)));
+      if(a.g[T.id]==="N") c.append(el("p",{class:"naTxt"},"N/A — "+T.na)); }
+    if(on) T.subs.forEach(S=>c.append(qBlock(S,a,touch,lock)));
+    if(T.risk) c.append(riskPicker(a,touch,lock));
+    p.append(c); });
+  // impacted requirements and tests
+  const rq=el("div",{class:"card"}, el("h3",{class:"secTitle"},"Impacted requirements and required tests (optional)"), el("p",{class:"src"},"One row per change item. Leave empty if no requirement is impacted."));
+  const tb=el("div",{class:"reqList"});
+  const drawR=()=>{ tb.innerHTML=""; a.req.forEach((r,i)=>{ const row=el("div",{class:"wsRow"}, el("div",{class:"wsHead"}, el("b",{},"Item "+(i+1)), lock?"":el("button",{class:"linkBtn del",type:"button",onclick:()=>{ a.req.splice(i,1); touch(); drawR(); }},"Delete")));
+    const g=el("div",{class:"rInputs grid2"}); [["item","Change item"],["area","Impacted area"],["req","Impacted requirement (system / sub-system / SW ID)"],["test","Tests (system V&V / SW V&V)"]].forEach(([k,l])=>{ const t=txtField(l,r[k],x=>{ r[k]=x; touch(); }); if(lock) t.querySelector("input").disabled=true; g.append(t); }); row.append(g); tb.append(row); }); };
+  drawR(); rq.append(tb); if(!lock) rq.append(el("button",{class:"linkBtn",type:"button",onclick:()=>{ a.req.push({item:"",area:"",req:"",test:""}); touch(); drawR(); }},"+ Add item")); p.append(rq);
+  const miss=iaP1Missing(a);
+  p.append(el("div",{class:"card"}, el("p",{id:"iaStatus",class:miss.length?"warn":"okTxt"},miss.length?miss.length+" item(s) still open: "+miss.slice(0,8).join("; ")+(miss.length>8?"…":""):"Part 1 is complete. Send it for approval in tab 3."),
+    el("div",{class:"mact"}, el("button",{class:"cta",type:"button",onclick:()=>{ IA_TAB="ap"; renderImpact(); }},"Next: Part 1 approval"))));
+}
+function iaAp(p,a,touch){
+  const miss=iaP1Missing(a); const P=a.p1;
+  if(P.status==="approved"){ p.append(verdict(true,"Part 1 approved","By "+P.by+" ("+P.role+") on "+P.date+". Regulatory assessment is now open."),
+      el("div",{class:"mact"}, el("button",{class:"cta",type:"button",onclick:()=>{ IA_TAB="ra"; renderImpact(); }},"Go to regulatory assessment"), el("button",{class:"reset",type:"button",onclick:()=>modalConfirm("Re-open Part 1?","Re-opening clears the Part 1 approval and the RA sign-off. Continue?","Re-open",()=>{ P.status="draft"; a.ra.by=""; a.ra.date=""; touch(); IA_TAB="p1"; renderImpact(); })},"Re-open Part 1"))); return; }
+  if(miss.length){ p.append(el("p",{class:"warn"},"Part 1 is not complete: "+miss.join("; "))); return; }
+  const by=txtField("Approved by (name)",P.by,v=>{ P.by=v; touch(); }), role=txtField("Role / function",P.role,v=>{ P.role=v; touch(); },"e.g. R&D lead, QA"), dt=txtField("Approval date",P.date||new Date().toISOString().slice(0,10),v=>{ P.date=v; touch(); });
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Approve Part 1 (SME impact assessment)"), el("p",{class:"src"},"Record the approver here for the output. The formal electronic approval stays in your eQMS / PLM change control."),
+    el("div",{class:"rInputs grid3"},by,role,dt), el("div",{class:"mact"}, el("button",{class:"cta",type:"button",onclick:()=>{ if(!P.by.trim()||!P.role.trim()){ flash("Enter the approver name and role."); return; } P.date=P.date||new Date().toISOString().slice(0,10); P.status="approved"; touch(); IA_TAB="ra"; renderImpact(); }},"Approve Part 1 and open the RA assessment"))));
+}
+function raQ(id,q,a,touch,hint){ const v=a.ra.ans[id]; const w=el("div",{class:"iaQ sub"+(v==="Y"?" yes":"")}, el("div",{}, el("span",{class:"idTag"},id)," ",el("span",{},q), hint?el("small",{},hint):""), ynBtns(v,x=>{ a.ra.ans[id]=x; touch(); renderImpact(); })); return w; }
+function iaRa(p,a,touch){
+  const R=a.ra, A=R.ans, I=a.info;
+  // summary of Part 1 flags
+  const flags=IA_P1.flatMap(T=>T.subs.filter(S=>a.ans[S.id]==="Y").map(S=>S.id));
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Part 1 summary for RA"), el("p",{},flags.length?"SME answered Yes to: "+flags.join(", ")+".":"SME found no impact in any topic."), el("p",{class:"src"},"Device: US "+(I.usClass||"—")+" · EU "+(I.euClass||"—")+" ("+(I.euCert||"certificate not set")+")"),
+    el("b",{},"Markets affected"), el("div",{class:"chipRow"}, ...["US","EU","Other"].map(k=>el("button",{class:"chipBtn",type:"button","aria-pressed":String(!!R.markets[k]),onclick:()=>{ R.markets[k]=!R.markets[k]; touch(); renderImpact(); }},k==="Other"?"Other markets":k)))));
+  if(R.markets.US){ const c=el("div",{class:"card"}, el("h3",{class:"secTitle"},"United States (FDA)"));
+    c.append(raQ("US0","Is the change covered by an FDA-authorized predetermined change control plan (PCCP)?",a,touch,"Section 515C FD&C Act"));
+    if(A.US0!=="Y"){
+      if(!I.usClass||I.usClass==="NA") c.append(el("p",{class:"warn"},"Set the US class in tab 1."));
+      if(I.usClass==="I-exempt") c.append(raQ("USX","Does the change exceed the limitations of the exemption (21 CFR 8xx.9) or raise new issues of safety or effectiveness?",a,touch));
+      if(I.usClass==="II"){ c.append(el("p",{class:"src"},"Per 21 CFR 807.81(a)(3) and FDA guidance “Deciding When to Submit a 510(k) for a Change to an Existing Device” and the software-change guidance (2017). Choose the change types; only their questions are shown. IVD devices: use flowchart D of the guidance."));
+        RA_US510.forEach(g=>{ c.append(el("div",{class:"iaQ gate"}, el("b",{},"Is it a "+g.t.toLowerCase()+"?"), ynBtns(A["UT"+g.id],x=>{ A["UT"+g.id]=x; touch(); renderImpact(); }))); if(A["UT"+g.id]==="Y") g.q.forEach(([id,q])=>c.append(raQ(id,q,a,touch))); }); }
+      if(I.usClass==="III"){ c.append(el("p",{class:"src"},"PMA changes per 21 CFR 814.39. Answer top-down; the first Yes sets the submission type.")); for(const [id,q] of RA_PMA){ c.append(raQ(id,q,a,touch)); if(A[id]==="Y") break; } } }
+    c.append(raQ("US1","Is the change part of a correction or removal to reduce a risk to health (recall), rather than an enhancement?",a,touch,"21 CFR 806; document the recall vs enhancement decision either way"),
+      raQ("US2","Does the change create a new version or model, or change GUDID data?",a,touch,"21 CFR 830.50"), raQ("US3","Does it change device listing information (e.g. proprietary name, product code)?",a,touch,"21 CFR 807.28"));
+    p.append(c); }
+  if(R.markets.EU){ const c=el("div",{class:"card"}, el("h3",{class:"secTitle"},"European Union (MDR 2017/745)"));
+    if(!I.euCert) c.append(el("p",{class:"warn"},"Set the EU certificate type in tab 1."));
+    if(I.euCert==="legacy") c.append(raQ("EL1","Is it a significant change in design or intended purpose per MDCG 2020-3 rev.1 (Art. 120(3c))?",a,touch,"Use the MDCG 2020-3 flowcharts; record which chart and box"));
+    if(I.euCert==="mdr"){ c.append(el("p",{class:"src"},"Substantial change criteria per MDR Annex IX 2.4 and 4.10 (or Annex X/XI), using NBOG BPG 2014-3 criteria as most notified bodies do. Check your notified body’s own change-notification procedure."));
+      RA_EU_SUB.forEach(g=>{ c.append(el("div",{class:"iaQ gate"}, el("b",{},"Does the change affect the "+g.t.toLowerCase()+" area?"), ynBtns(A["EG"+g.id],x=>{ A["EG"+g.id]=x; touch(); renderImpact(); }))); if(A["EG"+g.id]==="Y") g.q.forEach(([id,q])=>c.append(raQ(id,q,a,touch))); }); }
+    c.append(el("h3",{class:"secTitle"},"EU documents to update"), el("p",{class:"src"},"No keeps the fixed rationale shown in the output."));
+    RA_EU_DOCS.forEach(([id,t])=>c.append(raQ(id,"Update needed: "+t+"?",a,touch)));
+    p.append(c); }
+  if(R.markets.Other){ p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Other markets"), txtField("Countries affected and decision (e.g. Health Canada significant change, annual report, no impact)",R.other,v=>{ R.other=v; touch(); },"",true))); }
+  const cr=raCalc(a);
+  const res=el("div",{class:"card"}, el("h3",{class:"secTitle"},"Regulatory decision"));
+  if(cr.us) res.append(verdict(!cr.us.pre,"US: "+({PCCP:"PCCP",LTF:"Letter to file","510k":"New 510(k)",PMA:"PMA supplement / notice",AR:"Annual report"})[cr.us.k],cr.us.t));
+  if(cr.eu) res.append(verdict(!cr.eu.pre,"EU: "+({SIG:"Significant change",NSIG:"Not significant",SUB:"Substantial change",NSUB:"Non-substantial",SELF:"Self-declared"})[cr.eu.k],cr.eu.t));
+  if(cr.notes.length) res.append(el("ul",{}, ...cr.notes.map(n=>el("li",{},n))));
+  if(!R.markets.US&&!R.markets.EU&&!R.markets.Other) res.append(el("p",{class:"src"},"Select at least one market."));
+  res.append(txtField("RA comments and justification (procedure or guidance references)",R.txt.comment,v=>{ R.txt.comment=v; touch(); },"",true),
+    el("div",{class:"rInputs grid3"}, txtField("RA reviewer",R.by,v=>{ R.by=v; touch(); }), txtField("Date",R.date,v=>{ R.date=v; touch(); },new Date().toISOString().slice(0,10))),
+    el("div",{class:"mact"}, el("button",{class:"cta",type:"button",onclick:()=>{ const miss=raMissing(a); if(miss.length){ flash("Open items: "+miss.slice(0,4).join("; ")); return; } if(!R.date) R.date=new Date().toISOString().slice(0,10); touch(); IA_TAB="out"; renderImpact(); }},"Complete and create the output")));
+  p.append(res);
+}
+function raMissing(a){ const R=a.ra, A=R.ans, I=a.info, m=[]; if(!R.markets.US&&!R.markets.EU&&!R.markets.Other) m.push("markets");
+  if(R.markets.US){ if(!A.US0) m.push("US0"); else if(A.US0==="N"){ if(I.usClass==="I-exempt"&&!A.USX) m.push("USX"); if(I.usClass==="II") RA_US510.forEach(g=>{ if(!A["UT"+g.id]) m.push("US change type: "+g.id); else if(A["UT"+g.id]==="Y") g.q.forEach(([id])=>{ if(!A[id]) m.push(id); }); });
+      if(I.usClass==="III"){ for(const [id] of RA_PMA){ if(!A[id]){ m.push(id); break; } if(A[id]==="Y") break; } } if(!I.usClass||I.usClass==="NA") m.push("US class"); }
+    ["US1","US2","US3"].forEach(id=>{ if(!A[id]) m.push(id); }); }
+  if(R.markets.EU){ if(!I.euCert) m.push("EU certificate type"); if(I.euCert==="legacy"&&!A.EL1) m.push("EL1"); if(I.euCert==="mdr") RA_EU_SUB.forEach(g=>{ if(!A["EG"+g.id]) m.push("EU area: "+g.id); else if(A["EG"+g.id]==="Y") g.q.forEach(([id])=>{ if(!A[id]) m.push(id); }); }); RA_EU_DOCS.forEach(([id])=>{ if(!A[id]) m.push(id); }); }
+  if(R.markets.Other&&!R.other.trim()) m.push("Other markets decision"); if(!R.by.trim()) m.push("RA reviewer"); return m; }
+/* ---- output ---- */
+function iaDocModel(a){
+  const I=a.info, C=iaClass(a), cr=C.r, blocks=[];
+  blocks.push({h1:"Change Impact Assessment "+a.id},{p:"Change control "+(I.cc||"-")+" · "+(I.title||"")},{p:"Product: "+(I.product||"-")+" · US: "+(I.usClass||"-")+" · EU: "+(I.euClass||"-")+(I.euCert?" ("+I.euCert+")":"")+" · Generated "+nowTs()});
+  blocks.push({h2:"1. Description of change"},{table:[["Originator",I.originator||"-"],["Description",I.desc||"-"],["Reason",I.reason||"-"],["Source",I.source],["Related records",I.refs||"-"]]});
+  blocks.push({h2:"2. Change impact assessment (SME)"});
+  IA_P1.forEach(T=>{ if(!T.always&&a.g[T.id]==="N"){ blocks.push({h3:T.id+" "+T.t+" — N/A"},{p:T.na}); return; }
+    blocks.push({h3:T.id+" "+T.t}); blocks.push({table:[["#","Question","Answer","Impact / rationale"],...T.subs.map(S=>[S.id,S.q,a.ans[S.id]==="Y"?"Yes":a.ans[S.id]==="N"?"No":"-",(a.txt[S.id]||"")+(a.ans[S.id]==="Y"&&(a.dl[S.id]||[]).length?" Deliverables: "+a.dl[S.id].join("; ")+".":"")])],head:true});
+    if(T.risk) blocks.push({table:[["Linked risk-file items",a.risk.items.join(", ")||"none"],["Risk-file documents to update",a.risk.docs.join(", ")||"none"]]}); });
+  const yes=IA_P1.flatMap(T=>T.subs.filter(S=>a.ans[S.id]==="Y"));
+  blocks.push({h2:"3. Required deliverables"}); blocks.push(yes.length?{table:[["#","Deliverables","Details"],...yes.map(S=>[S.id,(a.dl[S.id]||[]).join("; ")||"-",a.txt[S.id]||""])],head:true}:{p:"No deliverables: the change does not modify design attributes, manufacturing processes, quality attributes or safety characteristics. Existing verification, validation and risk management evidence remains valid."});
+  if(a.req.length) blocks.push({h2:"4. Impacted requirements and required tests"},{table:[["Change item","Impacted area","Requirement","Tests"],...a.req.map(r=>[r.item,r.area,r.req,r.test])],head:true});
+  blocks.push({h2:"Part 1 approval"},{p:"Approved by "+a.p1.by+" ("+a.p1.role+") on "+a.p1.date+"."});
+  blocks.push({h2:"5. Regulatory impact assessment"});
+  const rr=[]; if(cr.us) rr.push(["US decision",cr.us.t]); if(cr.eu) rr.push(["EU decision",cr.eu.t]); if(a.ra.markets.Other) rr.push(["Other markets",a.ra.other]); cr.notes.forEach(n=>rr.push(["Action",n]));
+  const A=a.ra.ans; const ansRows=Object.keys(A).sort().map(k=>{ const q=[...RA_US510.flatMap(g=>g.q),...RA_PMA,...RA_EU_SUB.flatMap(g=>g.q),...RA_EU_DOCS].find(x=>x[0]===k); const lbl={US0:"PCCP covers change",USX:"Exceeds 510(k) exemption",US1:"Correction/removal (806)",US2:"New DI / GUDID",US3:"Listing update",EL1:"Significant change (MDCG 2020-3)"}[k]||(k.startsWith("UT")?"Change type "+k.slice(2):k.startsWith("EG")?"EU area "+k.slice(2):q?q[1]:k);
+    const docNo=RA_EU_DOCS.find(x=>x[0]===k); return [k,lbl,A[k]==="Y"?"Yes":"No"+(docNo&&A[k]==="N"?" — "+docNo[2]:"")]; });
+  blocks.push({table:rr.length?rr:[["Decision","-"]]}); if(ansRows.length) blocks.push({table:[["#","Question","Answer"],...ansRows],head:true});
+  if(a.ra.txt.comment) blocks.push({p:"RA justification: "+a.ra.txt.comment}); blocks.push({p:"RA reviewer: "+a.ra.by+" · "+a.ra.date});
+  blocks.push({h2:"6. Change classification"},{table:[["Classification",C.c+(a.cls.override?" (override; automatic: "+C.auto+")":"")],["Basis",a.info.immediate==="Y"?"Immediate action required (potential Critical change: escalate to CCB / steering committee).":cr.preapproval?"Regulatory pre-approval or notified body approval required.":C.safety?"Potential impact on safety, performance or risk.":"No impact on safety, efficacy or quality, and no regulatory pre-approval."],...(a.cls.why?[["Override rationale",a.cls.why]]:[])]});
+  blocks.push({h2:"7. Summary"},{p:iaSummary(a,C)});
+  return blocks;
+}
+function iaSummary(a,C){ const yes=IA_P1.flatMap(T=>T.subs.filter(S=>a.ans[S.id]==="Y").map(S=>S.id)); const na=IA_P1.filter(T=>!T.always&&a.g[T.id]==="N").map(T=>T.t.toLowerCase());
+  const r=C.r; return (yes.length?"The change affects "+yes.length+" assessed item(s) ("+yes.join(", ")+"); the required deliverables are listed in section 3. ":"The change has no impact on any assessed item. ")+(na.length?"Not affected: "+na.join(", ")+". ":"")+(r.us?"US: "+r.us.t+" ":"")+(r.eu?"EU: "+r.eu.t+" ":"")+"Classification: "+C.c+" change."; }
+function buildDocx(blocks,title){
+  const x=s=>String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  const run=(t,b)=>`<w:r>${b?"<w:rPr><w:b/></w:rPr>":""}<w:t xml:space="preserve">${x(t)}</w:t></w:r>`;
+  const para=(t,style,b)=>`<w:p>${style?`<w:pPr><w:pStyle w:val="${style}"/></w:pPr>`:""}${String(t).split("\n").map((l,i)=>(i?"<w:r><w:br/></w:r>":"")+run(l,b)).join("")}</w:p>`;
+  const tbl=(rows,head)=>{ const n=Math.max(...rows.map(r=>r.length)); const W={1:[9600],2:[2600,7000],3:[900,5200,3500],4:[800,4300,800,3700]}[n]||Array(n).fill(Math.floor(9600/n)); const w=W[0]; return `<w:tbl><w:tblPr><w:tblStyle w:val="TableGrid"/><w:tblW w:w="9600" w:type="dxa"/><w:tblLayout w:type="fixed"/><w:tblBorders>${["top","left","bottom","right","insideH","insideV"].map(s=>`<w:${s} w:val="single" w:sz="4" w:space="0" w:color="A0A8B0"/>`).join("")}</w:tblBorders></w:tblPr><w:tblGrid>${W.map(x=>`<w:gridCol w:w="${x}"/>`).join("")}</w:tblGrid>${rows.map((r,ri)=>`<w:tr>${r.map((c,ci)=>`<w:tc><w:tcPr><w:tcW w:w="${W[ci]||w}" w:type="dxa"/>${(head&&ri===0)||(!head&&ci===0)?'<w:shd w:val="clear" w:color="auto" w:fill="EEF2F4"/>':""}</w:tcPr>${para(c,null,(head&&ri===0)||(!head&&ci===0))}</w:tc>`).join("")}</w:tr>`).join("")}</w:tbl>${para("")}`; };
+  const body=blocks.map(b=>b.h1?para(b.h1,"Title"):b.h2?para(b.h2,"Heading1"):b.h3?para(b.h3,"Heading2"):b.table?tbl(b.table,b.head):para(b.p||"")).join("");
+  const doc=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${body}<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1134" w:right="1134" w:bottom="1134" w:left="1134" w:header="567" w:footer="567" w:gutter="0"/></w:sectPr></w:body></w:document>`;
+  const sty=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:cs="Calibri"/><w:sz w:val="20"/></w:rPr></w:rPrDefault><w:pPrDefault><w:pPr><w:spacing w:after="80"/></w:pPr></w:pPrDefault></w:docDefaults><w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/></w:style><w:style w:type="paragraph" w:styleId="Title"><w:name w:val="Title"/><w:basedOn w:val="Normal"/><w:rPr><w:b/><w:color w:val="0B5C52"/><w:sz w:val="36"/></w:rPr></w:style><w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/><w:basedOn w:val="Normal"/><w:pPr><w:keepNext/><w:spacing w:before="240" w:after="80"/><w:outlineLvl w:val="0"/></w:pPr><w:rPr><w:b/><w:color w:val="1F3A5F"/><w:sz w:val="28"/></w:rPr></w:style><w:style w:type="paragraph" w:styleId="Heading2"><w:name w:val="heading 2"/><w:basedOn w:val="Normal"/><w:pPr><w:keepNext/><w:spacing w:before="160" w:after="60"/><w:outlineLvl w:val="1"/></w:pPr><w:rPr><w:b/><w:sz w:val="22"/></w:rPr></w:style><w:style w:type="table" w:styleId="TableGrid"><w:name w:val="Table Grid"/><w:tblPr><w:tblCellMar><w:left w:w="80" w:type="dxa"/><w:right w:w="80" w:type="dxa"/></w:tblCellMar></w:tblPr></w:style></w:styles>`;
+  const ct=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/></Types>`;
+  const rels=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`;
+  const drels=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`;
+  const z=zipStore([["[Content_Types].xml",ct],["_rels/.rels",rels],["word/document.xml",doc],["word/_rels/document.xml.rels",drels],["word/styles.xml",sty]]);
+  return new Blob([z],{type:"application/vnd.openxmlformats-officedocument.wordprocessingml.document"});
+}
+function iaPdf(blocks,title){ const secs=[]; let cur=null; blocks.forEach(b=>{ if(b.h1) return; if(b.h2||b.h3){ cur={h:b.h2||b.h3,rows:[]}; secs.push(cur); return; } if(!cur){ cur={h:"",rows:[]}; secs.push(cur); }
+    if(b.p) cur.rows.push(["",b.p]); if(b.table){ const rows=b.head?b.table.slice(1):b.table; rows.forEach(r=>cur.rows.push(r.length===2?[r[0],r[1]]:[r[0],r.slice(1).join(" | ")])); } });
+  return buildPdf({title,subtitle:"Medical Device QA Handbook - Change Impact Assessment - "+nowTs(),footer:title,sections:secs.filter(s=>s.rows.length||s.h),decision:null,hist:null,data:[]}); }
+function iaOut(p,a,touch){
+  const C=iaClass(a); const missRa=raMissing(a);
+  if(missRa.length) p.append(el("p",{class:"warn"},"Regulatory assessment is not complete: "+missRa.slice(0,10).join("; ")));
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Change classification"), verdict(C.c!=="Critical",C.c+" change",C.c==="Critical"?"Escalate to the CCB / steering committee.":C.c==="Major"?"Regulatory pre-approval or a potential safety/performance impact.":"No safety, efficacy or quality impact and no regulatory pre-approval."),
+    el("div",{class:"rInputs grid2"}, el("label",{class:"rField"}, el("span",{},"Override (optional)"), selectEl([["","Use automatic: "+C.auto],["Critical","Critical"],["Major","Major"],["Minor","Minor"]],a.cls.override,v=>{ a.cls.override=v; touch(); renderImpact(); })), txtField("Override rationale",a.cls.why,v=>{ a.cls.why=v; touch(); }))));
+  const blocks=iaDocModel(a);
+  const prev=el("div",{class:"card iaPrev"}); blocks.forEach(b=>{ if(b.h1) prev.append(el("h3",{class:"secTitle"},b.h1)); else if(b.h2) prev.append(el("h4",{},b.h2)); else if(b.h3) prev.append(el("b",{class:"iaH3"},b.h3)); else if(b.p) prev.append(el("p",{},b.p)); else if(b.table){ const t=el("table",{class:"map rmTbl"}); b.table.forEach((r,i)=>t.append(el("tr",{}, ...r.map((c,j)=>el((b.head&&i===0)||(!b.head&&j===0)?"th":"td",{},String(c)))))); prev.append(el("div",{class:"tblWrap"},t)); } });
+  const ttl="Impact assessment "+a.id+(a.info.cc?" "+a.info.cc:"");
+  if(!a.fname) a.fname=(a.info.cc||a.id)+"_Impact_Assessment";
+  toolExport(p,Object.assign(a,{_save:()=>{ a.updated=nowTs(); iaSave(); }}),(a.info.cc||a.id)+"_Impact_Assessment",[["Export Word (.docx)","docx",()=>buildDocx(iaDocModel(a),ttl)],["Export PDF","pdf",()=>iaPdf(iaDocModel(a),ttl)]],"The Word file follows your template sections: description, impact assessment, deliverables, impacted requirements, regulatory assessment, classification and summary. N/A topics appear as one line with their fixed rationale.");
+  p.append(prev);
+}
+
 function route(){
   const id=(location.hash||"").slice(1)||"home";
-  if(["home","explore","dilemmas","map","sampling","tools","dates","audit","risk","msa","grr","rmtools"].includes(id)){ closeModal(); renderNav(id); ({home:()=>renderHome(false),explore:()=>renderHome(true),dilemmas:renderDilemmas,map:renderMap,sampling:renderSampling,tools:renderTools,risk:renderRisk,msa:renderMsa,grr:renderGrr,rmtools:renderRmTools,dates:renderDates,audit:renderAudit})[id](); totals(); try{ window.scrollTo({top:0}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
+  if(["home","explore","dilemmas","map","sampling","tools","dates","audit","risk","msa","grr","rmtools","impact"].includes(id)){ closeModal(); renderNav(id); ({home:()=>renderHome(false),explore:()=>renderHome(true),dilemmas:renderDilemmas,map:renderMap,sampling:renderSampling,tools:renderTools,risk:renderRisk,msa:renderMsa,grr:renderGrr,rmtools:renderRmTools,impact:renderImpact,dates:renderDates,audit:renderAudit})[id](); totals(); try{ window.scrollTo({top:0}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
   if(id==="random"){ closeModal(); renderNav("random"); renderRandom(); totals(); try{ window.scrollTo({top:document.getElementById("dnav").offsetTop}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
   const valid=CH.some(c=>c.id===id)?id:CH[0].id;
   currentTab=pendingTab||""; pendingTab=null;
