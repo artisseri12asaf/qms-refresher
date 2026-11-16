@@ -685,6 +685,83 @@ button.mRingSvg{cursor:pointer}
 .vChip.oos{background:#fbeceb; border-color:#e6a9a1; color:#9b2f25; font-weight:800}
 .vChip.oos i{color:#9b2f25}
 .plotCard .eyebrow{text-transform:none; letter-spacing:.01em; font-size:12.5px}
+
+/* ---- round 7: risk management, MSA, Gauge R&R ---- */
+.chHead.riskHead{--ac:#a0522d} .choiceBtn.riskc{border-left-color:#a0522d} .navBtn.n-risk{--ac:#a0522d;--ac-soft:#f7ece5}
+@media (min-width:641px) and (max-width:899px){ .mainNav{grid-template-columns:repeat(3,1fr)} .navBtn.n-samp{grid-column:auto} }
+@media (min-width:900px){ .mainNav{grid-template-columns:repeat(5,1fr) 1.5fr 1.6fr 1.25fr 1.1fr} .navBtn{font-size:13.5px} }
+.backLnk{color:inherit; text-decoration:none; font-weight:800}
+.toolTabs{position:static}
+.grid2{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px}
+.grid3{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px}
+.twoCol{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px}
+.twoCol ul,.card ul{margin:6px 0 10px; padding-left:20px} .card li{margin:4px 0}
+.steps{padding-left:22px} .steps li{margin:6px 0}
+.howItem.msaItem{font:inherit; text-align:left; cursor:pointer; color:var(--ink)} .howItem .how{font-size:13.5px; color:var(--ink)}
+.tblWrap{overflow-x:auto; -webkit-overflow-scrolling:touch}
+table.rmTbl{font-size:14px} table.rmTbl td,table.rmTbl th{padding:6px 8px} table.rmTbl tr.bad td{color:#9b2f25; font-weight:700} table.rmTbl tr.hl td{background:#f4f6fd; font-weight:700}
+.verdict.mid{background:#fbf5e6; border-color:#ead9a6; color:#7a5a0c}
+.warnCard{border-left:5px solid #c9a227}
+.selBar{display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px; align-items:center; background:var(--paper); border:1px solid var(--line); border-radius:10px; padding:8px 12px; margin:8px 0; font-size:14px; font-weight:600}
+.sampList{display:grid; gap:8px}
+.sampRow{display:grid; grid-template-columns:auto auto 1fr auto; gap:10px; align-items:center; border:1px solid var(--line); border-radius:12px; padding:10px; background:var(--card)}
+.sampRow.isBad{border-left:5px solid var(--bad)} .sampRow.isGood{border-left:5px solid #2e8b57}
+.sampRow .sNo{white-space:nowrap} .sampRow .warnTxt{grid-column:1/-1; color:#9b2f25; font-weight:700}
+@media (max-width:640px){ .sampRow{grid-template-columns:1fr auto} .sampRow .rField{grid-column:1/-1} }
+.gbTog{display:inline-flex; border:1px solid var(--line); border-radius:10px; overflow:hidden}
+.gb{font:inherit; font-weight:800; font-size:14px; border:0; padding:8px 12px; background:var(--card); color:var(--muted); cursor:pointer}
+.gb.g[aria-pressed="true"]{background:#2e8b57; color:#fff} .gb.b[aria-pressed="true"]{background:var(--bad); color:#fff}
+.gbTog.sm .gb{padding:6px 10px; font-size:13px}
+.rateGrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(112px,1fr)); gap:6px; margin-top:8px}
+.rateCell{display:flex; justify-content:space-between; align-items:center; gap:4px; border:1px solid var(--line); border-radius:10px; padding:5px 6px; font-weight:700; font-variant-numeric:tabular-nums}
+.rateCell.set{background:var(--paper)}
+.imgCell{display:grid; gap:4px; justify-items:start}
+.thumb{width:84px; height:64px; object-fit:cover; border-radius:8px; border:1px solid var(--line)}
+.fileLbl{font-size:13px; font-weight:700; border:1px dashed var(--line); border-radius:10px; padding:8px 10px; cursor:pointer; white-space:nowrap}
+.fileLbl input{display:none}
+.linkBtn{font:inherit; font-size:13px; font-weight:700; background:none; border:0; color:#2f6f86; cursor:pointer; padding:4px 0}
+table.gridIn td{padding:3px} table.gridIn th{padding:4px 6px}
+.cellIn{font:inherit; font-size:15px; width:76px; padding:6px; border:1px solid var(--line); border-radius:8px; font-variant-numeric:tabular-nums}
+.devCard{display:grid; gap:4px; margin-top:12px}
+.rmFlow{padding-left:0; list-style:none; display:grid; gap:6px; counter-reset:none}
+.rmStep{border:1px solid var(--line); border-radius:12px; padding:10px 12px; background:var(--card)}
+.rmStep summary{cursor:pointer; display:flex; gap:10px; align-items:baseline; flex-wrap:wrap}
+.rmStep .cl{font-size:12px; font-weight:800; color:#a0522d; white-space:nowrap}
+.rmStep p{margin:8px 0 0} .rmStep .bp{background:#f7ece5; border-radius:8px; padding:8px 10px}
+.gtag{justify-self:start; background:#f7ece5; color:#a0522d}
+.qList{display:grid; gap:6px}
+.qItem{display:grid; grid-template-columns:auto 1fr auto; gap:10px; align-items:start; border:1px solid var(--line); border-radius:10px; padding:8px 10px}
+.qItem small{display:block; color:var(--muted)} .qItem.hl{border-color:#e2b99f; background:#fdf6f1}
+.qn{font-size:12px; font-weight:800; color:var(--muted); white-space:nowrap}
+.tag.focus{background:#a0522d; color:#fff}
+.hzGrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px}
+.hzCol{border:1px solid var(--line); border-radius:12px; padding:10px 12px} .hzCol i{font-style:normal; font-weight:700}
+.statCell b.lite{font-size:13.5px; font-weight:500}
+.chain{display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin:10px 0}
+@media (max-width:640px){ .chain{grid-template-columns:1fr} }
+.chainBox{border-radius:10px; padding:8px 10px; display:grid; gap:3px; border:1px solid var(--line); position:relative}
+.chainBox small{font-size:11.5px; font-weight:800; text-transform:uppercase; letter-spacing:.04em; color:var(--muted)}
+.chainBox.c0{background:#fdf3e6} .chainBox.c1{background:#f4f6fd} .chainBox.c2{background:#fbeceb} .chainBox.c3{background:#f3e9f5}
+.scRow{display:grid; grid-template-columns:auto 1fr 1.6fr; gap:6px; align-items:center; margin:4px 0}
+.rIn.sm{font-size:14px; padding:7px 9px}
+table.rmMatrix{border-collapse:separate; border-spacing:3px; font-size:12.5px; margin:10px 0}
+table.rmMatrix th{font-weight:700; text-align:left; padding:4px; color:var(--muted)} table.rmMatrix th.corner{font-size:11px}
+.mCell{font:inherit; font-weight:800; width:100%; min-width:44px; height:40px; border-radius:8px; border:0; cursor:pointer; color:#fff}
+.acc0{background:#3a9a62} .acc1{background:#d9a441; color:#3b2a00} .acc2{background:#c0503f}
+.accLeg{display:flex; flex-wrap:wrap; gap:12px; font-size:13px; align-items:center} .accLeg .mCell{display:inline-grid; place-items:center; width:26px; min-width:0; height:22px; font-style:normal; font-size:12px; cursor:default}
+.wsList{display:grid; gap:10px; margin-top:10px}
+.wsRow{border:1px solid var(--line); border-radius:12px; padding:12px; display:grid; gap:10px; background:var(--paper)}
+.wsHead{display:flex; justify-content:space-between; align-items:center; gap:8px}
+.wsRisk{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px; align-items:end}
+.lvl{display:inline-block; font-size:13px; font-weight:800; border-radius:8px; padding:8px 10px; background:var(--card); border:1px solid var(--line)}
+.lvl.acc0,.lvl.acc2{color:#fff; border:0} .lvl.acc1{border:0}
+.chk{display:flex; gap:6px; align-items:center; font-weight:700}
+.evRow{display:grid; grid-template-columns:1.6fr 1fr auto; gap:8px; align-items:end}
+.ftaWrap{overflow-x:auto} .ftaSvg{min-width:340px}
+.ftaSvg .topB{fill:#fbeceb; stroke:#c0503f} .ftaSvg .midB{fill:#f4f6fd; stroke:#2f4aa0} .ftaSvg .evtB{fill:#fff; stroke:#6b7785} .ftaSvg .evtB.spf{stroke:#c0503f; stroke-width:2} .ftaSvg .gate{fill:#fff; stroke:#333} .ftaSvg .ln{fill:none; stroke:#8a96a3}
+.ftaSvg text{fill:var(--ink)}
+.panel,.panel>*,.card>*,.twoCol>*,.scRow>*,.grid2>*,.grid3>*,.wsRisk>*,.evRow>*,.sampRow>*{min-width:0}
+.tblWrap,.ftaWrap{max-width:100%}
 </style>
 </head>
 <body>
@@ -701,7 +778,7 @@ button.mRingSvg{cursor:pointer}
   <nav class="rail" id="rail" aria-label="Chapters"></nav>
   <main id="main"></main>
 </div>
-<footer>Sources are limited to official publications: for the US, the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases; for the EU, EUR-Lex and European Commission pages including MDCG guidance. Items tagged “Application” are my reasoning, not official statements. Check the linked source before you cite anything in an audit response. Answers are saved in this browser on this device. Version 2026-11-16b.</footer>
+<footer>Sources are limited to official publications: for the US, the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases; for the EU, EUR-Lex and European Commission pages including MDCG guidance. Items tagged “Application” are my reasoning, not official statements. Check the linked source before you cite anything in an audit response. Answers are saved in this browser on this device. Version 2026-11-16c.</footer>
 </div>
 
 <script>
@@ -785,7 +862,7 @@ function renderNav(active){
     ps.append(el("button",{class:"partBtn "+p,type:"button","aria-pressed":String(c.part===p),onclick:()=>{ if(c.part!==p) location.hash=CH.find(x=>x.part===p).id; }},l));
   });
   const r2=document.getElementById("navRow2"); r2.innerHTML="";
-  NAV.forEach(([k,l,ic])=>r2.append(el("button",{class:"navBtn n-"+ic,type:"button","aria-current":String(active===k||(k==="tools"&&active==="sampling")),onclick:()=>{ if(k==="random"){ rnd.cur=null; } if(location.hash==="#"+k) route(); else location.hash=k; }}, ico(ic), el("span",{},l))));
+  NAV.forEach(([k,l,ic])=>r2.append(el("button",{class:"navBtn n-"+ic,type:"button","aria-current":String(active===k||(k==="tools"&&["sampling","msa","grr"].includes(active))),onclick:()=>{ if(k==="random"){ rnd.cur=null; } if(location.hash==="#"+k) route(); else location.hash=k; }}, ico(ic), el("span",{},l))));
   const isCh=CH.some(x=>x.id===active); document.getElementById("dnav").style.display=isCh?"":"none";
   const ct=document.getElementById("chTabs"); ct.innerHTML=""; ct.style.display="";
   CH.filter(x=>x.part===c.part).forEach(x=>{
@@ -939,9 +1016,10 @@ const CHOICES=[
  ["Training mode","Random questions to enhance and refresh your memory","random","train"],
  ["Selected Dilemmas","Real-life dilemmas for selected QMS chapters","dilemmas","dil"],
  ["QMS map","ISO 13485 ↔ 21 CFR 820 ↔ EU MDR","map","mapc"],
+ ["Risk management","ISO 14971 and ISO/TR 24971: glossary, risk analysis, acceptability, xFMEA, FTA and URRA (IEC 62366-1), tailored to your device type","risk","riskc"],
  ["Audit mode","Test your knowledge in a demo audit and practice with a virtual investigator (a 20-question inspection chatbot)","audit","auditc"],
  ["Regulatory Timeline","Regulatory milestones and transition dates","dates","datesc"],
- ["Useful tools","Sample size tool (ISO 2859-1:2026), with more tools to come","tools","samp"]
+ ["Useful tools","Sample size (ISO 2859-1:2026), MSA and Gauge R&R / Kappa tools; templates coming soon","tools","samp"]
 ];
 function go(target){ closeModal(); if(target==="random"){ rnd.unanswered=true; rnd.cur=null; } if(location.hash==="#"+target) route(); else location.hash=target; }
 function choiceGrid(){
@@ -1446,7 +1524,7 @@ function buildXlsx(sheets){
   const sty=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="2"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="2"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
   return zipStore([["[Content_Types].xml",ct],["_rels/.rels",rels],["xl/workbook.xml",wb],["xl/_rels/workbook.xml.rels",wbr],["xl/styles.xml",sty],...sheets.map((s,i)=>["xl/worksheets/sheet"+(i+1)+".xml",sheetXml(s.rows,s.widths)])]);
 }
-function pdfTxt(s){ return String(s).replace(/≤/g,"<=").replace(/≥/g,">=").replace(/[–—]/g,"-").replace(/[’‘]/g,"'").replace(/[“”]/g,'"').replace(/·/g,"-").replace(/²/g,"^2").replace(/σ/g,"s").replace(/x̄/g,"mean").replace(/R̄/g,"R-bar").replace(/→/g,"->").replace(/±/g,"+/-").replace(/×/g,"x").replace(/[^\x20-\x7E]/g,"").replace(/\\/g,"\\\\").replace(/\(/g,"\\(").replace(/\)/g,"\\)"); }
+function pdfTxt(s){ const SUP="⁻⁰¹²³⁴⁵⁶⁷⁸⁹"; return String(s).replace(/[⁻⁰¹²³⁴⁵⁶⁷⁸⁹]+/g,m=>"^"+[...m].map(c=>{ const i=SUP.indexOf(c); return i===0?"-":String(i-1); }).join("")).replace(/≤/g,"<=").replace(/≥/g,">=").replace(/[–—]/g,"-").replace(/[’‘]/g,"'").replace(/[“”]/g,'"').replace(/·/g,"-").replace(/²/g,"^2").replace(/σ/g,"s").replace(/x̄/g,"mean").replace(/R̄/g,"R-bar").replace(/→/g,"->").replace(/±/g,"+/-").replace(/×/g,"x").replace(/[^\x20-\x7E]/g,"").replace(/\\/g,"\\\\").replace(/\(/g,"\\(").replace(/\)/g,"\\)"); }
 function buildPdf(doc){
   // doc: {title, subtitle, sections:[{h, rows:[[k,v]]}], decision:{text,ok}, hist:{bins,lo,w,mean,sd,n,LSL,USL}|null, data:[numbers]}
   const pages=[]; let ops=[]; let y=800; const L=50, R=545;
@@ -1458,7 +1536,12 @@ function buildPdf(doc){
   ops.push(`0.8 0.84 0.86 RG 0.8 w ${L} ${y} m ${R} ${y} l S`); y-=22;
   if(doc.decision){ need(40); ops.push(`${doc.decision.ok?"0.88 0.95 0.91":"0.98 0.9 0.89"} rg ${L} ${y-12} ${R-L} 26 re f`); text(L+10,y-3,doc.decision.text,12,true,doc.decision.ok?"0.1 0.45 0.25":"0.6 0.18 0.15"); y-=36; }
   doc.sections.forEach(sec=>{ need(40); text(L,y,sec.h,11.5,true); y-=16;
-    sec.rows.forEach(([k,v])=>{ const lines=wrap(v,62); need(14*lines.length+2); text(L+6,y,k,9.5,false,"0.35 0.4 0.45"); lines.forEach((ln,i)=>text(L+190,y-i*13,ln,9.5,false)); y-=13*lines.length+3; }); y-=8; });
+    sec.rows.forEach(([k,v])=>{ const lines=wrap(v,62); const kl=wrap(k,32); const nl=Math.max(lines.length,kl.length); need(13*nl+4); kl.forEach((ln,i)=>text(L+6,y-i*13,ln,9.5,false,"0.35 0.4 0.45")); lines.forEach((ln,i)=>text(L+190,y-i*13,ln,9.5,false)); y-=13*nl+3; }); y-=8; });
+  const imgs=(doc.images||[]).filter(im=>im&&im.d&&/^data:image\/jpeg;base64,/.test(im.d));
+  if(imgs.length){ need(40); text(L,y,doc.imagesTitle||"Images",11.5,true); y-=16;
+    imgs.forEach((im,k)=>{ const sc=Math.min(200/im.w,150/im.h); const w=im.w*sc, hh=im.h*sc; const cap=[].concat(...(im.cap||[]).map(c=>wrap(c,50))); need(Math.max(hh,cap.length*13)+16);
+      ops.push(`q ${w.toFixed(1)} 0 0 ${hh.toFixed(1)} ${L+6} ${(y-hh).toFixed(1)} cm /Im${k+1} Do Q`); ops.push(`0.8 0.84 0.86 RG 0.6 w ${L+6} ${(y-hh).toFixed(1)} ${w.toFixed(1)} ${hh.toFixed(1)} re S`);
+      cap.forEach((ln,i)=>text(L+220,y-10-i*13,ln,9.5,i===0)); y-=Math.max(hh,cap.length*13)+14; }); }
   if(doc.hist){ const H=doc.hist; need(200); text(L,y,"Histogram with fitted normal curve",11.5,true); y-=12; const gx=L+10, gy=y-150, gw=R-L-20, gh=140;
     let x0=Math.min(H.lo,H.LSL??H.lo), x1=Math.max(H.lo+H.bins.length*H.w,H.USL??-Infinity); const pad=(x1-x0)*0.06||1; x0-=pad; x1+=pad; const ymax=Math.max(...H.bins)*1.18||1;
     const X=v=>gx+gw*(v-x0)/(x1-x0), Y=v=>gy+gh*v/ymax;
@@ -1474,9 +1557,11 @@ function buildPdf(doc){
   newPage();
   const objs=[]; const add=s=>{ objs.push(s); return objs.length; };
   const fontR=add("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>"), fontB=add("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>");
+  const imgIds=imgs.map(im=>{ const bin=atob(im.d.split(",")[1]); return add(`<< /Type /XObject /Subtype /Image /Width ${im.w} /Height ${im.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${bin.length} >>\nstream\n${bin}\nendstream`); });
+  const xo=imgIds.length?` /XObject << ${imgIds.map((id,k)=>`/Im${k+1} ${id} 0 R`).join(" ")} >>`:"";
   const pagesId=objs.length+1; objs.push(null); const kids=[];
   pages.forEach((content,i)=>{ const foot=`0.5 0.55 0.6 rg BT /F1 8 Tf 50 30 Td (${pdfTxt(doc.footer+"  |  page "+(i+1)+" of "+pages.length)}) Tj ET`; const s=content+"\n"+foot;
-    const cid=add(`<< /Length ${s.length} >>\nstream\n${s}\nendstream`); kids.push(add(`<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 ${fontR} 0 R /F2 ${fontB} 0 R >> >> /Contents ${cid} 0 R >>`)); });
+    const cid=add(`<< /Length ${s.length} >>\nstream\n${s}\nendstream`); kids.push(add(`<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 ${fontR} 0 R /F2 ${fontB} 0 R >>${xo} >> /Contents ${cid} 0 R >>`)); });
   objs[pagesId-1]=`<< /Type /Pages /Kids [${kids.map(k=>k+" 0 R").join(" ")}] /Count ${kids.length} >>`;
   const cat=add(`<< /Type /Catalog /Pages ${pagesId} 0 R >>`);
   let out="%PDF-1.4\n"; const offs=[]; objs.forEach((o,i)=>{ offs.push(out.length); out+=`${i+1} 0 obj\n${o}\nendobj\n`; });
@@ -1490,13 +1575,15 @@ async function saveFile(name,blob,statusEl){
   try{ const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download=name; document.body.append(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),4000); say("Downloaded "+name); }catch(e){ say("Download isn’t available in this view."); }
 }
 /* ---------- Useful tools page ---------- */
-const TOOLS=[["sampling","Sample size tool (ISO 2859-1:2026)","Lot acceptance plans with switching rules, and design-verification sample sizes from confidence and reliability. Enter your results, see the statistics and export a report.","samp",true]];
+const TOOLS=[["sampling","Sample size tool (ISO 2859-1:2026)","Lot acceptance plans with switching rules, and design-verification sample sizes from confidence and reliability. Enter your results, see the statistics and export a report.","samp",true],
+ ["msa","Measurement System Analysis (MSA)","Resolution, Type 1 gauge study (Cg, Cgk), bias and linearity, and stability charts, with Excel and PDF export.","chart",true],
+ ["grr","Gauge R&R / Kappa test","A guide to choose between variable Gauge R&R and attribute agreement (Kappa), sample definitions with defect notes and photos, analysis, and the test protocol and report.","gauge",true]];
 function renderTools(){
   const m=document.getElementById("main"); m.innerHTML="";
-  m.append(el("section",{class:"chHead"}, el("div",{class:"eyebrow"},"Useful tools"), el("h2",{},"Tools for daily QA work"), el("p",{},"Pick a tool. More tools will be added here.")));
+  m.append(el("section",{class:"chHead"}, el("div",{class:"eyebrow"},"Useful tools"), el("h2",{},"Tools for daily QA work"), el("p",{},"Pick a tool. Templates will be added here soon.")));
   const g=el("div",{class:"choiceGrid toolGrid"});
   TOOLS.forEach(([t,lab,s,ic])=>{ const b=el("button",{class:"choiceBtn samp toolCard",type:"button",onclick:()=>{ location.hash=t; }}, el("span",{class:"toolIco"},ico(ic)), el("b",{},lab), el("span",{},s)); g.append(b); });
-  g.append(el("div",{class:"choiceBtn toolCard soon","aria-disabled":"true"}, el("b",{},"More tools coming"), el("span",{},"New calculators and checklists will appear here.")));
+  g.append(el("div",{class:"choiceBtn toolCard soon","aria-disabled":"true"}, el("span",{class:"toolIco"},ico("tmpl")), el("b",{},"Templates"), el("span",{},"Coming soon: ready-to-use QMS templates.")));
   m.append(g);
 }
 /* ---------- results entry, statistics and export ---------- */
@@ -1670,11 +1757,14 @@ const ICONS={
  dates:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
  samp:'<path d="M14.7 6.3a4 4 0 0 0-5.4 5.2L3.5 17.3a1.6 1.6 0 0 0 2.2 2.2l5.8-5.8a4 4 0 0 0 5.2-5.4l-2.6 2.6-2.2-.4-.4-2.2z"/>',
  chart:'<path d="M4 20V11M10 20V5M16 20v-8M3 20h18"/>',
+ gauge:'<path d="M4 17a8 8 0 1 1 16 0"/><path d="M12 17l4-5"/><circle cx="12" cy="17" r="1.3"/>',
+ tmpl:'<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/>',
+ risk:'<path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17v.5"/>',
  search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>',
  audit:'<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v3h6V3M8.5 12l2.5 2.5 4.5-5"/>'
 };
 function ico(k){ const s=document.createElementNS("http://www.w3.org/2000/svg","svg"); s.setAttribute("viewBox","0 0 24 24"); s.setAttribute("aria-hidden","true"); s.setAttribute("class","ico"); s.innerHTML=ICONS[k]; return s; }
-const NAV=[["home","Home","home"],["explore","Explore","explore"],["random","Training","train"],["dilemmas","Selected Dilemmas","dil"],["map","QMS map","map"],["dates","Regulatory Timeline","dates"],["tools","Useful tools","samp"],["audit","Audit mode","audit"]];
+const NAV=[["home","Home","home"],["explore","Explore","explore"],["random","Training","train"],["dilemmas","Selected Dilemmas","dil"],["map","QMS map","map"],["risk","Risk management","risk"],["dates","Regulatory Timeline","dates"],["tools","Useful tools","samp"],["audit","Audit mode","audit"]];
 
 /* ---------- search widget (one component, used inside Explore) ---------- */
 function searchWidget(){
@@ -1797,17 +1887,17 @@ function renderDates(){
 }
 /* ===== Audit mode data ===== */
 const AUD_CASES=[
- {id:"AUD-101",dev:"drug-eluting coronary stent",name:"Coronary drug-eluting stent system",intended:"Treat de novo coronary artery lesions to improve luminal diameter in patients with symptomatic ischemic heart disease.",us:"Class III — PMA",eu:"Class III",path:"pma",ster:"ethylene oxide (EtO)",part:"the cobalt-chromium tubing",process:"laser cutting and electropolishing of the stent",failure:"difficulty withdrawing the delivery system",psur:"at least annually (Class III)",tool:"stent inspection image-analysis software",flags:["sterile","implant"],icon:"heart"},
- {id:"AUD-102",dev:"insulin infusion pump",name:"Ambulatory insulin infusion pump",intended:"Continuous subcutaneous insulin delivery for people with diabetes requiring insulin.",us:"Class II — 510(k)",eu:"Class IIb",path:"510k",ster:"",part:"the motor-drive assembly",process:"automated pump-motor assembly and torque setting",failure:"occlusion alarms not triggering",psur:"at least annually (Class IIb)",tool:"automated final functional tester",flags:["software","connected"],icon:"pump"},
- {id:"AUD-103",dev:"surgical stapler",name:"Single-use linear surgical stapler",intended:"Transection, resection and creation of anastomoses in open and laparoscopic surgery.",us:"Class II — 510(k)",eu:"Class IIb (implantable staples)",path:"510k",ster:"radiation (gamma)",part:"the staple cartridge",process:"ultrasonic welding of the cartridge housing",failure:"incomplete staple formation",psur:"at least annually (Class IIb)",tool:"label printing and verification system",flags:["sterile"],icon:"tool"},
- {id:"AUD-104",dev:"total hip prosthesis",name:"Total hip replacement system",intended:"Replacement of the hip joint in patients with degenerative joint disease.",us:"Class II — 510(k)",eu:"Class III (joint replacement)",path:"510k",ster:"radiation (gamma)",part:"the forged titanium femoral stem",process:"plasma-spray coating of the stem",failure:"early loosening reported at revision surgery",psur:"at least annually (Class III)",tool:"coordinate-measuring machine software",flags:["sterile","implant"],icon:"bone"},
- {id:"AUD-105",dev:"patient monitor",name:"Bedside multiparameter patient monitor",intended:"Monitoring of ECG, SpO2, NIBP and respiration for adult and pediatric patients in hospitals.",us:"Class II — 510(k)",eu:"Class IIb",path:"510k",ster:"",part:"the SpO2 sensor module",process:"PCB soldering and conformal coating",failure:"intermittent loss of the SpO2 signal",psur:"at least annually (Class IIb)",tool:"automated test equipment for boards",flags:["software","connected"],icon:"monitor"},
- {id:"AUD-106",dev:"peripheral IV catheter",name:"Peripheral intravenous catheter",intended:"Short-term access to the peripheral venous system for fluids and medication.",us:"Class II — 510(k)",eu:"Class IIa",path:"510k",ster:"ethylene oxide (EtO)",part:"the polyurethane catheter tubing",process:"tip forming and needle bonding",failure:"catheter tip damage on insertion",psur:"at least every two years (Class IIa)",tool:"vision system for tip inspection",flags:["sterile"],icon:"drop"},
- {id:"AUD-107",dev:"diagnostic ultrasound system",name:"General-purpose diagnostic ultrasound system",intended:"Diagnostic imaging of abdominal, cardiac and vascular structures by trained clinicians.",us:"Class II — 510(k)",eu:"Class IIa",path:"510k",ster:"",part:"the transducer array",process:"transducer lens bonding",failure:"image artifacts from damaged transducer elements",psur:"at least every two years (Class IIa)",tool:"image-quality test software",flags:["software","connected"],icon:"wave"},
- {id:"AUD-108",dev:"implantable pacemaker",name:"Implantable cardiac pacemaker",intended:"Treatment of bradyarrhythmias by cardiac pacing.",us:"Class III — PMA",eu:"Class III",path:"pma",ster:"ethylene oxide (EtO)",part:"the lithium battery",process:"hermetic laser welding of the titanium can",failure:"premature battery depletion",psur:"at least annually (Class III)",tool:"automated hermeticity (leak) tester",flags:["sterile","implant","software","connected"],icon:"heart"},
- {id:"AUD-109",dev:"orthopedic bone screw",name:"Cannulated orthopedic bone screw",intended:"Fixation of bone fractures and osteotomies.",us:"Class II — 510(k)",eu:"Class IIb",path:"510k",ster:"radiation (gamma)",part:"the titanium bar stock",process:"Swiss-type CNC machining and anodizing",failure:"screw breakage during insertion",psur:"at least annually (Class IIb)",tool:"CNC program management software",flags:["sterile","implant"],icon:"bone"},
- {id:"AUD-110",dev:"AI chest X-ray triage software",name:"AI chest X-ray triage software (SaMD)",intended:"Flags suspected pneumothorax on chest X-rays to prioritize radiologist review; not for diagnosis.",us:"Class II — 510(k)",eu:"Class IIa (Rule 11)",path:"510k",ster:"",part:"the cloud hosting service",process:"model training and release pipeline",failure:"missed flags on portable X-ray images",psur:"at least every two years (Class IIa)",tool:"automated model-release test pipeline",flags:["software","connected"],icon:"chip"},
- {id:"AUD-111",dev:"reusable surgical forceps",name:"Reusable stainless-steel surgical forceps",intended:"Grasping and holding tissue during general surgery; reprocessed by the hospital.",us:"Class I — 510(k)-exempt",eu:"Class Ir (reusable surgical)",path:"exempt",ster:"",part:"the stainless-steel blanks",process:"passivation after machining",failure:"corrosion spots after hospital reprocessing",psur:"PMS report updated when necessary (Class I)",tool:"laser-marking (UDI) system",flags:["reusable"],icon:"tool"}
+ {id:"AUD-101",dev:"drug-eluting coronary stent",name:"Coronary drug-eluting stent system",intended:"Treat de novo coronary artery lesions to improve luminal diameter in patients with symptomatic ischemic heart disease.",us:"Class III — PMA (product code NIQ; not covered by a classification regulation)",eu:"Class III",path:"pma",ster:"ethylene oxide (EtO)",part:"the cobalt-chromium tubing",process:"laser cutting and electropolishing of the stent",failure:"difficulty withdrawing the delivery system",psur:"at least annually (Class III)",tool:"stent inspection image-analysis software",flags:["sterile","implant"],icon:"heart"},
+ {id:"AUD-102",dev:"insulin infusion pump",name:"Ambulatory insulin infusion pump",intended:"Continuous subcutaneous insulin delivery for people with diabetes requiring insulin.",us:"Class II — 510(k) (21 CFR 880.5725)",eu:"Class IIb",path:"510k",ster:"",part:"the motor-drive assembly",process:"automated pump-motor assembly and torque setting",failure:"occlusion alarms not triggering",psur:"at least annually (Class IIb)",tool:"automated final functional tester",flags:["software","connected"],icon:"pump"},
+ {id:"AUD-103",dev:"surgical stapler",name:"Single-use linear surgical stapler",intended:"Transection, resection and creation of anastomoses in open and laparoscopic surgery.",us:"Class II — 510(k) (21 CFR 878.4740; Class II since 2021)",eu:"Class IIb (implantable staples)",path:"510k",ster:"radiation (gamma)",part:"the staple cartridge",process:"ultrasonic welding of the cartridge housing",failure:"incomplete staple formation",psur:"at least annually (Class IIb)",tool:"label printing and verification system",flags:["sterile"],icon:"tool"},
+ {id:"AUD-104",dev:"total hip prosthesis",name:"Total hip replacement system",intended:"Replacement of the hip joint in patients with degenerative joint disease.",us:"Class II — 510(k) (e.g. 21 CFR 888.3358; metal-on-metal hips remain Class III)",eu:"Class III (joint replacement, Rule 8)",path:"510k",ster:"radiation (gamma)",part:"the forged titanium femoral stem",process:"plasma-spray coating of the stem",failure:"early loosening reported at revision surgery",psur:"at least annually (Class III)",tool:"coordinate-measuring machine software",flags:["sterile","implant"],icon:"bone"},
+ {id:"AUD-105",dev:"patient monitor",name:"Bedside multiparameter patient monitor",intended:"Monitoring of ECG, SpO2, NIBP and respiration for adult and pediatric patients in hospitals.",us:"Class II — 510(k) (21 CFR 870.1025)",eu:"Class IIb",path:"510k",ster:"",part:"the SpO2 sensor module",process:"PCB soldering and conformal coating",failure:"intermittent loss of the SpO2 signal",psur:"at least annually (Class IIb)",tool:"automated test equipment for boards",flags:["software","connected"],icon:"monitor"},
+ {id:"AUD-106",dev:"peripheral IV catheter",name:"Peripheral intravenous catheter",intended:"Short-term access to the peripheral venous system for fluids and medication.",us:"Class II — 510(k) (21 CFR 880.5200)",eu:"Class IIa",path:"510k",ster:"ethylene oxide (EtO)",part:"the polyurethane catheter tubing",process:"tip forming and needle bonding",failure:"catheter tip damage on insertion",psur:"at least every two years (Class IIa)",tool:"vision system for tip inspection",flags:["sterile"],icon:"drop"},
+ {id:"AUD-107",dev:"diagnostic ultrasound system",name:"General-purpose diagnostic ultrasound system",intended:"Diagnostic imaging of abdominal, cardiac and vascular structures by trained clinicians.",us:"Class II — 510(k) (21 CFR 892.1550)",eu:"Class IIa",path:"510k",ster:"",part:"the transducer array",process:"transducer lens bonding",failure:"image artifacts from damaged transducer elements",psur:"at least every two years (Class IIa)",tool:"image-quality test software",flags:["software","connected"],icon:"wave"},
+ {id:"AUD-108",dev:"implantable pacemaker",name:"Implantable cardiac pacemaker",intended:"Treatment of bradyarrhythmias by cardiac pacing.",us:"Class III — PMA (21 CFR 870.3610)",eu:"Class III",path:"pma",ster:"ethylene oxide (EtO)",part:"the lithium battery",process:"hermetic laser welding of the titanium can",failure:"premature battery depletion",psur:"at least annually (Class III)",tool:"automated hermeticity (leak) tester",flags:["sterile","implant","software","connected"],icon:"heart"},
+ {id:"AUD-109",dev:"orthopedic bone screw",name:"Cannulated orthopedic bone screw",intended:"Fixation of bone fractures and osteotomies.",us:"Class II — 510(k) (21 CFR 888.3040)",eu:"Class IIb",path:"510k",ster:"radiation (gamma)",part:"the titanium bar stock",process:"Swiss-type CNC machining and anodizing",failure:"screw breakage during insertion",psur:"at least annually (Class IIb)",tool:"CNC program management software",flags:["sterile","implant"],icon:"bone"},
+ {id:"AUD-110",dev:"AI chest X-ray triage software",name:"AI chest X-ray triage software (SaMD)",intended:"Flags suspected pneumothorax on chest X-rays to prioritize radiologist review; not for diagnosis.",us:"Class II — 510(k) (21 CFR 892.2080)",eu:"Class IIb (Rule 11: a missed or delayed pneumothorax could cause serious deterioration)",path:"510k",ster:"",part:"the cloud hosting service",process:"model training and release pipeline",failure:"missed flags on portable X-ray images",psur:"at least annually (Class IIb)",tool:"automated model-release test pipeline",flags:["software","connected"],icon:"chip"},
+ {id:"AUD-111",dev:"reusable surgical forceps",name:"Reusable stainless-steel surgical forceps",intended:"Grasping and holding tissue during general surgery; reprocessed by the hospital.",us:"Class I — 510(k)-exempt (21 CFR 878.4800)",eu:"Class Ir (reusable surgical)",path:"exempt",ster:"",part:"the stainless-steel blanks",process:"passivation after machining",failure:"corrosion spots after hospital reprocessing",psur:"PMS report updated when necessary (Class I)",tool:"laser-marking (UDI) system",flags:["reusable"],icon:"tool"}
 ];
 const AUD_ICONS={heart:'<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>',pump:'<rect x="5" y="3" width="14" height="18" rx="3"/><rect x="8" y="6" width="8" height="5" rx="1"/><circle cx="12" cy="16" r="2"/>',tool:'<path d="M4 20l8-8M14 4l6 6-4 4-6-6z"/>',bone:'<path d="M7 17l10-10M5 15a2 2 0 1 0 4 4M15 5a2 2 0 1 1 4 4"/>',monitor:'<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M6 11h3l2-3 2 5 2-2h3M9 20h6"/>',drop:'<path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z"/>',wave:'<path d="M3 12h3l2-6 3 12 3-9 2 3h5"/>',chip:'<rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/>'};
 /* ===== Audit mode v2: node map. Each node: t topic, q, ok, bad[3], n next if right, w next if wrong, why ===== */
@@ -2236,9 +2326,796 @@ function renderChapter(id){
   m.append(pg);
 }
 
+/* ===== shared helpers: storage, distributions, plots, export (MSA, Gauge R&R, risk) ===== */
+function lsGet(k,d){ try{ const v=JSON.parse(localStorage.getItem(k)||"null"); if(v&&typeof v==="object"){ for(const [kk,vv] of Object.entries(v)){ const dv=d[kk]; d[kk]=(dv&&vv&&typeof dv==="object"&&typeof vv==="object"&&!Array.isArray(dv)&&!Array.isArray(vv))?Object.assign({},dv,vv):vv; } } }catch(e){} return d; }
+function lsSet(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); return true; }catch(e){ return false; } }
+function lnGam(x){ const g=[676.5203681218851,-1259.1392167224028,771.32342877765313,-176.61502916214059,12.507343278686905,-0.13857109526572012,9.9843695780195716e-6,1.5056327351493116e-7];
+  if(x<0.5) return Math.log(Math.PI/Math.sin(Math.PI*x))-lnGam(1-x); x-=1; let a=0.99999999999980993; const t=x+7.5; for(let i=0;i<8;i++) a+=g[i]/(x+i+1); return 0.5*Math.log(2*Math.PI)+(x+0.5)*Math.log(t)-t+Math.log(a); }
+function betacf(a,b,x){ const FP=1e-300; let qab=a+b,qap=a+1,qam=a-1,c=1,d=1-qab*x/qap; if(Math.abs(d)<FP) d=FP; d=1/d; let h=d;
+  for(let m=1;m<=300;m++){ const m2=2*m; let aa=m*(b-m)*x/((qam+m2)*(a+m2)); d=1+aa*d; if(Math.abs(d)<FP) d=FP; c=1+aa/c; if(Math.abs(c)<FP) c=FP; d=1/d; h*=d*c;
+    aa=-(a+m)*(qab+m)*x/((a+m2)*(qap+m2)); d=1+aa*d; if(Math.abs(d)<FP) d=FP; c=1+aa/c; if(Math.abs(c)<FP) c=FP; d=1/d; const del=d*c; h*=del; if(Math.abs(del-1)<1e-12) break; } return h; }
+function ibeta(x,a,b){ if(x<=0) return 0; if(x>=1) return 1; const bt=Math.exp(lnGam(a+b)-lnGam(a)-lnGam(b)+a*Math.log(x)+b*Math.log(1-x)); return x<(a+1)/(a+b+2)?bt*betacf(a,b,x)/a:1-bt*betacf(b,a,1-x)/b; }
+function fPval(F,d1,d2){ if(!Number.isFinite(F)) return F>0?0:1; if(F<=0) return 1; return ibeta(d2/(d2+d1*F),d2/2,d1/2); }
+function tPval2(t,df){ if(!Number.isFinite(t)) return 0; return ibeta(df/(df+t*t),df/2,0.5); }
+function cpInt(k,n,conf){ const a=(1-conf)/2; const inv=(p,A,B)=>{ let lo=0,hi=1; for(let i=0;i<60;i++){ const m=(lo+hi)/2; if(ibeta(m,A,B)<p) lo=m; else hi=m; } return (lo+hi)/2; };
+  return [k===0?0:inv(a,k,n-k+1), k===n?1:inv(1-a,k+1,n-k)]; }
+const pFmt=p=>!Number.isFinite(p)?"—":p<0.001?"<0.001":fmt(p,3);
+const pct=(v,d)=>Number.isFinite(v)?fmt(v,d===undefined?1:d)+"%":"—";
+function mean(a){ return a.reduce((s,v)=>s+v,0)/a.length; }
+function sdv(a){ if(a.length<2) return 0; const m=mean(a); return Math.sqrt(a.reduce((s,v)=>s+(v-m)**2,0)/(a.length-1)); }
+/* generic SVG xy plot: o={series:[{pts:[[x,y]],line,col,r,dash}], hl:[[y,col,label,dash]], xt:[labels]|null, xl, yl, aria} */
+function xyPlot(o){
+  const W=340,H=200,P=38,T=10,B=30; let xs=[],ys=[]; o.series.forEach(s=>s.pts.forEach(([x,y])=>{ if(Number.isFinite(x)&&Number.isFinite(y)){ xs.push(x); ys.push(y); } })); (o.hl||[]).forEach(h=>{ if(Number.isFinite(h[0])) ys.push(h[0]); });
+  if(!xs.length) return "";
+  let x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys); if(x0===x1){ x0-=1; x1+=1; } if(y0===y1){ y0-=1; y1+=1; } const px=(x1-x0)*0.05, py=(y1-y0)*0.1; x0-=px; x1+=px; y0-=py; y1+=py;
+  const X=v=>P+(W-P-10)*(v-x0)/(x1-x0), Y=v=>T+(H-T-B)*(1-(v-y0)/(y1-y0));
+  let s=`<svg viewBox="0 0 ${W} ${H}" class="oc" role="img" aria-label="${o.aria||"chart"}"><rect x="${P}" y="${T}" width="${W-P-10}" height="${H-T-B}" fill="none" stroke="var(--line)"/>`;
+  s+=`<text x="${P-4}" y="${T+8}" text-anchor="end" font-size="9" fill="var(--muted)">${fmt(y1-py)}</text><text x="${P-4}" y="${H-B}" text-anchor="end" font-size="9" fill="var(--muted)">${fmt(y0+py)}</text>`;
+  (o.hl||[]).forEach(([v,c,l,d])=>{ if(!Number.isFinite(v)) return; s+=`<line x1="${P}" y1="${Y(v).toFixed(1)}" x2="${W-10}" y2="${Y(v).toFixed(1)}" stroke="${c}" ${d===false?"":'stroke-dasharray="4 3"'}/><text x="${W-12}" y="${(Y(v)-3).toFixed(1)}" text-anchor="end" font-size="9.5" fill="${c}">${l}</text>`; });
+  o.series.forEach(se=>{ const pts=se.pts.filter(([x,y])=>Number.isFinite(x)&&Number.isFinite(y)); if(se.line&&pts.length>1) s+=`<path d="${pts.map(([x,y],i)=>(i?"L":"M")+X(x).toFixed(1)+" "+Y(y).toFixed(1)).join(" ")}" fill="none" stroke="${se.col}" stroke-width="${se.w||1.3}" ${se.dash?'stroke-dasharray="5 3"':""}/>`;
+    if(se.r!==0) pts.forEach(([x,y],i)=>{ s+=`<circle cx="${X(x).toFixed(1)}" cy="${Y(y).toFixed(1)}" r="${se.r||2.6}" fill="${(se.bad&&se.bad[i])?"var(--bad)":se.col}"/>`; }); });
+  if(o.xt) o.xt.forEach((l,i)=>{ s+=`<text x="${X(i+1).toFixed(1)}" y="${H-B+12}" text-anchor="middle" font-size="9" fill="var(--muted)">${l}</text>`; });
+  else s+=`<text x="${P}" y="${H-B+12}" font-size="9" fill="var(--muted)">${fmt(x0+px)}</text><text x="${W-10}" y="${H-B+12}" text-anchor="end" font-size="9" fill="var(--muted)">${fmt(x1-px)}</text>`;
+  if(o.xl) s+=`<text x="${(P+W)/2}" y="${H-4}" text-anchor="middle" font-size="10" fill="var(--muted)">${o.xl}</text>`;
+  if(o.leg) s+=o.leg.map(([c,l],i)=>`<rect x="${P+6+i*70}" y="${T+4}" width="9" height="9" fill="${c}"/><text x="${P+18+i*70}" y="${T+12}" font-size="9.5" fill="var(--ink)">${l}</text>`).join("");
+  return s+"</svg>";
+}
+function barPlot(groups,series,aria){ // groups:[label], series:[{lab,col,vals}]
+  const W=340,H=200,P=34,T=24,B=30; const mx=Math.max(1,...series.flatMap(s=>s.vals.filter(Number.isFinite))); const gw=(W-P-10)/groups.length, bw=Math.min(22,(gw-10)/series.length);
+  let s=`<svg viewBox="0 0 ${W} ${H}" class="oc" role="img" aria-label="${aria}"><line x1="${P}" y1="${H-B}" x2="${W-10}" y2="${H-B}" stroke="var(--line)"/>`;
+  [10,30].forEach(v=>{ if(v<mx*1.1){ const y=T+(H-T-B)*(1-v/(mx*1.1)); s+=`<line x1="${P}" y1="${y.toFixed(1)}" x2="${W-10}" y2="${y.toFixed(1)}" stroke="#c9a227" stroke-dasharray="3 3"/><text x="${P-3}" y="${(y+3).toFixed(1)}" text-anchor="end" font-size="9" fill="#9a7a10">${v}%</text>`; } });
+  groups.forEach((g,gi)=>{ series.forEach((se,si)=>{ const v=se.vals[gi]; if(!Number.isFinite(v)) return; const h=(H-T-B)*v/(mx*1.1); const x=P+gi*gw+(gw-bw*series.length)/2+si*bw; s+=`<rect x="${x.toFixed(1)}" y="${(H-B-h).toFixed(1)}" width="${(bw-2).toFixed(1)}" height="${h.toFixed(1)}" fill="${se.col}"/>`; }); s+=`<text x="${(P+gi*gw+gw/2).toFixed(1)}" y="${H-B+12}" text-anchor="middle" font-size="9.5" fill="var(--muted)">${g}</text>`; });
+  s+=series.map((se,i)=>`<rect x="${P+4+i*92}" y="6" width="9" height="9" fill="${se.col}"/><text x="${P+16+i*92}" y="14" font-size="9.5" fill="var(--ink)">${se.lab}</text>`).join("");
+  return s+"</svg>";
+}
+function plotCard(t,svg){ const c=el("div",{class:"plotCard"}, el("div",{class:"eyebrow"},t)); const h=el("div",{}); h.innerHTML=svg; c.append(h); return c; }
+function statGrid(rows){ const g=el("div",{class:"statGrid"}); rows.forEach(([k,v])=>g.append(el("div",{class:"statCell"+(String(v).length>28?" wide":"")}, el("span",{},k), el("b",{},String(v))))); return g; }
+function selectEl(opts,val,on,attrs){ const s=el("select",Object.assign({class:"rIn"},attrs||{})); opts.forEach(o=>{ const [v,l]=Array.isArray(o)?o:[o,o]; const op=el("option",{value:String(v)},l); if(String(v)===String(val)) op.selected=true; s.append(op); }); s.addEventListener("change",()=>on(s.value)); return s; }
+function txtField(lab,val,on,ph,area){ const i=el(area?"textarea":"input",area?{class:"rData",rows:"2",placeholder:ph||""}:{type:"text",class:"rIn",placeholder:ph||""}); i.value=val||""; i.addEventListener("input",()=>on(i.value)); return el("label",{class:"rField"}, el("span",{},lab), i); }
+function toolHead(title,sub,back){ return el("section",{class:"chHead sampHead"}, el("div",{class:"eyebrow"}, el("a",{href:"#tools",class:"backLnk"},"‹ Useful tools")), el("h2",{},title), el("p",{},sub)); }
+function tabRow(list,cur,on){ const t=el("div",{class:"tabs toolTabs",role:"tablist"}); list.forEach(([k,l])=>t.append(el("button",{class:"tab",type:"button",role:"tab","aria-selected":String(cur===k),onclick:()=>on(k)},l))); return t; }
+/* generic document for the new tools */
+function mkDoc(tool,title,sections,decision,extraSheets,opts){
+  opts=opts||{}; const stamp=new Date().toLocaleString("en-GB");
+  const sum=[[{v:title,b:true}],["Created",stamp],["Tool","Medical Device QA Handbook · "+tool],[]];
+  if(decision) sum.push([{v:"Decision",b:true},{v:decision.text,b:true}],[]);
+  sections.forEach(s=>{ sum.push([{v:s.h,b:true}]); s.rows.forEach(r=>sum.push([r[0],r[1]])); sum.push([]); });
+  let hist=null; const xs=opts.xs||[]; if(xs.length>1){ const D=describe(xs); const Bn=histBins(D); hist={bins:Bn.c,lo:Bn.lo,w:Bn.w,mean:D.mean,sd:D.sd,n:D.n,LSL:opts.LSL??null,USL:opts.USL??null}; }
+  return {sheets:[{name:"Summary",rows:sum,widths:[40,70]},...(extraSheets||[])],
+    pdf:{title,subtitle:"Medical Device QA Handbook - "+tool+" - "+stamp,footer:title+" - "+stamp,sections,decision,hist,data:opts.data||[],images:opts.images||[],imagesTitle:opts.imagesTitle}};
+}
+function toolExport(holder,st,defName,items,note){
+  if(!st.fname) st.fname=defName+"_"+new Date().toISOString().slice(0,10);
+  const status=el("small",{class:"src",role:"status"});
+  const inp=el("input",{type:"text",class:"rIn fname","aria-label":"File name"}); inp.value=st.fname; inp.addEventListener("input",()=>{ st.fname=inp.value; if(st._save) st._save(); });
+  const acts=el("div",{class:"mact"});
+  items.forEach(([lab,ext,mk,suffix],i)=>acts.append(el("button",{class:"cta"+(i%2?" alt":""),type:"button",onclick:async()=>{ const name=safeName((st.fname||defName)+(suffix||""),ext); status.textContent="Preparing "+name+"…"; try{ await saveFile(name,mk(),status); }catch(e){ status.textContent="Couldn’t build the file ("+e.message+")."; } }},lab)));
+  holder.append(el("div",{class:"card exportBox"}, el("h3",{class:"secTitle"},"Export"), el("label",{class:"rField"}, el("span",{},"File name"), inp), acts, status, note?el("p",{class:"src"},note):""));
+}
+function readImage(file,cb){ const fr=new FileReader(); fr.onload=()=>{ const im=new Image(); im.onload=()=>{ const s=Math.min(1,640/Math.max(im.width,im.height)); const w=Math.max(1,Math.round(im.width*s)),h=Math.max(1,Math.round(im.height*s)); const c=document.createElement("canvas"); c.width=w; c.height=h; const x=c.getContext("2d"); x.fillStyle="#fff"; x.fillRect(0,0,w,h); x.drawImage(im,0,0,w,h); cb({d:c.toDataURL("image/jpeg",0.72),w,h,name:file.name}); }; im.onerror=()=>cb(null); im.src=fr.result; }; fr.onerror=()=>cb(null); fr.readAsDataURL(file); }
+function shuffled(n){ const a=[...Array(n)].map((_,i)=>i+1); for(let i=n-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+const SPC={2:[1.880,0,3.267,1.128],3:[1.023,0,2.574,1.693],4:[0.729,0,2.282,2.059],5:[0.577,0,2.114,2.326],6:[0.483,0,2.004,2.534],7:[0.419,0.076,1.924,2.704],8:[0.373,0.136,1.864,2.847],9:[0.337,0.184,1.816,2.970],10:[0.308,0.223,1.777,3.078]};
+
+/* ===================== MSA tool ===================== */
+const msa=lsGet("sc-msa-v1",{tab:"guide",t1:{ref:"",LSL:"",USL:"",raw:""},lin:{raw:"",pv:""},stab:{raw:"",ref:""},rs:{res:"",LSL:"",USL:"",sd:""},fname:""});
+msa._save=()=>lsSet("sc-msa-v1",msa);
+const MSA_TABS=[["guide","Guide"],["res","Resolution"],["t1","Type 1 study"],["lin","Bias & linearity"],["stab","Stability"],["grr","Gauge R&R / Kappa"]];
+function renderMsa(){
+  const m=document.getElementById("main"); m.innerHTML="";
+  m.append(toolHead("Measurement System Analysis (MSA)","Check that a gauge or test method can be trusted before you accept or reject product with it: resolution, bias, linearity, stability, repeatability and reproducibility. Methods follow the AIAG MSA reference manual (4th edition)."));
+  m.append(tabRow(MSA_TABS,msa.tab,k=>{ if(k==="grr"){ location.hash="grr"; return; } msa.tab=k; msa._save(); renderMsa(); }));
+  const p=el("div",{class:"panel"}); m.append(p);
+  ({guide:msaGuide,res:msaRes,t1:msaT1,lin:msaLin,stab:msaStab})[msa.tab](p);
+}
+function msaGuide(p){
+  const items=[
+   ["Resolution (discrimination)","The smallest change the instrument can show.","Rule of ten: resolution no larger than one tenth of the tolerance, or of the process spread (6σ). Check it first; nothing else can fix a gauge that cannot see the difference.","res"],
+   ["Bias (accuracy)","The difference between the average of repeated readings and a reference value.","Type 1 study on one master part, or the bias study at several reference values. Bias should not be statistically significant, or must be corrected.","t1"],
+   ["Linearity","How bias changes across the measuring range.","Measure 5 or more reference parts across the range, about 10 or more times each. The slope of bias against reference value should not be significant.","lin"],
+   ["Stability (drift)","How bias changes over time.","Measure the same master part in small subgroups over days or weeks and plot an X̄–R control chart. The chart should stay in control.","stab"],
+   ["Repeatability (EV)","Variation when one person measures the same part several times with the same gauge.","Type 1 study (Cg) for the gauge alone; crossed Gauge R&R for the full system.","t1"],
+   ["Reproducibility (AV)","Variation between operators, set-ups or sites measuring the same parts.","Crossed Gauge R&R: typically 10 parts × 3 operators × 2–3 trials, in random order and blind.","grr"],
+   ["Attribute agreement","For pass/fail, go/no-go or visual inspection, where there is no measured number.","Attribute agreement analysis with Kappa and effectiveness, against a known standard for each sample.","grr"]];
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Which study do I need?"),
+    el("ol",{class:"steps"}, el("li",{},"Start with resolution. If the gauge cannot resolve one tenth of the tolerance, choose another gauge."), el("li",{},"Run a Type 1 study on a master part: it shows bias and gauge repeatability before you involve operators."), el("li",{},"For a gauge used across a wide range, add bias and linearity. For a gauge used over a long period, set up a stability chart."), el("li",{},"Then run the full system study: Gauge R&R for measured values, or attribute agreement (Kappa) for pass/fail decisions.")),
+    el("div",{class:"mact"}, el("button",{class:"cta",type:"button",onclick:()=>{ location.hash="grr"; }},"Open the Gauge R&R / Kappa tool"))));
+  const g=el("div",{class:"howGrid"}); items.forEach(([t,d,how,tab])=>g.append(el("button",{class:"howItem msaItem",type:"button",onclick:()=>{ if(tab==="grr"){ location.hash="grr"; return; } msa.tab=tab; msa._save(); renderMsa(); }}, el("b",{},t), el("span",{},d), el("span",{class:"how"},how))));
+  p.append(g);
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Where MSA sits in the QMS"),
+    el("ul",{}, el("li",{},"ISO 13485 clause 7.6 requires monitoring and measuring equipment to be calibrated or verified, and measurement to be valid. Calibration shows traceability; MSA shows the whole measurement process (gauge, method, people, environment) is good enough for the decision you make with it."),
+      el("li",{},"FDA’s QMSR (21 CFR 820, effective 2 February 2026) incorporates ISO 13485 by reference, so clause 7.6 applies to US manufacturers too."),
+      el("li",{},"In medtech, MSA is usually part of test method validation (TMV). Validate a test method before using it for design verification, process validation (OQ/PQ) or lot release."),
+      el("li",{},"Re-run the study after a change of gauge, fixture, method, software, site or operator group, and when a stability chart goes out of control.")),
+    el("p",{class:"src"},"Acceptance limits shown in these tools are common industry defaults (AIAG MSA). Your procedure or protocol can set stricter criteria.")));
+}
+function msaRes(p){
+  const s=msa.rs; const out=el("div",{});
+  const draw=()=>{ msa._save(); out.innerHTML=""; const r=numOrNull(s.res),L=numOrNull(s.LSL),U=numOrNull(s.USL),sd=numOrNull(s.sd);
+    if(r===null||r<=0){ out.append(el("p",{class:"src"},"Enter the instrument resolution and the specification limits.")); return; }
+    const rows=[]; let ok=null;
+    if(L!==null&&U!==null&&U>L){ const T=U-L; rows.push(["Tolerance (USL − LSL)",fmt(T)],["Tolerance ÷ resolution",fmt(T/r,3)],["Resolution as % of tolerance",pct(100*r/T)]); ok=r<=T/10; }
+    if(sd!==null&&sd>0){ rows.push(["Process spread (6σ)",fmt(6*sd)],["Process spread ÷ resolution",fmt(6*sd/r,3)],["Distinct categories the gauge can resolve (approx.)",Math.floor(6*sd/r)]); ok=(ok!==false)&&(r<=6*sd/10); }
+    if(!rows.length){ out.append(el("p",{class:"src"},"Enter LSL and USL, or the process standard deviation.")); return; }
+    out.append(verdict(ok,ok?"Resolution is adequate (rule of ten met)":"Resolution is too coarse",ok?"Continue with the Type 1 study and Gauge R&R.":"Use an instrument that resolves at least one tenth of the tolerance or process spread, or justify the gauge in the protocol."));
+    out.append(statGrid(rows));
+    toolExport(out,msa,"MSA-resolution",[["Export Excel (.xlsx)","xlsx",()=>buildXlsx(mkDoc("MSA","Gauge resolution check",[{h:"Inputs",rows:[["Resolution",s.res],["LSL",s.LSL||"—"],["USL",s.USL||"—"],["Process SD",s.sd||"—"]]},{h:"Results",rows}],{text:ok?"Resolution adequate":"Resolution too coarse",ok}).sheets)],["Export PDF","pdf",()=>buildPdf(mkDoc("MSA","Gauge resolution check",[{h:"Inputs",rows:[["Resolution",s.res],["LSL",s.LSL||"—"],["USL",s.USL||"—"],["Process SD",s.sd||"—"]]},{h:"Results",rows:rows.map(r=>[r[0],String(r[1])])}],{text:ok?"Resolution adequate":"Resolution too coarse",ok}).pdf)]]);
+  };
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Resolution check"), el("p",{class:"src"},"The smallest increment the instrument displays (for example 0.01 mm). Add the specification limits, the process standard deviation, or both."),
+    el("div",{class:"rInputs grid3"}, field("Resolution",s.res,v=>{ s.res=v; draw(); }), field("LSL",s.LSL,v=>{ s.LSL=v; draw(); }), field("USL",s.USL,v=>{ s.USL=v; draw(); }), field("Process SD (optional)",s.sd,v=>{ s.sd=v; draw(); })), out));
+  draw();
+}
+function msaT1(p){
+  const s=msa.t1; const out=el("div",{});
+  const draw=()=>{ msa._save(); out.innerHTML=""; const ref=numOrNull(s.ref),L=numOrNull(s.LSL),U=numOrNull(s.USL); const xs=parseNums(s.raw);
+    if(ref===null||L===null||U===null||!(U>L)){ out.append(el("p",{class:"src"},"Enter the reference value of the master part and both specification limits.")); return; }
+    if(xs.length<10){ out.append(el("p",{class:"src"},xs.length+" readings entered. Enter at least 25 repeat readings of the master part (50 recommended).")); return; }
+    const T=U-L, n=xs.length, mu=mean(xs), s1=sdv(xs), bias=mu-ref; const t=s1>0?bias/(s1/Math.sqrt(n)):Infinity; const pb=s1>0?tPval2(t,n-1):(bias===0?1:0);
+    const Cg=s1>0?(0.2*T)/(6*s1):Infinity, Cgk=s1>0?(0.1*T-Math.abs(bias))/(3*s1):Infinity;
+    const ok=Cg>=1.33&&Cgk>=1.33;
+    out.append(verdict(ok,ok?"Gauge capable: Cg and Cgk ≥ 1.33":"Gauge not capable: Cg or Cgk below 1.33",(pb<0.05?"Bias is statistically significant (p "+pFmt(pb)+"). ":"No significant bias (p "+pFmt(pb)+"). ")+(ok?"Continue with Gauge R&R.":"Improve the gauge, fixture or method, or correct the bias, before Gauge R&R.")));
+    if(n<25) out.append(el("p",{class:"warn"},"Fewer than 25 readings: treat Cg and Cgk as rough estimates."));
+    const rows=[["n",n],["Reference value",fmt(ref)],["Mean",fmt(mu)],["Standard deviation",fmt(s1)],["Bias (mean − reference)",fmt(bias)],["Bias t-test p-value",pFmt(pb)],["Tolerance",fmt(T)],["Cg = 0.2·T / 6s",fmt(Cg,2)],["Cgk = (0.1·T − |bias|) / 3s",fmt(Cgk,2)],["%Var (repeatability) = 100/Cg",pct(100/Cg)],["%Var (repeatability and bias) = 100/Cgk",pct(100/Cgk)]];
+    out.append(statGrid(rows));
+    const pts=xs.map((v,i)=>[i+1,v]); const lim=0.1*T;
+    out.append(el("div",{class:"plotGrid"}, plotCard("Run chart with reference and ±10% of tolerance",xyPlot({series:[{pts,line:true,col:"var(--fda)",bad:xs.map(v=>Math.abs(v-ref)>lim)}],hl:[[ref,"var(--qms)","ref"],[ref+lim,"var(--bad)","ref+0.1T"],[ref-lim,"var(--bad)","ref−0.1T"],[mu,"#6b5a9a","x̄"]],xl:"reading order →",aria:"Type 1 run chart"})), plotCard("Histogram",plotHist(describe(xs),ref-lim,ref+lim))));
+    out.append(el("p",{class:"src"},"Cg and Cgk use 20% of the tolerance and 6s (the common Type 1 convention, K = 20%). Measure one stable master part repeatedly, in one session, by one operator, re-loading the part each time. The bias p-value is a two-sided one-sample t-test against the reference."));
+    const sec=[{h:"Inputs",rows:[["Reference value",s.ref],["LSL",s.LSL],["USL",s.USL]]},{h:"Results",rows:rows.map(r=>[r[0],String(r[1])])}]; const dec={text:ok?"Gauge capable (Cg, Cgk >= 1.33)":"Gauge not capable",ok};
+    toolExport(out,msa,"MSA-type1",[["Export Excel (.xlsx)","xlsx",()=>buildXlsx(mkDoc("MSA Type 1 study","Type 1 gauge study",sec,dec,[{name:"Raw data",rows:[[{v:"#",b:true},{v:"Reading",b:true}],...xs.map((v,i)=>[i+1,v])],widths:[8,16]}]).sheets)],["Export PDF","pdf",()=>buildPdf(mkDoc("MSA Type 1 study","Type 1 gauge study",sec,dec,null,{xs,data:xs,LSL:ref-lim,USL:ref+lim}).pdf)]],"The histogram in the PDF marks reference ± 10% of the tolerance as the limits.");
+  };
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Type 1 gauge study"), el("div",{class:"rInputs grid3"}, field("Reference value (master)",s.ref,v=>{ s.ref=v; draw(); }), field("LSL",s.LSL,v=>{ s.LSL=v; draw(); }), field("USL",s.USL,v=>{ s.USL=v; draw(); })),
+    dataBox(s.raw,v=>{ s.raw=v; draw(); },"Repeat readings of the master part, in order: one per line, or separated by spaces"), out));
+  draw();
+}
+function parseLin(raw){ const out=[]; String(raw||"").split(/\n+/).forEach(line=>{ const t=line.trim(); if(!t) return; let ref,rest; if(t.includes(":")){ const [a,b]=t.split(":"); ref=parseFloat(a); rest=parseNums(b); } else { const ns=parseNums(t); ref=ns[0]; rest=ns.slice(1); } if(Number.isFinite(ref)&&rest.length) out.push({ref,xs:rest}); }); return out; }
+function linFit(x,y){ const n=x.length, mx=mean(x), my=mean(y); let sxx=0,sxy=0; for(let i=0;i<n;i++){ sxx+=(x[i]-mx)**2; sxy+=(x[i]-mx)*(y[i]-my); } const b=sxx?sxy/sxx:0, a=my-b*mx; let sse=0,sst=0; for(let i=0;i<n;i++){ sse+=(y[i]-a-b*x[i])**2; sst+=(y[i]-my)**2; } const s=Math.sqrt(sse/Math.max(1,n-2)); const seb=sxx?s/Math.sqrt(sxx):Infinity, sea=s*Math.sqrt(1/n+mx*mx/(sxx||Infinity)); return {a,b,s,r2:sst?1-sse/sst:1,seb,sea,pb:tPval2(b/seb,n-2),pa:tPval2(a/sea,n-2),n}; }
+function msaLin(p){
+  const s=msa.lin; const out=el("div",{});
+  const draw=()=>{ msa._save(); out.innerHTML=""; const G=parseLin(s.raw); const pv=numOrNull(s.pv);
+    if(G.length<2){ out.append(el("p",{class:"src"},"Enter at least 2 reference parts (5 recommended), one per line.")); return; }
+    const X=[],Y=[]; const per=G.map(g=>{ g.xs.forEach(v=>{ X.push(g.ref); Y.push(v-g.ref); }); const b=g.xs.map(v=>v-g.ref); const mb=mean(b), sb=sdv(b); const p=b.length>1&&sb>0?tPval2(mb/(sb/Math.sqrt(b.length)),b.length-1):(mb===0?1:0); return {ref:g.ref,n:b.length,mean:mean(g.xs),bias:mb,p}; });
+    if(X.length<3){ out.append(el("p",{class:"src"},"Enter more readings.")); return; }
+    const F=linFit(X,Y); const avgBias=mean(Y), sAll=sdv(Y); const pAvg=sAll>0?tPval2(avgBias/(sAll/Math.sqrt(Y.length)),Y.length-1):1;
+    const linOk=F.pb>=0.05, biasOk=per.every(r=>r.p>=0.05);
+    out.append(verdict(linOk&&biasOk,linOk&&biasOk?"No significant linearity or bias":"Linearity or bias is significant",(linOk?"Slope not significant (p "+pFmt(F.pb)+"). ":"Bias changes across the range (slope p "+pFmt(F.pb)+"). ")+(biasOk?"Bias not significant at any reference value.":"Significant bias at "+per.filter(r=>r.p<0.05).map(r=>fmt(r.ref)).join(", ")+": investigate or apply a correction.")));
+    const rows=[["Reference parts",G.length],["Readings",X.length],["Slope (bias per unit of reference)",fmt(F.b)],["Slope p-value",pFmt(F.pb)],["Intercept",fmt(F.a)],["Intercept p-value",pFmt(F.pa)],["R²",fmt(F.r2,3)],["Average bias",fmt(avgBias)],["Average bias p-value",pFmt(pAvg)],["%Linearity = |slope| × 100",pct(Math.abs(F.b)*100)]];
+    if(pv!==null&&pv>0) rows.push(["Linearity = |slope| × process variation",fmt(Math.abs(F.b)*pv)],["%Bias of process variation",pct(100*Math.abs(avgBias)/pv)]);
+    out.append(statGrid(rows));
+    const tb=el("table",{class:"map rmTbl"}, el("thead",{}, el("tr",{}, el("th",{},"Reference"), el("th",{},"n"), el("th",{},"Mean"), el("th",{},"Bias"), el("th",{},"p-value"))));
+    const tbody=el("tbody",{}); per.forEach(r=>tbody.append(el("tr",{class:r.p<0.05?"bad":""}, el("td",{},fmt(r.ref)), el("td",{},String(r.n)), el("td",{},fmt(r.mean)), el("td",{},fmt(r.bias)), el("td",{},pFmt(r.p))))); tb.append(tbody); out.append(el("div",{class:"tblWrap"},tb));
+    const xr=[Math.min(...X),Math.max(...X)];
+    out.append(el("div",{class:"plotGrid"}, plotCard("Bias against reference value, with fitted line",xyPlot({series:[{pts:X.map((x,i)=>[x,Y[i]]),col:"#9fb3c8",r:2.2},{pts:per.map(r=>[r.ref,r.bias]),col:"#c0614f",r:3.5},{pts:xr.map(x=>[x,F.a+F.b*x]),line:true,r:0,col:"var(--fda)"}],hl:[[0,"var(--qms)","bias = 0"]],xl:"reference value",leg:[["#9fb3c8","reading"],["#c0614f","mean bias"]],aria:"Linearity plot"}))));
+    out.append(el("p",{class:"src"},"The regression uses every individual bias value (reading − reference), as in the AIAG method. Choose reference parts that cover the operating range; measure each about 10 times or more, in random order."));
+    const sec=[{h:"Results",rows:rows.map(r=>[r[0],String(r[1])])},{h:"Bias by reference value",rows:per.map(r=>["Ref "+fmt(r.ref)+" (n "+r.n+")","bias "+fmt(r.bias)+", p "+pFmt(r.p)])}]; const dec={text:linOk&&biasOk?"Linearity and bias acceptable":"Linearity or bias significant",ok:linOk&&biasOk};
+    const raw=[[{v:"Reference",b:true},{v:"Reading",b:true},{v:"Bias",b:true}]]; G.forEach(g=>g.xs.forEach(v=>raw.push([g.ref,v,v-g.ref])));
+    toolExport(out,msa,"MSA-linearity",[["Export Excel (.xlsx)","xlsx",()=>buildXlsx(mkDoc("MSA bias and linearity","Bias and linearity study",sec,dec,[{name:"Raw data",rows:raw,widths:[14,14,14]}]).sheets)],["Export PDF","pdf",()=>buildPdf(mkDoc("MSA bias and linearity","Bias and linearity study",sec,dec).pdf)]]);
+  };
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Bias and linearity"), el("p",{class:"src"},"One line per reference part: the reference value, a colon, then the repeated readings. Example: 2.00: 2.03 1.98 2.02 2.01"),
+    dataBox(s.raw,v=>{ s.raw=v; draw(); },"2.00: 2.03 1.98 2.02 2.01\n4.00: 4.05 4.02 4.06 4.03"), el("div",{class:"rInputs grid3"}, field("Process variation 6σ or tolerance (optional)",s.pv,v=>{ s.pv=v; draw(); })), out));
+  draw();
+}
+function msaStab(p){
+  const s=msa.stab; const out=el("div",{});
+  const draw=()=>{ msa._save(); out.innerHTML=""; const sg=String(s.raw||"").split(/\n+/).map(parseNums).filter(a=>a.length); const ref=numOrNull(s.ref);
+    if(sg.length<5){ out.append(el("p",{class:"src"},sg.length+" subgroups entered. Enter at least 20 subgroups (one per line) for a reliable chart; 5 is the minimum here.")); return; }
+    const n=sg[0].length; if(!sg.every(a=>a.length===n)||n<2||n>10){ out.append(el("p",{class:"warn"},"Every subgroup needs the same number of readings, between 2 and 10.")); return; }
+    const [A2,D3,D4,d2]=SPC[n]; const xb=sg.map(mean), rg=sg.map(a=>Math.max(...a)-Math.min(...a)); const xbb=mean(xb), rb=mean(rg);
+    const UCL=xbb+A2*rb, LCL=xbb-A2*rb, RU=D4*rb, RL=D3*rb; const sig=rb/d2;
+    const outX=xb.map(v=>v>UCL||v<LCL), outR=rg.map(v=>v>RU||v<RL);
+    let run=0,side=0,runs=[]; xb.forEach((v,i)=>{ const sd=v>xbb?1:v<xbb?-1:0; if(sd&&sd===side) run++; else { side=sd; run=sd?1:0; } if(run>=8) runs.push(i); });
+    const stable=!outX.some(Boolean)&&!outR.some(Boolean)&&!runs.length;
+    out.append(verdict(stable,stable?"In control: no evidence of drift":"Out of control: the measurement system is not stable",stable?"Keep charting at the planned frequency.":[outX.some(Boolean)?"X̄ point(s) beyond the limits":"",outR.some(Boolean)?"range point(s) beyond the limits":"",runs.length?"a run of 8 or more on one side of the centre line":""].filter(Boolean).join("; ")+". Investigate and re-qualify the gauge."));
+    const rows=[["Subgroups",sg.length],["Subgroup size",n],["Grand mean (X̄̄)",fmt(xbb)],["Average range (R̄)",fmt(rb)],["X̄ chart UCL / LCL",fmt(UCL)+" / "+fmt(LCL)],["R chart UCL / LCL",fmt(RU)+" / "+fmt(RL)],["Repeatability σ (R̄/d₂)",fmt(sig)]];
+    if(ref!==null) rows.push(["Bias over the period (X̄̄ − reference)",fmt(xbb-ref)]);
+    out.append(statGrid(rows));
+    out.append(el("div",{class:"plotGrid"}, plotCard("X̄ chart",xyPlot({series:[{pts:xb.map((v,i)=>[i+1,v]),line:true,col:"var(--fda)",bad:outX.map((b,i)=>b||runs.includes(i))}],hl:[[xbb,"var(--qms)","X̄̄"],[UCL,"var(--bad)","UCL"],[LCL,"var(--bad)","LCL"]].concat(ref!==null?[[ref,"#b98a35","ref"]]:[]),xl:"subgroup →",aria:"X-bar chart"})),
+      plotCard("R chart",xyPlot({series:[{pts:rg.map((v,i)=>[i+1,v]),line:true,col:"#6b5a9a",bad:outR}],hl:[[rb,"var(--qms)","R̄"],[RU,"var(--bad)","UCL"]].concat(RL>0?[[RL,"var(--bad)","LCL"]]:[]),xl:"subgroup →",aria:"Range chart"}))));
+    out.append(el("p",{class:"src"},"Rules flagged: a point beyond a control limit, and 8 or more consecutive X̄ points on one side of the centre line. Measure the same master part, for example 3–5 readings once a day or once a shift."));
+    const sec=[{h:"Results",rows:rows.map(r=>[r[0],String(r[1])])}]; const dec={text:stable?"Stable (in control)":"Not stable (out of control)",ok:stable};
+    const raw=[[{v:"Subgroup",b:true},...sg[0].map((_,j)=>({v:"Reading "+(j+1),b:true})),{v:"Mean",b:true},{v:"Range",b:true}]]; sg.forEach((a,i)=>raw.push([i+1,...a,xb[i],rg[i]]));
+    toolExport(out,msa,"MSA-stability",[["Export Excel (.xlsx)","xlsx",()=>buildXlsx(mkDoc("MSA stability","Stability study",sec,dec,[{name:"Subgroups",rows:raw}]).sheets)],["Export PDF","pdf",()=>buildPdf(mkDoc("MSA stability","Stability study",sec,dec,null,{data:xb.map(v=>+v.toPrecision(6))}).pdf)]],"The PDF lists the subgroup means as data.");
+  };
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Stability (X̄–R chart)"), el("p",{class:"src"},"One subgroup per line, in time order, all of the same size (2–10 readings of the same master part)."),
+    dataBox(s.raw,v=>{ s.raw=v; draw(); },"10.02 10.01 10.03\n10.00 10.02 10.02"), el("div",{class:"rInputs grid3"}, field("Reference value (optional)",s.ref,v=>{ s.ref=v; draw(); })), out));
+  draw();
+}
+
+/* ===================== Gauge R&R / Kappa tool ===================== */
+const grr=lsGet("sc-grr-v1",{step:"path",path:null,q1:null,q2:null,
+  g:{title:"",ops:"A, B, C",parts:10,trials:3,LSL:"",USL:"",hist:"",basis:"tol",lim1:10,lim2:30,ndc:5,data:{},pd:{}},
+  k:{title:"",apprs:"A, B, C",n:30,trials:3,std:{},cmt:{},rat:{},kmin:0.75,eff:90,miss:2,fa:5,order:null},fname:""});
+grr._save=()=>lsSet("sc-grr-v1",grr);
+const grrImg=lsGet("sc-grr-img-v1",{}); let grrImgWarn=false;
+function grrImgSave(){ if(!lsSet("sc-grr-img-v1",grrImg)) grrImgWarn=true; }
+const listNames=s=>String(s||"").split(/[,;\n]+/).map(x=>x.trim()).filter(Boolean);
+function renderGrr(){
+  const m=document.getElementById("main"); m.innerHTML="";
+  m.append(toolHead("Gauge R&R / Kappa test","Choose the right path, define your samples (with defect descriptions and photos), record results, and export the test protocol and the report."));
+  const P=grr.path; const steps=[["path","1 · Choose the path"],["plan","2 · Plan & samples"],["data","3 · Record results"],["ana","4 · Analysis & report"]];
+  if(!P&&grr.step!=="path") grr.step="path";
+  m.append(tabRow(steps,grr.step,k=>{ if(k!=="path"&&!grr.path) return; grr.step=k; grr._save(); renderGrr(); }));
+  if(P) m.append(el("div",{class:"selBar"}, el("span",{},"Path: "+(P==="grr"?"Variable Gauge R&R (crossed ANOVA)":"Attribute agreement analysis (Kappa)")), el("button",{class:"reset",type:"button",onclick:()=>{ grr.step="path"; grr._save(); renderGrr(); }},"Change")));
+  const p=el("div",{class:"panel"}); m.append(p);
+  if(grr.step==="path") grrPath(p); else if(P==="grr") ({plan:grrPlanV,data:grrDataV,ana:grrAnaV})[grr.step](p); else ({plan:grrPlanK,data:grrDataK,ana:grrAnaK})[grr.step](p);
+  if(grrImgWarn) p.append(el("p",{class:"warn"},"This browser’s storage is full, so some photos are kept only until you close the page. Export the protocol now, or use smaller photos."));
+}
+function grrPath(p){
+  const q=(t,opts,key)=>{ const c=el("div",{class:"card"}, el("h3",{class:"secTitle"},t)); const g=el("div",{class:"choiceGrid"}); opts.forEach(([v,b,s])=>g.append(el("button",{class:"choiceBtn sbtn"+(grr[key]===v?" on":""),type:"button",onclick:()=>{ grr[key]=v; if(key==="q1") grr.q2=null; grr._save(); renderGrr(); }}, el("b",{},b), el("span",{},s)))); c.append(g); return c; };
+  p.append(q("Q1. What does your inspection or test produce?",[["num","A measured number","A value on a continuous scale: mm, N, kPa, ml/min, seconds."],["att","A decision or a category","Pass/fail, good/bad, go/no-go, accept/reject, or a defect class from visual inspection."]],"q1"));
+  if(grr.q1==="num") p.append(q("Q2. Can the same part be measured again without changing it?",[["nd","Yes, non-destructive","Dimensions, weight, optical or electrical readings."],["de","No, the test destroys or changes the part","Tensile, burst, peel, bond strength, crush tests."]],"q2"));
+  let rec=null;
+  if(grr.q1==="att") rec=["kappa","Attribute agreement analysis (Kappa)","Several appraisers judge the same set of known good and bad samples several times, blind and in random order. You get within-appraiser repeatability, agreement between appraisers, agreement with the standard (Kappa), and miss and false-alarm rates."];
+  if(grr.q1==="num"&&grr.q2==="nd") rec=["grr","Crossed Gauge R&R (ANOVA method)","Typically 10 parts × 3 operators × 2–3 trials. Every operator measures every part. You get repeatability, reproducibility, %Study Variation, %Tolerance and the number of distinct categories (ndc)."];
+  if(grr.q1==="num"&&grr.q2==="de") p.append(el("div",{class:"card warnCard"}, el("h3",{class:"secTitle"},"Destructive test: use a nested Gauge R&R"),
+    el("p",{},"Each part can be tested only once, so operators cannot share parts. A nested design gives each operator their own set of near-identical parts (for example consecutive units from one homogeneous batch). This tool does not calculate nested designs; use statistical software and document the homogeneity assumption."),
+    el("p",{},"If you can make parts that are truly identical, a crossed study with “batch as part” is sometimes accepted, but only with a written justification in the protocol.")));
+  if(rec){ p.append(el("div",{class:"card"}, el("div",{class:"eyebrow"},"Recommended path"), el("h3",{class:"secTitle"},rec[1]), el("p",{},rec[2]),
+    el("div",{class:"mact"}, el("button",{class:"cta",type:"button",onclick:()=>{ grr.path=rec[0]; grr.step="plan"; grr._save(); renderGrr(); }},"Use this path and plan the study"))));
+    p.append(grrHowTo(rec[0])); }
+}
+function grrHowTo(path){
+  const L=path==="grr"?[
+   "Select about 10 parts that cover the whole process range (or more than the tolerance), not 10 consecutive parts. Number them so the operators cannot see the numbers.",
+   "Use 2–3 operators who normally run the measurement, with the normal gauge, fixture, method and environment.",
+   "Each operator measures every part 2–3 times. Randomize the order in every trial and do not show earlier results.",
+   "Define the acceptance criteria in the protocol before testing: %Tolerance (for product acceptance) or %Study Variation (for process control), and ndc.",
+   "Record every reading. Do not repeat or discard a reading without a documented reason."]:[
+   "Collect at least 30 samples (AIAG’s example uses 50). Aim for roughly half good and half bad, and include borderline units close to the limit, because those test the decision.",
+   "Set the reference standard for every sample first: an expert decision, a measurement, or a lab test. For every bad sample, write the defect description and attach a photo. These go into the protocol and the report.",
+   "Use 2–3 appraisers who normally do the inspection, with the normal lighting, magnification and acceptance criteria (for example the visual inspection standard or boundary samples).",
+   "Each appraiser judges every sample 2–3 times, blind and in a different random order each trial. Use the run order the tool generates.",
+   "Set the acceptance criteria in the protocol before testing: Kappa, effectiveness, miss rate and false-alarm rate."];
+  return el("div",{class:"card"}, el("h3",{class:"secTitle"},"How to run it"), el("ol",{class:"steps"}, ...L.map(t=>el("li",{},t))));
+}
+function imgCell(key,onChange){
+  const w=el("div",{class:"imgCell"}); const im=grrImg[key];
+  if(im){ w.append(el("img",{src:im.d,alt:"Sample photo",class:"thumb"}), el("button",{class:"linkBtn",type:"button",onclick:()=>{ delete grrImg[key]; grrImgSave(); onChange(); }},"Remove photo")); }
+  else { const inp=el("input",{type:"file",accept:"image/*",class:"fileIn","aria-label":"Add a photo"}); inp.addEventListener("change",()=>{ const f=inp.files&&inp.files[0]; if(!f) return; readImage(f,r=>{ if(r){ grrImg[key]=r; grrImgSave(); } onChange(); }); }); w.append(el("label",{class:"fileLbl"},"📷 Add photo",inp)); }
+  return w;
+}
+/* ---- variables path ---- */
+function grrDims(){ const g=grr.g; const ops=listNames(g.ops); const P=Math.max(2,Math.min(30,parseInt(g.parts)||10)), T=Math.max(2,Math.min(5,parseInt(g.trials)||2)); return {g,ops,P,T}; }
+function grrPlanV(p){
+  const {g}=grrDims();
+  const c=el("div",{class:"card"}, el("h3",{class:"secTitle"},"Study set-up"),
+    txtField("Study title / gauge and characteristic",g.title,v=>{ g.title=v; grr._save(); },"e.g. Catheter OD, laser micrometer LM-02"),
+    el("div",{class:"rInputs grid3"}, txtField("Operators (comma-separated)",g.ops,v=>{ g.ops=v; grr._save(); }), field("Parts",g.parts,v=>{ g.parts=v; grr._save(); }), field("Trials per operator",g.trials,v=>{ g.trials=v; grr._save(); }),
+      field("LSL",g.LSL,v=>{ g.LSL=v; grr._save(); }), field("USL",g.USL,v=>{ g.USL=v; grr._save(); }), field("Historical process SD (optional)",g.hist,v=>{ g.hist=v; grr._save(); })),
+    el("h3",{class:"secTitle"},"Acceptance criteria"),
+    el("div",{class:"rInputs grid3"}, el("label",{class:"rField"}, el("span",{},"Judge on"), selectEl([["tol","%Tolerance (product acceptance)"],["sv","%Study Variation (process control)"]],g.basis,v=>{ g.basis=v; grr._save(); })), field("Acceptable if below (%)",g.lim1,v=>{ g.lim1=v; grr._save(); }), field("Not acceptable above (%)",g.lim2,v=>{ g.lim2=v; grr._save(); }), field("Minimum ndc",g.ndc,v=>{ g.ndc=v; grr._save(); })),
+    el("p",{class:"src"},"AIAG guidance: below 10% acceptable; 10–30% may be acceptable depending on the importance of the measurement and the cost of improvement; above 30% not acceptable. ndc should be 5 or more."),
+    el("div",{class:"mact"}, el("button",{class:"cta",type:"button",onclick:()=>{ grr.step="data"; grr._save(); renderGrr(); }},"Next: record results")));
+  p.append(c);
+  const {P}=grrDims(); const pc=el("div",{class:"card"}, el("h3",{class:"secTitle"},"Parts (optional notes and photos)"), el("p",{class:"src"},"Describe each part (for example its position in the range) and attach a photo if useful. Notes and photos appear in the protocol and the report."));
+  const list=el("div",{class:"sampList"});
+  for(let i=1;i<=P;i++){ const k="g-"+i; list.append(el("div",{class:"sampRow"}, el("b",{class:"sNo"},"Part "+i), txtField("Note",g.pd[i],v=>{ g.pd[i]=v; grr._save(); },"e.g. near LSL"), imgCell(k,()=>renderGrr()))); }
+  pc.append(list); p.append(pc);
+  grrProtocolExport(p,"grr");
+}
+function grrDataV(p){
+  const {g,ops,P,T}=grrDims();
+  if(ops.length<2){ p.append(el("p",{class:"warn"},"Enter at least 2 operators in step 2.")); return; }
+  p.append(el("p",{class:"src"},"Type each reading. Parts across, trials down. Readings are saved as you type."));
+  ops.forEach((o,oi)=>{ const c=el("div",{class:"card"}, el("h3",{class:"secTitle"},"Operator "+o)); const tb=el("table",{class:"map gridIn"}); const hr=el("tr",{}, el("th",{},"Trial")); for(let i=1;i<=P;i++) hr.append(el("th",{},"P"+i)); tb.append(el("thead",{},hr)); const bd=el("tbody",{});
+    for(let t=1;t<=T;t++){ const tr=el("tr",{}, el("th",{},String(t))); for(let i=1;i<=P;i++){ const key=oi+"|"+i+"|"+t; const inp=el("input",{type:"text",inputmode:"decimal",class:"cellIn","aria-label":o+" part "+i+" trial "+t}); inp.value=g.data[key]??""; inp.addEventListener("input",()=>{ g.data[key]=inp.value; grr._save(); }); tr.append(el("td",{},inp)); } bd.append(tr); }
+    tb.append(bd); c.append(el("div",{class:"tblWrap"},tb)); p.append(c); });
+  p.append(el("div",{class:"mact"}, el("button",{class:"cta",type:"button",onclick:()=>{ grr.step="ana"; grr._save(); renderGrr(); }},"Analyse")));
+}
+function grrCalc(){
+  const {g,ops,P,T}=grrDims(); const O=ops.length; const y=[]; let missing=0;
+  for(let i=0;i<P;i++){ y.push([]); for(let j=0;j<O;j++){ y[i].push([]); for(let t=0;t<T;t++){ const v=numOrNull(g.data[j+"|"+(i+1)+"|"+(t+1)]); if(v===null) missing++; y[i][j].push(v); } } }
+  if(missing) return {missing,P,O,T,ops};
+  const all=y.flat(2), gm=mean(all); const pm=y.map(a=>mean(a.flat())), om=ops.map((_,j)=>mean(y.map(a=>a[j]).flat())); const cm=y.map(a=>a.map(mean));
+  let SSp=0,SSo=0,SSi=0,SSe=0,SSt=0; pm.forEach(v=>SSp+=O*T*(v-gm)**2); om.forEach(v=>SSo+=P*T*(v-gm)**2);
+  for(let i=0;i<P;i++) for(let j=0;j<O;j++){ SSi+=T*(cm[i][j]-pm[i]-om[j]+gm)**2; y[i][j].forEach(v=>{ SSe+=(v-cm[i][j])**2; }); }
+  all.forEach(v=>SSt+=(v-gm)**2);
+  const dfp=P-1,dfo=O-1,dfi=dfp*dfo,dfe=P*O*(T-1); const MSp=SSp/dfp,MSo=SSo/dfo,MSi=SSi/dfi,MSe=SSe/dfe;
+  const Fi=MSe>0?MSi/MSe:Infinity, pI=fPval(Fi,dfi,dfe); const pooled=pI>=0.25;
+  let vr,vo,vi,vp,anova;
+  if(pooled){ const dfr=dfi+dfe, MSr=(SSi+SSe)/dfr; vr=MSr; vo=Math.max(0,(MSo-MSr)/(P*T)); vi=0; vp=Math.max(0,(MSp-MSr)/(O*T));
+    anova=[["Part",dfp,SSp,MSp,MSp/MSr,fPval(MSp/MSr,dfp,dfr)],["Operator",dfo,SSo,MSo,MSo/MSr,fPval(MSo/MSr,dfo,dfr)],["Repeatability (pooled)",dfr,SSi+SSe,MSr,null,null],["Total",P*O*T-1,SSt,null,null,null]]; }
+  else { vr=MSe; vi=Math.max(0,(MSi-MSe)/T); vo=Math.max(0,(MSo-MSi)/(P*T)); vp=Math.max(0,(MSp-MSi)/(O*T));
+    anova=[["Part",dfp,SSp,MSp,MSp/MSi,fPval(MSp/MSi,dfp,dfi)],["Operator",dfo,SSo,MSo,MSo/MSi,fPval(MSo/MSi,dfo,dfi)],["Part × Operator",dfi,SSi,MSi,Fi,pI],["Repeatability",dfe,SSe,MSe,null,null],["Total",P*O*T-1,SSt,null,null,null]]; }
+  const vrep=vo+vi, vgrr=vr+vrep; const hist=numOrNull(g.hist); let vtot=vgrr+vp, histUsed=false; if(hist&&hist>0&&hist*hist>vgrr){ vtot=hist*hist; vp=vtot-vgrr; histUsed=true; }
+  const L=numOrNull(g.LSL),U=numOrNull(g.USL); const tol=(L!==null&&U!==null&&U>L)?U-L:null;
+  const comp=[["Total Gauge R&R",vgrr],["  Repeatability",vr],["  Reproducibility",vrep],["    Operator",vo],["    Operator × Part",vi],["Part-to-part",vp],["Total variation",vtot]].map(([n,v])=>({n,v,sd:Math.sqrt(v),cont:100*v/vtot,sv:100*Math.sqrt(v/vtot),tolp:tol?100*6*Math.sqrt(v)/tol:null}));
+  const ndc=vgrr>0?Math.max(1,Math.floor(1.41*Math.sqrt(vp)/Math.sqrt(vgrr))):Infinity;
+  return {P,O,T,ops,y,pm,om,cm,anova,pooled,pI,comp,ndc,tol,histUsed,gm};
+}
+function grrVerdict(R){ const g=grr.g; const key=g.basis==="tol"&&R.tol?"tolp":"sv"; const v=R.comp[0][key]; const l1=+g.lim1||10, l2=+g.lim2||30, nd=+g.ndc||5;
+  const lvl=v<l1&&R.ndc>=nd?0:v<=l2?1:2; const lab=key==="tolp"?"%Tolerance":"%Study Variation";
+  return {lvl,ok:lvl===0,txt:lvl===0?"Measurement system acceptable":lvl===1?"Marginal: may be acceptable with justification":"Measurement system not acceptable",sub:lab+" (Gauge R&R) = "+pct(v)+"; ndc = "+R.ndc+(lvl===1?". Acceptability depends on the importance of the measurement; document the rationale.":"")}; }
+function grrAnaV(p){
+  const R=grrCalc(); if(R.missing){ p.append(el("p",{class:"warn"},R.missing+" readings are missing. Complete step 3 first.")); return; }
+  const V=grrVerdict(R); const g=grr.g;
+  p.append(verdict(V.ok,V.txt,V.sub)); if(V.lvl===1) p.lastChild.classList.add("mid");
+  if(!R.tol&&g.basis==="tol") p.append(el("p",{class:"warn"},"No tolerance entered, so %Study Variation is used."));
+  const tb=el("table",{class:"map rmTbl"}, el("thead",{}, el("tr",{}, ...["Source","Variance","%Contribution","SD","%Study Var (6·SD)",R.tol?"%Tolerance":null].filter(Boolean).map(h=>el("th",{},h)))));
+  const bd=el("tbody",{}); R.comp.forEach(c=>{ if(R.pooled&&c.n.includes("×")) return; bd.append(el("tr",{class:c.n==="Total Gauge R&R"?"hl":""}, el("td",{},c.n), el("td",{},fmt(c.v)), el("td",{},pct(c.cont,2)), el("td",{},fmt(c.sd)), el("td",{},pct(c.sv,2)), R.tol?el("td",{},pct(c.tolp,2)):null)); }); tb.append(bd);
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Variance components"), el("div",{class:"tblWrap"},tb), statGrid([["Number of distinct categories (ndc)",R.ndc],["Interaction (Part × Operator) p-value",pFmt(R.pI)+(R.pooled?" — removed from the model (p ≥ 0.25)":" — kept in the model")],["Total variation based on",R.histUsed?"historical process SD":"the parts in this study"]])));
+  const at=el("table",{class:"map rmTbl"}, el("thead",{}, el("tr",{}, ...["Source","DF","SS","MS","F","p"].map(h=>el("th",{},h))))); const ab=el("tbody",{}); R.anova.forEach(r=>ab.append(el("tr",{}, el("td",{},r[0]), el("td",{},String(r[1])), el("td",{},fmt(r[2])), el("td",{},fmt(r[3])), el("td",{},fmt(r[4],2)), el("td",{},r[5]===null?"—":pFmt(r[5]))))); at.append(ab);
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Two-way ANOVA"), el("div",{class:"tblWrap"},at)));
+  const cols=["#2f4aa0","#c0614f","#2e7d74","#b98a35","#6b5a9a"];
+  const rg=R.y.map(a=>a.map(t=>Math.max(...t)-Math.min(...t))); const rb=mean(rg.flat()); const D4=(SPC[R.T]||SPC[2])[2];
+  p.append(el("div",{class:"plotGrid"},
+    plotCard("Components of variation",barPlot(["Gauge R&R","Repeat","Reprod","Part"],[{lab:"%Contribution",col:"#9fb3c8",vals:[0,1,2,5].map(i=>R.comp[i].cont)},{lab:"%Study Var",col:"#2f4aa0",vals:[0,1,2,5].map(i=>R.comp[i].sv)}].concat(R.tol?[{lab:"%Tolerance",col:"#c0614f",vals:[0,1,2,5].map(i=>R.comp[i].tolp)}]:[]),"Components of variation")),
+    plotCard("Part × Operator interaction (mean per part)",xyPlot({series:R.ops.map((o,j)=>({pts:R.cm.map((a,i)=>[i+1,a[j]]),line:true,col:cols[j%5]})),xt:R.cm.map((_,i)=>String(i+1)),xl:"part",leg:R.ops.slice(0,4).map((o,j)=>[cols[j],o]),aria:"Interaction plot"})),
+    plotCard("Range chart by operator",xyPlot({series:R.ops.map((o,j)=>({pts:rg.map((a,i)=>[j*R.P+i+1,a[j]]),line:true,col:cols[j%5],bad:rg.map(a=>a[j]>D4*rb)})),hl:[[rb,"var(--qms)","R̄"],[D4*rb,"var(--bad)","UCL"]],xl:"operator blocks of parts →",leg:R.ops.slice(0,4).map((o,j)=>[cols[j],o]),aria:"Range chart"}))));
+  p.append(el("p",{class:"src"},"ANOVA method with a random-effects model. If the Part × Operator interaction is not significant (p ≥ 0.25) it is pooled into repeatability. %Study Variation uses 6 standard deviations. ndc = 1.41 × (part SD ÷ Gauge R&R SD), rounded down. Ranges above the R chart UCL point to an inconsistent operator or part."));
+  grrReportExport(p,"grr",R,V);
+}
+/* ---- attribute path ---- */
+function kDims(){ const k=grr.k; const ap=listNames(k.apprs); const N=Math.max(5,Math.min(100,parseInt(k.n)||30)), T=Math.max(1,Math.min(5,parseInt(k.trials)||2)); return {k,ap,N,T}; }
+function grrPlanK(p){
+  const {k,N}=kDims();
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Study set-up"),
+    txtField("Study title / inspection and characteristic",k.title,v=>{ k.title=v; grr._save(); },"e.g. Visual inspection of balloon bond, 10× magnifier"),
+    el("div",{class:"rInputs grid3"}, txtField("Appraisers (comma-separated)",k.apprs,v=>{ k.apprs=v; grr._save(); }), field("Samples",k.n,v=>{ k.n=v; grr._save(); }), field("Trials per appraiser",k.trials,v=>{ k.trials=v; grr._save(); })),
+    el("h3",{class:"secTitle"},"Acceptance criteria"),
+    el("div",{class:"rInputs grid3"}, field("Minimum Kappa vs standard",k.kmin,v=>{ k.kmin=v; grr._save(); }), field("Minimum effectiveness (%)",k.eff,v=>{ k.eff=v; grr._save(); }), field("Maximum miss rate (%)",k.miss,v=>{ k.miss=v; grr._save(); }), field("Maximum false-alarm rate (%)",k.fa,v=>{ k.fa=v; grr._save(); })),
+    el("p",{class:"src"},"AIAG MSA guidance: Kappa above 0.75 shows good agreement and below 0.40 poor agreement. Effectiveness 90% or more, miss rate 2% or less and false-alarm rate 5% or less are acceptable. Many medtech procedures set Kappa ≥ 0.9 for critical defects; set the criteria your procedure requires.")));
+  const nb=Object.entries(k.std).filter(([i,v])=>+i<=N&&v==="B").length, ng=Object.entries(k.std).filter(([i,v])=>+i<=N&&v==="G").length;
+  const sc=el("div",{class:"card"}, el("h3",{class:"secTitle"},"Samples and the reference standard"),
+    el("p",{class:"src"},"Set the true condition of every sample. For each bad sample, describe the defect (what, where, size) and attach a photo. Good samples can carry a note too, for example “borderline: scratch 0.1 mm, within limit”."),
+    el("div",{class:"selBar"}, el("span",{},ng+" good · "+nb+" bad · "+(N-ng-nb)+" not set"), (ng&&nb)?el("span",{},Math.round(100*nb/(ng+nb))+"% bad"):""));
+  const list=el("div",{class:"sampList"});
+  for(let i=1;i<=N;i++){ const st=k.std[i]; const row=el("div",{class:"sampRow"+(st==="B"?" isBad":st==="G"?" isGood":"")});
+    const tg=el("div",{class:"gbTog"}, el("button",{type:"button",class:"gb g","aria-pressed":String(st==="G"),onclick:()=>{ k.std[i]="G"; grr._save(); renderGrr(); }},"Good"), el("button",{type:"button",class:"gb b","aria-pressed":String(st==="B"),onclick:()=>{ k.std[i]="B"; grr._save(); renderGrr(); }},"Bad"));
+    row.append(el("b",{class:"sNo"},"Sample "+i), tg, txtField(st==="B"?"Defect description (required)":"Note",k.cmt[i],v=>{ k.cmt[i]=v; grr._save(); },st==="B"?"e.g. bubble 0.3 mm in the bond, distal end":"optional"), imgCell("k-"+i,()=>renderGrr()));
+    if(st==="B"&&!String(k.cmt[i]||"").trim()) row.append(el("small",{class:"warnTxt"},"Add the defect description."));
+    list.append(row); }
+  sc.append(list); p.append(sc);
+  p.append(el("div",{class:"mact"}, el("button",{class:"cta",type:"button",onclick:()=>{ grr.step="data"; grr._save(); renderGrr(); }},"Next: record results")));
+  grrProtocolExport(p,"kappa");
+}
+function kOrder(){ const {k,ap,N,T}=kDims(); const key=ap.join("|")+"#"+N+"#"+T; if(!k.order||k.order.key!==key){ k.order={key,o:ap.map(()=>[...Array(T)].map(()=>shuffled(N)))}; grr._save(); } return k.order.o; }
+function grrDataK(p){
+  const {k,ap,N,T}=kDims(); if(!ap.length){ p.append(el("p",{class:"warn"},"Enter the appraisers in step 2.")); return; }
+  const ord=kOrder();
+  p.append(el("p",{class:"src"},"Record each decision in the run order shown (the order is random for every appraiser and trial). The standard is hidden here so the record stays blind."));
+  ap.forEach((a,ai)=>{ for(let t=1;t<=T;t++){ const c=el("div",{class:"card"}, el("h3",{class:"secTitle"},a+" · trial "+t)); const g=el("div",{class:"rateGrid"});
+    ord[ai][t-1].forEach(i=>{ const key=ai+"|"+i+"|"+t; const v=k.rat[key]; const cell=el("div",{class:"rateCell"+(v?" set":"")}, el("span",{},"#"+i),
+      el("div",{class:"gbTog sm"}, el("button",{type:"button",class:"gb g","aria-pressed":String(v==="G"),"aria-label":"Sample "+i+" good",onclick:e=>{ k.rat[key]="G"; grr._save(); upd(e.target); }},"G"), el("button",{type:"button",class:"gb b","aria-pressed":String(v==="B"),"aria-label":"Sample "+i+" bad",onclick:e=>{ k.rat[key]="B"; grr._save(); upd(e.target); }},"B")));
+      g.append(cell); });
+    const done=ord[ai][t-1].filter(i=>k.rat[ai+"|"+i+"|"+t]).length; c.append(el("small",{class:"src"},done+" of "+N+" recorded"), g); p.append(c); } });
+  function upd(btn){ const tg=btn.parentNode; [...tg.children].forEach(b=>b.setAttribute("aria-pressed",String(b===btn))); tg.parentNode.classList.add("set"); }
+  p.append(el("div",{class:"mact"}, el("button",{class:"cta",type:"button",onclick:()=>{ grr.step="ana"; grr._save(); renderGrr(); }},"Analyse")));
+}
+function fleiss(counts,m){ // counts:[[nG,nB]] per subject, m raters
+  const N=counts.length; if(!N||m<2) return NaN; let Pbar=0; const pj=[0,0]; counts.forEach(c=>{ Pbar+=(c[0]*c[0]+c[1]*c[1]-m)/(m*(m-1)); pj[0]+=c[0]; pj[1]+=c[1]; }); Pbar/=N; const Pe=(pj[0]/(N*m))**2+(pj[1]/(N*m))**2; return Pe>=1?(Pbar>=1?1:NaN):(Pbar-Pe)/(1-Pe); }
+function cohen(pairs){ const n=pairs.length; if(!n) return NaN; let po=0,a=[0,0],b=[0,0]; pairs.forEach(([x,y])=>{ if(x===y) po++; a[x==="G"?0:1]++; b[y==="G"?0:1]++; }); po/=n; const pe=(a[0]*b[0]+a[1]*b[1])/(n*n); return pe>=1?(po>=1?1:NaN):(po-pe)/(1-pe); }
+function kCalc(){
+  const {k,ap,N,T}=kDims(); const S=[]; for(let i=1;i<=N;i++) if(k.std[i]) S.push(i);
+  const r=(a,i,t)=>k.rat[a+"|"+i+"|"+t]; let missing=0; ap.forEach((_,a)=>S.forEach(i=>{ for(let t=1;t<=T;t++) if(!r(a,i,t)) missing++; }));
+  const unset=N-S.length; if(missing||S.length<5) return {missing,unset,S};
+  const per=ap.map((name,a)=>{ const within=S.filter(i=>{ const v=r(a,i,1); for(let t=2;t<=T;t++) if(r(a,i,t)!==v) return false; return true; }).length;
+    const vsStd=S.filter(i=>{ for(let t=1;t<=T;t++) if(r(a,i,t)!==k.std[i]) return false; return true; }).length;
+    const pairs=[]; S.forEach(i=>{ for(let t=1;t<=T;t++) pairs.push([r(a,i,t),k.std[i]]); });
+    const correct=pairs.filter(([x,y])=>x===y).length; const badOpp=pairs.filter(x=>x[1]==="B").length, goodOpp=pairs.filter(x=>x[1]==="G").length;
+    const miss=pairs.filter(([x,y])=>y==="B"&&x==="G").length, fa=pairs.filter(([x,y])=>y==="G"&&x==="B").length;
+    const kw=T>1?fleiss(S.map(i=>{ let g=0; for(let t=1;t<=T;t++) if(r(a,i,t)==="G") g++; return [g,T-g]; }),T):NaN;
+    return {name,within,withinPct:100*within/S.length,withinCI:cpInt(within,S.length,0.95),kw,vsStd,vsPct:100*vsStd/S.length,vsCI:cpInt(vsStd,S.length,0.95),kstd:cohen(pairs),eff:100*correct/pairs.length,miss:badOpp?100*miss/badOpp:NaN,fa:goodOpp?100*fa/goodOpp:NaN,missN:miss,faN:fa,badOpp,goodOpp}; });
+  const M=ap.length*T; const allAgree=S.filter(i=>{ const v=r(0,i,1); return ap.every((_,a)=>{ for(let t=1;t<=T;t++) if(r(a,i,t)!==v) return false; return true; }); }).length;
+  const allStd=S.filter(i=>ap.every((_,a)=>{ for(let t=1;t<=T;t++) if(r(a,i,t)!==k.std[i]) return false; return true; })).length;
+  const kb=M>1?fleiss(S.map(i=>{ let g=0; ap.forEach((_,a)=>{ for(let t=1;t<=T;t++) if(r(a,i,t)==="G") g++; }); return [g,M-g]; }),M):NaN;
+  const allPairs=[]; ap.forEach((_,a)=>S.forEach(i=>{ for(let t=1;t<=T;t++) allPairs.push([r(a,i,t),k.std[i]]); }));
+  const disagree=S.filter(i=>ap.some((_,a)=>{ for(let t=1;t<=T;t++) if(r(a,i,t)!==k.std[i]) return true; return false; }));
+  return {S,ap,T,per,allAgree,allAgreePct:100*allAgree/S.length,allAgreeCI:cpInt(allAgree,S.length,0.95),kb,allStd,allStdPct:100*allStd/S.length,allStdCI:cpInt(allStd,S.length,0.95),kall:cohen(allPairs),disagree,unset};
+}
+function kVerdict(R){ const k=grr.k; const km=+k.kmin||0.75, ef=+k.eff||90, mi=+k.miss||2, fa=+k.fa||5; const fails=[];
+  R.per.forEach(a=>{ if(!(a.kstd>=km)) fails.push(a.name+": Kappa "+fmt(a.kstd,2)); if(a.eff<ef) fails.push(a.name+": effectiveness "+pct(a.eff)); if(a.miss>mi) fails.push(a.name+": miss rate "+pct(a.miss)); if(a.fa>fa) fails.push(a.name+": false alarms "+pct(a.fa)); });
+  return {ok:!fails.length,txt:fails.length?"Attribute system not acceptable":"Attribute system acceptable",sub:fails.length?fails.join("; "):"All appraisers meet Kappa ≥ "+km+", effectiveness ≥ "+ef+"%, miss rate ≤ "+mi+"% and false alarms ≤ "+fa+"%."}; }
+function grrAnaK(p){
+  const R=kCalc(); if(R.missing||R.S.length<5){ p.append(el("p",{class:"warn"},R.S.length<5?"Set the standard (good or bad) for at least 5 samples in step 2.":R.missing+" decisions are missing. Complete step 3 first.")); return; }
+  if(R.unset) p.append(el("p",{class:"warn"},R.unset+" samples have no standard and are left out."));
+  const V=kVerdict(R); p.append(verdict(V.ok,V.txt,V.sub));
+  const ci=c=>" (95% CI "+fmt(100*c[0],1)+"–"+fmt(100*c[1],1)+"%)";
+  const t1=el("table",{class:"map rmTbl"}, el("thead",{}, el("tr",{}, ...["Appraiser","Within appraiser (all trials agree)","Kappa within","Vs standard (all trials correct)","Kappa vs standard","Effectiveness","Miss rate","False alarm"].map(h=>el("th",{},h)))));
+  const b1=el("tbody",{}); R.per.forEach(a=>b1.append(el("tr",{}, el("td",{},a.name), el("td",{},R.T>1?pct(a.withinPct)+ci(a.withinCI):"needs 2+ trials"), el("td",{},fmt(a.kw,2)), el("td",{},pct(a.vsPct)+ci(a.vsCI)), el("td",{},fmt(a.kstd,2)), el("td",{},pct(a.eff)), el("td",{},pct(a.miss)+" ("+a.missN+"/"+a.badOpp+")"), el("td",{},pct(a.fa)+" ("+a.faN+"/"+a.goodOpp+")")))); t1.append(b1);
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"By appraiser"), el("div",{class:"tblWrap"},t1)));
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"All appraisers"), statGrid([["Between appraisers (all decisions agree)",pct(R.allAgreePct)+ci(R.allAgreeCI)],["Fleiss’ Kappa between appraisers",fmt(R.kb,2)],["All appraisers vs standard (all correct)",pct(R.allStdPct)+ci(R.allStdCI)],["Kappa, all decisions vs standard",fmt(R.kall,2)]])));
+  if(R.disagree.length){ const k=grr.k; const dl=el("div",{class:"sampList"}); R.disagree.forEach(i=>{ const im=grrImg["k-"+i]; dl.append(el("div",{class:"sampRow "+(k.std[i]==="B"?"isBad":"isGood")}, el("b",{class:"sNo"},"Sample "+i), el("span",{},"Standard: "+(k.std[i]==="B"?"Bad":"Good")+(k.cmt[i]?" — "+k.cmt[i]:"")), im?el("img",{src:im.d,class:"thumb",alt:"Sample "+i}):"")); });
+    p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Samples with at least one wrong decision ("+R.disagree.length+")"), el("p",{class:"src"},"Review these with the appraisers. Unclear defect definitions or boundary samples are the usual cause; improve the inspection standard and re-test."), dl)); }
+  p.append(el("div",{class:"plotGrid"}, plotCard("Agreement with the standard by appraiser (with 95% CI)",xyPlot({series:R.per.map((a,i)=>({pts:[[i+1,100*a.vsCI[0]],[i+1,a.vsPct],[i+1,100*a.vsCI[1]]],line:true,col:"#2f4aa0"})),hl:[[+grr.k.eff||90,"var(--bad)","target "+(+grr.k.eff||90)+"%"]],xt:R.per.map(a=>a.name),xl:"appraiser",aria:"Agreement chart"}))));
+  p.append(el("p",{class:"src"},"Kappa within an appraiser and between appraisers is Fleiss’ Kappa. Kappa against the standard is Cohen’s Kappa on every decision paired with the standard. Effectiveness = correct decisions ÷ all decisions. Miss rate = bad samples called good ÷ decisions on bad samples. False alarm = good samples called bad ÷ decisions on good samples. Confidence intervals are exact (Clopper-Pearson)."));
+  grrReportExport(p,"kappa",R,V);
+}
+/* ---- protocol and report exports ---- */
+function grrSampleImages(kind){ const out=[]; if(kind==="kappa"){ const {k,N}=kDims(); for(let i=1;i<=N;i++){ const im=grrImg["k-"+i]; const st=k.std[i]; if(im) out.push(Object.assign({cap:["Sample "+i+" - "+(st==="B"?"BAD (reject)":st==="G"?"GOOD (accept)":"standard not set"),k.cmt[i]||"",im.name?"File: "+im.name:""].filter(Boolean)},im)); } }
+  else { const {g,P}=grrDims(); for(let i=1;i<=P;i++){ const im=grrImg["g-"+i]; if(im) out.push(Object.assign({cap:["Part "+i,g.pd[i]||"",im.name?"File: "+im.name:""].filter(Boolean)},im)); } } return out; }
+function grrSampleRows(kind){ if(kind==="kappa"){ const {k,N}=kDims(); const rows=[]; for(let i=1;i<=N;i++) rows.push(["Sample "+i,(k.std[i]==="B"?"BAD":k.std[i]==="G"?"GOOD":"not set")+(k.cmt[i]?" - "+k.cmt[i]:"")+(grrImg["k-"+i]?" [photo]":"")]); return rows; }
+  const {g,P}=grrDims(); g.pd=g.pd||{}; const rows=[]; for(let i=1;i<=P;i++) if(g.pd[i]||grrImg["g-"+i]) rows.push(["Part "+i,(g.pd[i]||"")+(grrImg["g-"+i]?" [photo]":"")]); return rows; }
+function grrPlanSections(kind){
+  if(kind==="kappa"){ const {k,ap,N,T}=kDims(); const ord=kOrder();
+    return [{h:"Purpose and scope",rows:[["Study",k.title||"Attribute agreement analysis"],["Purpose","Show that the inspection gives correct and consistent accept/reject decisions against a known standard."],["Method","Attribute agreement analysis (Kappa), blind, random order per appraiser and trial"]]},
+      {h:"Design",rows:[["Appraisers",ap.join(", ")],["Samples",String(N)],["Trials per appraiser",String(T)],["Decisions in total",String(N*T*ap.length)]]},
+      {h:"Acceptance criteria",rows:[["Kappa vs standard",">= "+(k.kmin||0.75)+" for each appraiser"],["Effectiveness",">= "+(k.eff||90)+"%"],["Miss rate","<= "+(k.miss||2)+"%"],["False-alarm rate","<= "+(k.fa||5)+"%"]]},
+      {h:"Instructions",rows:[["1","Prepare and label samples with codes only; keep the standard sheet with the study owner."],["2","Use normal inspection conditions (lighting, magnification, inspection standard)."],["3","Present samples in the run order below; do not show earlier decisions."],["4","Record G (accept) or B (reject) for each sample."]]},
+      {h:"Samples and reference standard",rows:grrSampleRows("kappa")},
+      {h:"Run order",rows:ap.flatMap((a,ai)=>[...Array(T)].map((_,t)=>[a+" trial "+(t+1),ord[ai][t].join(", ")]))}]; }
+  const {g,ops,P,T}=grrDims();
+  return [{h:"Purpose and scope",rows:[["Study",g.title||"Gauge R&R"],["Purpose","Show that measurement variation is small compared with the tolerance or process variation."],["Method","Crossed Gauge R&R, ANOVA method; randomized order, blind readings"]]},
+    {h:"Design",rows:[["Operators",ops.join(", ")],["Parts",String(P)],["Trials",String(T)],["LSL / USL",(g.LSL||"-")+" / "+(g.USL||"-")]]},
+    {h:"Acceptance criteria",rows:[["Basis",g.basis==="tol"?"%Tolerance":"%Study Variation"],["Acceptable","< "+(g.lim1||10)+"% and ndc >= "+(g.ndc||5)],["Marginal",(g.lim1||10)+"-"+(g.lim2||30)+"% with documented rationale"],["Not acceptable","> "+(g.lim2||30)+"%"]]},
+    {h:"Instructions",rows:[["1","Select parts across the full range and label them with codes only."],["2","Each operator measures every part in a new random order in each trial."],["3","Record every reading; do not discard readings without a documented reason."]]}].concat(grrSampleRows("grr").length?[{h:"Parts",rows:grrSampleRows("grr")}]:[]);
+}
+function grrProtocolExport(p,kind){
+  const title=kind==="kappa"?"Attribute agreement test protocol":"Gauge R&R test protocol";
+  const doc=()=>mkDoc(kind==="kappa"?"Kappa test":"Gauge R&R",title,grrPlanSections(kind),null,null,{images:grrSampleImages(kind),imagesTitle:kind==="kappa"?"Sample definitions (photos)":"Part photos"});
+  toolExport(p,grr,kind==="kappa"?"Kappa":"GaugeRR",[["Export protocol PDF","pdf",()=>buildPdf(doc().pdf),"_protocol"],["Export protocol Excel","xlsx",()=>buildXlsx(doc().sheets),"_protocol"]],"The protocol lists the design, acceptance criteria, instructions"+(kind==="kappa"?", every sample with its standard and defect description, the random run order":"")+" and the photos. Excel lists photo markers; the photos themselves are in the PDF.");
+}
+function grrReportExport(p,kind,R,V){
+  let secs=grrPlanSections(kind).filter(s=>s.h!=="Instructions"&&s.h!=="Run order"), extra=[];
+  if(kind==="kappa"){ secs.push({h:"Results by appraiser",rows:R.per.map(a=>[a.name,"vs standard "+pct(a.vsPct)+", Kappa "+fmt(a.kstd,2)+", within "+(R.T>1?pct(a.withinPct):"-")+", effectiveness "+pct(a.eff)+", miss "+pct(a.miss)+", false alarm "+pct(a.fa)])},
+      {h:"All appraisers",rows:[["Between appraisers",pct(R.allAgreePct)+", Fleiss Kappa "+fmt(R.kb,2)],["All vs standard",pct(R.allStdPct)+", Kappa "+fmt(R.kall,2)],["Samples with a wrong decision",R.disagree.length?R.disagree.join(", "):"none"]]});
+    const {k,ap,T}=kDims(); const hdr=[{v:"Sample",b:true},{v:"Standard",b:true},{v:"Description",b:true},{v:"Photo",b:true}]; ap.forEach(a=>{ for(let t=1;t<=T;t++) hdr.push({v:a+" T"+t,b:true}); });
+    const rows=[hdr]; R.S.forEach(i=>{ const r=[i,k.std[i],k.cmt[i]||"",grrImg["k-"+i]?(grrImg["k-"+i].name||"yes"):""]; ap.forEach((_,a)=>{ for(let t=1;t<=T;t++) r.push(k.rat[a+"|"+i+"|"+t]||""); }); rows.push(r); });
+    extra=[{name:"Decisions",rows,widths:[9,10,40,22]}]; }
+  else { secs.push({h:"Variance components",rows:R.comp.filter(c=>!(R.pooled&&c.n.includes("×"))).map(c=>[c.n.trim(),"%Contribution "+pct(c.cont,2)+", %StudyVar "+pct(c.sv,2)+(R.tol?", %Tol "+pct(c.tolp,2):"")])},{h:"Summary",rows:[["ndc",String(R.ndc)],["Interaction p",pFmt(R.pI)+(R.pooled?" (pooled)":"")]]},{h:"ANOVA",rows:R.anova.map(r=>[r[0],"DF "+r[1]+", SS "+fmt(r[2])+(r[3]!==null?", MS "+fmt(r[3]):"")+(r[4]!==null?", F "+fmt(r[4],2)+", p "+pFmt(r[5]):"")])});
+    const rows=[[{v:"Part",b:true},{v:"Operator",b:true},{v:"Trial",b:true},{v:"Value",b:true}]]; R.y.forEach((a,i)=>a.forEach((tr,j)=>tr.forEach((v,t)=>rows.push([i+1,R.ops[j],t+1,v])))); extra=[{name:"Raw data",rows,widths:[8,14,8,14]}]; }
+  const title=kind==="kappa"?"Attribute agreement test report":"Gauge R&R test report"; const dec={text:V.txt,ok:V.ok};
+  const doc=()=>mkDoc(kind==="kappa"?"Kappa test":"Gauge R&R",title,secs,dec,extra,{images:grrSampleImages(kind),imagesTitle:kind==="kappa"?"Sample definitions (photos)":"Part photos"});
+  toolExport(p,grr,kind==="kappa"?"Kappa":"GaugeRR",[["Export report PDF","pdf",()=>buildPdf(doc().pdf),"_report"],["Export report Excel","xlsx",()=>buildXlsx(doc().sheets),"_report"]],"The report repeats the design and criteria, then the results, the decision, every sample description and the photos.");
+}
+
+/* ===================== Risk management (ISO 14971:2019, ISO/TR 24971:2020, IEC 62366-1) ===================== */
+const rm=lsGet("sc-rm-v1",{tab:"over",dev:"generic",gq:"",gsrc:"All",
+  sevN:5,probN:5,sev:null,prob:null,cells:null,ws:{dfmea:[],pfmea:[],ufmea:[],sfmea:[],urra:[]},wsType:"dfmea",
+  chain:{hz:"",seq:"",hs:"",harm:"",p1:"",p2:"",s:""},fta:null,fname:""});
+rm._save=()=>lsSet("sc-rm-v1",rm);
+const RM_TABS=[["over","Process"],["gloss","Glossary"],["ana","Risk analysis"],["acc","Acceptability"],["fmea","xFMEA"],["fta","FTA & techniques"],["urra","URRA (IEC 62366-1)"]];
+/* device types: adapts hazards, questions, analyses and examples */
+const DEVT={
+ generic:{l:"General (any device)",d:"A neutral starting point. Pick a device type to tailor the hazards, questions and examples.",q:[1,3,4,13,19,22,28,29,31,33],
+  hz:["Mechanical: sharp edges, parts that break or detach","Biological and chemical: materials in contact with the body","Performance: wrong output, loss of function, wrong information","Use-related: user mistakes during set-up, use or maintenance"],
+  an:["PHA early in design","DFMEA and PFMEA","Use-related risk analysis (URRA)","FTA for the most severe harms"],std:["ISO 14971:2019 and ISO/TR 24971:2020","IEC 62366-1 (usability)","ISO 10993-1 (biological evaluation) if body contact"],
+  ex:{hz:"Mechanical energy (moving part)",seq:"Guard missing after service; user reaches in during operation",hs:"User’s finger in the pinch point while the mechanism moves",harm:"Crush injury to the finger"}},
+ implant:{l:"Implant (long-term)",d:"Permanent or long-term implants: stents, orthopaedic and dental implants, heart valves, breast implants.",q:[2,3,4,8,22,23,24,25,30,33],
+  hz:["Biological and chemical: leachables, degradation products, wear particles, residues of manufacturing aids","Mechanical: fatigue fracture, migration, corrosion, loosening","Sterility: contamination, endotoxin, sterilant residues","MRI and other energy interactions: heating, force, image artefacts","Delayed effects that appear years after implantation"],
+  an:["DFMEA with fatigue and corrosion failure modes","PFMEA for special processes (coating, welding, cleaning, sterilization)","FTA for fracture or embolization","Clinical evaluation and PMCF data as probability inputs"],std:["ISO 10993 series and ISO 14630 (non-active implants)","ASTM F2503 and ASTM F2182 (MR safety)","ISO 11135 / ISO 11137, ISO 11607 (sterilization, packaging)"],
+  ex:{hz:"Mechanical energy (cyclic loading)",seq:"Strut fatigue crack grows under cardiac cycles; strut fractures",hs:"Fractured strut exposed in the vessel lumen",harm:"In-stent restenosis or vessel injury needing re-intervention"}},
+ active:{l:"Active electrical device",d:"Mains- or battery-powered equipment: monitors, pumps, generators, imaging and therapy systems.",q:[5,10,11,14,15,16,18,19,32,34,35],
+  hz:["Electrical: leakage current, insulation failure, battery thermal runaway","Thermal: hot surfaces, applied-part heating","Radiation: EMC disturbances, RF, laser, ionizing radiation","Mechanical: moving parts, tip-over, falling device","Functionality: alarm failure, loss of essential performance"],
+  an:["DFMEA including single-fault conditions","FTA for loss of essential performance and alarm failure","SFMEA for embedded software","URRA for alarms and controls"],std:["IEC 60601-1 and collateral standards (EMC IEC 60601-1-2, alarms IEC 60601-1-8)","IEC 62304 (software life cycle)","IEC 62133-2 (lithium batteries)"],
+  ex:{hz:"Electrical energy (mains voltage)",seq:"Insulation cracks inside the housing; user opens the battery cover while the device is on mains",hs:"User touches a live part",harm:"Electric shock"}},
+ software:{l:"Software, SaMD and AI",d:"Standalone software, apps, decision support, and devices whose main function relies on software or machine learning.",q:[11,12,19,20,21,29,31,36,37],
+  hz:["Information: wrong, late or missing result, or a result shown for the wrong patient","Data: loss of integrity, availability or confidentiality","Cybersecurity: unauthorized access, ransomware, compromised updates","AI-specific: bias in training data, data drift, poor generalization to a new population","Interoperability: wrong data exchanged with other systems"],
+  an:["SFMEA or hazard analysis per software item (IEC 62304 clause 7)","Security risk assessment linked to safety risk (ISO/TR 24971 Annex F, AAMI TIR57)","URRA for result display and alerts","FTA for “wrong diagnosis shown”"],std:["IEC 62304 and IEC 82304-1","AAMI TIR57 and IEC 81001-5-1 (security)","AAMI TIR34971 (machine learning and ISO 14971)"],
+  ex:{hz:"Incorrect diagnostic information",seq:"Model trained on one population is used on another; sensitivity drops; clinician relies on a negative result",hs:"Patient with the condition receives a negative triage result",harm:"Delayed diagnosis and treatment"}},
+ sterileSU:{l:"Sterile single-use device",d:"Disposable sterile devices: catheters, syringes, needles, surgical drapes, staplers.",q:[3,4,8,22,24,26,27,30,33],
+  hz:["Biological: loss of sterility (pack breach, failed cycle)","Chemical: sterilant residues (EtO, ECH), leachables","Mechanical: breakage, kinking, detachment during use","Reuse of a single-use device: infection, degraded performance","Expired product used beyond the shelf life"],
+  an:["PFMEA covering sterilization, sealing and packaging","DFMEA for breakage and detachment","URRA for opening the pack and preparing the device","Shelf-life and transport studies as risk control verification"],std:["ISO 11135 / ISO 11137 (sterilization)","ISO 11607-1/-2 (packaging)","ISO 10993-7 (EtO residuals)"],
+  ex:{hz:"Biological agents (bacteria)",seq:"Seal channel in the pouch during shipping; user does not notice the breach",hs:"Non-sterile catheter inserted into the patient",harm:"Bloodstream infection"}},
+ reusable:{l:"Reusable instrument (reprocessed)",d:"Instruments and devices cleaned, disinfected or sterilized by the user between patients: endoscopes, surgical instruments, probes.",q:[7,8,9,18,24,25,28,29,33],
+  hz:["Biological: cross-contamination from inadequate cleaning","Chemical: residues of cleaning or disinfecting agents","Mechanical: wear, corrosion, cracking after many cycles","Use-related: reprocessing steps skipped or done wrongly"],
+  an:["Reprocessing validation and worst-case soil studies","URRA for the reprocessing instructions","DFMEA for end-of-life failure modes","Field data on reprocessing complaints"],std:["ISO 17664-1/-2 (reprocessing information)","AAMI TIR12 and TIR30","ISO 15883 series (washer-disinfectors)"],
+  ex:{hz:"Biological agents (residual soil)",seq:"Narrow lumen is hard to brush; reprocessing step skipped at a busy site",hs:"Contaminated endoscope used on the next patient",harm:"Cross-infection"}},
+ combo:{l:"Drug-device combination",d:"Devices that deliver or incorporate a medicinal substance: prefilled syringes, autoinjectors, inhalers, drug-coated devices.",q:[4,6,17,22,23,28,31,33],
+  hz:["Delivery: wrong dose, wrong rate, incomplete dose","Chemical: drug-container interaction, extractables and leachables","Use-related: user fails a critical step (needle not held, priming missed)","Storage: temperature excursions, light exposure"],
+  an:["URRA with a strong focus on critical tasks","DFMEA for dose accuracy and container closure","PFMEA for filling and assembly","FTA for “no dose” and “double dose”"],std:["ISO 11608 series (needle-based injection systems)","FDA 21 CFR Part 4 (cGMP for combination products)","MDR Article 117 and the medicinal product rules"],
+  ex:{hz:"Delivery quantity (under-dose)",seq:"User removes the autoinjector before the end-of-dose click",hs:"Patient receives part of the dose",harm:"Lack of therapeutic effect"}},
+ home:{l:"Home use or lay user",d:"Devices used by patients or carers outside a clinical setting: home monitors, CPAP, self-test kits, wearable pumps.",q:[1,15,17,18,28,29,31,32,33,34],
+  hz:["Use-related: misunderstood instructions, missed alarms, wrong set-up","Environment: humidity, temperature, pets, children, travel","Electrical and mechanical: unsupervised use, damaged cables","Information: misread results, no professional to check them"],
+  an:["URRA with lay-user profiles (age, vision, dexterity, literacy)","Formative evaluation early and often","DFMEA for robustness to the home environment","Review of complaints and known use problems of similar devices"],std:["IEC 60601-1-11 (home healthcare environment)","IEC 62366-1 and FDA human factors guidance","EN ISO 15223-1 (symbols)"],
+  ex:{hz:"Functionality (alarm)",seq:"Alarm volume turned down at night; carrier asleep in another room",hs:"Alarm condition not noticed",harm:"Hypoxia not treated in time"}},
+ ivd:{l:"IVD medical device",d:"In vitro diagnostic analysers, reagents, rapid tests and self-tests. Harm usually arises indirectly, through an incorrect or delayed result.",q:[1,11,12,15,19,21,22,31,37],
+  hz:["Incorrect result: false positive, false negative, wrong value","Delayed result for a time-critical decision","Result reported for the wrong patient or sample","Biological: exposure of the user to infectious specimens"],
+  an:["Analytical and clinical performance as risk inputs (ISO/TR 24971 Annex H)","FTA for “incorrect result reported”","URRA for sample handling and result interpretation","Post-market performance monitoring"],std:["ISO/TR 24971 Annex H","ISO 15197 (glucose self-testing), CLSI EP guidance","IVDR 2017/746 Annex I"],
+  ex:{hz:"Incorrect diagnostic information",seq:"Reagent stored above its temperature limit; calibration does not detect the drift",hs:"Falsely low result reported to the clinician",harm:"Missed or delayed treatment"}}
+};
+/* ISO/TR 24971 Annex A: questions to identify characteristics related to safety (paraphrased) */
+const RM_Q=[[1,"Intended use and how the device is used","indication, population, body site, user, environment, single or repeated use"],[2,"Is it implanted?","location, population, lifetime, reversibility of removal"],[3,"Does it contact the patient or other persons?","surface or invasive contact, duration, frequency"],[4,"Which materials and components are used or contacted?","biocompatibility, known toxicology, interactions"],[5,"Is energy delivered to or taken from the patient?","type, amount, control and monitoring"],[6,"Are substances delivered to or taken from the patient?","single or multiple substances, rate, control"],[7,"Are biological materials processed for re-use or transfusion?","cross-infection, contamination"],[8,"Is it supplied sterile, sterilized by the user, or otherwise kept microbiologically controlled?","sterility assurance, packaging, shelf life"],[9,"Is routine cleaning or disinfection by the user expected?","agents, cycles, effect on safety and performance"],[10,"Does it change the patient’s environment?","temperature, humidity, gas, pressure, light"],[11,"Are measurements made?","variables, accuracy, precision"],[12,"Does it interpret data?","algorithms, conclusions drawn, confidence limits"],[13,"Is it used with other devices, medicines or technologies?","interactions, compatibility"],[14,"Are there unwanted outputs of energy or substances?","noise, heat, radiation, emissions, residues"],[15,"Is it sensitive to the environment?","temperature, humidity, EMC, vibration, supply variation"],[16,"Does it affect the environment?","effects on other equipment and on the workplace"],[17,"Are consumables or accessories needed?","specifications, compatibility, user selection"],[18,"Is maintenance or calibration needed?","who does it, special tools, consequences if skipped"],[19,"Does it contain software?","installation, configuration, updates, verification"],[20,"Does it allow access to information?","access control, confidentiality"],[21,"Does it store data critical to patient care?","integrity, availability, back-up"],[22,"Is the shelf life limited?","labelling, storage conditions, ageing"],[23,"Are there delayed or long-term effects?","cumulative exposure, ergonomic effects"],[24,"Which mechanical forces will it face?","user, patient, transport and handling loads"],[25,"What limits its lifetime?","ageing, wear, battery depletion, fatigue"],[26,"Is it single-use?","what happens if it is reused; prevention of re-use"],[27,"Is safe disposal or decommissioning needed?","waste, hazardous materials, data on the device"],[28,"Is special training needed for installation or use?","who trains, competence of installers and users"],[29,"How is information for safety provided?","labels, IFU, training, displays, e-labelling"],[30,"Are new manufacturing processes involved?","new technology, new production scale"],[31,"Does safe use depend on the user interface?","use errors, user characteristics, use environment"],[32,"Does it have an alarm system?","false, missed or ignored alarms; alarm fatigue"],[33,"How could it be misused, on purpose or not?","reasonably foreseeable misuse, off-label use"],[34,"Is it mobile or portable?","drops, handling, transport, power"],[35,"Does use depend on essential performance?","what failure of essential performance means"],[36,"Does it act with a degree of autonomy?","decisions without the user, override and supervision"],[37,"Is its output used to decide on clinical management?","how results lead to treatment decisions"]];
+/* ISO 14971 Annex C hazard categories (paraphrased with examples) */
+const RM_HZ=[["Energy",[["Acoustic","ultrasound, infrasound, loud noise"],["Electric","leakage current, electric or magnetic fields, static discharge"],["Mechanical (kinetic)","moving or rotating parts, vibration, projectiles"],["Mechanical (potential)","falling or suspended masses, springs, pressure vessels, tip-over"],["Radiation","ionizing radiation, laser, UV, infrared, RF, magnetic fields"],["Thermal","hot or cold surfaces, cryogenics, heating of tissue"]]],
+ ["Biological and chemical",[["Biological","bacteria, viruses, fungi, prions, parasites, endotoxins"],["Chemical","toxic, carcinogenic, mutagenic or corrosive substances; residues of process aids, cleaning agents or sterilants; degradation products"],["Immunological","allergens, irritants, pyrogens, sensitizers"]]],
+ ["Performance-related",[["Data","access, availability, confidentiality, transfer and integrity of data"],["Delivery","wrong quantity or rate of energy or substance delivered"],["Diagnostic information","wrong, missing or late results; image artefacts; wrong orientation or patient"],["Functionality","loss or degradation of an alarm, of critical performance, or of a measurement"]]]];
+const RM_EV=[["Requirements","incomplete or wrong design inputs, missing parameters or performance limits"],["Manufacturing","inadequate control of processes, changes or suppliers"],["Transport and storage","inadequate packaging, contamination, wrong environmental conditions"],["Environment","temperature, humidity, EMC, power supply, cooling, foreign objects"],["Cleaning, disinfection, sterilization","unvalidated procedures or wrong performance of them"],["Disposal and scrap","no or inadequate information on disposal"],["Formulation","biodegradation, biocompatibility, wrong formulation"],["Use (usability)","confusing instructions, complex controls, ambiguous displays, unfamiliar layouts"],["Functionality","loss of electrical or mechanical integrity, deterioration, ageing"],["Security","unprotected data entry points, malware, unauthorized access"]];
+/* default scales (examples; the manufacturer defines and justifies its own) */
+const SEV_DEF=[["Negligible","Inconvenience or temporary discomfort"],["Minor","Temporary injury or impairment not needing professional medical intervention"],["Serious","Injury or impairment needing professional medical intervention"],["Critical","Permanent impairment or life-threatening injury"],["Catastrophic","Death"]];
+const PROB_DEF=[["Improbable","< 10⁻⁶"],["Remote","10⁻⁶ to < 10⁻⁵"],["Occasional","10⁻⁵ to < 10⁻⁴"],["Probable","10⁻⁴ to < 10⁻³"],["Frequent","≥ 10⁻³"]];
+function pickN(arr,n){ if(n>=arr.length) return arr.map(a=>a.slice()); if(n===3) return [arr[0],arr[2],arr[4]].map(a=>a.slice()); return [arr[0],arr[1],arr[3],arr[4]].map(a=>a.slice()); }
+function rmScales(){ if(!rm.sev||rm.sev.length!==rm.sevN) rm.sev=pickN(SEV_DEF,rm.sevN); if(!rm.prob||rm.prob.length!==rm.probN) rm.prob=pickN(PROB_DEF,rm.probN);
+  if(!rm.cells||rm.cells.length!==rm.probN||rm.cells[0].length!==rm.sevN){ rm.cells=[...Array(rm.probN)].map((_,p)=>[...Array(rm.sevN)].map((_,s)=>{ const x=(p/(rm.probN-1))+(s/(rm.sevN-1)); return x<0.75?0:x<1.3?1:2; })); } }
+const ACC=[["Acceptable","acc0"],["Reduce as far as possible; review benefit-risk","acc1"],["Not acceptable","acc2"]];
+function riskLevel(s,p){ rmScales(); if(!(s>=1&&p>=1)) return null; const c=rm.cells[p-1]&&rm.cells[p-1][s-1]; return c===undefined?null:c; }
+function renderRisk(){
+  rmScales(); const m=document.getElementById("main"); m.innerHTML="";
+  m.append(el("section",{class:"chHead riskHead"}, el("div",{class:"eyebrow"},"Risk management"), el("h2",{},"Risk management for medical devices"), el("p",{},"ISO 14971:2019 process, ISO/TR 24971:2020 guidance and IEC 62366-1 use-related risk. Choose your device type to tailor hazards, questions, analyses and examples. Worksheets are saved in this browser and export to Excel or PDF.")));
+  const dv=el("div",{class:"card devCard"}, el("label",{class:"rField"}, el("span",{},"Device type"), selectEl(Object.entries(DEVT).map(([k,v])=>[k,v.l]),rm.dev,v=>{ rm.dev=v; rm._save(); renderRisk(); },{"aria-label":"Device type"})), el("p",{class:"src"},DEVT[rm.dev].d));
+  m.append(dv);
+  m.append(tabRow(RM_TABS,rm.tab,k=>{ rm.tab=k; rm._save(); renderRisk(); }));
+  const p=el("div",{class:"panel"}); m.append(p);
+  ({over:rmOver,gloss:rmGloss,ana:rmAna,acc:rmAcc,fmea:rmFmea,fta:rmFta,urra:rmUrra})[rm.tab](p);
+  p.append(el("p",{class:"src"},"Content is a paraphrased summary for training. It does not replace the standards: ISO 14971:2019 (with EN ISO 14971:2019+A11:2021 for the EU), ISO/TR 24971:2020 and IEC 62366-1:2015+A1:2020. Use your licensed copies for exact requirements."));
+}
+/* ---- process overview ---- */
+const RM_PROC=[
+ ["4","General requirements","Set up a documented risk management process covering the whole life cycle. Top management defines the policy for risk acceptability criteria, provides resources and competent people, and reviews that the process stays suitable. Plan each device in a risk management plan and keep a risk management file.","Policy for risk acceptability criteria; risk management plan (scope, responsibilities, review requirements, acceptability criteria, method for overall residual risk, verification, post-production activities); risk management file.","Write the policy once at QMS level and the criteria in each plan. Name who is competent to judge clinical severity (24971, 4.2–4.4)."],
+ ["5.1–5.3","Risk analysis: intended use and safety characteristics","Describe the intended use and the reasonably foreseeable misuse, then list the characteristics that could affect safety.","Intended use statement; foreseeable misuse list; list of safety characteristics.","Use the ISO/TR 24971 Annex A questions (Risk analysis tab) as a checklist, and record “not applicable” with a reason."],
+ ["5.4","Identify hazards and hazardous situations","List known and foreseeable hazards in normal and fault conditions, then the sequences of events that turn each hazard into a hazardous situation.","Hazard list; hazard → sequence of events → hazardous situation → harm chains.","Consider random and systematic faults, use errors, security and combinations of events, not only single faults (24971, 5.4)."],
+ ["5.5","Risk estimation","Estimate severity of harm and probability of occurrence of harm for each hazardous situation.","Severity and probability for every hazardous situation, with the data or rationale used.","Estimate severity and probability separately. Split P into P1 (hazardous situation occurs) × P2 (it leads to harm) when it helps. If probability cannot be estimated, judge on severity alone (24971, 5.5)."],
+ ["6","Risk evaluation","Compare each estimated risk with the acceptability criteria in the plan and decide whether it needs to be reduced.","Evaluation result for each risk.",""],
+ ["7.1","Risk control option analysis","Choose risk control measures in this order of priority: inherently safe design and manufacture; protective measures in the device or the manufacturing process; information for safety and, where appropriate, training.","Selected risk control measures, with the reason when a higher-priority option was not used.","Information for safety is the weakest control. Do not rely on a warning when a design change is practicable (24971, 7.1)."],
+ ["7.2","Implementation and verification","Implement each measure, then verify both that it is implemented and that it is effective.","Verification records linked to each risk control measure.","Effectiveness can be shown by test, analysis, or usability evaluation for user-related controls."],
+ ["7.3–7.4","Residual risk evaluation and benefit-risk analysis","Re-evaluate each residual risk. If it is still not acceptable and further control is not practicable, a benefit-risk analysis decides whether the medical benefit outweighs it.","Residual risk evaluation; benefit-risk analysis where needed.","Base benefits on clinical data and the state of the art (24971, 7.4)."],
+ ["7.5–7.6","New risks and completeness","Check whether a control introduces new hazards or changes other risks, and confirm that all identified hazardous situations were considered.","Review of risks from risk control measures; completeness check.",""],
+ ["8","Overall residual risk","Evaluate all residual risks together against the benefits, using the method and criteria in the plan. Decide which residual risks to disclose to users.","Overall residual risk evaluation and disclosure of significant residual risks in the accompanying documentation.","Look at the whole matrix: clusters of borderline risks, conflicting warnings, and trade-offs between users and patients (24971, clause 8)."],
+ ["9","Risk management review","Before commercial release, review that the plan was carried out, the overall residual risk is acceptable, and methods are in place to collect production and post-production information.","Risk management report.",""],
+ ["10","Production and post-production","Collect and review information from production, complaints, service, literature, similar devices and the state of the art. Feed it back into the file and act when risks change.","Updated risk management file; actions such as CAPA, design change or field safety corrective action.","Link the risk file to PMS, complaints, vigilance and CAPA so new hazards or higher probabilities are caught (24971, clause 10)."]];
+function rmOver(p){
+  const d=DEVT[rm.dev];
+  p.append(el("div",{class:"card"}, el("div",{class:"eyebrow"},"Profile: "+d.l), el("h3",{class:"secTitle"},"Recommended for this device type"),
+    el("div",{class:"twoCol"}, el("div",{}, el("b",{},"Typical hazards"), el("ul",{}, ...d.hz.map(x=>el("li",{},x)))), el("div",{}, el("b",{},"Analyses to plan"), el("ul",{}, ...d.an.map(x=>el("li",{},x))), el("b",{},"Related standards"), el("ul",{}, ...d.std.map(x=>el("li",{},x)))))));
+  const fl=el("ol",{class:"rmFlow"}); RM_PROC.forEach(([c,t,w,o,b])=>{ const det=el("details",{class:"rmStep"}, el("summary",{}, el("span",{class:"cl"},"Clause "+c), el("b",{},t)), el("p",{},w), el("p",{}, el("b",{},"Outputs: "),o), b?el("p",{class:"bp"}, el("b",{},"Best practice: "),b):""); fl.append(el("li",{},det)); });
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"The ISO 14971 process, step by step"), el("p",{class:"src"},"Tap a step for what to do, what to record and the ISO/TR 24971 guidance."), fl));
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Regulatory links"),
+    el("ul",{}, el("li",{},"EU MDR Annex I, GSPR 1–9: risks reduced as far as possible without adversely affecting the benefit-risk ratio, a risk management system across the life cycle, and the priority of risk control. EN ISO 14971:2019+A11:2021 Annex ZA maps the standard to these requirements; economic considerations cannot justify leaving a risk unreduced."),
+      el("li",{},"MDR Article 10(2) requires manufacturers to establish, document, implement and maintain a risk management system; Annex II/III require the benefit-risk analysis and risk management in the technical documentation and PMS."),
+      el("li",{},"FDA: the QMSR (21 CFR 820, effective 2 February 2026) incorporates ISO 13485:2016, whose clause 7.1 requires documented risk management. FDA recognizes ISO 14971:2019 as a consensus standard, and design validation must include risk analysis."),
+      el("li",{},"ISO 13485 links risk to supplier control (7.4), software validation (4.1.6), process validation (7.5.6), feedback and CAPA (8.2, 8.5)."))));
+}
+/* ---- glossary ---- */
+const RM_GLOSS=[
+ ["Accompanying documentation","14971 3.1","Material that comes with the device and holds information for the user or the people responsible for installation, use, maintenance, decommissioning and disposal, especially on safe use."],
+ ["Benefit","14971 3.2","The positive impact or desirable outcome of using the device on the health of a person, or a positive impact on patient management or public health."],
+ ["Harm","14971 3.3","Injury or damage to people’s health, or damage to property or the environment."],
+ ["Hazard","14971 3.4","A potential source of harm."],
+ ["Hazardous situation","14971 3.5","A circumstance in which people, property or the environment are exposed to one or more hazards."],
+ ["Intended use (intended purpose)","14971 3.6","The use for which the manufacturer intends the device, as stated in the specifications, instructions and information it provides."],
+ ["In vitro diagnostic (IVD) medical device","14971 3.7","A device used to examine specimens taken from the human body, mainly to give information for diagnosis, monitoring or compatibility."],
+ ["Life cycle","14971 3.8","All phases of a device’s life, from initial idea to final decommissioning and disposal."],
+ ["Manufacturer","14971 3.9","The person or organization responsible for designing and/or making the device and making it available under its own name, whether or not it does the work itself."],
+ ["Medical device","14971 3.10","An instrument, apparatus, software, material or similar article intended for medical purposes such as diagnosis, prevention, monitoring, treatment or alleviation of disease or injury, that does not achieve its main action by pharmacological, immunological or metabolic means."],
+ ["Objective evidence","14971 3.11","Data that show something exists or is true."],
+ ["Post-production","14971 3.12","The part of the life cycle after design is complete and the device has been manufactured."],
+ ["Procedure","14971 3.13","A specified way to carry out an activity or a process."],
+ ["Process","14971 3.14","A set of interrelated or interacting activities that use inputs to deliver an intended result."],
+ ["Reasonably foreseeable misuse","14971 3.15","Use not intended by the manufacturer but which can result from readily predictable human behaviour. It can be intentional or unintentional."],
+ ["Record","14971 3.16","A document that states results achieved or gives evidence of activities performed."],
+ ["Residual risk","14971 3.17","The risk remaining after risk control measures have been implemented."],
+ ["Risk","14971 3.18","The combination of the probability of occurrence of harm and the severity of that harm."],
+ ["Risk analysis","14971 3.19","Systematic use of available information to identify hazards and to estimate risk."],
+ ["Risk assessment","14971 3.20","The overall process of risk analysis plus risk evaluation."],
+ ["Risk control","14971 3.21","The process of making decisions and implementing measures to reduce risks to, or keep them within, specified levels."],
+ ["Risk estimation","14971 3.22","The process of assigning values to the probability of occurrence of harm and to the severity of that harm."],
+ ["Risk evaluation","14971 3.23","The process of comparing the estimated risk with the risk criteria to decide whether the risk is acceptable."],
+ ["Risk management","14971 3.24","The systematic application of management policies, procedures and practices to analysing, evaluating, controlling and monitoring risk."],
+ ["Risk management file","14971 3.25","The set of records and other documents produced by risk management."],
+ ["Safety","14971 3.26","Freedom from unacceptable risk."],
+ ["Severity","14971 3.27","A measure of the possible consequences of a hazard."],
+ ["State of the art","14971 3.28","The developed stage of technical capability at a given time for products, processes and services, based on the consolidated findings of science, technology and experience. It is what is currently and generally accepted as good practice, not necessarily the most advanced solution."],
+ ["Top management","14971 3.29","The person or group who directs and controls the manufacturer at the highest level."],
+ ["Use error","14971 3.30 / 62366-1 3.21","A user action, or lack of action, that leads to a result different from what the manufacturer intended or the user expected. Includes slips, lapses and mistakes. An unexpected physiological response of the patient is not a use error in itself."],
+ ["Verification","14971 3.31","Confirmation, through objective evidence, that specified requirements have been fulfilled."],
+ ["Abnormal use","62366-1 3.1","A deliberate act, or deliberate omission, that is against or violates normal use and is beyond any further reasonable risk control through user-interface design (for example sabotage or reckless disregard of instructions). It is not a use error."],
+ ["Correct use","62366-1 3.3","Normal use without use error."],
+ ["Effectiveness (usability)","62366-1 3.4","The accuracy and completeness with which users achieve specified goals."],
+ ["Efficiency","62366-1 3.5","Resources spent in relation to the effectiveness achieved."],
+ ["Expected service life","62366-1 3.6","The time over which the device is expected to remain safe for use, as stated by the manufacturer."],
+ ["Formative evaluation","62366-1 3.7","User-interface evaluation done during design to explore strengths, weaknesses and unexpected use errors, so the design can be improved."],
+ ["Hazard-related use scenario","62366-1 3.8","A use scenario that could lead to a hazardous situation or harm."],
+ ["Normal use","62366-1 3.9","Operation, including routine inspection and adjustment by any user and stand-by, according to the instructions for use or accepted practice for devices without instructions."],
+ ["Patient","62366-1 3.10","A living being (person or animal) undergoing a medical, surgical or dental procedure."],
+ ["Primary operating function","62366-1 3.11","A function that involves user interaction and is either frequently used or related to safety."],
+ ["Responsible organization","62366-1 3.12","The entity accountable for the use and maintenance of the device, for example a hospital or a clinician."],
+ ["Summative evaluation","62366-1 3.13","User-interface evaluation done at the end of development to obtain objective evidence that the user interface can be used safely."],
+ ["Task","62366-1 3.14","One or more user interactions with the device to achieve a result."],
+ ["User interface of unknown provenance (UOUP)","62366-1 3.15","A user interface, or part of one, already developed for which records of a 62366-1 process are not available (legacy designs). Annex C gives the evaluation route."],
+ ["Usability","62366-1 3.16","The characteristic of the user interface that supports effectiveness, efficiency, learnability and satisfaction for the intended users in the intended use environment."],
+ ["Usability engineering","62366-1 3.17","Applying knowledge about human behaviour, abilities and limitations to the design of devices, systems and tasks to achieve adequate usability."],
+ ["Usability engineering file","62366-1 3.18","The records and documents produced by the usability engineering process."],
+ ["Usability test","62366-1 3.19","A method that explores or evaluates a user interface with representative users in the specified use environment."],
+ ["Use environment","62366-1 3.20","The actual conditions and setting in which users interact with the device."],
+ ["Use scenario","62366-1 3.22","A specific sequence of tasks by a specific user in a specific use environment, and the resulting response of the device."],
+ ["Use specification","62366-1 3.23","A summary of the key characteristics of the device’s intended use: medical indication, patient population, body part or tissue, user profiles, use environment and operating principle."],
+ ["User","62366-1 3.24","A person who interacts with (operates or handles) the device."],
+ ["User group","62366-1 3.25","A subset of users who differ in factors that could affect usability, such as age, culture, expertise or type of interaction."],
+ ["User interface","62366-1 3.26","All the means by which the user and the device interact, including labelling, accompanying documentation, displays, controls, packaging and training."],
+ ["User interface evaluation","62366-1 3.27","The process in which the manufacturer explores or assesses the user interface by one or more methods, such as usability tests, expert reviews and heuristic analysis."],
+ ["User interface specification","62366-1 3.28","Requirements for the user interface, used to design and verify it."],
+ ["User profile","62366-1 3.29","A summary of the mental, physical and demographic traits of a user group, plus characteristics such as occupational skills and job requirements that can affect design decisions."],
+ ["P1 and P2","24971 5.5.2","A common way to estimate probability of occurrence of harm: P = P1 × P2, where P1 is the probability that the hazardous situation occurs and P2 the probability that it leads to harm. Splitting is optional; set an unknown factor to 1 to stay conservative."],
+ ["Sequence of events","14971 5.4 / Annex C","The chain of one or more events or circumstances that turns a hazard into a hazardous situation (for example: fault, then user action)."],
+ ["Risk control measure","14971 7.1","A design, protective or informational measure that reduces risk. Priority: inherent safety by design, then protective measures, then information for safety and training."],
+ ["Information for safety","14971 7.1 / 24971 Annex D","Warnings, precautions and instructions that tell users what to do or avoid. It is the lowest-priority risk control and different from disclosure of residual risk."],
+ ["Benefit-risk analysis","14971 7.4","Comparison of the medical benefits of intended use with the residual risk, used when a risk is not acceptable under the criteria and further control is not practicable, and for overall residual risk."],
+ ["Overall residual risk","14971 clause 8","The combined effect of all residual risks, judged against the benefits using the method and criteria set in the risk management plan."],
+ ["Policy for risk acceptability","14971 4.2 / 24971 Annex C","Top-management document giving the framework for setting criteria: purpose, scope, factors (regulations, standards, state of the art, stakeholder concerns), approach to risk control, and approval."],
+ ["As far as possible (AFAP)","EU MDR Annex I","EU requirement to reduce risks as far as possible without adversely affecting the benefit-risk ratio. Unlike ALARP, cost is not a reason to stop reducing risk."],
+ ["ALARP","24971 Annex C","“As low as reasonably practicable”: a risk-control approach that weighs technical and economic practicability. Acceptable in some markets, but not as an economic argument under the EU MDR."],
+ ["FMEA","24971 B.5 / IEC 60812","Failure mode and effects analysis: a bottom-up, inductive method that asks “what happens if this item fails?”, one failure at a time. Variants: design, process, use and software FMEA."],
+ ["FTA","24971 B.3 / IEC 61025","Fault tree analysis: a top-down, deductive method that starts from a harm or hazardous situation and works down through AND/OR gates to its causes, including combinations of faults."],
+ ["ETA","24971 B.4 / IEC 62502","Event tree analysis: an inductive method that follows an initiating event forward through success or failure of each safeguard to its possible outcomes and their probabilities."],
+ ["PHA","24971 B.2","Preliminary hazard analysis: an early, broad hazard identification done when design details are few, to guide design choices and later analyses."],
+ ["HAZOP","24971 B.6 / IEC 61882","Hazard and operability study: a team review that applies guide words (no, more, less, reverse, other than) to design intentions to find deviations and their consequences."],
+ ["HACCP","24971 B.7","Hazard analysis and critical control points: a process-focused method, from food safety, that identifies critical control points in manufacturing and sets limits, monitoring and corrective actions."],
+ ["RPN","Industry practice","Risk priority number = severity × occurrence × detection, used in some FMEAs to rank actions. It is not a measure of risk under ISO 14971 and must not be used to accept a risk."],
+ ["URRA","FDA HF guidance / 62366-1 5.1–5.5","Use-related risk analysis: analysis of user tasks, potential use errors, resulting hazardous situations and harms, used to find critical tasks and to choose scenarios for summative evaluation."],
+ ["Critical task","FDA HF guidance","A user task which, if done wrongly or not done, would or could cause serious harm. Critical tasks must be included in the human factors validation (summative) test."],
+ ["Known use problems","62366-1 5.3","Use-related issues reported for the same or similar devices, for example in complaints, MAUDE, recalls, field safety notices and literature."]];
+function rmGloss(p){
+  const q=(rm.gq||"").toLowerCase(); const srcOf=s=>s.startsWith("14971")?"ISO 14971":s.startsWith("62366")?"IEC 62366-1":s.startsWith("24971")?"ISO/TR 24971":"Other";
+  const sIn=el("input",{type:"search",class:"cfilter",placeholder:"Search terms, e.g. harm, use error, P1",value:rm.gq||"","aria-label":"Search the risk glossary"});
+  const ctl=el("div",{class:"chipRow"}); ["All","ISO 14971","IEC 62366-1","ISO/TR 24971","Other"].forEach(c=>ctl.append(el("button",{class:"chipBtn",type:"button","aria-pressed":String(rm.gsrc===c),onclick:()=>{ rm.gsrc=c; rm._save(); renderRisk(); }},c)));
+  const list=el("div",{class:"howGrid gloss"});
+  const draw=()=>{ list.innerHTML=""; const qq=(rm.gq||"").toLowerCase(); const items=RM_GLOSS.filter(([t,s,d])=>(rm.gsrc==="All"||srcOf(s)===rm.gsrc)&&(!qq||(t+" "+d+" "+s).toLowerCase().includes(qq))).sort((a,b)=>a[0].localeCompare(b[0]));
+    items.forEach(([t,s,d])=>list.append(el("div",{class:"howItem gItem"}, el("b",{},t), el("span",{class:"tag gtag"},s), el("span",{},d))));
+    if(!items.length) list.append(el("p",{class:"src"},"No terms match.")); cnt.textContent=items.length+" of "+RM_GLOSS.length+" terms"; };
+  const cnt=el("small",{class:"src"});
+  sIn.addEventListener("input",()=>{ rm.gq=sIn.value; rm._save(); draw(); });
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Risk management glossary"), sIn, ctl, cnt, list, el("p",{class:"src"},"Definitions are paraphrased for orientation, with the clause number of the source. Use the standards for the exact wording.")));
+  draw();
+}
+/* ---- risk analysis ---- */
+function rmAna(p){
+  const d=DEVT[rm.dev];
+  const qs=el("div",{class:"qList"}); RM_Q.forEach(([n,t,h])=>{ const hl=d.q.includes(n); qs.append(el("div",{class:"qItem"+(hl?" hl":"")}, el("span",{class:"qn"},"A.2."+n), el("div",{}, el("b",{},t), el("small",{},h)), hl?el("span",{class:"tag focus"},"focus"):"")); });
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"1 · Safety characteristics checklist (ISO/TR 24971 Annex A)"), el("p",{class:"src"},"Answer each question for your device and record the answer in the risk management file. Questions marked “focus” matter most for: "+d.l+"."), qs));
+  const hz=el("div",{class:"hzGrid"}); RM_HZ.forEach(([cat,items])=>hz.append(el("div",{class:"hzCol"}, el("b",{},cat), el("ul",{}, ...items.map(([n,e])=>el("li",{}, el("i",{},n+": "), e))))));
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"2 · Hazard categories (ISO 14971 Annex C)"), hz, el("h3",{class:"secTitle"},"Typical hazards for "+d.l), el("ul",{}, ...d.hz.map(x=>el("li",{},x)))));
+  const ev=el("div",{class:"statGrid"}); RM_EV.forEach(([n,e])=>ev.append(el("div",{class:"statCell"}, el("span",{},n), el("b",{class:"lite"},e))));
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"3 · Events and circumstances that start a sequence (Annex C)"), ev));
+  // chain builder
+  const c=rm.chain; const out=el("div",{});
+  const draw=()=>{ rm._save(); out.innerHTML=""; const p1=numOrNull(c.p1), p2=numOrNull(c.p2); const s=parseInt(c.s)||0;
+    const P=(p1!==null&&p2!==null)?p1*p2:p1!==null?p1:null; let pl=null; if(P!==null&&rm.probN===5){ pl=P<1e-6?1:P<1e-5?2:P<1e-4?3:P<1e-3?4:5; }
+    const chain=el("div",{class:"chain"}, ...[["Hazard",c.hz],["Sequence of events",c.seq],["Hazardous situation",c.hs],["Harm",c.harm]].map(([l,v],i)=>el("div",{class:"chainBox c"+i}, el("small",{},l), el("b",{},v||"—"))));
+    out.append(chain);
+    const rows=[["P1 (hazardous situation occurs)",p1===null?"—":fmt(p1)],["P2 (situation leads to harm)",p2===null?"— (set to 1 if unknown)":fmt(p2)],["P = P1 × P2",P===null?"—":fmt(P)]];
+    if(pl) rows.push(["Probability level (default 5-level scale)",rm.prob[pl-1][0]]); if(s) rows.push(["Severity",rm.sev[s-1][0]]);
+    if(pl&&s){ const lv=riskLevel(s,pl); rows.push(["Risk (from your matrix)",ACC[lv][0]]); }
+    out.append(statGrid(rows)); };
+  const f=(lab,key,ph)=>txtField(lab,c[key],v=>{ c[key]=v; draw(); },ph);
+  const ex=d.ex;
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"4 · Build a hazard chain and estimate the risk"),
+    el("p",{class:"src"},"Write one chain per hazardous situation. Probability per use (or per device, per hour, per patient: state the unit in your plan). Severity and risk use the scales in the Acceptability tab."),
+    el("div",{class:"rInputs grid2"}, f("Hazard","hz",ex.hz), f("Sequence of events","seq",ex.seq), f("Hazardous situation","hs",ex.hs), f("Harm","harm",ex.harm),
+      field("P1",c.p1,v=>{ c.p1=v; draw(); },{placeholder:"e.g. 1e-4"}), field("P2",c.p2,v=>{ c.p2=v; draw(); },{placeholder:"e.g. 0.1"}),
+      el("label",{class:"rField"}, el("span",{},"Severity"), selectEl([["","Choose…"],...rm.sev.map((s,i)=>[i+1,s[0]+" — "+s[1]])],c.s,v=>{ c.s=v; draw(); }))),
+    el("div",{class:"mact"}, el("button",{class:"cta alt",type:"button",onclick:()=>{ Object.assign(c,{hz:ex.hz,seq:ex.seq,hs:ex.hs,harm:ex.harm}); rm._save(); renderRisk(); }},"Load the example for "+d.l)), out));
+  draw();
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Estimation tips (ISO/TR 24971, 5.5)"),
+    el("ul",{}, el("li",{},"Use quantitative probability only when the data support it; otherwise a qualitative scale agreed by experts is better than a precise-looking guess."),
+      el("li",{},"Sources: history of similar devices, complaint and vigilance data, reliability predictions, test data, simulation, literature, expert judgment. Combine more than one."),
+      el("li",{},"Several harms can follow one hazardous situation (discomfort, burn, death), each with its own P2. Record the relevant ones, not only the worst."),
+      el("li",{},"When probability cannot be estimated (software faults, sabotage, novel hazards), evaluate on severity and rely on risk control and verification; for software, assume the failure will occur (P = 1) unless a hardware or independent control limits it."))));
+}
+/* ---- acceptability ---- */
+function rmAcc(p){
+  rmScales();
+  const ctl=el("div",{class:"rInputs grid3"}, el("label",{class:"rField"}, el("span",{},"Severity levels"), selectEl([3,4,5],rm.sevN,v=>{ rm.sevN=+v; rm.sev=null; rm.cells=null; rm._save(); renderRisk(); })), el("label",{class:"rField"}, el("span",{},"Probability levels"), selectEl([3,4,5],rm.probN,v=>{ rm.probN=+v; rm.prob=null; rm.cells=null; rm._save(); renderRisk(); })));
+  const sc=el("div",{class:"twoCol"});
+  const ed=(arr,lab)=>{ const w=el("div",{}, el("b",{},lab)); arr.forEach((r,i)=>{ const a=el("input",{type:"text",class:"rIn sm","aria-label":lab+" "+(i+1)+" name"}); a.value=r[0]; a.addEventListener("input",()=>{ r[0]=a.value; rm._save(); drawM(); }); const b=el("input",{type:"text",class:"rIn sm","aria-label":lab+" "+(i+1)+" description"}); b.value=r[1]; b.addEventListener("input",()=>{ r[1]=b.value; rm._save(); }); w.append(el("div",{class:"scRow"}, el("span",{class:"qn"},String(i+1)), a, b)); }); return w; };
+  sc.append(ed(rm.sev,"Severity (S)"), ed(rm.prob,"Probability of occurrence of harm (P)"));
+  const mx=el("div",{class:"tblWrap"});
+  const drawM=()=>{ mx.innerHTML=""; const t=el("table",{class:"rmMatrix"}); const hr=el("tr",{}, el("th",{class:"corner"},"P ↓  S →")); rm.sev.forEach((s,i)=>hr.append(el("th",{},(i+1)+". "+s[0]))); t.append(el("thead",{},hr)); const bd=el("tbody",{});
+    for(let pi=rm.probN-1;pi>=0;pi--){ const tr=el("tr",{}, el("th",{},(pi+1)+". "+rm.prob[pi][0])); for(let si=0;si<rm.sevN;si++){ const v=rm.cells[pi][si]; tr.append(el("td",{}, el("button",{type:"button",class:"mCell "+ACC[v][1],"aria-label":rm.prob[pi][0]+" × "+rm.sev[si][0]+": "+ACC[v][0]+". Tap to change.",onclick:()=>{ rm.cells[pi][si]=(v+1)%3; rm._save(); drawM(); }},v===0?"A":v===1?"R":"N"))); } bd.append(tr); }
+    t.append(bd); mx.append(t); };
+  drawM();
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Risk matrix builder"), el("p",{class:"src"},"Set the number of levels, rename them, then tap a cell to cycle Acceptable → Reduce as far as possible → Not acceptable. The matrix drives the risk levels in the hazard chain and the worksheets."),
+    ctl, sc, mx, el("div",{class:"accLeg"}, ...ACC.map(([l,c],i)=>el("span",{}, el("i",{class:"mCell "+c},["A","R","N"][i])," "+l))),
+    el("p",{class:"src"},"Defaults are an example semi-quantitative scale (probability per use). Define the unit, the ranges and the rationale for your device family in the risk management plan, and justify the matrix for the application (ISO/TR 24971, 5.5).")));
+  const exRows=()=>{ const rows=[[{v:"P \\ S",b:true},...rm.sev.map((s,i)=>({v:(i+1)+". "+s[0],b:true}))]]; for(let pi=rm.probN-1;pi>=0;pi--) rows.push([{v:(pi+1)+". "+rm.prob[pi][0]+" ("+rm.prob[pi][1]+")",b:true},...rm.cells[pi].map(v=>ACC[v][0])]); return rows; };
+  const secs=()=>[{h:"Severity scale",rows:rm.sev.map((s,i)=>[(i+1)+". "+s[0],s[1]])},{h:"Probability scale",rows:rm.prob.map((s,i)=>[(i+1)+". "+s[0],s[1]])},{h:"Matrix (probability rows, high to low)",rows:[...Array(rm.probN)].map((_,k)=>{ const pi=rm.probN-1-k; return [rm.prob[pi][0],rm.cells[pi].map((v,si)=>rm.sev[si][0]+": "+["A","R","N"][v]).join(" | ")]; })},{h:"Key",rows:ACC.map((a,i)=>[["A","R","N"][i],a[0]])}];
+  toolExport(p,rm,"Risk-acceptability-matrix",[["Export Excel (.xlsx)","xlsx",()=>buildXlsx(mkDoc("Risk management","Risk acceptability criteria - "+DEVT[rm.dev].l,secs(),null,[{name:"Matrix",rows:exRows(),widths:[34,...rm.sev.map(()=>22)]}]).sheets)],["Export PDF","pdf",()=>buildPdf(mkDoc("Risk management","Risk acceptability criteria - "+DEVT[rm.dev].l,secs(),null).pdf)]]);
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Policy and criteria: best practice"),
+    el("ul",{}, el("li",{},"Top management documents a policy (in the QMS) for setting acceptability criteria: purpose, scope, the factors used, the approach to risk control, and who approves and reviews it (ISO/TR 24971, Annex C)."),
+      el("li",{},"Factors: regulatory requirements in each market, product standards with pass/fail limits, the generally acknowledged state of the art, and validated stakeholder concerns."),
+      el("li",{},"Criteria go in each risk management plan. They can differ by device family. Where probability cannot be estimated, set criteria on severity alone."),
+      el("li",{},"Approaches to risk control: reduce as far as possible without hurting the benefit-risk ratio (required in the EU), or ALARA/ALARP where allowed. Some policies let risks classed as negligible skip further reduction; under the EU MDR, still reduce them where practicable."),
+      el("li",{},"Technical practicability matters: a control that weakens the clinical effect, adds confusing alarms or floods the user with warnings can make overall risk worse."),
+      el("li",{},"Set separate criteria and a method for the overall residual risk (ISO 14971, 4.4 and clause 8)."))));
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Evaluating overall residual risk (ISO/TR 24971, clause 8)"),
+    el("ul",{}, el("li",{},"Weigh the benefits (size, probability and duration of benefit) against all residual risks together, considering alternatives and the state of the art."),
+      el("li",{},"Plot all residual risks on the matrix: many risks in the high-severity column or clustered at the border can make the overall residual risk unacceptable even if each one passes."),
+      el("li",{},"Compare with similar devices on the market, using their adverse events and literature."),
+      el("li",{},"Use an independent expert panel including clinicians."),
+      el("li",{},"Check combined effects: different harms from one sequence, one harm from many situations (use FTA), conflicting instructions, too many warnings, and risk trade-offs between users and patients."),
+      el("li",{},"Disclose significant residual risks in the accompanying documentation."))));
+}
+/* ---- worksheets (xFMEA and URRA) ---- */
+const WS={
+ dfmea:{l:"Design FMEA",who:"Item / function",fm:"Failure mode",cause:"Cause",eff:"Effect",d:"Bottom-up analysis of components and functions of the design. Start from the design architecture or BOM.",when:"From early design through design transfer; update with design changes and field data.",tips:["Severity is the severity of the harm (your ISO 14971 scale), not of the failure.","Occurrence should reflect the probability of harm (P1 × P2), or document how it maps to it.","Do not use RPN to accept a risk; use the acceptability matrix.","A single-fault method: add FTA for combinations of failures and redundancy."]},
+ pfmea:{l:"Process FMEA",who:"Process step",fm:"Failure mode (process)",cause:"Cause (5M)",eff:"Effect on the product",d:"Bottom-up analysis of each step in the process flow chart: what can go wrong, why, and what the patient or user would experience.",when:"Before process validation (IQ/OQ/PQ); update with NCRs, CAPAs and process changes.",tips:["Link each step to the process flow chart and the control plan.","Detection (inspection, test) is a control only if it reliably prevents the defect reaching the user.","Special processes (sealing, sterilization, bonding, welding) need validation as the risk control.","Use the same harm severity as the DFMEA for the same end effect."]},
+ ufmea:{l:"Use FMEA",who:"Task / step",fm:"Use error",cause:"Cause (perception, cognition, action)",eff:"Effect",d:"Bottom-up analysis of each user task for possible use errors. Often merged into the URRA.",when:"With the task analysis, before formative evaluation; update after each evaluation.",tips:["Base tasks on a task analysis of the use specification.","Include reasonably foreseeable misuse; exclude abnormal use.","Probability of use error is hard to estimate; many teams evaluate on severity and verify controls by usability testing.","Training and labelling are the weakest controls."]},
+ sfmea:{l:"Software FMEA",who:"Software item / function",fm:"Software failure mode",cause:"Cause (logic, data, timing, interface)",eff:"Effect on the system",d:"Analysis of software items for failure modes such as wrong output, no output, late output, corrupted data or unexpected state.",when:"With the software architecture (IEC 62304 clause 7); update with anomalies and changes.",tips:["Assume the software failure can occur; reduce risk by architecture (segregation, hardware interlocks) and verification.","Include cybersecurity threats that can lead to harm.","Link controls to software requirements and to tests.","Software safety class (A, B, C) follows from the harm, before considering external controls."]},
+ urra:{l:"URRA",who:"Task / step",fm:"Potential use error",cause:"PCA (perception, cognition, action)",eff:"Hazardous situation",d:"Use-related risk analysis per IEC 62366-1 clauses 5.1–5.5, in the format FDA expects in human factors submissions.",when:"From the use specification through summative evaluation.",tips:["List every task from the task analysis, then each way it can go wrong.","Flag critical tasks (serious harm possible). All of them must be in the summative evaluation.","Record how each risk control will be evaluated (formative and summative).","Use known use problems of similar devices as input."]}};
+function wsRowsFor(type){ if(!rm.ws[type]) rm.ws[type]=[]; return rm.ws[type]; }
+function wsExample(type){ const d=DEVT[rm.dev], e=d.ex; const base={who:"",fm:"",cause:"",eff:"",hs:e.hs,harm:e.harm,s:"",p:"",ctl:"",ct:"Design",ver:"",p2:"",crit:false,eval:""};
+  const E={dfmea:{who:"Main function of the "+d.l.toLowerCase(),fm:"Function fails or degrades",cause:e.seq.split(";")[0],eff:"Loss or degradation of the intended function"},
+   pfmea:{who:"Special process (e.g. sealing, bonding, sterilization)",fm:"Process output out of specification",cause:"Process parameter drift; operator set-up error",eff:"Nonconforming device reaches the user"},
+   ufmea:{who:"Set-up and first use",fm:"User skips or misreads a step",cause:"Cognition: instruction unclear",eff:"Device not ready or wrongly configured"},
+   sfmea:{who:"Result calculation / control logic",fm:"Wrong output shown without warning",cause:"Logic or data error",eff:"Wrong information or wrong therapy delivered"},
+   urra:{who:"Critical step of use",fm:"Step omitted or done wrongly",cause:"Perception: indicator not noticed",eff:e.hs}};
+  return Object.assign(base,E[type]); }
+function rmWorksheet(p,type){
+  const W=WS[type]; const rows=wsRowsFor(type); const isU=type==="urra";
+  const sevOpts=[["","S"],...rm.sev.map((s,i)=>[i+1,(i+1)+" "+s[0]])], probOpts=[["","P"],...rm.prob.map((s,i)=>[i+1,(i+1)+" "+s[0]])];
+  const wrap=el("div",{class:"wsList"});
+  const lvlChip=(s,pp)=>{ const v=riskLevel(parseInt(s),parseInt(pp)); return v===null?el("span",{class:"lvl"},"—"):el("span",{class:"lvl "+ACC[v][1]},ACC[v][0]); };
+  const draw=()=>{ rm._save(); wrap.innerHTML="";
+    if(!rows.length) wrap.append(el("p",{class:"src"},"No rows yet. Add a row, or load an example for "+DEVT[rm.dev].l+"."));
+    rows.forEach((r,i)=>{ const card=el("div",{class:"wsRow"}); const head=el("div",{class:"wsHead"}, el("b",{},"#"+(i+1)+" "+(r.who||"")), el("button",{class:"linkBtn",type:"button",onclick:()=>{ rows.splice(i,1); draw(); }},"Delete"));
+      const t=(lab,k,area)=>txtField(lab,r[k],v=>{ r[k]=v; rm._save(); if(k==="who") head.firstChild.textContent="#"+(i+1)+" "+v; },"",area);
+      const before=el("span",{}), after=el("span",{}); const upd=()=>{ before.replaceChildren(lvlChip(r.s,r.p)); after.replaceChildren(lvlChip(r.s,r.p2)); };
+      const sSel=selectEl(sevOpts,r.s,v=>{ r.s=v; if(isU){ r.crit=parseInt(v)>=critMin(); const cb=card.querySelector(".chk input"); if(cb) cb.checked=r.crit; } rm._save(); upd(); },{"aria-label":"Severity"});
+      card.append(head, el("div",{class:"rInputs grid2"}, t(W.who,"who"), t(W.fm,"fm"), t(W.cause,"cause"), t(W.eff,"eff"), isU?"":t("Hazardous situation","hs"), t("Harm","harm")),
+        el("div",{class:"wsRisk"}, el("label",{class:"rField"}, el("span",{},"Severity"), sSel), el("label",{class:"rField"}, el("span",{},"P before"), selectEl(probOpts,r.p,v=>{ r.p=v; rm._save(); upd(); },{"aria-label":"Probability before control"})), el("div",{class:"rField"}, el("span",{},"Risk before"), before)),
+        el("div",{class:"rInputs grid2"}, t("Risk control measure","ctl",true), el("label",{class:"rField"}, el("span",{},"Control type"), selectEl(["Design","Protective","Information / training"],r.ct||"Design",v=>{ r.ct=v; rm._save(); })), t(isU?"Evaluation (formative / summative)":"Verification of implementation and effectiveness","ver")),
+        el("div",{class:"wsRisk"}, el("label",{class:"rField"}, el("span",{},"P after"), selectEl(probOpts,r.p2,v=>{ r.p2=v; rm._save(); upd(); },{"aria-label":"Probability after control"})), el("div",{class:"rField"}, el("span",{},"Residual risk"), after),
+          isU?el("label",{class:"chk"}, (()=>{ const c=el("input",{type:"checkbox"}); c.checked=!!r.crit; c.addEventListener("change",()=>{ r.crit=c.checked; rm._save(); }); return c; })(), " Critical task"):""));
+      upd(); wrap.append(card); }); };
+  const critMin=()=>rm.sevN>=4?3:2;
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},W.l+" worksheet"), el("p",{class:"src"},W.d+" Severity and probability use your matrix from the Acceptability tab."+(isU?" A task is flagged critical automatically when severity is “"+rm.sev[critMin()-1][0]+"” or higher; you can change the flag.":"")),
+    el("div",{class:"mact"}, el("button",{class:"cta",type:"button",onclick:()=>{ rows.push({who:"",fm:"",cause:"",eff:"",hs:"",harm:"",s:"",p:"",ctl:"",ct:"Design",ver:"",p2:"",crit:false}); draw(); }},"+ Add row"), el("button",{class:"cta alt",type:"button",onclick:()=>{ rows.push(wsExample(type)); draw(); }},"Load example row")), wrap));
+  draw();
+  const lab=(arr,v)=>{ const i=parseInt(v); return i>=1&&arr[i-1]?i+" "+arr[i-1][0]:""; };
+  const lvT=(s,pp)=>{ const v=riskLevel(parseInt(s),parseInt(pp)); return v===null?"":ACC[v][0]; };
+  const xRows=()=>{ const h=["#",W.who,W.fm,W.cause,W.eff,...(isU?[]:["Hazardous situation"]),"Harm","Severity","P before","Risk before","Risk control","Control type",isU?"Evaluation":"Verification","P after","Residual risk",...(isU?["Critical task"]:[])].map(v=>({v,b:true}));
+    return [h,...rows.map((r,i)=>[i+1,r.who,r.fm,r.cause,r.eff,...(isU?[]:[r.hs]),r.harm,lab(rm.sev,r.s),lab(rm.prob,r.p),lvT(r.s,r.p),r.ctl,r.ct,r.ver,lab(rm.prob,r.p2),lvT(r.s,r.p2),...(isU?[r.crit?"Yes":"No"]:[])])]; };
+  const secs=()=>rows.map((r,i)=>({h:"#"+(i+1)+" "+(r.who||""),rows:[[W.fm,r.fm||"-"],[W.cause,r.cause||"-"],[W.eff,r.eff||"-"],...(isU?[]:[["Hazardous situation",r.hs||"-"]]),["Harm",r.harm||"-"],["Severity / P before",(lab(rm.sev,r.s)||"-")+" / "+(lab(rm.prob,r.p)||"-")+" -> "+(lvT(r.s,r.p)||"-")],["Risk control ("+(r.ct||"")+")",r.ctl||"-"],[isU?"Evaluation":"Verification",r.ver||"-"],["P after / residual",(lab(rm.prob,r.p2)||"-")+" -> "+(lvT(r.s,r.p2)||"-")],...(isU?[["Critical task",r.crit?"Yes":"No"]]:[])]}));
+  const ttl=W.l+" - "+DEVT[rm.dev].l;
+  toolExport(p,rm,W.l.replace(/\s+/g,"-"),[["Export Excel (.xlsx)","xlsx",()=>buildXlsx(mkDoc("Risk management",ttl,[{h:"Scales",rows:[["Severity",rm.sev.map((s,i)=>(i+1)+" "+s[0]).join(", ")],["Probability",rm.prob.map((s,i)=>(i+1)+" "+s[0]).join(", ")]]}],null,[{name:W.l.slice(0,28),rows:xRows(),widths:[5,24,24,24,24,24,22,14,14,18,30,16,26,14,18,10]}]).sheets)],["Export PDF","pdf",()=>buildPdf(mkDoc("Risk management",ttl,secs(),null).pdf)]]);
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Good practice for the "+W.l), el("p",{}, el("b",{},"When: "),W.when), el("ul",{}, ...W.tips.map(x=>el("li",{},x)))));
+}
+function rmFmea(p){
+  const types=["dfmea","pfmea","ufmea","sfmea"]; if(!types.includes(rm.wsType)) rm.wsType="dfmea";
+  const cmp=el("table",{class:"map rmTbl"}, el("thead",{}, el("tr",{}, ...["Approach","Looks at","Best for","Watch out for"].map(h=>el("th",{},h)))), el("tbody",{},
+    ...[["Design FMEA","Components and functions of the design","Hardware design, materials, mechanical and electrical failures","Single-fault only; severity must be the harm"],["Process FMEA","Each step of the manufacturing process","Process validation, control plans, supplier processes","Detection is not a design control; link to the DFMEA end effects"],["Use FMEA","Each user task and its possible use errors","Early usability input; feeds the URRA","Probability of use error is uncertain; verify by usability testing"],["Software FMEA","Software items, data and interfaces","Embedded software, SaMD, cybersecurity effects","Software failure probability cannot be estimated; rely on architecture"],["FMECA","FMEA plus a criticality ranking","Reliability programs, complex systems","Criticality ranking is not ISO 14971 acceptability"]].map(r=>el("tr",{}, ...r.map((c,i)=>i?el("td",{},c):el("td",{}, el("b",{},c)))))));
+  const d=DEVT[rm.dev]; p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Choosing an xFMEA approach"), el("div",{class:"tblWrap"},cmp),
+    el("p",{class:"src"},"For "+d.l+": "+d.an.join("; ")+". FMEA is described in ISO/TR 24971 Annex B.5 and IEC 60812. Use FMEA results as input to the ISO 14971 risk analysis, not as a substitute for it.")));
+  p.append(el("div",{class:"chipRow"}, ...types.map(t=>el("button",{class:"chipBtn",type:"button","aria-pressed":String(rm.wsType===t),onclick:()=>{ rm.wsType=t; rm._save(); renderRisk(); }},WS[t].l))));
+  rmWorksheet(p,rm.wsType);
+}
+/* ---- FTA and other techniques ---- */
+function ftaDefault(){ return {top:"Patient harmed by over-delivery",tg:"OR",g:[{n:"Control fault not detected",gate:"AND",e:[{n:"Control software fault",p:"1e-3"},{n:"Independent watchdog fails",p:"1e-3"}]},{n:"Use error not caught",gate:"AND",e:[{n:"Wrong value entered",p:"1e-2"},{n:"Confirmation screen ignored",p:"5e-2"}]},{n:"Hardware runaway",gate:"OR",e:[{n:"Motor driver short",p:"1e-6"}]}]}; }
+function ftaCalc(f){ const comb=(gate,ps)=>gate==="AND"?ps.reduce((a,b)=>a*b,1):1-ps.reduce((a,b)=>a*(1-b),1);
+  const gp=f.g.map(g=>{ const ps=g.e.map(e=>{ const v=numOrNull(e.p); return v===null?0:Math.min(1,Math.max(0,v)); }); return comb(g.gate,ps); }); return {gp,top:comb(f.tg,gp)}; }
+function ftaSvg(f,R){
+  const n=f.g.length, W=Math.max(340,n*150), H=250; const cx=W/2; let s=`<svg viewBox="0 0 ${W} ${H}" class="oc ftaSvg" role="img" aria-label="Fault tree">`;
+  const box=(x,y,t,sub,cls)=>{ const w=136; return `<rect x="${x-w/2}" y="${y}" width="${w}" height="34" rx="6" class="${cls}"/><text x="${x}" y="${y+14}" text-anchor="middle" font-size="9.5" font-weight="700">${xesc(t.slice(0,26))}</text><text x="${x}" y="${y+27}" text-anchor="middle" font-size="9">${sub}</text>`; };
+  const gate=(x,y,type)=>type==="AND"?`<path d="M${x-11} ${y+16} v-8 a11 11 0 0 1 22 0 v8 z" class="gate"/><text x="${x}" y="${y+14}" text-anchor="middle" font-size="7">AND</text>`:`<path d="M${x-11} ${y+16} q11 -6 22 0 q-2 -12 -11 -18 q-9 6 -11 18 z" class="gate"/><text x="${x}" y="${y+13}" text-anchor="middle" font-size="7">OR</text>`;
+  s+=box(cx,6,f.top,"P = "+fmt(R.top),"topB")+gate(cx,40,f.tg);
+  f.g.forEach((g,i)=>{ const x=W*(i+0.5)/n; s+=`<path d="M${cx} 56 V70 H${x} V84" class="ln"/>`+box(x,84,g.n,"P = "+fmt(R.gp[i]),"midB")+gate(x,118,g.gate);
+    const m=g.e.length; g.e.forEach((e,j)=>{ const ex=x+(j-(m-1)/2)*Math.min(70,140/m); s+=`<path d="M${x} 134 V146 H${ex} V160" class="ln"/><circle cx="${ex}" cy="${178}" r="17" class="${g.gate==="OR"&&f.tg==="OR"?"evtB spf":"evtB"}"/><text x="${ex}" y="${176}" text-anchor="middle" font-size="7.5">${xesc(e.n.slice(0,12))}</text><text x="${ex}" y="${186}" text-anchor="middle" font-size="7.5">${xesc(String(e.p))}</text>`; }); });
+  return s+`<text x="6" y="${H-8}" font-size="9" fill="var(--bad)">Red circles: a single basic event reaches the top event (single point of failure)</text></svg>`;
+}
+function rmFta(p){
+  if(!rm.fta) rm.fta=ftaDefault(); const f=rm.fta; const out=el("div",{}); const ed=el("div",{});
+  const draw=()=>{ rm._save(); const R=ftaCalc(f); out.innerHTML=""; const h=el("div",{class:"ftaWrap"}); h.innerHTML=ftaSvg(f,R); out.append(h,statGrid([["Top event probability",fmt(R.top)],...f.g.map((g,i)=>[g.n+" ("+g.gate+")",fmt(R.gp[i])])])); };
+  const build=()=>{ ed.innerHTML=""; ed.append(el("div",{class:"rInputs grid2"}, txtField("Top event (harm or hazardous situation)",f.top,v=>{ f.top=v; draw(); }), el("label",{class:"rField"}, el("span",{},"Top gate"), selectEl(["OR","AND"],f.tg,v=>{ f.tg=v; draw(); }))));
+    f.g.forEach((g,gi)=>{ const c=el("div",{class:"wsRow"}, el("div",{class:"wsHead"}, el("b",{},"Branch "+(gi+1)), el("button",{class:"linkBtn",type:"button",onclick:()=>{ f.g.splice(gi,1); build(); draw(); }},"Delete branch")),
+      el("div",{class:"rInputs grid2"}, txtField("Intermediate event",g.n,v=>{ g.n=v; draw(); }), el("label",{class:"rField"}, el("span",{},"Gate"), selectEl(["AND","OR"],g.gate,v=>{ g.gate=v; draw(); }))));
+      g.e.forEach((e,ei)=>c.append(el("div",{class:"evRow"}, txtField("Basic event",e.n,v=>{ e.n=v; draw(); }), field("Probability",e.p,v=>{ e.p=v; draw(); }), el("button",{class:"linkBtn",type:"button",onclick:()=>{ g.e.splice(ei,1); build(); draw(); }},"×"))));
+      c.append(el("button",{class:"linkBtn",type:"button",onclick:()=>{ g.e.push({n:"New event",p:"1e-3"}); build(); draw(); }},"+ Add basic event")); ed.append(c); });
+    ed.append(el("div",{class:"mact"}, el("button",{class:"cta",type:"button",onclick:()=>{ f.g.push({n:"New branch",gate:"AND",e:[{n:"Event",p:"1e-3"}]}); build(); draw(); }},"+ Add branch"), el("button",{class:"cta alt",type:"button",onclick:()=>{ rm.fta=ftaDefault(); rm._save(); renderRisk(); }},"Reset example"))); };
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Fault tree calculator"), el("p",{class:"src"},"Two-level tree: a top event, branches (intermediate events) and basic events. Assumes independent events: AND multiplies probabilities; OR = 1 − Π(1 − p). Watch for common-cause failures, which break the independence assumption."), out, ed));
+  build(); draw();
+  const secs=()=>{ const R=ftaCalc(f); return [{h:"Top event",rows:[[f.top,f.tg+" gate, P = "+fmt(R.top)]]},...f.g.map((g,i)=>({h:"Branch "+(i+1)+": "+g.n+" ("+g.gate+", P = "+fmt(R.gp[i])+")",rows:g.e.map(e=>[e.n,String(e.p)])}))]; };
+  toolExport(p,rm,"FTA",[["Export Excel (.xlsx)","xlsx",()=>buildXlsx(mkDoc("Risk management","Fault tree - "+f.top,secs(),null).sheets)],["Export PDF","pdf",()=>buildPdf(mkDoc("Risk management","Fault tree - "+f.top,secs(),null).pdf)]]);
+  const T=[["PHA","Top-down, early","Concept phase, few design details","Finds hazards early and steers design; refine later with FMEA/FTA","24971 B.2"],["FTA","Top-down (deductive)","Severe harms, redundancy, combined faults, software and use errors together","Shows combinations and single points of failure; needs good data for probabilities","24971 B.3, IEC 61025"],["ETA","Forward (inductive)","An initiating event with several safeguards (e.g. power loss, use error)","Probability of each outcome path; complements FTA","24971 B.4, IEC 62502"],["FMEA","Bottom-up (inductive)","Components, process steps, tasks, software items","Systematic and thorough; single-fault only","24971 B.5, IEC 60812"],["HAZOP","Guide-word team review","Fluid, energy or information flows; processes","Finds deviations from design intent early","24971 B.6, IEC 61882"],["HACCP","Process control points","Manufacturing contamination, sterility, biological risks","Defines critical limits, monitoring and corrective actions","24971 B.7"]];
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Risk analysis techniques (ISO/TR 24971 Annex B)"), el("div",{class:"tblWrap"}, el("table",{class:"map rmTbl"}, el("thead",{}, el("tr",{}, ...["Technique","Direction","Use it for","Strengths and limits","Reference"].map(h=>el("th",{},h)))), el("tbody",{}, ...T.map(r=>el("tr",{}, ...r.map((c,i)=>i?el("td",{},c):el("td",{}, el("b",{},c)))))))),
+    el("p",{class:"src"},"No single technique is enough. A common set: PHA early, DFMEA/PFMEA and URRA for detail, and FTA for the most severe harms to check combinations and redundancy.")));
+}
+/* ---- URRA (IEC 62366-1) ---- */
+const UE_STEPS=[["5.1","Prepare the use specification","Medical indication, patient population, body part or tissue, user profiles, use environment, operating principle."],["5.2","Identify UI characteristics related to safety and potential use errors","Task analysis; for each task, how perception, cognition or action can fail."],["5.3","Identify known or foreseeable hazards and hazardous situations","Include known use problems of similar devices (complaints, MAUDE, field safety notices, literature). Feeds ISO 14971 5.4."],["5.4","Identify and describe hazard-related use scenarios","Sequence of tasks, user, environment, use error, hazardous situation and harm, with severity."],["5.5","Select hazard-related use scenarios for summative evaluation","All scenarios with serious harm (critical tasks), or a justified subset based on severity."],["5.6","Establish the user interface specification","Testable UI requirements, including the risk control measures and the accompanying documentation and training."],["5.7","Establish the UI evaluation plan","Formative methods and objectives; summative method, participants per user group, tasks, success criteria, data to collect."],["5.8","Design, implement and run formative evaluation","Iterate: expert reviews, cognitive walkthroughs, simulated-use studies. Feed findings back into the URRA."],["5.9","Perform summative evaluation","Representative users, realistic environment, production-equivalent device and labelling. Analyse every use error and close call for root cause and residual risk."],["5.10","User interface of unknown provenance","Legacy UI without a 62366-1 file: evaluate per Annex C using post-production data, hazard-related use scenarios and residual risk."]];
+function rmUrra(p){
+  const d=DEVT[rm.dev];
+  const fl=el("ol",{class:"rmFlow"}); UE_STEPS.forEach(([c,t,w])=>fl.append(el("li",{}, el("details",{class:"rmStep"}, el("summary",{}, el("span",{class:"cl"},"62366-1 "+c), el("b",{},t)), el("p",{},w)))));
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Usability engineering process and the URRA"), el("p",{class:"src"},"“URRA” is the name FDA uses in its human factors guidance. IEC 62366-1 does not use the acronym; the same content comes from clauses 5.1–5.5 and links to ISO 14971."), fl));
+  p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Best practice"),
+    el("ul",{}, el("li",{},"Classify each potential use error by where it starts: perception (cannot see or hear), cognition (misunderstands, forgets), or action (wrong movement, slip)."),
+      el("li",{},"A critical task is one where a use error could cause serious harm. All critical tasks go into the summative (HF validation) test."),
+      el("li",{},"FDA’s 2016 human factors guidance recommends at least 15 participants per distinct user group in the validation test."),
+      el("li",{},"Prefer design changes over labels and training. If training is a risk control, the summative test must reflect the realistic training and decay time."),
+      el("li",{},"Summative results are pass/fail on safety, not on satisfaction. Every use error, close call and difficulty needs root-cause analysis and a residual-risk decision."),
+      el("li",{},"Distinguish use error (in scope, reduce it) from abnormal use (deliberate, outside reasonable design control)."),
+      el("li",{},"Focus for "+d.l+": "+(d.an.find(x=>/URRA|usab|lay|formative/i.test(x))||"URRA for the main user tasks")+"."))));
+  rmWorksheet(p,"urra");
+}
+
 function route(){
   const id=(location.hash||"").slice(1)||"home";
-  if(["home","explore","dilemmas","map","sampling","tools","dates","audit"].includes(id)){ closeModal(); renderNav(id); ({home:()=>renderHome(false),explore:()=>renderHome(true),dilemmas:renderDilemmas,map:renderMap,sampling:renderSampling,tools:renderTools,dates:renderDates,audit:renderAudit})[id](); totals(); try{ window.scrollTo({top:0}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
+  if(["home","explore","dilemmas","map","sampling","tools","dates","audit","risk","msa","grr"].includes(id)){ closeModal(); renderNav(id); ({home:()=>renderHome(false),explore:()=>renderHome(true),dilemmas:renderDilemmas,map:renderMap,sampling:renderSampling,tools:renderTools,risk:renderRisk,msa:renderMsa,grr:renderGrr,dates:renderDates,audit:renderAudit})[id](); totals(); try{ window.scrollTo({top:0}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
   if(id==="random"){ closeModal(); renderNav("random"); renderRandom(); totals(); try{ window.scrollTo({top:document.getElementById("dnav").offsetTop}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
   const valid=CH.some(c=>c.id===id)?id:CH[0].id;
   currentTab=pendingTab||""; pendingTab=null;
