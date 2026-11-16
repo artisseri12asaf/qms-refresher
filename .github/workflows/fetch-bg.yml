@@ -1,0 +1,24 @@
+name: fetch-background
+on:
+  workflow_dispatch:
+  push:
+    paths: ['.github/workflows/fetch-bg.yml']
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download background photo (Unsplash, Tasha Kostyuk, Unsplash License)
+        run: |
+          curl -fsSL -o bg-corridor.jpg "https://images.unsplash.com/photo-1777269749032-d8d458ae594d?w=1600&q=60&fm=jpg"
+          curl -fsSL -o bg-corridor-sm.jpg "https://images.unsplash.com/photo-1777269749032-d8d458ae594d?w=900&q=55&fm=jpg"
+          ls -la bg-corridor*.jpg
+      - name: Commit
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add bg-corridor.jpg bg-corridor-sm.jpg
+          git commit -m "Add background photo" || echo "nothing to commit"
+          git push
