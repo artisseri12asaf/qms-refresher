@@ -2352,7 +2352,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="1.4.2", APPDATE="17-NOV-2026";
+const APPVER="1.4.3", APPDATE="17-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Asaf Ben Zion. All rights reserved.";
 const LEGAL=[["Copyright", "No part of this handbook’s original content may be copied or redistributed without written permission. Cited regulations, standards and guidance, and their links, remain the property of their official publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, data selection and design, developed with AI tools, and has been verified against requirements set by the author and against the official sources."], ["Sources", "Sources are limited to official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases. EU: EUR-Lex and European Commission pages, including MDCG guidance."], ["Important", "This application is intended for training only. Results from its tools require human review, verification and approval. Always check the linked source before citing anything in an audit response."]];
@@ -2438,7 +2438,7 @@ function svyDone(text){
 function openSurvey(){
   const val={};
   const form=el("div",{class:"svyForm"});
-  form.append(el("p",{class:"svyIntro"}, el("b",{},"Your feedback is important!"), "Please take a moment to complete this short survey (7 questions, about two minutes). It asks for no personal details. Your answers will help me learn whether this app is useful and how it can better serve QA professionals like you. 🙂"));
+  form.append(el("p",{class:"svyIntro"}, el("b",{},"Your feedback is important!"), "Please take a moment to complete this short survey (7 questions, about two minutes). Your answers will help me learn whether this app is useful and how it can better serve QA professionals like you. 🙂"));
   SVY_RATE.forEach(([k,q,lo,hi],i)=>{ form.append(svyStars(k,(i+1)+". "+q,lo,hi,val)); });
   const q5=el("fieldset",{class:"svyQ"}, el("legend",{},"5. Did you notice any mistakes or inaccuracies that need attention or correction?", el("small",{},"Optional")));
   const t5=el("textarea",{class:"svyTa",maxlength:"600",rows:"3","aria-label":"Mistakes or inaccuracies",placeholder:"Please describe what you found and where (screen or topic)"}); t5.addEventListener("input",()=>{ val.mistakes=t5.value; }); q5.append(t5);
