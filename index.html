@@ -1070,6 +1070,51 @@ footer#siteFoot .legalBody p.imp{font-size:14px; color:var(--ink)}
 }
 @keyframes sheetUp{from{opacity:0; transform:translateY(14px)} to{opacity:1; transform:none}}
 @media (prefers-reduced-motion:reduce){ html[data-sheet] nav#navRow2.mainNav{animation:none} }
+
+/* 1.4.0 quick survey */
+.hRight{display:grid; gap:10px; min-width:0}
+.svyBtn{font:inherit; display:flex; align-items:center; justify-content:center; gap:8px; height:42px; border:1px solid color-mix(in srgb,var(--sky) 55%,var(--line)); background:color-mix(in srgb,var(--sky) 9%,var(--card)); color:var(--skyInk); border-radius:12px; font-weight:700; font-size:14.5px; cursor:pointer; box-shadow:var(--shadow); transition:background .15s, transform .15s}
+.svyBtn:hover{background:color-mix(in srgb,var(--sky) 16%,var(--card)); transform:translateY(-1px)}
+.svyBtn[hidden]{display:none}
+.svyBtn .ico{width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round}
+.svyForm{display:grid; gap:14px}
+.svyIntro{margin:0; font-size:15.5px; color:var(--muted)}
+.svyIntro b{color:var(--ink); font-size:17px; display:block; margin-bottom:2px}
+.svyQ{display:grid; gap:6px; border:1px solid var(--line); border-radius:12px; padding:12px 14px; background:var(--card); margin:0; min-width:0}
+.svyQ legend{font-weight:700; font-size:15.5px; padding:0 4px; max-width:100%}
+.svyQ legend small{font-weight:600; color:var(--muted); font-size:12.5px; margin-left:4px}
+.svyStars{display:flex; gap:2px}
+.svyStars button{font:inherit; font-size:34px; line-height:1; width:46px; height:46px; border:0; background:none; cursor:pointer; color:var(--line); padding:0; border-radius:10px; touch-action:manipulation; -webkit-tap-highlight-color:transparent}
+.svyStars button.on{color:#e0a82e}
+.svyStars button:hover{transform:scale(1.08)}
+.svyStars button:focus-visible{outline:3px solid #3b88b5; outline-offset:1px}
+.svyEnds{display:flex; justify-content:space-between; font-size:12px; color:var(--muted); max-width:240px}
+.svyTa{font:inherit; font-size:15.5px; width:100%; border:1.5px solid var(--line); border-radius:10px; padding:9px 11px; background:var(--paper); color:var(--ink); resize:vertical; min-height:44px}
+.svyTa:focus{outline:none; border-color:var(--sky); background:var(--card)}
+.svyCnt{font-size:12px; color:var(--muted); text-align:right}
+.svyOpts{display:flex; flex-wrap:wrap; gap:6px}
+.svyOpts button{font:inherit; font-size:14.5px; font-weight:600; padding:8px 12px; border-radius:99px; border:1px solid var(--line); background:var(--card); color:var(--ink); cursor:pointer; min-height:40px}
+.svyOpts button[aria-checked="true"]{background:var(--skyInk); border-color:var(--skyInk); color:#fff}
+.svySub{font-size:14px; font-weight:700; color:var(--muted); margin:4px 0 0}
+.svyThanks{margin:0; font-size:15.5px; text-align:center}
+.svyMsg{margin:0; min-height:1.3em; font-size:14px; color:var(--bad); text-align:center}
+.svyGo{font:inherit; font-weight:800; font-size:17px; padding:13px 18px; border-radius:12px; border:0; background:var(--skyInk); color:#fff; cursor:pointer; width:100%}
+.svyGo:disabled{opacity:.5; cursor:default}
+.svyDone{display:grid; gap:10px; text-align:center; padding:10px 0}
+.svyDone b{font-size:20px}
+.svyAdm{margin-top:16px; border-top:1px solid var(--line); padding-top:14px; display:grid; gap:10px}
+.svyAdm h3{font-size:17px; margin:0}
+.svyBar{display:flex; flex-wrap:wrap; gap:8px 14px; align-items:center; font-size:14px; color:var(--muted)}
+.svyBar label{display:flex; gap:6px; align-items:center; cursor:pointer}
+.svyRow{display:grid; grid-template-columns:auto 1fr; gap:10px; align-items:start; border:1px solid var(--line); border-radius:12px; padding:10px 12px; background:var(--card)}
+.svyRow.done{opacity:.6; background:var(--paper)}
+.svyRow input[type=checkbox]{width:24px; height:24px; margin-top:2px; cursor:pointer}
+.svyRow b{display:block; font-size:14.5px}
+.svyRow small{color:var(--muted); font-size:12.5px}
+.svyRow details summary{cursor:pointer; font-size:13.5px; color:var(--skyInk); font-weight:700; margin-top:4px}
+.svyRow dl{display:grid; grid-template-columns:max-content 1fr; gap:3px 10px; margin:8px 0 0; font-size:14px}
+.svyRow dt{color:var(--muted); font-weight:700} .svyRow dd{margin:0; white-space:pre-wrap; overflow-wrap:anywhere}
+@media (max-width:640px){ .svyStars button{width:52px; height:52px; font-size:38px} .svyStars{justify-content:space-between; max-width:280px} }
 </style>
 </head>
 <body>
@@ -2249,6 +2294,7 @@ const ICONS={
  mdr:'<circle cx="12" cy="12" r="9"/><path d="M12 6.5v.01M15.9 8.1v.01M17.5 12v.01M15.9 15.9v.01M12 17.5v.01M8.1 15.9v.01M6.5 12v.01M8.1 8.1v.01" stroke-width="2.6"/>',
  fdapre:'<path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>',
  gloss:'<path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/><path d="M9 8h6M9 11h4"/>',
+ survey:'<rect x="5" y="5" width="14" height="16" rx="2"/><path d="M9 3h6v4H9z"/><path d="M9 12l2 2 4-4"/><path d="M9 17h6"/>',
  search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>',
  audit:'<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v3h6V3M8.5 12l2.5 2.5 4.5-5"/>'
 };
@@ -2300,7 +2346,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="1.3.1", APPDATE="17-NOV-2026";
+const APPVER="1.4.0", APPDATE="17-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Asaf Ben Zion. All rights reserved.";
 const LEGAL=[["Copyright", "No part of this handbook’s original content may be copied or redistributed without written permission. Cited regulations, standards and guidance, and their links, remain the property of their official publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, data selection and design, developed with AI tools, and has been verified against requirements set by the author and against the official sources."], ["Sources", "Sources are limited to official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases. EU: EUR-Lex and European Commission pages, including MDCG guidance."], ["Important", "This application is intended for training only. Results from its tools require human review, verification and approval. Always check the linked source before citing anything in an audit response."]];
@@ -2314,6 +2360,108 @@ function renderFooter(){
 window.addEventListener("hashchange",renderFooter);
 renderFooter();
 
+/* ---------- 1.4.0 quick survey (answers go to the Claude db; the button only appears where db is available) ---------- */
+let SVY_DB=null;
+const SVY_RATE=[
+ ["overall","How would you rate your overall experience with the app?","Poor","Excellent"],
+ ["nav","How easy was it to navigate between the different screens?","Difficult","Very easy"],
+ ["train","How would you rate the difficulty of the questions in Training mode?","Too easy","Very difficult"],
+ ["insp","How would you rate your experience of Inspection mode?","Poor","Excellent"]];
+const SVY_AGAIN=[["yes","Yes, definitely"],["prob","Probably"],["unsure","Not sure"],["no","Probably not"]];
+const SVY_HELP=[["lot","Yes, a lot"],["some","Somewhat"],["little","Not really"]];
+const SVY_LAB=Object.fromEntries([...SVY_AGAIN,...SVY_HELP]);
+function svyButton(){
+  const b=el("button",{class:"svyBtn",type:"button",onclick:openSurvey}, ico("survey"), el("span",{},"Quick Survey"));
+  if(!SVY_DB) b.hidden=true; return b;
+}
+(async()=>{
+  try{
+    if(!window.claude||typeof window.claude.use!=="function") return;
+    const db=await window.claude.use("db"); if(!db) return;
+    let ok=true; try{ const u=await window.claude.use("user"); if(u&&typeof u.can==="function"){ const w=await u.can("data.write"); if(w===false) ok=false; } }catch(e){}
+    if(!ok) return;
+    SVY_DB=db; document.querySelectorAll(".svyBtn").forEach(b=>b.hidden=false);
+  }catch(e){}
+})();
+function svyStars(key,q,lo,hi,val){
+  const wrap=el("fieldset",{class:"svyQ"}, el("legend",{},q));
+  const row=el("div",{class:"svyStars",role:"radiogroup","aria-label":q});
+  const btns=[1,2,3,4,5].map(n=>{ const b=el("button",{type:"button",role:"radio","aria-checked":"false","aria-label":n+(n===1?" star":" stars")+(n===1?", "+lo:n===5?", "+hi:""),"data-n":String(n)},"★");
+    b.addEventListener("click",()=>{ val[key]=(val[key]===n?0:n); paint(); }); row.append(b); return b; });
+  const paint=()=>btns.forEach((b,i)=>{ const on=i<(val[key]||0); b.classList.toggle("on",on); b.setAttribute("aria-checked",String((val[key]||0)===i+1)); });
+  wrap.append(row, el("div",{class:"svyEnds"}, el("span",{},"1 · "+lo), el("span",{},"5 · "+hi)));
+  const ta=el("textarea",{class:"svyTa",maxlength:"200",rows:"2","aria-label":"Optional comment: "+q,placeholder:"Optional comment"});
+  ta.addEventListener("input",()=>{ val[key+"_c"]=ta.value; });
+  wrap.append(ta);
+  return wrap;
+}
+function svyChoice(key,label,opts,val){
+  const g=el("div",{class:"svyOpts",role:"radiogroup","aria-label":label});
+  const bs=opts.map(([k,t])=>{ const b=el("button",{type:"button",role:"radio","aria-checked":"false"},t); b.addEventListener("click",()=>{ val[key]=(val[key]===k?"":k); bs.forEach((x,i)=>x.setAttribute("aria-checked",String(opts[i][0]===val[key]))); }); g.append(b); return b; });
+  return el("div",{}, el("p",{class:"svySub"},label), g);
+}
+function openSurvey(){
+  const val={};
+  const form=el("div",{class:"svyForm"});
+  form.append(el("p",{class:"svyIntro"}, el("b",{},"Your feedback is important!"), "Please take a moment to complete this short, anonymous survey (7 questions, about two minutes). Your answers will help me learn whether this app is useful and how it can better serve QA professionals like you. 🙂"));
+  SVY_RATE.forEach(([k,q,lo,hi],i)=>{ const f=svyStars(k,(i+1)+". "+q,lo,hi,val); form.append(f); });
+  const q5=el("fieldset",{class:"svyQ"}, el("legend",{},"5. Did you notice any mistakes or inaccuracies that need attention or correction?", el("small",{},"Optional")));
+  const t5=el("textarea",{class:"svyTa",maxlength:"600",rows:"3","aria-label":"Mistakes or inaccuracies",placeholder:"Please describe what you found and where (screen or topic)"}); t5.addEventListener("input",()=>{ val.mistakes=t5.value; }); q5.append(t5);
+  const q6=el("fieldset",{class:"svyQ"}, el("legend",{},"6. Would you use this app again, and can this type of app help you learn and strengthen your knowledge?"));
+  q6.append(svyChoice("again","Would you use it again?",SVY_AGAIN,val), svyChoice("help","Can this type of app help you learn more and enhance your knowledge?",SVY_HELP,val));
+  const q7=el("fieldset",{class:"svyQ"}, el("legend",{},"7. General comments", el("small",{},"Optional, up to 200 characters")));
+  const t7=el("textarea",{class:"svyTa",maxlength:"200",rows:"3","aria-label":"General comments",placeholder:"Anything else you would like to share"}); const cnt=el("div",{class:"svyCnt"},"0 / 200");
+  t7.addEventListener("input",()=>{ val.general=t7.value; cnt.textContent=t7.value.length+" / 200"; }); q7.append(t7,cnt);
+  const msg=el("p",{class:"svyMsg",role:"status"});
+  const go=el("button",{class:"svyGo",type:"button"},"Submit");
+  go.addEventListener("click",async()=>{
+    const r={}; SVY_RATE.forEach(([k])=>{ if(val[k]) r[k]=val[k]; });
+    const c={}; SVY_RATE.forEach(([k])=>{ const t=(val[k+"_c"]||"").trim(); if(t) c[k]=t.slice(0,200); });
+    const doc={v:1, at:new Date().toISOString(), ts:Date.now(), app:APPVER, r, c, mistakes:(val.mistakes||"").trim().slice(0,600), again:val.again||"", help:val.help||"", general:(val.general||"").trim().slice(0,200), handled:false};
+    if(!Object.keys(r).length && !Object.keys(c).length && !doc.mistakes && !doc.again && !doc.help && !doc.general){ msg.style.color="var(--bad)"; msg.textContent="Please answer at least one question before submitting."; return; }
+    if(!SVY_DB){ msg.textContent="The survey is not available right now."; return; }
+    go.disabled=true; msg.style.color="var(--muted)"; msg.textContent="Sending…";
+    try{ await SVY_DB.collection("surveys").add(doc);
+      const box=el("div",{class:"svyDone"}, el("b",{},"Thank you! 🙏"), el("p",{},"Your answers were received. I hope you found the app enjoyable and interesting."), el("button",{class:"cta",type:"button",onclick:closeModal},"Close"));
+      form.replaceWith(box); const f=box.querySelector("button"); if(f) f.focus();
+    }catch(e){ go.disabled=false; msg.style.color="var(--bad)"; msg.textContent="Couldn’t send your answers. Please check the connection and try again."; }
+  });
+  form.append(q5,q6,q7, el("p",{class:"svyThanks"},"Thank you for your time. I hope you find the app enjoyable and interesting."), msg, go);
+  modal("Quick Survey", form);
+}
+async function svyAdmin(host){
+  try{
+    if(!SVY_DB) return;
+    const u=await window.claude.use("user"); if(!u||!(await u.canEdit())) return;
+    const hd=el("h3",{},"Survey responses"), bar=el("div",{class:"svyBar"}), list=el("div",{class:"vvList"});
+    host.append(hd,bar,list); list.append(el("p",{class:"vvSt",role:"status"},"Loading…"));
+    let rows=[], hideDone=false;
+    const stars=n=>n?"★".repeat(n)+"☆".repeat(5-n):"–";
+    const NM={overall:"Overall",nav:"Navigation",train:"Training difficulty",insp:"Inspection mode"};
+    const load=async()=>{ try{ const sn=await SVY_DB.collection("surveys").get(); rows=sn.docs.map(x=>({id:x.id,d:Object.assign({},x.data())})).sort((a,b)=>(b.d.ts||0)-(a.d.ts||0)); paint(); }catch(e){ list.innerHTML=""; list.append(el("p",{class:"vvSt"},"Couldn’t load the responses. Try Refresh.")); } };
+    const paint=()=>{
+      list.innerHTML=""; bar.innerHTML="";
+      const todo=rows.filter(x=>!x.d.handled).length;
+      const avg=k=>{ const a=rows.map(x=>x.d.r&&x.d.r[k]).filter(Boolean); return a.length?(a.reduce((p,c)=>p+c,0)/a.length).toFixed(1):"–"; };
+      const hide=el("input",{type:"checkbox"}); hide.checked=hideDone; hide.addEventListener("change",()=>{ hideDone=hide.checked; paint(); });
+      bar.append(el("span",{},rows.length+" responses · "+todo+" to review"), el("label",{},hide," Hide treated"), el("button",{class:"tab",type:"button",onclick:load},"Refresh"));
+      if(rows.length) list.append(el("p",{class:"vvSt"},"Average: overall "+avg("overall")+" · navigation "+avg("nav")+" · training difficulty "+avg("train")+" · Inspection mode "+avg("insp")));
+      const shown=rows.filter(x=>!(hideDone&&x.d.handled));
+      if(!shown.length) list.append(el("p",{class:"vvSt"},rows.length?"All responses are marked as treated.":"No responses yet."));
+      shown.forEach(({id,d})=>{
+        const cb=el("input",{type:"checkbox","aria-label":"Mark as read and treated"}); cb.checked=!!d.handled;
+        cb.addEventListener("change",async()=>{ const want=cb.checked; cb.disabled=true; try{ await SVY_DB.collection("surveys").doc(id).update({handled:want}); d.handled=want; }catch(e){ cb.checked=!want; } paint(); });
+        const r=d.r||{}, c=d.c||{}, dl=el("dl",{});
+        const add=(k,t)=>{ if(t){ dl.append(el("dt",{},k), el("dd",{},t)); } };
+        Object.keys(NM).forEach(k=>{ if(r[k]||c[k]) add(NM[k], (r[k]?stars(r[k]):"")+(c[k]?(r[k]?"  ":"")+c[k]:"")); });
+        add("Mistakes",d.mistakes); add("Use again",SVY_LAB[d.again]||""); add("Helps learning",SVY_LAB[d.help]||""); add("General",d.general);
+        const when=d.at?new Date(d.at).toLocaleString([], {dateStyle:"medium",timeStyle:"short"}):"";
+        list.append(el("div",{class:"svyRow"+(d.handled?" done":"")}, cb, el("div",{}, el("b",{},"Overall "+stars(r.overall)+" · Nav "+stars(r.nav)+" · Train "+stars(r.train)+" · Insp "+stars(r.insp)), el("small",{},when+(d.app?" · v"+d.app:"")), el("details",{}, el("summary",{},"Show answers"), dl))));
+      });
+    };
+    await load();
+  }catch(e){}
+}
 /* ---------- hidden V&V records menu (opened from the shield logo) ---------- */
 const VVDOCS=[["QAH-URS-001","User Requirements Specification","URS","docx"],["QAH-SRS-001","Software Requirements Specification","SRS","docx"],["QAH-SDD-001","Software Design Description","SDD","docx"],["QAH-STP-001","Software Test Plan","STP","docx"],["QAH-STR-001","Software Test Report","STR","docx"],["QAH-RTM-001","Traceability Matrix and Sources","RTM","xlsx"]];
 async function vvGet(code,ext,id,st){
@@ -2334,7 +2482,9 @@ function openVV(){
     list.append(el("div",{class:"vvRow"}, el("div",{}, el("b",{},t), el("small",{},id+" · Rev "+APPVER)),
       el("div",{class:"vvBtns"}, el("button",{class:"tab",type:"button",onclick:()=>vvGet(code,ext,id,st)},ext==="xlsx"?"Excel":"Word"), el("button",{class:"tab",type:"button",onclick:()=>vvGet(code,"pdf",id,st)},"PDF"))));
   });
-  modal("Software V&V records", el("div",{class:"vvBox"}, el("p",{},"Read-only validation records for "+VERLINE+". Approach: risk-based software assurance for a training tool."), list, st));
+  const adm=el("div",{class:"svyAdm"});
+  modal("Software V&V records", el("div",{class:"vvBox"}, el("p",{},"Read-only validation records for "+VERLINE+". Approach: risk-based software assurance for a training tool."), list, st, adm));
+  svyAdmin(adm).then(()=>{ if(!adm.childNodes.length) adm.remove(); });
 }
 (function(){ const sv=document.querySelector(".brand2 svg"); if(!sv) return; sv.addEventListener("click",e=>{ e.preventDefault(); e.stopPropagation(); openVV(); }); })();
 function heroTop(show){
@@ -2351,7 +2501,7 @@ function heroTop(show){
   h.append(el("div",{class:"hTxt"},
     el("h2",{class:"heroTitle"},"Quality Handbook and Training Guide"),
     el("p",{class:"heroTag"},"The Hitchhiker’s QA Guide assistant to the Medical Devices Universe"),
-    el("p",{class:"hDesc"},"A working handbook for QA professionals on Class II and III devices: requirements, real-world dilemmas and practice questions."), el("p",{class:"hVer"},VERLINE)), stats);
+    el("p",{class:"hDesc"},"A working handbook for QA professionals on Class II and III devices: requirements, real-world dilemmas and practice questions."), el("p",{class:"hVer"},VERLINE)), el("div",{class:"hRight"}, stats, svyButton()));
   const reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
   const bs=[...stats.querySelectorAll("b")];
   if(reduce){ bs.forEach(b=>b.textContent=b.dataset.n); }
