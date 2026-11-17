@@ -1075,7 +1075,6 @@ footer#siteFoot .legalBody p.imp{font-size:14px; color:var(--ink)}
 .hRight{display:grid; gap:10px; min-width:0}
 .svyBtn{font:inherit; display:flex; align-items:center; justify-content:center; gap:8px; height:42px; border:1px solid color-mix(in srgb,var(--sky) 55%,var(--line)); background:color-mix(in srgb,var(--sky) 9%,var(--card)); color:var(--skyInk); border-radius:12px; font-weight:700; font-size:14.5px; cursor:pointer; box-shadow:var(--shadow); transition:background .15s, transform .15s}
 .svyBtn:hover{background:color-mix(in srgb,var(--sky) 16%,var(--card)); transform:translateY(-1px)}
-.svyBtn[hidden]{display:none}
 .svyBtn .ico{width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round}
 .svyForm{display:grid; gap:14px}
 .svyIntro{margin:0; font-size:15.5px; color:var(--muted)}
@@ -1115,6 +1114,13 @@ footer#siteFoot .legalBody p.imp{font-size:14px; color:var(--ink)}
 .svyRow dl{display:grid; grid-template-columns:max-content 1fr; gap:3px 10px; margin:8px 0 0; font-size:14px}
 .svyRow dt{color:var(--muted); font-weight:700} .svyRow dd{margin:0; white-space:pre-wrap; overflow-wrap:anywhere}
 @media (max-width:640px){ .svyStars button{width:52px; height:52px; font-size:38px} .svyStars{justify-content:space-between; max-width:280px} }
+
+/* 1.4.1 survey: send-back screen */
+.svyBtns{display:flex; flex-wrap:wrap; gap:8px; justify-content:center}
+.svyBtns .cta{min-height:44px}
+.svyA{text-decoration:none; display:inline-flex; align-items:center; justify-content:center}
+.svyOut{font-size:13.5px; text-align:left; background:var(--paper)}
+.svyDone .vvSt{text-align:center}
 </style>
 </head>
 <body>
@@ -2346,7 +2352,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="1.4.0", APPDATE="17-NOV-2026";
+const APPVER="1.4.1", APPDATE="17-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Asaf Ben Zion. All rights reserved.";
 const LEGAL=[["Copyright", "No part of this handbook’s original content may be copied or redistributed without written permission. Cited regulations, standards and guidance, and their links, remain the property of their official publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, data selection and design, developed with AI tools, and has been verified against requirements set by the author and against the official sources."], ["Sources", "Sources are limited to official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases. EU: EUR-Lex and European Commission pages, including MDCG guidance."], ["Important", "This application is intended for training only. Results from its tools require human review, verification and approval. Always check the linked source before citing anything in an audit response."]];
@@ -2360,29 +2366,50 @@ function renderFooter(){
 window.addEventListener("hashchange",renderFooter);
 renderFooter();
 
-/* ---------- 1.4.0 quick survey (answers go to the Claude db; the button only appears where db is available) ---------- */
-let SVY_DB=null;
+/* ---------- 1.4.1 quick survey (no server: the answers are sent back by message and collected in the hidden menu) ---------- */
+const SVY_HEAD="Quick Survey · Medical Device QA Handbook";
+const SVY_KEY="qah-survey-inbox-v1";
 const SVY_RATE=[
  ["overall","How would you rate your overall experience with the app?","Poor","Excellent"],
  ["nav","How easy was it to navigate between the different screens?","Difficult","Very easy"],
  ["train","How would you rate the difficulty of the questions in Training mode?","Too easy","Very difficult"],
  ["insp","How would you rate your experience of Inspection mode?","Poor","Excellent"]];
+const SVY_NM={overall:"Overall experience",nav:"Navigation",train:"Training difficulty",insp:"Inspection mode"};
+const SVY_NUM={overall:"1",nav:"2",train:"3",insp:"4"};
 const SVY_AGAIN=[["yes","Yes, definitely"],["prob","Probably"],["unsure","Not sure"],["no","Probably not"]];
 const SVY_HELP=[["lot","Yes, a lot"],["some","Somewhat"],["little","Not really"]];
 const SVY_LAB=Object.fromEntries([...SVY_AGAIN,...SVY_HELP]);
-function svyButton(){
-  const b=el("button",{class:"svyBtn",type:"button",onclick:openSurvey}, ico("survey"), el("span",{},"Quick Survey"));
-  if(!SVY_DB) b.hidden=true; return b;
+const svyOne=t=>String(t||"").replace(/\s+/g," ").trim();
+function svyNow(){ const d=new Date(), p=n=>String(n).padStart(2,"0"); return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate())+" "+p(d.getHours())+":"+p(d.getMinutes()); }
+function svyHash(s){ let h=5381; for(let i=0;i<s.length;i++) h=((h<<5)+h+s.charCodeAt(i))|0; return (h>>>0).toString(36); }
+function svyButton(){ return el("button",{class:"svyBtn",type:"button",onclick:openSurvey}, ico("survey"), el("span",{},"Quick Survey")); }
+function svyText(d){
+  const L=[SVY_HEAD+" · v"+APPVER, "Sent: "+d.at];
+  SVY_RATE.forEach(([k])=>{ if(d.r[k]||d.c[k]) L.push(SVY_NUM[k]+" "+SVY_NM[k]+": "+(d.r[k]?d.r[k]+"/5":"–")+(d.c[k]?" | "+d.c[k]:"")); });
+  if(d.mistakes) L.push("5 Mistakes: "+d.mistakes);
+  if(d.again) L.push("6a Use again: "+d.again);
+  if(d.help) L.push("6b Helps learning: "+d.help);
+  if(d.general) L.push("7 General: "+d.general);
+  return L.join("\n");
 }
-(async()=>{
-  try{
-    if(!window.claude||typeof window.claude.use!=="function") return;
-    const db=await window.claude.use("db"); if(!db) return;
-    let ok=true; try{ const u=await window.claude.use("user"); if(u&&typeof u.can==="function"){ const w=await u.can("data.write"); if(w===false) ok=false; } }catch(e){}
-    if(!ok) return;
-    SVY_DB=db; document.querySelectorAll(".svyBtn").forEach(b=>b.hidden=false);
-  }catch(e){}
-})();
+function svyParse(txt){
+  const out=[];
+  String(txt).split(/^(?=Quick Survey · Medical Device QA Handbook)/m).forEach(p=>{
+    if(!p.startsWith(SVY_HEAD)) return;
+    const lines=p.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+    const e={raw:lines.join("\n"), at:"", ver:"", r:{}, c:{}, mistakes:"", again:"", help:"", general:"", handled:false};
+    const hv=lines[0].match(/· v([\w.]+)\s*$/); if(hv) e.ver=hv[1];
+    lines.slice(1).forEach(ln=>{
+      let m=ln.match(/^Sent:\s*(.*)$/); if(m){ e.at=m[1]; return; }
+      m=ln.match(/^(\d)([ab])? [^:]+:\s*(.*)$/); if(!m) return;
+      const key=m[1]+(m[2]||""), v=m[3], rk={1:"overall",2:"nav",3:"train",4:"insp"}[m[1]];
+      if(rk&&!m[2]){ const q=v.match(/^(?:(\d)\/5|–)(?:\s*\|\s*(.*))?$/); if(q){ if(q[1]) e.r[rk]=+q[1]; if(q[2]) e.c[rk]=q[2]; } return; }
+      if(key==="5") e.mistakes=v; else if(key==="6a") e.again=v; else if(key==="6b") e.help=v; else if(key==="7") e.general=v;
+    });
+    e.id=svyHash(e.raw); out.push(e);
+  });
+  return out;
+}
 function svyStars(key,q,lo,hi,val){
   const wrap=el("fieldset",{class:"svyQ"}, el("legend",{},q));
   const row=el("div",{class:"svyStars",role:"radiogroup","aria-label":q});
@@ -2400,11 +2427,21 @@ function svyChoice(key,label,opts,val){
   const bs=opts.map(([k,t])=>{ const b=el("button",{type:"button",role:"radio","aria-checked":"false"},t); b.addEventListener("click",()=>{ val[key]=(val[key]===k?"":k); bs.forEach((x,i)=>x.setAttribute("aria-checked",String(opts[i][0]===val[key]))); }); g.append(b); return b; });
   return el("div",{}, el("p",{class:"svySub"},label), g);
 }
+function svyDone(text){
+  const ta=el("textarea",{class:"svyTa svyOut",readonly:"",rows:"8","aria-label":"Your answers, ready to send"}); ta.value=text;
+  const st=el("p",{class:"vvSt",role:"status"});
+  const copy=async()=>{ const ok=()=>{ st.textContent="Copied. Paste it into your message."; };
+    try{ await navigator.clipboard.writeText(text); ok(); }catch(e){ try{ ta.focus(); ta.select(); if(document.execCommand("copy")) ok(); else st.textContent="Select the text below and copy it."; }catch(_){ st.textContent="Select the text below and copy it."; } } };
+  const row=el("div",{class:"svyBtns"});
+  if(typeof navigator.share==="function") row.append(el("button",{class:"cta",type:"button",onclick:async()=>{ try{ await navigator.share({title:"Quick Survey answers",text}); st.textContent="Thank you!"; }catch(e){ if(!e||e.name!=="AbortError") st.textContent="Sharing is not available here. Use Email or Copy."; } }},"Share…"));
+  row.append(el("a",{class:"cta svyA",href:"mailto:?subject="+encodeURIComponent("Quick Survey answers · Medical Device QA Handbook")+"&body="+encodeURIComponent(text)},"Email"), el("button",{class:"cta",type:"button",onclick:copy},"Copy answers"));
+  return el("div",{class:"svyDone"}, el("b",{},"Thank you! 🙏"), el("p",{},"One last step: please send your answers back to the person who shared this app with you. Choose how:"), row, ta, st, el("button",{class:"reset",type:"button",onclick:closeModal},"Close"));
+}
 function openSurvey(){
   const val={};
   const form=el("div",{class:"svyForm"});
-  form.append(el("p",{class:"svyIntro"}, el("b",{},"Your feedback is important!"), "Please take a moment to complete this short, anonymous survey (7 questions, about two minutes). Your answers will help me learn whether this app is useful and how it can better serve QA professionals like you. 🙂"));
-  SVY_RATE.forEach(([k,q,lo,hi],i)=>{ const f=svyStars(k,(i+1)+". "+q,lo,hi,val); form.append(f); });
+  form.append(el("p",{class:"svyIntro"}, el("b",{},"Your feedback is important!"), "Please take a moment to complete this short survey (7 questions, about two minutes). It asks for no personal details. Your answers will help me learn whether this app is useful and how it can better serve QA professionals like you. 🙂"));
+  SVY_RATE.forEach(([k,q,lo,hi],i)=>{ form.append(svyStars(k,(i+1)+". "+q,lo,hi,val)); });
   const q5=el("fieldset",{class:"svyQ"}, el("legend",{},"5. Did you notice any mistakes or inaccuracies that need attention or correction?", el("small",{},"Optional")));
   const t5=el("textarea",{class:"svyTa",maxlength:"600",rows:"3","aria-label":"Mistakes or inaccuracies",placeholder:"Please describe what you found and where (screen or topic)"}); t5.addEventListener("input",()=>{ val.mistakes=t5.value; }); q5.append(t5);
   const q6=el("fieldset",{class:"svyQ"}, el("legend",{},"6. Would you use this app again, and can this type of app help you learn and strengthen your knowledge?"));
@@ -2414,53 +2451,52 @@ function openSurvey(){
   t7.addEventListener("input",()=>{ val.general=t7.value; cnt.textContent=t7.value.length+" / 200"; }); q7.append(t7,cnt);
   const msg=el("p",{class:"svyMsg",role:"status"});
   const go=el("button",{class:"svyGo",type:"button"},"Submit");
-  go.addEventListener("click",async()=>{
+  go.addEventListener("click",()=>{
     const r={}; SVY_RATE.forEach(([k])=>{ if(val[k]) r[k]=val[k]; });
-    const c={}; SVY_RATE.forEach(([k])=>{ const t=(val[k+"_c"]||"").trim(); if(t) c[k]=t.slice(0,200); });
-    const doc={v:1, at:new Date().toISOString(), ts:Date.now(), app:APPVER, r, c, mistakes:(val.mistakes||"").trim().slice(0,600), again:val.again||"", help:val.help||"", general:(val.general||"").trim().slice(0,200), handled:false};
-    if(!Object.keys(r).length && !Object.keys(c).length && !doc.mistakes && !doc.again && !doc.help && !doc.general){ msg.style.color="var(--bad)"; msg.textContent="Please answer at least one question before submitting."; return; }
-    if(!SVY_DB){ msg.textContent="The survey is not available right now."; return; }
-    go.disabled=true; msg.style.color="var(--muted)"; msg.textContent="Sending…";
-    try{ await SVY_DB.collection("surveys").add(doc);
-      const box=el("div",{class:"svyDone"}, el("b",{},"Thank you! 🙏"), el("p",{},"Your answers were received. I hope you found the app enjoyable and interesting."), el("button",{class:"cta",type:"button",onclick:closeModal},"Close"));
-      form.replaceWith(box); const f=box.querySelector("button"); if(f) f.focus();
-    }catch(e){ go.disabled=false; msg.style.color="var(--bad)"; msg.textContent="Couldn’t send your answers. Please check the connection and try again."; }
+    const c={}; SVY_RATE.forEach(([k])=>{ const t=svyOne(val[k+"_c"]).slice(0,200); if(t) c[k]=t; });
+    const d={at:svyNow(), r, c, mistakes:svyOne(val.mistakes).slice(0,600), again:SVY_LAB[val.again]||"", help:SVY_LAB[val.help]||"", general:svyOne(val.general).slice(0,200)};
+    if(!Object.keys(r).length && !Object.keys(c).length && !d.mistakes && !d.again && !d.help && !d.general){ msg.textContent="Please answer at least one question before submitting."; return; }
+    const box=svyDone(svyText(d)); form.replaceWith(box); const f=box.querySelector("button,a"); if(f) f.focus();
   });
   form.append(q5,q6,q7, el("p",{class:"svyThanks"},"Thank you for your time. I hope you find the app enjoyable and interesting."), msg, go);
   modal("Quick Survey", form);
 }
-async function svyAdmin(host){
-  try{
-    if(!SVY_DB) return;
-    const u=await window.claude.use("user"); if(!u||!(await u.canEdit())) return;
-    const hd=el("h3",{},"Survey responses"), bar=el("div",{class:"svyBar"}), list=el("div",{class:"vvList"});
-    host.append(hd,bar,list); list.append(el("p",{class:"vvSt",role:"status"},"Loading…"));
-    let rows=[], hideDone=false;
-    const stars=n=>n?"★".repeat(n)+"☆".repeat(5-n):"–";
-    const NM={overall:"Overall",nav:"Navigation",train:"Training difficulty",insp:"Inspection mode"};
-    const load=async()=>{ try{ const sn=await SVY_DB.collection("surveys").get(); rows=sn.docs.map(x=>({id:x.id,d:Object.assign({},x.data())})).sort((a,b)=>(b.d.ts||0)-(a.d.ts||0)); paint(); }catch(e){ list.innerHTML=""; list.append(el("p",{class:"vvSt"},"Couldn’t load the responses. Try Refresh.")); } };
-    const paint=()=>{
-      list.innerHTML=""; bar.innerHTML="";
-      const todo=rows.filter(x=>!x.d.handled).length;
-      const avg=k=>{ const a=rows.map(x=>x.d.r&&x.d.r[k]).filter(Boolean); return a.length?(a.reduce((p,c)=>p+c,0)/a.length).toFixed(1):"–"; };
-      const hide=el("input",{type:"checkbox"}); hide.checked=hideDone; hide.addEventListener("change",()=>{ hideDone=hide.checked; paint(); });
-      bar.append(el("span",{},rows.length+" responses · "+todo+" to review"), el("label",{},hide," Hide treated"), el("button",{class:"tab",type:"button",onclick:load},"Refresh"));
-      if(rows.length) list.append(el("p",{class:"vvSt"},"Average: overall "+avg("overall")+" · navigation "+avg("nav")+" · training difficulty "+avg("train")+" · Inspection mode "+avg("insp")));
-      const shown=rows.filter(x=>!(hideDone&&x.d.handled));
-      if(!shown.length) list.append(el("p",{class:"vvSt"},rows.length?"All responses are marked as treated.":"No responses yet."));
-      shown.forEach(({id,d})=>{
-        const cb=el("input",{type:"checkbox","aria-label":"Mark as read and treated"}); cb.checked=!!d.handled;
-        cb.addEventListener("change",async()=>{ const want=cb.checked; cb.disabled=true; try{ await SVY_DB.collection("surveys").doc(id).update({handled:want}); d.handled=want; }catch(e){ cb.checked=!want; } paint(); });
-        const r=d.r||{}, c=d.c||{}, dl=el("dl",{});
-        const add=(k,t)=>{ if(t){ dl.append(el("dt",{},k), el("dd",{},t)); } };
-        Object.keys(NM).forEach(k=>{ if(r[k]||c[k]) add(NM[k], (r[k]?stars(r[k]):"")+(c[k]?(r[k]?"  ":"")+c[k]:"")); });
-        add("Mistakes",d.mistakes); add("Use again",SVY_LAB[d.again]||""); add("Helps learning",SVY_LAB[d.help]||""); add("General",d.general);
-        const when=d.at?new Date(d.at).toLocaleString([], {dateStyle:"medium",timeStyle:"short"}):"";
-        list.append(el("div",{class:"svyRow"+(d.handled?" done":"")}, cb, el("div",{}, el("b",{},"Overall "+stars(r.overall)+" · Nav "+stars(r.nav)+" · Train "+stars(r.train)+" · Insp "+stars(r.insp)), el("small",{},when+(d.app?" · v"+d.app:"")), el("details",{}, el("summary",{},"Show answers"), dl))));
-      });
-    };
-    await load();
-  }catch(e){}
+function svyLoad(){ try{ const a=JSON.parse(localStorage.getItem(SVY_KEY)||"[]"); return Array.isArray(a)?a:[]; }catch(e){ return []; } }
+function svySave(a){ try{ localStorage.setItem(SVY_KEY,JSON.stringify(a)); return true; }catch(e){ return false; } }
+function svyInbox(host){
+  let rows=svyLoad(), hideDone=false;
+  const ta=el("textarea",{class:"svyTa",rows:"3","aria-label":"Paste survey answers received",placeholder:"Paste the survey answers you received (WhatsApp, email…). Several at once is fine."});
+  const msg=el("p",{class:"vvSt",role:"status"}), bar=el("div",{class:"svyBar"}), list=el("div",{class:"vvList"});
+  const add=el("button",{class:"tab",type:"button"},"Add to inbox");
+  const stars=n=>n?"★".repeat(n)+"☆".repeat(5-n):"–";
+  const paint=()=>{
+    list.innerHTML=""; bar.innerHTML="";
+    const todo=rows.filter(x=>!x.handled).length;
+    const avg=k=>{ const a=rows.map(x=>x.r&&x.r[k]).filter(Boolean); return a.length?(a.reduce((p,c)=>p+c,0)/a.length).toFixed(1):"–"; };
+    const hide=el("input",{type:"checkbox"}); hide.checked=hideDone; hide.addEventListener("change",()=>{ hideDone=hide.checked; paint(); });
+    bar.append(el("span",{},rows.length+" responses · "+todo+" to review"), el("label",{},hide," Hide treated"));
+    if(rows.length) list.append(el("p",{class:"vvSt"},"Average: overall "+avg("overall")+" · navigation "+avg("nav")+" · training difficulty "+avg("train")+" · Inspection mode "+avg("insp")));
+    const shown=rows.filter(x=>!(hideDone&&x.handled)).sort((a,b)=>String(b.at).localeCompare(String(a.at)));
+    if(!shown.length) list.append(el("p",{class:"vvSt"},rows.length?"All responses are marked as treated.":"No responses yet."));
+    shown.forEach(e=>{
+      const cb=el("input",{type:"checkbox","aria-label":"Mark as read and treated"}); cb.checked=!!e.handled;
+      cb.addEventListener("change",()=>{ e.handled=cb.checked; svySave(rows); paint(); });
+      const dl=el("dl",{}), add2=(k,t)=>{ if(t) dl.append(el("dt",{},k), el("dd",{},t)); };
+      Object.keys(SVY_NM).forEach(k=>{ if(e.r[k]||e.c[k]) add2(SVY_NM[k], (e.r[k]?stars(e.r[k]):"")+(e.c[k]?(e.r[k]?"  ":"")+e.c[k]:"")); });
+      add2("Mistakes",e.mistakes); add2("Use again",e.again); add2("Helps learning",e.help); add2("General",e.general);
+      const rm=el("button",{class:"linkBtn",type:"button",onclick:()=>{ rows=rows.filter(x=>x.id!==e.id); svySave(rows); paint(); }},"Remove");
+      list.append(el("div",{class:"svyRow"+(e.handled?" done":"")}, cb, el("div",{}, el("b",{},"Overall "+stars(e.r.overall)+" · Nav "+stars(e.r.nav)+" · Train "+stars(e.r.train)+" · Insp "+stars(e.r.insp)), el("small",{},e.at+(e.ver?" · v"+e.ver:"")), el("details",{}, el("summary",{},"Show answers"), dl), rm)));
+    });
+  };
+  add.addEventListener("click",()=>{
+    const found=svyParse(ta.value);
+    if(!found.length){ msg.textContent="No survey answers found in the pasted text."; return; }
+    let n=0, dup=0; found.forEach(e=>{ if(rows.some(x=>x.id===e.id)) dup++; else { rows.push(e); n++; } });
+    const ok=svySave(rows); ta.value=""; msg.textContent=n+" added"+(dup?", "+dup+" already in the inbox":"")+"."+(ok?"":" Could not save on this device.");
+    paint();
+  });
+  host.append(el("h3",{},"Survey inbox"), el("p",{class:"vvSt"},"Answers sent back by colleagues. Paste them here to read and track them. Stored on this device only."), ta, el("div",{class:"svyBar"},add), msg, bar, list);
+  paint();
 }
 /* ---------- hidden V&V records menu (opened from the shield logo) ---------- */
 const VVDOCS=[["QAH-URS-001","User Requirements Specification","URS","docx"],["QAH-SRS-001","Software Requirements Specification","SRS","docx"],["QAH-SDD-001","Software Design Description","SDD","docx"],["QAH-STP-001","Software Test Plan","STP","docx"],["QAH-STR-001","Software Test Report","STR","docx"],["QAH-RTM-001","Traceability Matrix and Sources","RTM","xlsx"]];
@@ -2484,7 +2520,7 @@ function openVV(){
   });
   const adm=el("div",{class:"svyAdm"});
   modal("Software V&V records", el("div",{class:"vvBox"}, el("p",{},"Read-only validation records for "+VERLINE+". Approach: risk-based software assurance for a training tool."), list, st, adm));
-  svyAdmin(adm).then(()=>{ if(!adm.childNodes.length) adm.remove(); });
+  svyInbox(adm);
 }
 (function(){ const sv=document.querySelector(".brand2 svg"); if(!sv) return; sv.addEventListener("click",e=>{ e.preventDefault(); e.stopPropagation(); openVV(); }); })();
 function heroTop(show){
