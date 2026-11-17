@@ -2352,7 +2352,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="1.4.1", APPDATE="17-NOV-2026";
+const APPVER="1.4.2", APPDATE="17-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Asaf Ben Zion. All rights reserved.";
 const LEGAL=[["Copyright", "No part of this handbook’s original content may be copied or redistributed without written permission. Cited regulations, standards and guidance, and their links, remain the property of their official publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, data selection and design, developed with AI tools, and has been verified against requirements set by the author and against the official sources."], ["Sources", "Sources are limited to official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases. EU: EUR-Lex and European Commission pages, including MDCG guidance."], ["Important", "This application is intended for training only. Results from its tools require human review, verification and approval. Always check the linked source before citing anything in an audit response."]];
@@ -2377,8 +2377,7 @@ const SVY_RATE=[
 const SVY_NM={overall:"Overall experience",nav:"Navigation",train:"Training difficulty",insp:"Inspection mode"};
 const SVY_NUM={overall:"1",nav:"2",train:"3",insp:"4"};
 const SVY_AGAIN=[["yes","Yes, definitely"],["prob","Probably"],["unsure","Not sure"],["no","Probably not"]];
-const SVY_HELP=[["lot","Yes, a lot"],["some","Somewhat"],["little","Not really"]];
-const SVY_LAB=Object.fromEntries([...SVY_AGAIN,...SVY_HELP]);
+const SVY_LAB=Object.fromEntries(SVY_AGAIN);
 const svyOne=t=>String(t||"").replace(/\s+/g," ").trim();
 function svyNow(){ const d=new Date(), p=n=>String(n).padStart(2,"0"); return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate())+" "+p(d.getHours())+":"+p(d.getMinutes()); }
 function svyHash(s){ let h=5381; for(let i=0;i<s.length;i++) h=((h<<5)+h+s.charCodeAt(i))|0; return (h>>>0).toString(36); }
@@ -2388,7 +2387,6 @@ function svyText(d){
   SVY_RATE.forEach(([k])=>{ if(d.r[k]||d.c[k]) L.push(SVY_NUM[k]+" "+SVY_NM[k]+": "+(d.r[k]?d.r[k]+"/5":"–")+(d.c[k]?" | "+d.c[k]:"")); });
   if(d.mistakes) L.push("5 Mistakes: "+d.mistakes);
   if(d.again) L.push("6a Use again: "+d.again);
-  if(d.help) L.push("6b Helps learning: "+d.help);
   if(d.general) L.push("7 General: "+d.general);
   return L.join("\n");
 }
@@ -2444,8 +2442,8 @@ function openSurvey(){
   SVY_RATE.forEach(([k,q,lo,hi],i)=>{ form.append(svyStars(k,(i+1)+". "+q,lo,hi,val)); });
   const q5=el("fieldset",{class:"svyQ"}, el("legend",{},"5. Did you notice any mistakes or inaccuracies that need attention or correction?", el("small",{},"Optional")));
   const t5=el("textarea",{class:"svyTa",maxlength:"600",rows:"3","aria-label":"Mistakes or inaccuracies",placeholder:"Please describe what you found and where (screen or topic)"}); t5.addEventListener("input",()=>{ val.mistakes=t5.value; }); q5.append(t5);
-  const q6=el("fieldset",{class:"svyQ"}, el("legend",{},"6. Would you use this app again, and can this type of app help you learn and strengthen your knowledge?"));
-  q6.append(svyChoice("again","Would you use it again?",SVY_AGAIN,val), svyChoice("help","Can this type of app help you learn more and enhance your knowledge?",SVY_HELP,val));
+  const q6=el("fieldset",{class:"svyQ"}, el("legend",{},"6. Would you use this app again, and can this type of app help you learn and enhance your knowledge?"));
+  q6.append(svyChoice("again","Would you use it again?",SVY_AGAIN,val));
   const q7=el("fieldset",{class:"svyQ"}, el("legend",{},"7. General comments", el("small",{},"Optional, up to 200 characters")));
   const t7=el("textarea",{class:"svyTa",maxlength:"200",rows:"3","aria-label":"General comments",placeholder:"Anything else you would like to share"}); const cnt=el("div",{class:"svyCnt"},"0 / 200");
   t7.addEventListener("input",()=>{ val.general=t7.value; cnt.textContent=t7.value.length+" / 200"; }); q7.append(t7,cnt);
@@ -2454,8 +2452,8 @@ function openSurvey(){
   go.addEventListener("click",()=>{
     const r={}; SVY_RATE.forEach(([k])=>{ if(val[k]) r[k]=val[k]; });
     const c={}; SVY_RATE.forEach(([k])=>{ const t=svyOne(val[k+"_c"]).slice(0,200); if(t) c[k]=t; });
-    const d={at:svyNow(), r, c, mistakes:svyOne(val.mistakes).slice(0,600), again:SVY_LAB[val.again]||"", help:SVY_LAB[val.help]||"", general:svyOne(val.general).slice(0,200)};
-    if(!Object.keys(r).length && !Object.keys(c).length && !d.mistakes && !d.again && !d.help && !d.general){ msg.textContent="Please answer at least one question before submitting."; return; }
+    const d={at:svyNow(), r, c, mistakes:svyOne(val.mistakes).slice(0,600), again:SVY_LAB[val.again]||"", general:svyOne(val.general).slice(0,200)};
+    if(!Object.keys(r).length && !Object.keys(c).length && !d.mistakes && !d.again && !d.general){ msg.textContent="Please answer at least one question before submitting."; return; }
     const box=svyDone(svyText(d)); form.replaceWith(box); const f=box.querySelector("button,a"); if(f) f.focus();
   });
   form.append(q5,q6,q7, el("p",{class:"svyThanks"},"Thank you for your time. I hope you find the app enjoyable and interesting."), msg, go);
