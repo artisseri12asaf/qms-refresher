@@ -2245,7 +2245,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="1.2.0", APPDATE="17-NOV-2026";
+const APPVER="1.2.1", APPDATE="17-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Asaf Ben Zion. All rights reserved.";
 const LEGAL=[["Copyright", "No part of this handbook’s original content may be copied or redistributed without written permission. Cited regulations, standards and guidance, and their links, remain the property of their official publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, data selection and design, developed with AI tools, and has been verified against requirements set by the author and against the official sources."], ["Sources", "Sources are limited to official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases. EU: EUR-Lex and European Commission pages, including MDCG guidance."], ["Important", "This application is intended for training only. Results from its tools require human review, verification and approval. Always check the linked source before citing anything in an audit response."]];
@@ -2287,8 +2287,9 @@ function heroTop(show){
   h.hidden=!show; if(!show||h.dataset.built) return; h.dataset.built="1";
   const nq=CH.reduce((a,c)=>a+c.qs.length,0), nd=CH.reduce((a,c)=>a+c.dils.length,0);
   h.innerHTML="";
-  const stats=el("div",{class:"hStats","aria-label":CH.length+" chapters, "+nq+" questions, "+nd+" dilemmas"});
-  [[CH.length,"Chapters","learn"],[nq,"Questions","prac"],[nd,"Dilemmas","dil"]].forEach(([n,l,k],i)=>{
+  const ni=AUD_CASES.length+Object.keys(AUD_SCEN).length;
+  const stats=el("div",{class:"hStats","aria-label":ni+" virtual inspections, "+nq+" questions, "+nd+" dilemmas"});
+  [[ni,"Virtual Inspections","learn"],[nq,"Questions","prac"],[nd,"Dilemmas","dil"]].forEach(([n,l,k],i)=>{
     const b=el("b",{"data-n":String(n)},"0");
     stats.append(el("div",{class:"hStat s-"+k,style:"--d:"+(i*140)+"ms"}, b, el("small",{},l), el("i",{class:"hBar"})));
   });
