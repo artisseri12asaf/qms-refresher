@@ -946,6 +946,8 @@ body::before{content:""; position:fixed; inset:0; z-index:-1; pointer-events:non
 @media (min-width:901px) and (min-height:620px){ #navRow2 .glossBtn{height:38px} }
 @media (max-width:640px){ #ovl .choiceGrid{grid-template-columns:1fr 1fr !important; gap:8px} #ovl .choiceGrid .choiceBtn b{font-size:15px} #ovl .choiceGrid .choiceBtn span{font-size:12.5px} }
 .rmToolsLink{display:inline-block; margin-top:8px; text-decoration:none}
+.copyNote{font-size:12px; color:var(--muted); margin-top:6px; font-weight:600}
+.welcomeCopy{text-align:center; margin:8px 0 0}
 </style>
 </head>
 <body>
@@ -964,7 +966,7 @@ body::before{content:""; position:fixed; inset:0; z-index:-1; pointer-events:non
   <nav class="rail" id="rail" aria-label="Chapters"></nav>
   <main id="main"></main>
 </div>
-<footer>Sources are limited to official publications: for the US, the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases; for the EU, EUR-Lex and European Commission pages including MDCG guidance. Items tagged “Application” are my reasoning, not official statements. Check the linked source before you cite anything in an audit response. Answers are saved in this browser on this device. Version 2026-11-17e. <div class="photoCredit">Background photos (Unsplash License): Hans Reniers, National Cancer Institute and Trnava University on <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a>.</div></footer>
+<footer>Sources are limited to official publications: for the US, the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases; for the EU, EUR-Lex and European Commission pages including MDCG guidance. Items tagged “Application” are my reasoning, not official statements. Check the linked source before you cite anything in an audit response. Answers are saved in this browser on this device. Version 2026-11-17f. <div class="photoCredit">Background photos (Unsplash License): Hans Reniers, National Cancer Institute and Trnava University on <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a>.</div><div class="copyNote">© 2026 Asaf Ben Zion. All rights reserved. No part of this handbook’s original content may be copied or redistributed without permission. Cited regulations, standards and guidance remain the property of their publishers.</div></footer>
 </div>
 
 <script>
@@ -1231,7 +1233,7 @@ function showLaunch(){
   body.append(el("p",{class:"lede"},"What would you like to do?"), explorePanel(false), choiceGrid());
   const cb=el("input",{type:"checkbox",id:"launchPref"}); cb.checked=on;
   cb.addEventListener("change",()=>{ try{ localStorage.setItem(LKEY, cb.checked?"on":"off"); }catch(e){} });
-  body.append(el("div",{class:"qtWrap"}, el("button",{class:"qtBtn",type:"button",onclick:()=>go("home")},"Let’s have some quality time!")), el("div",{class:"mact"}, el("label",{class:"unl"}, cb, " Show this menu when the app opens")));
+  body.append(el("div",{class:"qtWrap"}, el("button",{class:"qtBtn",type:"button",onclick:()=>go("home")},"Let’s have some quality time!")), el("div",{class:"mact"}, el("label",{class:"unl"}, cb, " Show this menu when the app opens")), el("p",{class:"copyNote welcomeCopy"},"© 2026 Asaf Ben Zion. All rights reserved."));
   modal("Welcome to the Quality Handbook, a guide to Medical Device Requirements",body);
 }
 
