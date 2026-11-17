@@ -948,6 +948,42 @@ body::before{content:""; position:fixed; inset:0; z-index:-1; pointer-events:non
 .rmToolsLink{display:inline-block; margin-top:8px; text-decoration:none}
 .copyNote{font-size:12px; color:var(--muted); margin-top:6px; font-weight:600}
 .welcomeCopy{text-align:center; margin:8px 0 0}
+
+/* 1.0.0 welcome + footer */
+.launch .choiceGrid{grid-template-columns:1fr 1fr}
+.launch .qtWrap{display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:14px; margin:16px 0}
+.qtRule{height:1px; background:linear-gradient(90deg,transparent,rgba(46,125,116,.45))}
+.qtWrap .qtRule:last-child{background:linear-gradient(90deg,rgba(46,125,116,.45),transparent)}
+.launch .qtBtn{width:138px; height:138px; box-shadow:0 0 0 6px var(--card), 0 0 0 7px rgba(46,125,116,.28), 0 12px 28px rgba(46,125,116,.30); transition:transform .25s cubic-bezier(.2,.7,.2,1), box-shadow .25s}
+.launch .qtBtn:hover{transform:scale(1.04); box-shadow:0 0 0 7px var(--card), 0 0 0 8px rgba(46,125,116,.45), 0 16px 34px rgba(46,125,116,.36)}
+.launch .qtBtn:focus-visible{outline:3px solid #3b88b5; outline-offset:10px}
+.welcomeCopy{display:flex; flex-wrap:wrap; justify-content:center; gap:4px 14px; margin:10px 0 0; font-size:12px; color:var(--muted)}
+.ovl.leaving{transition:background .45s ease; background:rgba(10,20,20,0)}
+.ovl.leaving .mbox{transition:transform .45s cubic-bezier(.4,0,.2,1), opacity .4s ease, filter .45s ease; transform:scale(.965); opacity:0; filter:blur(6px)}
+.enterFx{position:fixed; inset:0; z-index:150; pointer-events:none; background:radial-gradient(circle at var(--x) var(--y), rgba(255,255,255,.92) 0, rgba(240,247,245,.85) 35%, rgba(46,125,116,.10) 70%, rgba(46,125,116,0) 100%); clip-path:circle(0 at var(--x) var(--y)); transition:clip-path .6s cubic-bezier(.4,0,.2,1)}
+.enterFx.grow{clip-path:circle(150% at var(--x) var(--y))}
+.enterFx.fade{transition:opacity .5s ease; opacity:0}
+.arrive{animation:arriveIn .55s cubic-bezier(.2,.7,.2,1) both}
+#navRow2.arrive{animation-delay:.06s} #main.arrive{animation-delay:.12s}
+@keyframes arriveIn{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
+@media (prefers-reduced-motion: reduce){ .arrive{animation:none} }
+.hVer{margin:4px 0 0; font-size:12px; color:var(--muted)}
+footer#siteFoot{max-width:min(1240px,100%); font-size:12.5px; line-height:1.5; color:var(--muted); margin-top:30px}
+.footTop{display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 16px; margin-bottom:8px}
+.footVer,.footCopy{font-weight:700; color:var(--ink)}
+.footMore{display:none; font:inherit; font-size:12.5px; border:1px solid var(--line); background:var(--card); border-radius:999px; padding:4px 12px; cursor:pointer; color:var(--ink)}
+.footLegal .legalBody{column-count:2; column-gap:36px}
+.legalBody p{margin:0 0 6px; break-inside:avoid}
+.legalBody b{color:var(--ink)}
+@media (max-width:640px){
+  .launch .choiceGrid{grid-template-columns:1fr 1fr}
+  .launch .qtBtn{width:120px; height:120px; font-size:15px}
+  .footLegal{display:none}
+  .footMore{display:inline-block}
+  .footTop{gap:4px 12px}
+}
+.mbox.launchBox{max-width:900px}
+@media (min-width:900px){ .launch .choiceGrid{grid-template-columns:repeat(4,1fr) !important} .launch .choiceBtn{min-height:84px !important} }
 </style>
 </head>
 <body>
@@ -966,7 +1002,7 @@ body::before{content:""; position:fixed; inset:0; z-index:-1; pointer-events:non
   <nav class="rail" id="rail" aria-label="Chapters"></nav>
   <main id="main"></main>
 </div>
-<footer>Sources are limited to official publications: for the US, the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases; for the EU, EUR-Lex and European Commission pages including MDCG guidance. Items tagged “Application” are my reasoning, not official statements. Check the linked source before you cite anything in an audit response. Answers are saved in this browser on this device. Version 2026-11-17f. <div class="photoCredit">Background photos (Unsplash License): Hans Reniers, National Cancer Institute and Trnava University on <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a>.</div><div class="copyNote">© 2026 Asaf Ben Zion. All rights reserved. No part of this handbook’s original content may be copied or redistributed without permission. Cited regulations, standards and guidance remain the property of their publishers.</div></footer>
+<footer id="siteFoot"></footer>
 </div>
 
 <script>
@@ -1229,12 +1265,32 @@ function choiceGrid(){
 }
 function showLaunch(){
   let on=true; try{ on=localStorage.getItem(LKEY)!=="off"; }catch(e){}
-  const body=el("div",{});
-  body.append(el("p",{class:"lede"},"What would you like to do?"), explorePanel(false), choiceGrid());
+  const body=el("div",{class:"launch"});
+  const btn=(c)=>{ const [t,sub,target,k]=c; return el("button",{class:"choiceBtn "+k,type:"button",onclick:()=>go(target)}, el("b",{},t), el("span",{},sub)); };
+  const qt=el("button",{class:"qtBtn",type:"button"},"Let’s have some quality time!");
+  qt.addEventListener("click",()=>enterApp(qt));
+  body.append(el("p",{class:"lede"},"What would you like to do?"), explorePanel(false),
+    el("div",{class:"choiceGrid launchTop"}, ...CHOICES.slice(0,4).map(btn)),
+    el("div",{class:"qtWrap"}, el("span",{class:"qtRule"}), qt, el("span",{class:"qtRule"})),
+    el("div",{class:"choiceGrid launchBot"}, ...CHOICES.slice(4).map(btn)));
   const cb=el("input",{type:"checkbox",id:"launchPref"}); cb.checked=on;
   cb.addEventListener("change",()=>{ try{ localStorage.setItem(LKEY, cb.checked?"on":"off"); }catch(e){} });
-  body.append(el("div",{class:"qtWrap"}, el("button",{class:"qtBtn",type:"button",onclick:()=>go("home")},"Let’s have some quality time!")), el("div",{class:"mact"}, el("label",{class:"unl"}, cb, " Show this menu when the app opens")), el("p",{class:"copyNote welcomeCopy"},"© 2026 Asaf Ben Zion. All rights reserved."));
+  body.append(el("div",{class:"mact"}, el("label",{class:"unl"}, cb, " Show this menu when the app opens")),
+    el("p",{class:"welcomeCopy"}, el("span",{},VERLINE), el("span",{},COPYLINE)));
   modal("Welcome to the Quality Handbook, a guide to Medical Device Requirements",body);
+  const mb=document.querySelector("#ovl .mbox"); if(mb) mb.classList.add("launchBox");
+}
+function enterApp(btn){
+  const reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const ov=document.getElementById("ovl");
+  if(reduce||!ov){ go("home"); return; }
+  const r=btn.getBoundingClientRect(), x=r.left+r.width/2, y=r.top+r.height/2;
+  btn.disabled=true; ov.classList.add("leaving");
+  const fx=el("div",{class:"enterFx",style:"--x:"+x+"px;--y:"+y+"px"}); document.body.append(fx);
+  requestAnimationFrame(()=>fx.classList.add("grow"));
+  setTimeout(()=>{ go("home"); const m=document.getElementById("main"), h=document.getElementById("heroTop"), n=document.getElementById("navRow2");
+    [h,n,m].forEach(e=>{ if(e){ e.classList.remove("arrive"); void e.offsetWidth; e.classList.add("arrive"); } });
+    fx.classList.add("fade"); setTimeout(()=>fx.remove(),520); },430);
 }
 
 /* ---------- selected dilemmas ---------- */
@@ -2123,6 +2179,24 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
+const APPVER="1.0.0", APPDATE="17-NOV-2026";
+const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
+const COPYLINE="© 2026 Asaf Ben Zion. All rights reserved.";
+const LEGAL=[
+ ["Copyright","No part of this handbook’s original content may be copied or redistributed without written permission. Cited regulations, standards and guidance, and their links, remain the property of their official publishers."],
+ ["Sources","Sources are limited to official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases. EU: EUR-Lex and European Commission pages, including MDCG guidance."],
+ ["About the content","This application contains no official statements. It reflects the author’s own reasoning, data selection and design, developed with AI tools, and has been verified against requirements set by the author and against the official sources."],
+ ["Important","This application is intended for training only. Results from its tools require human review, verification and approval. Always check the linked source before citing anything in an audit response."],
+ ["Data and images","Answers are saved in this browser on this device. Background photos (Unsplash License): Hans Reniers, National Cancer Institute and Trnava University on Unsplash."]
+];
+function legalBody(){ return el("div",{class:"legalBody"}, ...LEGAL.map(([h,t])=>el("p",{}, el("b",{},h+". "), t))); }
+function renderFooter(){
+  const f=document.getElementById("siteFoot"); if(!f) return; f.innerHTML="";
+  f.append(el("div",{class:"footTop"}, el("span",{class:"footVer"},VERLINE), el("span",{class:"footCopy"},COPYLINE),
+    el("button",{class:"footMore",type:"button",onclick:()=>modal("Terms, sources and intended use", el("div",{}, el("p",{class:"footVer"},VERLINE+" · "+COPYLINE), legalBody()))},"Terms and sources")),
+    el("div",{class:"footLegal"}, legalBody()));
+}
+renderFooter();
 function heroTop(show){
   const h=document.getElementById("heroTop"); if(!h) return;
   h.hidden=!show; if(!show||h.dataset.built) return; h.dataset.built="1";
@@ -2136,7 +2210,7 @@ function heroTop(show){
   h.append(el("div",{class:"hTxt"},
     el("h2",{class:"heroTitle"},"Quality Handbook and Training Guide"),
     el("p",{class:"heroTag"},"The Hitchhiker’s QA Guide assistant to the Medical Devices Universe"),
-    el("p",{class:"hDesc"},"A working handbook for QA professionals on Class II and III devices: requirements, real-world dilemmas and practice questions.")), stats);
+    el("p",{class:"hDesc"},"A working handbook for QA professionals on Class II and III devices: requirements, real-world dilemmas and practice questions."), el("p",{class:"hVer"},VERLINE)), stats);
   const reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
   const bs=[...stats.querySelectorAll("b")];
   if(reduce){ bs.forEach(b=>b.textContent=b.dataset.n); }
