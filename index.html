@@ -879,6 +879,16 @@ body::before{content:""; position:fixed; inset:0; z-index:-1; pointer-events:non
   .mainNav .navRowG.c6 .navBtn{font-size:12px !important; padding:8px 4px !important}
 }
 @media (max-width:640px){ .glossSum small{display:none} .glossSum .secTitle{flex:1} }
+
+.cPager{display:flex; align-items:center; justify-content:space-between; gap:10px; margin:2px 0 10px}
+.cPager.bottom{margin:10px 0 4px}
+.cPager .reset{min-width:112px; padding:9px 14px; font-weight:700}
+.cPager .reset:disabled{opacity:.35; cursor:default}
+.cPager .cNext:not(:disabled){background:var(--ink,#1f2a33); color:#fff; border-color:var(--ink,#1f2a33)}
+.cCount{color:var(--muted); font-size:14px}
+.cCount b{color:var(--ink); font-size:16px}
+.cPager .reset{text-decoration:none !important; border:1px solid var(--line) !important; background:var(--card); color:var(--ink); border-radius:10px; font-size:14.5px; box-shadow:0 1px 2px rgba(20,30,40,.06)}
+.cPager .cNext:not(:disabled){background:#1f2a33 !important; color:#fff !important; border-color:#1f2a33 !important}
 </style>
 </head>
 <body>
@@ -896,7 +906,7 @@ body::before{content:""; position:fixed; inset:0; z-index:-1; pointer-events:non
   <nav class="rail" id="rail" aria-label="Chapters"></nav>
   <main id="main"></main>
 </div>
-<footer>Sources are limited to official publications: for the US, the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases; for the EU, EUR-Lex and European Commission pages including MDCG guidance. Items tagged “Application” are my reasoning, not official statements. Check the linked source before you cite anything in an audit response. Answers are saved in this browser on this device. Version 2026-11-17a. <div class="photoCredit">Background photos (Unsplash License): Hans Reniers, National Cancer Institute and Trnava University on <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a>.</div></footer>
+<footer>Sources are limited to official publications: for the US, the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases; for the EU, EUR-Lex and European Commission pages including MDCG guidance. Items tagged “Application” are my reasoning, not official statements. Check the linked source before you cite anything in an audit response. Answers are saved in this browser on this device. Version 2026-11-17b. <div class="photoCredit">Background photos (Unsplash License): Hans Reniers, National Cancer Institute and Trnava University on <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a>.</div></footer>
 </div>
 
 <script>
@@ -976,7 +986,8 @@ function totals(){ document.querySelectorAll("[data-mring]").forEach(n=>n.replac
 function renderNav(active){
   const c=CH.find(x=>x.id===active)||{part:"none"};
   const ps=document.getElementById("partSwitch"); ps.innerHTML="";
-  [["basics","Basics"],["qms","QMS"],["fda","FDA"],["eu","EU MDR"]].forEach(([p,l])=>{
+  ps.style.display="none";
+  if(false) [["basics","Basics"],["qms","QMS"],["fda","FDA"],["eu","EU MDR"]].forEach(([p,l])=>{
     ps.append(el("button",{class:"partBtn "+p,type:"button","aria-pressed":String(c.part===p),onclick:()=>{ if(c.part!==p) location.hash=CH.find(x=>x.part===p).id; }},l));
   });
   const r2=document.getElementById("navRow2"); r2.innerHTML="";
@@ -993,7 +1004,7 @@ function renderNav(active){
   CH.filter(x=>x.part===c.part).forEach(x=>{
     const answered=x.qs.filter((q,i)=>state[x.id+"-"+i]!==undefined).length;
     const b=el("button",{class:"chTab "+x.part,type:"button",role:"tab","aria-selected":String(x.id===active),onclick:()=>{ location.hash=x.id; }},
-      el("span",{class:"n"},x.num+" · "+answered+"/"+x.qs.length), x.title);
+      x.title);
     ct.append(b);
     if(x.id===active) setTimeout(()=>{ try{ b.scrollIntoView({inline:"center",block:"nearest"}); }catch(e){} },0);
   });
@@ -2474,6 +2485,7 @@ function _unusedRail(active){
 }
 
 let currentTab="kp";
+const CPAGE={};
 function renderChapter(id){
   const c=CH.find(x=>x.id===id)||CH[0];
   const m=document.getElementById("main"); m.innerHTML="";
@@ -2494,6 +2506,19 @@ function renderChapter(id){
   m.append(tl);
   const panel=el("div",{class:"panel",role:"tabpanel","aria-labelledby":"tab-"+currentTab});
   m.append(panel);
+  const qOrder=c.qs.map((q,i)=>i).sort((x,y)=>((c.qs[y].k==="s")-(c.qs[x].k==="s"))||(x-y));
+  const PITEMS={b:c.best||[], kp:c.kps.concat(c.map?[["__map"]]:[]), q:qOrder.map(i=>c.qs[i]), d:c.debates, x:c.dils}[currentTab];
+  let pIdx=0, pNav=null;
+  if(PITEMS){
+    const key=c.id+":"+currentTab, n=PITEMS.length;
+    if(pendingHit&&pendingHit.text){ const nd=pendingHit.text.toLowerCase(); const flat=o=>typeof o==="string"?o:Array.isArray(o)?o.map(flat).join(" "):(o&&typeof o==="object")?Object.values(o).map(flat).join(" "):String(o==null?"":o); const f=PITEMS.findIndex(it=>flat(it).toLowerCase().includes(nd)); if(f>=0) CPAGE[key]=f; }
+    pIdx=Math.min(Math.max(0,CPAGE[key]||0),n-1);
+    pNav=(bottom)=>{ const go=d=>{ CPAGE[key]=pIdx+d; renderChapter(c.id); if(bottom){ try{ const t=document.querySelector("#main .tabs"), pn=document.querySelector("#main .panel"); const st=getComputedStyle(t).position==="sticky"?t.offsetHeight:0; window.scrollTo({top:Math.max(0,pn.getBoundingClientRect().top+window.scrollY-(((document.getElementById("dnav")||{}).offsetHeight)||0)-st-8),behavior:"smooth"}); }catch(e){} } };
+      const pv=el("button",{class:"reset",type:"button",onclick:()=>go(-1)},"‹ Previous"); pv.disabled=pIdx===0;
+      const nx=el("button",{class:"reset cNext",type:"button",onclick:()=>go(1)},"Next ›"); nx.disabled=pIdx>=n-1;
+      return el("div",{class:"cPager"+(bottom?" bottom":"")}, pv, el("span",{class:"cCount"}, el("b",{},String(pIdx+1)), " of "+n), nx); };
+    panel.append(pNav(false));
+  }
 
   if(currentTab==="c"){
     const f=el("input",{class:"cfilter",type:"search",id:"cfilter-"+c.id,placeholder:"Filter clauses, e.g. 7.5 or complaint","aria-label":"Filter clauses"});
@@ -2512,14 +2537,14 @@ function renderChapter(id){
     panel.append(el("div",{class:"src"},"Requirement summaries are paraphrased. ISO 13485:2016 is copyrighted. Read the clause text before you cite it."));
   }
   if(currentTab==="b"){
-    c.best.forEach(([t,d],i)=>panel.append(el("div",{class:"card bp"}, el("span",{class:"k"},String(i+1)), el("div",{}, el("h3",{},t), el("p",{},d)))));
+    [c.best[pIdx]].forEach(([t,d])=>{ const i=pIdx; panel.append(el("div",{class:"card bp"}, el("span",{class:"k"},String(i+1)), el("div",{}, el("h3",{},t), el("p",{},d)))); });
   }
   if(currentTab==="kp"){
-    c.kps.forEach(([type,text,src])=>{
+    if(PITEMS[pIdx][0]!=="__map") [PITEMS[pIdx]].forEach(([type,text,src])=>{
       const label={fact:"FDA text",interp:"Application",draft:"Draft guidance"}[type];
       panel.append(el("div",{class:"card kp"}, el("span",{class:"tag "+type},label), el("div",{}, el("p",{},text), srcLine(src))));
     });
-    if(c.map){
+    if(PITEMS[pIdx][0]==="__map"){
       const t=el("table",{class:"map"}, el("thead",{}, el("tr",{}, el("th",{},"Risk category"), el("th",{},"Typical FDA control source"), el("th",{},"QMS evidence to prepare (application)"))), el("tbody",{}));
       MAP.forEach(r=>t.tBodies[0].append(el("tr",{}, ...r.map(x=>el("td",{},x)))));
       panel.append(el("div",{class:"card"}, el("div",{class:"tblwrap"},t), srcLine(["e820","e814"])));
@@ -2527,7 +2552,7 @@ function renderChapter(id){
   }
   if(currentTab==="q"){
     const idxs=c.qs.map((q,i)=>i).sort((x,y)=>((c.qs[y].k==="s")-(c.qs[x].k==="s"))||(x-y));
-    idxs.forEach((i,n)=>{ panel.append(qCard(c,i,n+1,()=>{ renderChapter(c.id); renderRail(c.id); totals(); })); });
+    [idxs[pIdx]].forEach(i=>{ const n=pIdx; panel.append(qCard(c,i,n+1,()=>{ renderChapter(c.id); renderRail(c.id); totals(); })); });
   }
   if(false){ c.qs.forEach((q,i)=>{
       const key=c.id+"-"+i; const ans=state[key];
@@ -2548,7 +2573,7 @@ function renderChapter(id){
       panel.append(card);
     }); }
   if(currentTab==="d"){
-    c.debates.forEach(d=>{
+    [c.debates[pIdx]].forEach(d=>{
       const pro=el("div",{class:"side pro"}, el("b",{},"Argument"), el("p",{},d.pro)); if(d.mp) pro.append(el("p",{class:"more"},d.mp));
       const con=el("div",{class:"side con"}, el("b",{},"Counter-argument"), el("p",{},d.con)); if(d.mc) con.append(el("p",{class:"more"},d.mc));
       const card=el("div",{class:"card debate"}, el("h3",{},d.t), el("div",{class:"sides"}, pro, con));
@@ -2559,7 +2584,7 @@ function renderChapter(id){
     });
   }
   if(currentTab==="x"){
-    c.dils.forEach((d,di)=>panel.append(dilCard(c,di,()=>renderChapter(c.id))));
+    panel.append(dilCard(c,pIdx,()=>renderChapter(c.id)));
   }
   if(currentTab==="s"){
     const ul=el("ol",{class:"srcList"});
@@ -2569,6 +2594,7 @@ function renderChapter(id){
     OFFICIAL.forEach(k=>{ const s=SRC[k]; off.append(el("li",{}, el("a",{href:s.u,target:"_blank",rel:"noopener"},s.t))); });
     panel.append(el("div",{class:"card official"}, el("h3",{class:"srcHead"},"Official requirements and guidance databases"), el("p",{class:"src"},"The binding texts and the official places where final, draft and planned guidance is published."), off));
   }
+  if(pNav) panel.append(pNav(true));
   const idx=CH.findIndex(x=>x.id===c.id);
   const pg=el("div",{class:"pager"});
   const prev=CH[idx-1], next=CH[idx+1];
