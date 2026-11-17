@@ -1035,6 +1035,41 @@ footer#siteFoot .legalBody p.imp{font-size:14px; color:var(--ink)}
 @keyframes avShake{0%,100%{transform:none}25%{transform:rotate(-4deg)}75%{transform:rotate(4deg)}}
 @media (prefers-reduced-motion:reduce){ .avatar.angry svg{animation:none} }
 .readBtn.mapc{border-left-color:#2f4aa0}
+
+/* 1.3.0 sky-blue accent (welcome button + home hero) */
+:root{--sky:#3a9ad9; --skyInk:#1f6fae}
+.qtBtn{background:radial-gradient(circle at 30% 25%,#7cc6f4 0,#2f8fd0 55%,#1f6fae 100%); text-shadow:0 1px 2px rgba(10,40,70,.35); box-shadow:0 10px 26px rgba(31,111,174,.32)}
+.qtBtn:hover{box-shadow:0 14px 30px rgba(31,111,174,.40)}
+.launch .qtBtn{box-shadow:0 0 0 6px var(--card), 0 0 0 7px rgba(58,154,217,.34), 0 12px 28px rgba(31,111,174,.28)}
+.launch .qtBtn:hover{box-shadow:0 0 0 7px var(--card), 0 0 0 8px rgba(58,154,217,.55), 0 16px 34px rgba(31,111,174,.34)}
+.lTool{border-left-color:var(--sky)}
+.heroC .heroTag{color:var(--skyInk)}
+.hStat.s-learn{--sc:var(--skyInk)}
+.enterFx{background:radial-gradient(circle at var(--x) var(--y), rgba(255,255,255,.92) 0, rgba(238,246,252,.85) 35%, rgba(58,154,217,.10) 70%, rgba(58,154,217,0) 100%)}
+
+/* 1.3.0 phone: thumb-reach bottom bar (Explore, Search, Practice, Tools) */
+.tabBar,.sheetScrim{display:none}
+@media (max-width:640px){
+  body{padding-bottom:calc(76px + env(safe-area-inset-bottom)) !important}
+  .tabBar{display:grid; grid-template-columns:repeat(4,1fr); gap:4px; position:fixed; left:0; right:0; bottom:0; z-index:90; background:color-mix(in srgb,var(--card) 95%,transparent); -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); border-top:1px solid var(--line); box-shadow:0 -4px 18px rgba(20,30,40,.10); padding:5px 8px calc(5px + env(safe-area-inset-bottom))}
+  body:has(#ovl .launchBox) .tabBar{display:none}
+  .tbBtn{font:inherit; position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; min-height:58px; border:0; border-radius:14px; background:none; color:var(--muted); font-size:12.5px; font-weight:700; cursor:pointer; -webkit-tap-highlight-color:transparent; touch-action:manipulation}
+  .tbBtn .ico{width:24px; height:24px; fill:none; stroke:currentColor; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round}
+  .tbBtn.cur{color:var(--skyInk)}
+  .tbBtn.cur::before{content:""; position:absolute; top:-5px; left:28%; right:28%; height:3px; border-radius:0 0 3px 3px; background:var(--sky)}
+  .tbBtn[aria-expanded="true"]{color:var(--skyInk); background:color-mix(in srgb,var(--sky) 14%,transparent)}
+  .tbBtn:focus-visible{outline:3px solid #3b88b5; outline-offset:-2px}
+  nav#navRow2.mainNav{display:none !important; position:fixed !important; left:8px !important; right:8px !important; top:auto !important; bottom:calc(74px + env(safe-area-inset-bottom)) !important; z-index:89 !important; margin:0 !important; max-height:calc(100dvh - 130px); overflow:auto !important; border-radius:18px !important; border:1px solid var(--line) !important; background:var(--card) !important; box-shadow:0 -10px 34px rgba(20,30,40,.20) !important; padding:12px !important}
+  html[data-sheet] nav#navRow2.mainNav{display:block !important; animation:sheetUp .2s cubic-bezier(.2,.7,.2,1)}
+  html[data-sheet="Explore"] #navRow2 .navGroup:not([data-g="Explore"]),
+  html[data-sheet="Search"] #navRow2 .navGroup:not([data-g="Search"]),
+  html[data-sheet="Practice"] #navRow2 .navGroup:not([data-g="Practice"]),
+  html[data-sheet="Tools"] #navRow2 .navGroup:not([data-g="Tools"]){display:none !important}
+  #navRow2 .navGroup{border-top:0 !important; padding-top:0 !important; margin-top:0 !important}
+  html[data-sheet] .sheetScrim{display:block; position:fixed; inset:0; z-index:88; background:rgba(10,20,20,.30)}
+}
+@keyframes sheetUp{from{opacity:0; transform:translateY(14px)} to{opacity:1; transform:none}}
+@media (prefers-reduced-motion:reduce){ html[data-sheet] nav#navRow2.mainNav{animation:none} }
 </style>
 </head>
 <body>
@@ -1130,6 +1165,25 @@ function moduleRing(kind){
 }
 function totals(){ document.querySelectorAll("[data-mring]").forEach(n=>n.replaceWith(moduleRing(n.dataset.mring))); }
 
+const PB_G={Explore:["explore","iso","qmsr","mdr","map","dates","fdapre"],Practice:["random","dilemmas","audit"],Tools:["daily","stats","risk","tools","sampling","msa","grr","rmtools","impact"]};
+function sheetSet(g){ const r=document.documentElement; if(g) r.dataset.sheet=g; else delete r.dataset.sheet; document.querySelectorAll("#tabBar .tbBtn").forEach(b=>b.setAttribute("aria-expanded",String(b.dataset.g===g))); }
+function phoneBar(active){
+  let bar=document.getElementById("tabBar");
+  if(!bar){
+    bar=el("nav",{id:"tabBar",class:"tabBar","aria-label":"Sections"});
+    [["Explore","explore"],["Search","search"],["Practice","train"],["Tools","samp"]].forEach(([g,ic])=>{
+      const b=el("button",{class:"tbBtn",type:"button","data-g":g,"aria-expanded":"false","aria-controls":"navRow2"}, ico(ic), el("span",{},g));
+      b.addEventListener("click",()=>{ const cur=document.documentElement.dataset.sheet; sheetSet(cur===g?null:g);
+        if(cur!==g) setTimeout(()=>{ const t=g==="Search"?NAVSEARCH.querySelector("input"):document.querySelector('#navRow2 .navGroup[data-g="'+g+'"] .navBtn'); if(t) t.focus({preventScroll:true}); },60); });
+      bar.append(b);
+    });
+    document.body.append(el("div",{id:"sheetScrim",class:"sheetScrim","aria-hidden":"true",onclick:()=>sheetSet(null)}), bar);
+    document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&document.documentElement.dataset.sheet&&!document.getElementById("ovl")){ const g=document.documentElement.dataset.sheet; sheetSet(null); const b=bar.querySelector('[data-g="'+g+'"]'); if(b) b.focus(); } });
+  }
+  sheetSet(null);
+  const isCh=CH.some(x=>x.id===active);
+  bar.querySelectorAll(".tbBtn").forEach(b=>b.classList.toggle("cur",(PB_G[b.dataset.g]||[]).includes(active)||(isCh&&b.dataset.g==="Explore")));
+}
 function renderNav(active){
   const c=CH.find(x=>x.id===active)||{part:"none"};
   const ps=document.getElementById("partSwitch"); ps.innerHTML="";
@@ -1141,10 +1195,11 @@ function renderNav(active){
   const NK=Object.fromEntries(NAV.map(x=>[x[0],x]));
   const PARTK={iso:"basics",qmsr:"qms",mdr:"eu",fdapre:"fda"};
   const navBtn=([k,l,ic])=>el("button",{class:"navBtn n-"+ic,type:"button","aria-current":String(active===k||(PARTK[k]&&c.part===PARTK[k])||(k==="daily"&&["tools","impact"].includes(active))||(k==="stats"&&["sampling","msa","grr"].includes(active))||(k==="risk"&&active==="rmtools")),onclick:()=>{ if(k==="random"){ rnd.cur=null; } const t=PARTK[k]?CH.find(x=>x.part===PARTK[k]).id:k; if(location.hash==="#"+t) route(); else location.hash=t; }}, ico(ic), el("span",{},l));
-  const grp=(lab,keys)=>el("div",{class:"navGroup"}, el("span",{class:"navLab"},lab), el("div",{class:"navRowG c"+keys.length}, ...keys.map(k=>navBtn(NK[k]))));
+  const grp=(lab,keys)=>el("div",{class:"navGroup","data-g":lab}, el("span",{class:"navLab"},lab), el("div",{class:"navRowG c"+keys.length}, ...keys.map(k=>navBtn(NK[k]))));
   if(!window.NAVSEARCH) window.NAVSEARCH=searchWidget();
   { const ni=NAVSEARCH.querySelector("input"), nb=NAVSEARCH.querySelector(".qres"); if(ni && document.activeElement!==ni){ ni.value=""; nb.innerHTML=""; nb.classList.remove("open"); } }
-  r2.append(grp("Explore",["iso","qmsr","mdr","map","dates","fdapre"]), el("div",{class:"navGroup navSearchG"}, el("span",{class:"navLab"},"Search"), el("div",{class:"navSearchRow"}, NAVSEARCH, el("button",{class:"glossBtn",type:"button",title:"Glossary and abbreviations","aria-label":"Open the glossary and abbreviations",onclick:openGlossary}, ico("gloss"), el("span",{},"Glossary")))), grp("Practice",["random","dilemmas","audit"]), grp("Tools",["daily","stats","risk"]));
+  r2.append(grp("Explore",["iso","qmsr","mdr","map","dates","fdapre"]), el("div",{class:"navGroup navSearchG","data-g":"Search"}, el("span",{class:"navLab"},"Search"), el("div",{class:"navSearchRow"}, NAVSEARCH, el("button",{class:"glossBtn",type:"button",title:"Glossary and abbreviations","aria-label":"Open the glossary and abbreviations",onclick:openGlossary}, ico("gloss"), el("span",{},"Glossary")))), grp("Practice",["random","dilemmas","audit"]), grp("Tools",["daily","stats","risk"]));
+  phoneBar(active);
   heroTop(true); document.documentElement.dataset.home=String(active==="home"||active==="explore");
   requestAnimationFrame(()=>{ document.documentElement.style.setProperty("--hdrH",(navPinned()?r2.offsetHeight:0)+"px"); });
   const isCh=CH.some(x=>x.id===active); document.getElementById("dnav").style.display=isCh?"":"none";
@@ -2245,7 +2300,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="1.2.1", APPDATE="17-NOV-2026";
+const APPVER="1.3.0", APPDATE="17-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Asaf Ben Zion. All rights reserved.";
 const LEGAL=[["Copyright", "No part of this handbook’s original content may be copied or redistributed without written permission. Cited regulations, standards and guidance, and their links, remain the property of their official publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, data selection and design, developed with AI tools, and has been verified against requirements set by the author and against the official sources."], ["Sources", "Sources are limited to official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases. EU: EUR-Lex and European Commission pages, including MDCG guidance."], ["Important", "This application is intended for training only. Results from its tools require human review, verification and approval. Always check the linked source before citing anything in an audit response."]];
