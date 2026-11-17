@@ -822,6 +822,63 @@ body::before{content:""; position:fixed; inset:0; z-index:-1; pointer-events:non
 @media (max-width:640px){ body::before{background-image:linear-gradient(180deg,rgba(244,248,247,.55) 0%,rgba(244,248,247,.70) 100%),var(--bgimg)} }
 .photoCredit{font-size:12px; color:var(--muted); margin-top:6px}
 .photoCredit a{color:inherit}
+
+/* 2026-11-17a: compact hero, learn row, nav search, glossary collapse, xrefs */
+.heroC{grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:18px; padding:14px 20px; margin:0}
+.heroC[hidden]{display:none}
+.heroC .heroTitle{font-size:clamp(22px,2.7vw,30px); margin:0}
+.heroC .heroTag{margin:2px 0 2px; font-size:15px}
+.heroC .hDesc{font-size:14.5px; margin:0}
+.hStats{display:flex; gap:10px}
+.hStat{position:relative; min-width:104px; padding:10px 14px 12px; border-radius:12px; background:rgba(255,255,255,.85); border:1px solid var(--line); text-align:center; overflow:hidden; opacity:0; transform:translateY(6px); animation:hStatIn .55s cubic-bezier(.2,.7,.2,1) forwards; animation-delay:var(--d,0ms); transition:border-color .5s, box-shadow .5s, transform .5s}
+.hStat b{display:block; font-size:28px; line-height:1.05; font-variant-numeric:tabular-nums; color:var(--sc,#2e7d74); letter-spacing:-.01em}
+.hStat small{display:block; font-size:11px; font-weight:800; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); margin-top:3px}
+.hStat .hBar{position:absolute; left:0; bottom:0; height:3px; width:100%; background:var(--sc,#2e7d74); transform-origin:left; transform:scaleX(0); animation:hBar 1.2s cubic-bezier(.2,.7,.2,1) forwards; animation-delay:calc(var(--d,0ms) + 150ms); opacity:.8}
+.hStat.s-learn{--sc:#2e7d74} .hStat.s-prac{--sc:#b98a35} .hStat.s-dil{--sc:#b0544b}
+.hStat.on{border-color:var(--sc); box-shadow:0 6px 18px rgba(20,40,50,.10); transform:translateY(-2px)}
+@keyframes hStatIn{to{opacity:1; transform:none}}
+@keyframes hBar{to{transform:scaleX(1)}}
+@media (prefers-reduced-motion: reduce){ .hStat,.hStat .hBar{animation:none; opacity:1; transform:none} }
+.navRowG.c6{grid-template-columns:repeat(6,1fr)}
+.mainNav .navRowG.c6 .navBtn{font-size:14px !important; padding:10px 10px !important; gap:8px !important}
+.navSearchG .searchBox{margin:0}
+.navSearchG .qhelp{display:none}
+.navSearchG .searchBox input{font-size:15.5px; padding-top:10px; padding-bottom:10px; background-color:var(--card)}
+.navSearchG .qres{position:relative; z-index:5; max-height:60vh}
+.glossCard{padding:0}
+.glossCard > .glossSum{list-style:none; display:flex; align-items:center; gap:10px; padding:14px 18px; cursor:pointer}
+.glossCard > .glossSum::-webkit-details-marker{display:none}
+.glossSum .secTitle{margin:0; font-size:19px}
+.glossSum small{color:var(--muted); font-size:13.5px; flex:1}
+.glossSum .chev{font-style:normal; font-size:22px; color:var(--muted); transition:transform .2s}
+.glossCard[open] .glossSum .chev{transform:rotate(90deg)}
+.glossCard[open]{padding:0 18px 16px}
+.glossCard[open] > .glossSum{padding:14px 0}
+.xref{text-decoration:underline dotted; text-decoration-color:rgba(59,136,181,.75); text-decoration-thickness:1.5px; text-underline-offset:3px; cursor:help; border-radius:3px}
+.xref.xi,.xref.xc,.xref.xp,.xref.xa,.xref.xx{text-decoration-style:solid; text-decoration-color:rgba(46,125,116,.55)}
+.xref:hover,.xref.on{background:rgba(59,136,181,.10); text-decoration-color:#3b88b5}
+.xref:focus-visible{outline:2px solid #3b88b5; outline-offset:1px}
+#xPop{position:fixed; z-index:200; background:#fff; border:1px solid var(--line); border-radius:12px; box-shadow:0 10px 30px rgba(20,30,40,.18); padding:12px 34px 12px 14px; font-size:14.5px; line-height:1.4; animation:fadeUp .15s ease both; max-height:50vh; overflow:auto}
+#xPop .xBlk + .xBlk{border-top:1px dashed var(--line); margin-top:8px; padding-top:8px}
+#xPop .xH{display:flex; align-items:baseline; gap:8px; justify-content:space-between}
+#xPop .xH b{font-size:15px}
+#xPop .xA{font-size:11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--muted)}
+#xPop .xF{color:var(--muted); font-size:13px; margin-top:2px}
+#xPop .xD{margin-top:4px}
+#xPop .xT{font-weight:700; color:var(--ink)}
+#xPop .xSrc{display:inline-block; margin-top:6px; font-size:13px}
+#xPop .xClose{position:absolute; top:6px; right:6px; border:0; background:transparent; font-size:20px; line-height:1; color:var(--muted); cursor:pointer; padding:2px 6px}
+@media (max-width:900px){ .mainNav .navRowG.c6{grid-template-columns:repeat(3,1fr)} }
+@media (max-width:640px){
+  .heroC{grid-template-columns:1fr; gap:10px; padding:12px 14px}
+  .heroC .hDesc{display:none}
+  .heroC .heroTag{font-size:13.5px}
+  .hStats{display:grid; grid-template-columns:repeat(3,1fr); gap:8px}
+  .hStat{min-width:0; padding:8px 6px 10px}
+  .hStat b{font-size:22px}
+  .mainNav .navRowG.c6 .navBtn{font-size:12px !important; padding:8px 4px !important}
+}
+@media (max-width:640px){ .glossSum small{display:none} .glossSum .secTitle{flex:1} }
 </style>
 </head>
 <body>
@@ -830,6 +887,7 @@ body::before{content:""; position:fixed; inset:0; z-index:-1; pointer-events:non
   <div class="appbar">
     <a class="brand2" href="#home" aria-label="Medical Device QA Handbook, home"><svg viewBox="0 0 64 64" width="46" height="46" aria-hidden="true"><defs><linearGradient id="lgq" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0d7568"/><stop offset="1" stop-color="#2f4aa0"/></linearGradient></defs><path d="M32 3 L55 11.5 V29 C55 44.5 45 55 32 61 C19 55 9 44.5 9 29 V11.5 Z" fill="url(#lgq)"/><path d="M32 8.5 L50 15.2 V29 C50 41.5 42 50 32 55 C22 50 14 41.5 14 29 V15.2 Z" fill="none" stroke="#fff" stroke-opacity=".38" stroke-width="1.6"/><circle cx="32" cy="30" r="13.5" fill="none" stroke="#fff" stroke-opacity=".22" stroke-width="1.4" stroke-dasharray="2 3"/><path d="M22.5 30.5 L29.5 37.5 L42.5 23" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>Medical Device QA Handbook</b><small>ISO 13485 · FDA QMSR · EU MDR · Class II and III</small></span></a>
   </div>
+  <section class="hero heroC" id="heroTop" hidden></section>
   <nav class="mainNav" id="navRow2" aria-label="Main"></nav>
 </header>
 <div class="dnav" id="dnav"><div class="partSwitch" id="partSwitch"></div><div class="chTabs" id="chTabs" role="tablist" aria-label="Disciplines"></div></div>
@@ -838,7 +896,7 @@ body::before{content:""; position:fixed; inset:0; z-index:-1; pointer-events:non
   <nav class="rail" id="rail" aria-label="Chapters"></nav>
   <main id="main"></main>
 </div>
-<footer>Sources are limited to official publications: for the US, the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases; for the EU, EUR-Lex and European Commission pages including MDCG guidance. Items tagged “Application” are my reasoning, not official statements. Check the linked source before you cite anything in an audit response. Answers are saved in this browser on this device. Version 2026-11-16j. <div class="photoCredit">Background photos (Unsplash License): Hans Reniers, National Cancer Institute and Trnava University on <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a>.</div></footer>
+<footer>Sources are limited to official publications: for the US, the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases; for the EU, EUR-Lex and European Commission pages including MDCG guidance. Items tagged “Application” are my reasoning, not official statements. Check the linked source before you cite anything in an audit response. Answers are saved in this browser on this device. Version 2026-11-17a. <div class="photoCredit">Background photos (Unsplash License): Hans Reniers, National Cancer Institute and Trnava University on <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a>.</div></footer>
 </div>
 
 <script>
@@ -923,8 +981,13 @@ function renderNav(active){
   });
   const r2=document.getElementById("navRow2"); r2.innerHTML="";
   const NK=Object.fromEntries(NAV.map(x=>[x[0],x]));
-  const navBtn=([k,l,ic])=>el("button",{class:"navBtn n-"+ic,type:"button","aria-current":String(active===k||(k==="tools"&&["sampling","msa","grr","rmtools","impact"].includes(active))),onclick:()=>{ if(k==="random"){ rnd.cur=null; } if(location.hash==="#"+k) route(); else location.hash=k; }}, ico(ic), el("span",{},l));
-  [["Learn",["home","explore","map","dates"]],["Practice",["random","dilemmas","audit"]],["Tools",["tools","risk"]]].forEach(([lab,keys])=>r2.append(el("div",{class:"navGroup"}, el("span",{class:"navLab"},lab), el("div",{class:"navRowG c"+keys.length}, ...keys.map(k=>navBtn(NK[k]))))));
+  const PARTK={iso:"basics",qmsr:"qms",mdr:"eu",fdapre:"fda"};
+  const navBtn=([k,l,ic])=>el("button",{class:"navBtn n-"+ic,type:"button","aria-current":String(active===k||(PARTK[k]&&c.part===PARTK[k])||(k==="tools"&&["sampling","msa","grr","rmtools","impact"].includes(active))),onclick:()=>{ if(k==="random"){ rnd.cur=null; } const t=PARTK[k]?CH.find(x=>x.part===PARTK[k]).id:k; if(location.hash==="#"+t) route(); else location.hash=t; }}, ico(ic), el("span",{},l));
+  const grp=(lab,keys)=>el("div",{class:"navGroup"}, el("span",{class:"navLab"},lab), el("div",{class:"navRowG c"+keys.length}, ...keys.map(k=>navBtn(NK[k]))));
+  if(!window.NAVSEARCH) window.NAVSEARCH=searchWidget();
+  { const ni=NAVSEARCH.querySelector("input"), nb=NAVSEARCH.querySelector(".qres"); if(ni && document.activeElement!==ni){ ni.value=""; nb.innerHTML=""; nb.classList.remove("open"); } }
+  r2.append(grp("Learn",["iso","qmsr","mdr","map","dates","fdapre"]), el("div",{class:"navGroup navSearchG"}, el("span",{class:"navLab"},"Explore"), NAVSEARCH), grp("Practice",["random","dilemmas","audit"]), grp("Tools",["tools","risk"]));
+  heroTop(active==="home"||active==="explore");
   const isCh=CH.some(x=>x.id===active); document.getElementById("dnav").style.display=isCh?"":"none";
   const ct=document.getElementById("chTabs"); ct.innerHTML=""; ct.style.display="";
   CH.filter(x=>x.part===c.part).forEach(x=>{
@@ -1045,7 +1108,7 @@ function modal(title,body){
   const ov=el("div",{class:"ovl",id:"ovl",onclick:(e)=>{ if(e.target.id==="ovl") closeModal(); }});
   const box=el("div",{class:"mbox",role:"dialog","aria-modal":"true","aria-label":title});
   box.append(el("div",{class:"mhead"}, el("h2",{},title), el("button",{class:"mclose",type:"button","aria-label":"Close",onclick:closeModal},"×")));
-  box.append(body); ov.append(box); document.body.append(ov);
+  box.append(body); ov.append(box); document.body.append(ov); try{ xLink(box); }catch(e){}
   setTimeout(()=>{ const f=box.querySelector("button, a, input"); if(f) f.focus(); },0);
 }
 function closeModal(){ const o=document.getElementById("ovl"); if(o) o.remove(); }
@@ -1791,6 +1854,107 @@ function renderCRResults(box){
   exportPanel(out,getDoc,"cr");
 }
 
+/* ---------- term and clause pop-ups (not applied in question zones) ---------- */
+const ISO_T={"4":"Quality management system","4.1":"General requirements","4.1.1":"General requirements: document the QMS and the organization's regulatory role(s)","4.1.2":"General requirements: determine processes and apply a risk-based approach","4.1.3":"General requirements: process criteria, resources and monitoring","4.1.4":"General requirements: manage processes and evaluate changes","4.1.5":"General requirements: control of outsourced processes","4.1.6":"General requirements: validation of computer software used in the QMS","4.2":"Documentation requirements","4.2.1":"Documentation requirements: general","4.2.2":"Quality manual","4.2.3":"Medical device file","4.2.4":"Control of documents","4.2.5":"Control of records",
+"5":"Management responsibility","5.1":"Management commitment","5.2":"Customer focus","5.3":"Quality policy","5.4":"Planning","5.4.1":"Quality objectives","5.4.2":"Quality management system planning","5.5":"Responsibility, authority and communication","5.5.1":"Responsibility and authority","5.5.2":"Management representative","5.5.3":"Internal communication","5.6":"Management review","5.6.1":"Management review: general","5.6.2":"Review input","5.6.3":"Review output",
+"6":"Resource management","6.1":"Provision of resources","6.2":"Human resources","6.3":"Infrastructure","6.4":"Work environment and contamination control","6.4.1":"Work environment","6.4.2":"Contamination control",
+"7":"Product realization","7.1":"Planning of product realization","7.2":"Customer-related processes","7.2.1":"Determination of requirements related to product","7.2.2":"Review of requirements related to product","7.2.3":"Communication","7.3":"Design and development","7.3.1":"Design and development: general","7.3.2":"Design and development planning","7.3.3":"Design and development inputs","7.3.4":"Design and development outputs","7.3.5":"Design and development review","7.3.6":"Design and development verification","7.3.7":"Design and development validation","7.3.8":"Design and development transfer","7.3.9":"Control of design and development changes","7.3.10":"Design and development files","7.4":"Purchasing","7.4.1":"Purchasing process","7.4.2":"Purchasing information","7.4.3":"Verification of purchased product","7.5":"Production and service provision","7.5.1":"Control of production and service provision","7.5.2":"Cleanliness of product","7.5.3":"Installation activities","7.5.4":"Servicing activities","7.5.5":"Particular requirements for sterile medical devices","7.5.6":"Validation of processes for production and service provision","7.5.7":"Particular requirements for validation of processes for sterilization and sterile barrier systems","7.5.8":"Identification","7.5.9":"Traceability","7.5.10":"Customer property","7.5.11":"Preservation of product","7.6":"Control of monitoring and measuring equipment",
+"8":"Measurement, analysis and improvement","8.1":"Measurement, analysis and improvement: general","8.2":"Monitoring and measurement","8.2.1":"Feedback","8.2.2":"Complaint handling","8.2.3":"Reporting to regulatory authorities","8.2.4":"Internal audit","8.2.5":"Monitoring and measurement of processes","8.2.6":"Monitoring and measurement of product","8.3":"Control of nonconforming product","8.3.1":"Control of nonconforming product: general","8.3.2":"Actions in response to nonconforming product detected before delivery","8.3.3":"Actions in response to nonconforming product detected after delivery","8.3.4":"Rework","8.4":"Analysis of data","8.5":"Improvement","8.5.1":"Improvement: general","8.5.2":"Corrective action","8.5.3":"Preventive action"};
+/* section headings from eCFR (Title 21), retrieved Nov 2026 */
+const CFR_T={"803.1":"What does this part cover?","803.3":"How does FDA define the terms used in this part?","803.9":"What information from the reports do we disclose to the public?","803.10":"Generally, what are the reporting requirements that apply to me?","803.11":"What form should I use to submit reports of individual adverse events and where do I obtain these forms?","803.12":"How do I submit initial and supplemental or followup reports?","803.17":"What are the requirements for developing, maintaining, and implementing written MDR procedures that apply to me?","803.18":"What are the requirements for establishing and maintaining MDR files or records that apply to me?","803.19":"Are there exemptions, variances, or alternative forms of adverse event reporting requirements?","803.20":"How do I complete and submit an individual adverse event report?","803.22":"What are the circumstances in which I am not required to file a report?","803.30":"If I am a user facility, what reporting requirements apply to me?","803.40":"If I am an importer, what reporting requirements apply to me?","803.50":"If I am a manufacturer, what reporting requirements apply to me?","803.52":"If I am a manufacturer, what information must I submit in my individual adverse event reports?","803.53":"If I am a manufacturer, in which circumstances must I submit a 5-day report?","803.56":"If I am a manufacturer, in what circumstances must I submit a supplemental or followup report and what are the requirements for such reports?","803.58":"Foreign manufacturers",
+"806.1":"Scope","806.2":"Definitions","806.10":"Reports of corrections and removals","806.20":"Records of corrections and removals not required to be reported","806.30":"FDA access to records","806.40":"Public availability of reports",
+"807.3":"Definitions","807.20":"Who must register and submit a device list?","807.21":"How to register establishments and list devices","807.22":"Times for establishment registration and device listing","807.25":"Information required for device establishment registration and device listing","807.26":"Additional listing information","807.28":"Updating device listing information","807.40":"Establishment registration and device listing for foreign establishments importing or offering for import devices into the United States","807.65":"Exemptions for device establishments","807.81":"When a premarket notification submission is required","807.85":"Exemption from premarket notification","807.87":"Information required in a premarket notification submission","807.92":"Content and format of a 510(k) summary","807.100":"FDA action on a premarket notification",
+"814.1":"Scope","814.3":"Definitions","814.20":"Application","814.37":"PMA amendments and resubmitted PMAs","814.39":"PMA supplements","814.40":"Time frames for reviewing a PMA","814.44":"Procedures for review of a PMA","814.46":"Withdrawal of approval of a PMA","814.80":"General","814.82":"Postapproval requirements","814.84":"Reports","814.100":"Purpose and scope","814.126":"Postapproval requirements and reports",
+"820.1":"Scope","820.3":"Definitions","820.7":"Incorporation by reference","820.10":"Requirements for a quality management system","820.35":"Control of records","820.45":"Device labeling and packaging controls",
+"830.3":"Definitions","830.10":"Incorporation by reference","830.20":"Requirements for a unique device identifier","830.40":"Use and discontinuation of a device identifier","830.50":"Changes that require use of a new device identifier","830.60":"Relabeling of a device that is required to bear a unique device identifier","830.300":"Devices subject to device identification data submission requirements","830.310":"Information required for unique device identification","830.320":"Submission of unique device identification information","830.330":"Times for submission of unique device identification information","830.360":"Records to be maintained by the labeler"};
+const CFR_OLD={"820.20":"Management responsibility","820.22":"Quality audit","820.25":"Personnel","820.30":"Design controls","820.40":"Document controls","820.50":"Purchasing controls","820.70":"Production and process controls","820.75":"Process validation","820.90":"Nonconforming product","820.100":"Corrective and preventive action","820.120":"Device labeling","820.180":"General requirements (records)","820.181":"Device master record","820.184":"Device history record","820.198":"Complaint files","820.250":"Statistical techniques"};
+const CFR_PART={"7":"Enforcement policy (recalls)","11":"Electronic records; electronic signatures","801":"Labeling","803":"Medical device reporting","806":"Medical devices; reports of corrections and removals","807":"Establishment registration and device listing; premarket notification","812":"Investigational device exemptions","814":"Premarket approval of medical devices","820":"Quality management system regulation","830":"Unique device identification"};
+/* titles from Regulation (EU) 2017/745, EUR-Lex */
+const MDR_A={"1":"Subject matter and scope","2":"Definitions","3":"Amendment of certain definitions","4":"Regulatory status of products","5":"Placing on the market and putting into service","6":"Distance sales","7":"Claims","8":"Use of harmonised standards","9":"Common specifications","10":"General obligations of manufacturers","11":"Authorised representative","12":"Change of authorised representative","13":"General obligations of importers","14":"General obligations of distributors","15":"Person responsible for regulatory compliance","16":"Cases in which obligations of manufacturers apply to importers, distributors or other persons","17":"Single-use devices and their reprocessing","18":"Implant card and information to be supplied to the patient with an implanted device","19":"EU declaration of conformity","20":"CE marking of conformity","21":"Devices for special purposes","22":"Systems and procedure packs","23":"Parts and components","24":"Free movement","25":"Identification within the supply chain","26":"Medical devices nomenclature","27":"Unique Device Identification system","28":"UDI database","29":"Registration of devices","30":"Electronic system for registration of economic operators","31":"Registration of manufacturers, authorised representatives and importers","32":"Summary of safety and clinical performance","33":"European database on medical devices","34":"Functionality of Eudamed","51":"Classification of devices","52":"Conformity assessment procedures","53":"Involvement of notified bodies in conformity assessment procedures","54":"Clinical evaluation consultation procedure for certain class III and class IIb devices","55":"Mechanism for scrutiny of conformity assessments of certain class III and class IIb devices","56":"Certificates of conformity","57":"Electronic system on notified bodies and on certificates of conformity","58":"Voluntary change of notified body","59":"Derogation from the conformity assessment procedures","60":"Certificate of free sale","61":"Clinical evaluation","62":"General requirements regarding clinical investigations conducted to demonstrate conformity of devices","74":"Clinical investigations regarding devices bearing the CE marking","80":"Recording and reporting of adverse events that occur during clinical investigations","82":"Requirements regarding other clinical investigations","83":"Post-market surveillance system of the manufacturer","84":"Post-market surveillance plan","85":"Post-market surveillance report","86":"Periodic safety update report","87":"Reporting of serious incidents and field safety corrective actions","88":"Trend reporting","89":"Analysis of serious incidents and field safety corrective actions","90":"Analysis of vigilance data","92":"Electronic system on vigilance and on post-market surveillance","93":"Market surveillance activities","95":"Procedure for dealing with devices presenting an unacceptable risk to health and safety","103":"Medical Device Coordination Group","113":"Penalties","117":"Amendment to Directive 2001/83/EC","120":"Transitional provisions","122":"Repeal","123":"Entry into force and date of application"};
+const MDR_X={"I":"General safety and performance requirements","II":"Technical documentation","III":"Technical documentation on post-market surveillance","IV":"EU declaration of conformity","V":"CE marking of conformity","VI":"Information on registration of devices and economic operators, UDI data elements and the UDI system","VII":"Requirements to be met by notified bodies","VIII":"Classification rules","IX":"Conformity assessment based on a quality management system and on assessment of technical documentation","X":"Conformity assessment based on type-examination","XI":"Conformity assessment based on product conformity verification","XII":"Certificates issued by a notified body","XIII":"Procedure for custom-made devices","XIV":"Clinical evaluation and post-market clinical follow-up","XV":"Clinical investigations","XVI":"List of groups of products without an intended medical purpose referred to in Article 1(2)","XVII":"Correlation table"};
+const XEXCL=".q,.dil,.opts,.choice,.qres,.searchBox,.gloss,.glossCard,[class*='aud'],button,a,input,textarea,select,option,label,summary,h1,h2,h3,h4,svg,script,style,code,pre,.xref,.noX,[contenteditable],.chTab,.tag,.chips,.chipRow,.mhead,.eyebrow,.navLab,#xPop";
+let XT=null;
+function xBuild(){
+  if(XT) return XT;
+  const map=new Map(), add=(tok,i)=>{ tok=tok.trim(); if(tok.length<2||["Ac","Re","QA","CA","CFR","GDP"].includes(tok)) return; const k=tok.toLowerCase(); if(!map.has(k)) map.set(k,{tok,ids:[]}); if(!map.get(k).ids.includes(i)) map.get(k).ids.push(i); };
+  GLOSS.forEach((g,i)=>{ g[0].replace(/\s*\((EU|US)\)$/,"").split(/\s+\/\s+/).forEach(t=>add(t,i)); const f=g[1]||""; if(f.includes(" ")&&f.length>=10&&!/[\/(]/.test(f)) add(f,i); });
+  const toks=[...map.values()].sort((a,b)=>b.tok.length-a.tok.length);
+  const esc=t=>t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+  const cs=toks.filter(t=>!t.tok.includes(" ")).map(t=>esc(t.tok)), ci=toks.filter(t=>t.tok.includes(" ")).map(t=>esc(t.tok));
+  XT={map, rCS:new RegExp("(?<![\\w-])(?:"+cs.join("|")+")(?![\\w-])","g"), rCI:ci.length?new RegExp("(?<![\\w-])(?:"+ci.join("|")+")(?![\\w-])","gi"):null};
+  return XT;
+}
+function xOtherStd(text,idx){ const pre=text.slice(Math.max(0,idx-34),idx); const m=[...pre.matchAll(/(?:ISO|IEC|AAMI|ASTM|EN)(?:\/TR|\/TS)?\s?[A-Z]?\s?(\d{3,5})/g)].pop(); return !!(m&&m[1]!=="13485"); }
+function xFind(text){
+  const T=xBuild(), out=[]; let m;
+  const push=(a,b,k)=>out.push([a,b,k]);
+  const rCfr=/(?:21\s?CFR\s?(?:Part\s)?)?(?:§§?\s?)?(?<![\d.])(8(?:03|06|07|14|20|30))\.(\d{1,3})(?![\d]|\.\d)/g;
+  while((m=rCfr.exec(text))){ const k=m[1]+"."+m[2]; if(CFR_T[k]||CFR_OLD[k]) push(m.index,m.index+m[0].length,"c:"+k); }
+  const rPart=/\b21\s?CFR\s?(?:[Pp]arts?\s)?(\d{1,3})\b(?![\d.]*\d)|\b[Pp]art\s(8(?:01|03|06|07|12|14|20|30)|11)\b(?!\.\d)/g;
+  while((m=rPart.exec(text))){ const p=m[1]||m[2]; if(CFR_PART[p]) push(m.index,m.index+m[0].length,"p:"+p); }
+  const rArt=/\b(?:Articles?|Art\.)\s?(\d{1,3})\b/g;
+  while((m=rArt.exec(text))){ const pre=text.slice(Math.max(0,m.index-45),m.index); if(/AI Act|IVDR|2017\/746|2024\/1689|GDPR|Directive|TFEU|FD&C|Section/.test(pre)) continue; if(MDR_A[m[1]]) push(m.index,m.index+m[0].length,"a:"+m[1]); }
+  const rAnx=/\bAnnex(?:es)?\s(XVII|XVI|XV|XIV|XIII|XII|XI|IX|X|VIII|VII|VI|IV|V|III|II|I)\b(?![a-z])/g;
+  while((m=rAnx.exec(text))){ const pre=text.slice(Math.max(0,m.index-45),m.index); if(/AI Act|IVDR|2017\/746|2024\/1689|Directive|ISO|IEC/.test(pre)&&!/MDR/.test(pre)) continue; push(m.index,m.index+m[0].length,"x:"+m[1]); }
+  const rCtx=/(ISO\s?13485(?::2016)?|[Cc]lauses?|[Cc]l\.)\s+((?:\d\.\d{1,2}(?:\.\d{1,2})?)(?:\s*(?:,|;|and|or|&|\/|–)\s*\d\.\d{1,2}(?:\.\d{1,2})?)*)/g;
+  while((m=rCtx.exec(text))){ if(!/13485/.test(m[1])&&xOtherStd(text,m.index)) continue; const base=m.index+m[0].length-m[2].length; const rn=/\d\.\d{1,2}(?:\.\d{1,2})?/g; let n; while((n=rn.exec(m[2]))){ if(ISO_T[n[0]]) push(base+n.index,base+n.index+n[0].length,"i:"+n[0]); } }
+  const r3=/(?<![\w.§$])([4-8]\.\d{1,2}\.\d{1,2})(?![\w%]|\.\d)/g;
+  while((m=r3.exec(text))){ if(ISO_T[m[1]]&&!xOtherStd(text,m.index)) push(m.index,m.index+m[0].length,"i:"+m[1]); }
+  [T.rCS,T.rCI].forEach(r=>{ if(!r) return; r.lastIndex=0; while((m=r.exec(text))){ const e=T.map.get(m[0].toLowerCase()); if(e) push(m.index,m.index+m[0].length,"t:"+m[0].toLowerCase()); } });
+  out.sort((a,b)=>a[0]-b[0]||(b[1]-b[0])-(a[1]-a[0]));
+  const res=[]; let end=-1; out.forEach(o=>{ if(o[0]>=end){ res.push(o); end=o[1]; } });
+  return res;
+}
+const XSEEN=new WeakMap();
+function xLink(root){
+  if(!root||(root.id==="main"&&document.documentElement.dataset.sec==="practice")) return;
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>{ const p=n.parentElement; if(!p||n.nodeValue.length<2||!/[A-Za-z0-9]/.test(n.nodeValue)) return NodeFilter.FILTER_REJECT; return p.closest(XEXCL)?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT; }});
+  const nodes=[]; while(w.nextNode()) nodes.push(w.currentNode);
+  nodes.forEach(n=>{
+    const text=n.nodeValue; const hits=xFind(text); if(!hits.length) return;
+    const blk=n.parentElement.closest("p,li,td,th,dd,div,section")||n.parentElement;
+    let seen=XSEEN.get(blk); if(!seen){ seen=new Set(); XSEEN.set(blk,seen); }
+    const keep=hits.filter(h=>{ if(seen.has(h[2])) return false; seen.add(h[2]); return true; }); if(!keep.length) return;
+    const frag=document.createDocumentFragment(); let pos=0;
+    keep.forEach(([a,b,k])=>{ if(a>pos) frag.append(text.slice(pos,a)); const sp=document.createElement("span"); sp.className="xref x"+k[0]; sp.dataset.x=k; sp.tabIndex=0; sp.setAttribute("role","button"); sp.textContent=text.slice(a,b); frag.append(sp); pos=b; });
+    if(pos<text.length) frag.append(text.slice(pos));
+    n.replaceWith(frag);
+  });
+}
+function xContent(k){
+  const [t,key]=[k[0],k.slice(2)];
+  const ec=u=>el("a",{href:u,target:"_blank",rel:"noopener",class:"xSrc"},"Official text ↗");
+  if(t==="t"){ const e=xBuild().map.get(key); if(!e) return null;
+    return e.ids.map(i=>{ const g=GLOSS[i]; return el("div",{class:"xBlk"}, el("div",{class:"xH"}, el("b",{},g[0]), el("span",{class:"xA"},g[3])), g[1]&&g[1]!=="—"?el("div",{class:"xF"},g[1]):"", el("div",{class:"xD"},g[2])); }); }
+  if(t==="i") return [el("div",{class:"xBlk"}, el("div",{class:"xH"}, el("b",{},"ISO 13485:2016 · "+key), el("span",{class:"xA"},"Clause")), el("div",{class:"xD xT"},ISO_T[key]))];
+  if(t==="c"){ const p=key.split(".")[0], cur=CFR_T[key];
+    return [el("div",{class:"xBlk"}, el("div",{class:"xH"}, el("b",{},"21 CFR "+key), el("span",{class:"xA"},"FDA")), el("div",{class:"xD xT"}, cur||CFR_OLD[key]), cur?"":el("div",{class:"xF"},"Former QS regulation section. Reserved since the QMSR took effect on 2 Feb 2026; the topic is now covered through ISO 13485 under 820.10."), el("div",{class:"xF"},"Part "+p+": "+CFR_PART[p]), ec("https://www.ecfr.gov/current/title-21/section-"+key))]; }
+  if(t==="p") return [el("div",{class:"xBlk"}, el("div",{class:"xH"}, el("b",{},"21 CFR Part "+key), el("span",{class:"xA"},"FDA")), el("div",{class:"xD xT"},CFR_PART[key]), ec("https://www.ecfr.gov/current/title-21/part-"+key))];
+  if(t==="a") return [el("div",{class:"xBlk"}, el("div",{class:"xH"}, el("b",{},"EU MDR · Article "+key), el("span",{class:"xA"},"2017/745")), el("div",{class:"xD xT"},MDR_A[key]), ec("https://eur-lex.europa.eu/eli/reg/2017/745/oj/eng"))];
+  if(t==="x") return [el("div",{class:"xBlk"}, el("div",{class:"xH"}, el("b",{},"EU MDR · Annex "+key), el("span",{class:"xA"},"2017/745")), el("div",{class:"xD xT"},MDR_X[key]), ec("https://eur-lex.europa.eu/eli/reg/2017/745/oj/eng"))];
+  return null;
+}
+function xHide(){ const p=document.getElementById("xPop"); if(p) p.remove(); document.querySelectorAll(".xref.on").forEach(x=>x.classList.remove("on")); }
+function xShow(sp){
+  const was=sp.classList.contains("on"); xHide(); if(was) return;
+  const c=xContent(sp.dataset.x); if(!c) return;
+  sp.classList.add("on");
+  const pop=el("div",{id:"xPop",role:"tooltip"}, ...c, el("button",{class:"xClose",type:"button","aria-label":"Close",onclick:xHide},"×"));
+  document.body.append(pop);
+  const r=sp.getBoundingClientRect(), vw=document.documentElement.clientWidth, pw=Math.min(340,vw-16);
+  pop.style.width=pw+"px";
+  let left=Math.min(Math.max(8,r.left+r.width/2-pw/2),vw-pw-8);
+  const ph=pop.offsetHeight; let top=r.bottom+8; if(top+ph>window.innerHeight-8&&r.top-ph-8>8) top=r.top-ph-8;
+  pop.style.left=left+"px"; pop.style.top=top+"px";
+}
+document.addEventListener("click",e=>{ const sp=e.target.closest&&e.target.closest(".xref"); if(sp){ e.preventDefault(); e.stopPropagation(); xShow(sp); return; } if(!(e.target.closest&&e.target.closest("#xPop"))) xHide(); },true);
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") xHide(); else if((e.key==="Enter"||e.key===" ")&&e.target.classList&&e.target.classList.contains("xref")){ e.preventDefault(); xShow(e.target); } });
+window.addEventListener("scroll",()=>{ if(document.getElementById("xPop")) xHide(); },{passive:true});
+window.addEventListener("hashchange",xHide);
+(function(){ const m=document.getElementById("main"); if(!m||!window.MutationObserver) return; let tm=null;
+  const ob=new MutationObserver(()=>{ clearTimeout(tm); tm=setTimeout(()=>{ try{ xLink(m); }catch(e){ console.warn(e); } ob.takeRecords(); },60); });
+  ob.observe(m,{childList:true,subtree:true}); })();
+
 /* ---------- glossary ---------- */
 const GLOSS=[["510(k)", "Premarket notification", "US submission showing a device is substantially equivalent to a legally marketed predicate (21 CFR 807 Subpart E).", "FDA"], ["ALCOA+", "Attributable, Legible, Contemporaneous, Original, Accurate (+ Complete, Consistent, Enduring, Available)", "Principles for data integrity in records.", "QMS"], ["AQL", "Acceptance quality limit", "Worst tolerable quality level, in percent nonconforming or nonconformities per 100 units, used to index ISO 2859-1 sampling plans.", "Sampling"], ["Ac / Re", "Acceptance number / rejection number", "In a sampling plan: accept the lot if nonconforming units ≤ Ac; reject if ≥ Re.", "Sampling"], ["AIMDD", "Active Implantable Medical Devices Directive 90/385/EEC", "EU directive replaced by the MDR.", "EU"], ["AR", "Authorised representative", "EU-based person mandated by a non-EU manufacturer to act on its behalf (MDR Art. 11).", "EU"], ["ASTM F1980", "Standard guide for accelerated aging", "Method for estimating shelf life of sterile barrier systems using elevated temperature.", "Packaging"], ["Basic UDI-DI", "Basic unique device identifier – device identifier", "Primary EU identifier for a device model group with the same intended purpose, risk class and essential design; links to certificates and technical documentation.", "EU"], ["BI", "Biological indicator", "Test system with resistant microorganisms used to challenge a sterilization process.", "Sterilization"], ["CA", "Competent authority", "National regulator of an EU Member State responsible for medical devices.", "EU"], ["CAPA", "Corrective and preventive action", "Actions to remove causes of nonconformities (8.5.2) or potential nonconformities (8.5.3).", "QMS"], ["CE marking", "Conformité Européenne", "Mark showing a device conforms to the MDR (Art. 20).", "EU"], ["CEP / CER", "Clinical evaluation plan / report", "Plan and report of the clinical evaluation under MDR Art. 61 and Annex XIV.", "EU"], ["CFR", "Code of Federal Regulations", "Codified US federal regulations; Title 21 covers food and drugs, including devices (Parts 800–898).", "FDA"], ["Code letter", "Sample size code letter", "Letter (A–R) from ISO 2859-1 Table 1, set by lot size and inspection level, that leads to the sample size.", "Sampling"], ["Complaint", "—", "Written, electronic or oral communication alleging deficiencies in identity, quality, durability, reliability, usability, safety or performance of a released device (ISO 13485 3.4).", "QMS"], ["Concession", "—", "Permission to use or release product that doesn’t conform to requirements (ISO 13485 8.3.2).", "QMS"], ["CP 7382.850", "Compliance Program 7382.850", "FDA program for inspecting device manufacturers under the QMSR, replacing QSIT from 2 Feb 2026.", "FDA"], ["Cpk", "Process capability index", "Measure of how well a process fits within specification limits, accounting for centering.", "Statistics"], ["CS", "Common specifications", "Technical or clinical requirements adopted by the Commission under MDR Art. 9.", "EU"], ["CSA", "Computer Software Assurance", "FDA’s risk-based approach to assuring production and QMS software.", "FDA"], ["D&D", "Design and development", "ISO 13485 clause 7.3 activities, formerly “design controls” under 820.30.", "QMS"], ["De Novo", "De Novo classification request", "US pathway for novel low-to-moderate risk devices without a predicate (FD&C Act 513(f)(2)).", "FDA"], ["DHF / DMR / DHR", "Design history file / device master record / device history record", "QSR-era terms. Under the QMSR they map to the design and development file (7.3.10), the medical device file (4.2.3) and production records (7.5.1).", "FDA"], ["DI / PI", "Device identifier / production identifier", "The two parts of a UDI: the fixed model identifier and the variable lot, serial or date data.", "UDI"], ["DoC", "Declaration of conformity", "Manufacturer’s statement that a device meets the MDR (Art. 19, Annex IV).", "EU"], ["DOE", "Design of experiments", "Structured testing of several factors at once to find effects and interactions.", "Statistics"], ["DV / DVal", "Design verification / design validation", "Verification: outputs meet inputs (7.3.6). Validation: the device meets user needs and intended use (7.3.7).", "QMS"], ["eIFU", "Electronic instructions for use", "IFU provided electronically; in the EU limited by Regulation (EU) 2021/2226.", "Labeling"], ["EIR", "Establishment inspection report", "FDA investigator’s report of an inspection.", "FDA"], ["eMDR", "Electronic Medical Device Reporting", "Electronic submission of MDR reports to FDA.", "FDA"], ["EMDN", "European Medical Device Nomenclature", "EU coding system used in EUDAMED registration.", "EU"], ["eSTAR", "Electronic Submission Template And Resource", "FDA’s required template for 510(k) and De Novo submissions.", "FDA"], ["EtO / EO", "Ethylene oxide", "Gas sterilization method (ISO 11135).", "Sterilization"], ["EUDAMED", "European database on medical devices", "EU IT system for registration, UDI, certificates, vigilance and more (MDR Art. 33).", "EU"], ["FAI", "First article inspection", "Full inspection of the first parts from a new supplier, tool or process.", "Suppliers"], ["FD&C Act", "Federal Food, Drug, and Cosmetic Act", "US law under which FDA regulates devices.", "FDA"], ["FMEA", "Failure mode and effects analysis", "Bottom-up analysis of how parts or steps can fail and the effects.", "Risk"], ["FSCA / FSN", "Field safety corrective action / field safety notice", "EU action to reduce risk from a marketed device, and the notice to users (MDR Art. 2, 89).", "EU"], ["Form 483", "FDA Form 483, Inspectional Observations", "List of observations given at the end of an FDA inspection.", "FDA"], ["GDP", "Good documentation practice", "Rules for completing and correcting records.", "QMS"], ["GSPR", "General safety and performance requirements", "MDR Annex I requirements every device must meet.", "EU"], ["GUDID", "Global Unique Device Identification Database", "FDA database of device identifier data (21 CFR 830 Subpart E).", "UDI"], ["HF / HFE", "Human factors (engineering)", "Study of how users interact with a device to reduce use errors; see IEC 62366-1.", "Design"], ["HHE", "Health hazard evaluation", "FDA’s assessment of the health risk from a recalled product (21 CFR 7.41).", "FDA"], ["IDE", "Investigational device exemption", "Allows a device to be used in a US clinical study (21 CFR 812).", "FDA"], ["IFU", "Instructions for use", "Information from the manufacturer on proper use of the device.", "Labeling"], ["Inspection level", "—", "ISO 2859-1 setting (general I, II, III; special S-1 to S-4) that sets the relationship between lot size and sample size.", "Sampling"], ["IQ / OQ / PQ", "Installation / operational / performance qualification", "Stages of process or equipment validation.", "Validation"], ["ISO 13485", "Medical devices — Quality management systems", "International QMS standard; the 2016 edition is incorporated into 21 CFR 820.", "Standard"], ["ISO 14971", "Application of risk management to medical devices", "Risk management standard (2019 edition).", "Standard"], ["ISO 2859-1", "Sampling procedures for inspection by attributes — Part 1", "AQL-indexed sampling schemes; third edition ISO 2859-1:2026.", "Standard"], ["LQ", "Limiting quality", "Quality level that a sampling plan accepts with low probability (often 10%).", "Sampling"], ["MAUDE", "Manufacturer and User Facility Device Experience", "FDA public database of MDR reports.", "FDA"], ["MDCG", "Medical Device Coordination Group", "EU group of Member State experts that issues guidance on the MDR and IVDR.", "EU"], ["MDD", "Medical Devices Directive 93/42/EEC", "EU directive replaced by the MDR.", "EU"], ["MDF", "Medical device file", "File of documents defining a device type (ISO 13485 4.2.3).", "QMS"], ["MDR (EU)", "Medical Device Regulation (EU) 2017/745", "EU regulation for medical devices, applicable since 26 May 2021.", "EU"], ["MDR (US)", "Medical Device Reporting", "US adverse event reporting under 21 CFR 803.", "FDA"], ["MDSAP", "Medical Device Single Audit Program", "Single audit accepted by Australia, Brazil, Canada, Japan and the US.", "International"], ["NAI / VAI / OAI", "No / Voluntary / Official Action Indicated", "FDA inspection outcome classifications.", "FDA"], ["NB", "Notified body", "Organization designated to assess conformity under the MDR.", "EU"], ["NC / NCR", "Nonconformity / nonconformance report", "Failure to meet a requirement, and its record.", "QMS"], ["OC curve", "Operating characteristic curve", "Probability of accepting a lot versus its true quality for a given sampling plan.", "Sampling"], ["PCCP", "Predetermined change control plan", "Plan authorized in a submission for future device modifications (FD&C Act 515C).", "FDA"], ["PMA", "Premarket approval", "US approval for Class III devices (21 CFR 814).", "FDA"], ["PMCF", "Post-market clinical follow-up", "Ongoing collection of clinical data after CE marking (MDR Annex XIV Part B).", "EU"], ["PMS", "Post-market surveillance", "Proactive collection and review of experience from marketed devices (MDR Art. 83–86).", "EU"], ["PRRC", "Person responsible for regulatory compliance", "Qualified person required by MDR Art. 15.", "EU"], ["PSUR", "Periodic safety update report", "Summary of PMS results for Class IIa, IIb and III devices (MDR Art. 86).", "EU"], ["Q-Sub", "Q-Submission (Pre-Submission)", "Request for FDA feedback before a submission or study.", "FDA"], ["QMS", "Quality management system", "System to direct and control an organization with regard to quality.", "QMS"], ["QMSR", "Quality Management System Regulation", "21 CFR 820 as amended, effective 2 Feb 2026, incorporating ISO 13485:2016.", "FDA"], ["QSIT", "Quality System Inspection Technique", "FDA’s former inspection approach, withdrawn 2 Feb 2026.", "FDA"], ["QSR", "Quality System Regulation", "Previous 21 CFR 820, replaced by the QMSR.", "FDA"], ["RA / QA", "Regulatory affairs / quality assurance", "Functions responsible for regulatory compliance and the QMS.", "General"], ["RACI", "Responsible, Accountable, Consulted, Informed", "Matrix that clarifies roles in a process.", "General"], ["RFD", "Request for designation", "Request to FDA to decide which center regulates a combination product (21 CFR 3).", "FDA"], ["RPN", "Risk priority number", "Severity × occurrence × detection in FMEA; used for ranking, not ISO 14971 acceptability.", "Risk"], ["RRA", "Remote regulatory assessment", "FDA’s remote review of records or operations, including 704(a)(4) records requests.", "FDA"], ["RWE / RWD", "Real-world evidence / data", "Clinical evidence derived from data collected in routine care.", "FDA"], ["SAL", "Sterility assurance level", "Probability of a viable microorganism on a unit after sterilization; typically 10⁻⁶.", "Sterilization"], ["SaMD", "Software as a medical device", "Software intended for medical purposes without being part of a hardware device.", "Software"], ["SBOM", "Software bill of materials", "List of software components in a device, required for cyber devices (FD&C Act 524B).", "Software"], ["SE", "Substantial equivalence", "510(k) standard: as safe and effective as a predicate (FD&C Act 513(i)).", "FDA"], ["Special controls", "—", "Device-specific requirements for Class II devices, set in classification regulations or De Novo orders.", "FDA"], ["SPC", "Statistical process control", "Use of control charts to detect process shifts.", "Statistics"], ["SRN", "Single registration number", "EU identifier for a registered economic operator (MDR Art. 31).", "EU"], ["SSCP", "Summary of safety and clinical performance", "Public summary for implantable and Class III devices (MDR Art. 32).", "EU"], ["Switching rules", "—", "ISO 2859-1 rules for moving between normal, tightened, reduced and skip-lot inspection based on lot results.", "Sampling"], ["TPLC", "Total product life cycle", "FDA view of a device from design through postmarket.", "FDA"], ["UDI", "Unique device identification", "System of device identifiers on labels and in databases (21 CFR 830; MDR Art. 27).", "UDI"], ["URRA", "Use-related risk analysis", "Risk analysis focused on use errors and user tasks.", "Risk"], ["Vigilance", "—", "EU system for reporting and analyzing serious incidents and FSCAs (MDR Art. 87–92).", "EU"], ["VH2O2", "Vaporized hydrogen peroxide", "Low-temperature sterilization method recognized by FDA as Established Category A since January 2024.", "Sterilization"]];
 const gsel={all:false,q:""};
@@ -1825,11 +1989,15 @@ const ICONS={
  change:'<path d="M4 7h11l-3-3M20 17H9l3 3"/>',
  tmpl:'<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/>',
  risk:'<path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17v.5"/>',
+ iso:'<circle cx="12" cy="9" r="6"/><path d="M9 14.5L7.5 21l4.5-2.5 4.5 2.5-1.5-6.5"/><path d="M9.8 9l1.5 1.5 3-3"/>',
+ qmsr:'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5M8 7h7M8 11h7"/>',
+ mdr:'<circle cx="12" cy="12" r="9"/><path d="M12 6.5v.01M15.9 8.1v.01M17.5 12v.01M15.9 15.9v.01M12 17.5v.01M8.1 15.9v.01M6.5 12v.01M8.1 8.1v.01" stroke-width="2.6"/>',
+ fdapre:'<path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>',
  search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>',
  audit:'<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v3h6V3M8.5 12l2.5 2.5 4.5-5"/>'
 };
 function ico(k){ const s=document.createElementNS("http://www.w3.org/2000/svg","svg"); s.setAttribute("viewBox","0 0 24 24"); s.setAttribute("aria-hidden","true"); s.setAttribute("class","ico"); s.innerHTML=ICONS[k]; return s; }
-const NAV=[["home","Home","home"],["explore","Explore","explore"],["random","Training mode","train"],["dilemmas","Selected Dilemmas","dil"],["map","QMS map","map"],["risk","Risk management","risk"],["dates","Regulatory Timeline","dates"],["tools","Useful tools","samp"],["audit","Audit mode","audit"]];
+const NAV=[["home","Home","home"],["iso","ISO 13485:2016","iso"],["qmsr","FDA QMSR","qmsr"],["mdr","EU MDR 2017/745","mdr"],["fdapre","FDA Premarket and PMS Requirements","fdapre"],["explore","Explore","explore"],["random","Training mode","train"],["dilemmas","Selected Dilemmas","dil"],["map","QMS map","map"],["risk","Risk management","risk"],["dates","Regulatory Timeline","dates"],["tools","Useful tools","samp"],["audit","Audit mode","audit"]];
 
 /* ---------- search widget (one component, used inside Explore) ---------- */
 function searchWidget(){
@@ -1876,17 +2044,34 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-function renderHome(openExplore){
-  const m=document.getElementById("main"); m.innerHTML="";
+function heroTop(show){
+  const h=document.getElementById("heroTop"); if(!h) return;
+  h.hidden=!show; if(!show) return;
   const nq=CH.reduce((a,c)=>a+c.qs.length,0), nd=CH.reduce((a,c)=>a+c.dils.length,0);
-  m.append(el("section",{class:"hero"},
+  h.innerHTML="";
+  const stats=el("div",{class:"hStats","aria-label":CH.length+" chapters, "+nq+" questions, "+nd+" dilemmas"});
+  [[CH.length,"Chapters","learn"],[nq,"Questions","prac"],[nd,"Dilemmas","dil"]].forEach(([n,l,k],i)=>{
+    const b=el("b",{"data-n":String(n)},"0");
+    stats.append(el("div",{class:"hStat s-"+k,style:"--d:"+(i*140)+"ms"}, b, el("small",{},l), el("i",{class:"hBar"})));
+  });
+  h.append(el("div",{class:"hTxt"},
     el("h2",{class:"heroTitle"},"Quality Handbook and Training Guide"),
     el("p",{class:"heroTag"},"The Hitchhiker’s QA Guide assistant to the Medical Devices Universe"),
-    el("p",{},"A working handbook for QA professionals on Class II and III devices: requirements, real-world dilemmas and practice questions."),
-    el("div",{class:"heroStats"}, ...[[CH.length,"chapters"],[nq,"questions"],[nd,"dilemmas"],[GLOSS.length,"glossary terms"]].map(([n,l])=>el("span",{}, el("b",{},String(n)), " "+l)))));
-  m.append(explorePanel(openExplore));
-  const gc=el("section",{class:"card glossCard",id:"glossary"}, el("h3",{class:"secTitle"},"Glossary and abbreviations"));
+    el("p",{class:"hDesc"},"A working handbook for QA professionals on Class II and III devices: requirements, real-world dilemmas and practice questions.")), stats);
+  const reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const bs=[...stats.querySelectorAll("b")];
+  if(reduce){ bs.forEach(b=>b.textContent=b.dataset.n); }
+  else bs.forEach((b,i)=>{ const n=+b.dataset.n, d=1100+i*150, t0=performance.now()+i*140;
+    const step=t=>{ const p=Math.min(1,Math.max(0,(t-t0)/d)); const e=1-Math.pow(1-p,3); b.textContent=String(Math.round(n*e)); if(p<1&&b.isConnected) requestAnimationFrame(step); };
+    requestAnimationFrame(step); });
+  clearInterval(window.HEROT); let k=0; const tiles=[...stats.children];
+  if(!reduce) window.HEROT=setInterval(()=>{ if(!stats.isConnected||h.hidden){ clearInterval(window.HEROT); return; } tiles.forEach((t,i)=>t.classList.toggle("on",i===k%3)); k++; },2600);
+}
+function renderHome(openExplore){
+  const m=document.getElementById("main"); m.innerHTML="";
+  const gc=el("details",{class:"card glossCard",id:"glossary"}, el("summary",{class:"glossSum"}, el("span",{class:"secTitle"},"Glossary and abbreviations"), el("small",{},GLOSS.length+" terms · open to search"), el("i",{class:"chev"},"›")));
   renderGlossaryHome(gc); m.append(gc);
+  if(openExplore) setTimeout(()=>{ const i=window.NAVSEARCH&&NAVSEARCH.querySelector("input"); if(i){ i.focus({preventScroll:true}); i.scrollIntoView({block:"center"}); } },80);
 }
 function renderGlossaryHome(host){
   const areas=["All",...[...new Set(GLOSS.map(g=>g[3]))].sort()];
