@@ -1165,7 +1165,43 @@ footer#siteFoot .legalBody p.imp{font-size:14px; color:var(--ink)}
 .dItem i{font-style:normal; font-size:12px; font-weight:600; color:var(--muted); min-width:18px; text-align:right}
 .dItem[aria-current=true] i{color:var(--qms)}
 .dLay .toolGrid{margin:0; grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
-.dPick{display:none}
+ .dPick{all:unset; box-sizing:border-box; cursor:pointer; position:sticky; top:8px; z-index:16; display:none; align-items:center; justify-content:space-between; gap:10px; width:100%; margin:12px 0; padding:11px 14px; background:var(--card); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); color:var(--ink)}
+ .dPick:focus-visible{outline:2px solid var(--qms)}
+ .dPick small{display:block; font:700 10.5px var(--body); letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:2px}
+ .dPick b{font:600 15.5px var(--body)}
+ .dPick em{font-style:normal; font-weight:600; color:var(--muted); margin-left:4px}
+ .dPick svg{width:20px; height:20px; flex:none; stroke:var(--qms)}
+@media (max-width:760px){ .dPick{display:flex} }
+@media (max-width:999px){ .rmLay{display:block; margin-top:0} .rmLay .dSide{display:none} .dPick.rmPick{display:flex} }
+.rmLay{grid-template-columns:220px minmax(0,1fr)}
+.rmLay > .panel{margin-top:0}
+/* 1.11.0 investigator portrait and time-concern bubble */
+.avatar.inv{width:76px; height:76px; border-radius:50%; box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.avatar.inv.sm{width:56px; height:56px}
+.avCol{position:relative}
+.audQ:has(.invThink){margin-top:26px}
+.invThink{position:absolute; left:58px; top:-24px; width:54px; z-index:5; filter:drop-shadow(0 2px 4px rgba(0,0,0,.15)); animation:invPop .35s cubic-bezier(.2,1.4,.4,1) both}
+.invThink svg{width:100%; height:auto; display:block}
+@keyframes invPop{from{opacity:0; transform:translateY(6px) scale(.6)}to{opacity:1; transform:none}}
+@media (max-width:640px){ .avatar.inv{width:60px; height:60px} .invThink{left:44px; top:-24px; width:46px} }
+@media (prefers-reduced-motion:reduce){ .invThink{animation:none} }
+/* compact form cards on wide screens */
+@media (min-width:761px){
+ .dLay .toolGrid{gap:10px; grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+ .dLay .toolGrid .toolCard{display:grid !important; grid-template-columns:34px 1fr; grid-template-rows:auto auto; column-gap:12px; row-gap:2px; align-items:center; padding:12px 14px !important; min-height:0 !important; border-left-width:4px}
+ .dLay .toolGrid .toolCard .toolIco{width:34px; height:34px; border-radius:9px; grid-row:1 / span 2; align-self:start}
+ .dLay .toolGrid .toolCard .toolIco .ico{width:19px; height:19px}
+ .dLay .toolGrid .toolCard > b{font-size:15.5px; line-height:1.25}
+ .dLay .toolGrid .toolCard > span:not(.toolIco){grid-column:2; font-size:13.5px; line-height:1.35; color:var(--muted)}
+}
+/* compact device type selector */
+.devCard{display:flex !important; flex-wrap:wrap; align-items:center; gap:8px 16px; padding:12px 16px !important}
+.devCard .rField{display:flex; align-items:center; gap:10px; margin:0}
+.devCard .rField > span{font:700 11px var(--body); letter-spacing:.08em; text-transform:uppercase; color:var(--muted); white-space:nowrap}
+.devCard select.rIn{width:auto; min-width:230px; max-width:340px; height:36px; padding:4px 10px; font-size:14.5px; border-radius:8px}
+.devCard > .src{flex:1 1 260px; margin:0; font-size:13.5px}
+.devCard .rmToolsLink{margin-left:auto; font-size:14px; padding:7px 14px}
+@media (max-width:640px){ .devCard .rField{width:100%} .devCard select.rIn{flex:1; min-width:0; max-width:none} .devCard .rmToolsLink{margin-left:0} }
 @media (max-width:760px){
  .dLay{display:block; margin-top:0}
  .dSide{display:none}
@@ -1177,12 +1213,6 @@ footer#siteFoot .legalBody p.imp{font-size:14px; color:var(--ink)}
  .dLay .toolGrid .toolCard .toolIco .ico{width:19px; height:19px}
  .dLay .toolGrid .toolCard > b{flex:1; font-size:15.5px; line-height:1.25; font-weight:650}
  .dLay .toolGrid .toolCard::after{content:""; flex:none; width:8px; height:8px; border-right:2px solid var(--muted); border-top:2px solid var(--muted); transform:rotate(45deg); margin-right:4px; opacity:.7}
- .dPick{all:unset; box-sizing:border-box; cursor:pointer; position:sticky; top:8px; z-index:16; display:flex; align-items:center; justify-content:space-between; gap:10px; width:100%; margin:12px 0; padding:11px 14px; background:var(--card); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); color:var(--ink)}
- .dPick:focus-visible{outline:2px solid var(--qms)}
- .dPick small{display:block; font:700 10.5px var(--body); letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:2px}
- .dPick b{font:600 15.5px var(--body)}
- .dPick em{font-style:normal; font-weight:600; color:var(--muted); margin-left:4px}
- .dPick svg{width:20px; height:20px; flex:none; stroke:var(--qms)}
 }
 .dSheetBg{position:fixed; inset:0; z-index:200; background:rgba(8,20,18,.45); display:flex; align-items:flex-end; animation:dFade .15s ease-out}
 .dSheet{background:var(--card); width:100%; max-height:80vh; overflow:auto; border-radius:18px 18px 0 0; padding:8px 8px calc(16px + env(safe-area-inset-bottom)); box-shadow:0 -8px 30px rgba(0,0,0,.2); animation:dUp .2s ease-out}
@@ -2105,11 +2135,11 @@ const TOOLS=[["sampling","Sample size tool (ISO 2859-1:2026)","Lot acceptance pl
  ["qa-rep","Report Template","Report of an executed protocol: results against criteria, deviations and conclusion.","agree",true],
  ["qa-iq","Installation Qualification (IQ)","Equipment identification, installation checks, utilities, documents and calibration.","gauge",true],
  ["qa-oq","Operational Qualification (OQ)","Functional and alarm tests, and challenge runs at the process limits to set the operating window.","chart",true],
- ["qa-pq","Performance Qualification (PQ)","Routine production runs with statistical sampling and capability to show the process is consistent.","fdapre",true],
+ ["qa-pq","Performance Qualification (PQ)","Routine production runs with statistical sampling and capability to show the process is consistent.","fdapre",true],["qa-tmv","Test Method Validation (TMV)","Gage R&R, bias and attribute agreement to show a test method is fit for use.","caliper",true],
  ["qa-nps","Non-Product / Non-GxP Software Assessment","GxP relevance, risk classification and risk-based assurance of business software.","search",true],
  ["qa-npsl","Non-Product Software List","Inventory of business software with GxP status, risk, assessment, validation status and review dates.","list",true],
  ["grr","Gauge R&R / Kappa test","A guide to choose between variable Gauge R&R and attribute agreement (Kappa), sample definitions with defect notes and photos, analysis, and the test protocol and report.","gauge",true]];
-const TOOLGROUPS={daily:["Daily QA Work","Tools for daily QA work","Ready-to-use QA forms and templates: change control, nonconformance and CAPA, suppliers and CMOs, audits, documents, validation, software and training. Each has a filled sample and exports to Word and PDF.",["#Change control","impact","#Nonconformance and CAPA","qa-ncr","qa-mrb","qa-dev","qa-capa","#Suppliers and CMOs","sq-quest","sq-eval","sq-scar","sq-scn","sq-asl","sq-fai","sq-sqa","sq-cmo","#Audits and quality planning","qa-iap","qa-iac","qa-qp","#Documents","qa-sop","qa-wi","qa-pol","#Inspection and validation","qa-vis","qa-prot","qa-rep","qa-iq","qa-oq","qa-pq","qa-mvp","qa-mvpr","#Non-Product software","qa-nps","qa-npsl","#Training","qa-trn","qa-gtr"],[["Coming soon","More tools and ready-to-use QMS templates for daily QA work.","tmpl"]]],
+const TOOLGROUPS={daily:["Daily QA Work","Tools for daily QA work","Ready-to-use QA forms and templates: change control, nonconformance and CAPA, suppliers and CMOs, audits, documents, validation, software and training. Each has a filled sample and exports to Word and PDF.",["#Change control","impact","#Nonconformance and CAPA","qa-ncr","qa-mrb","qa-dev","qa-capa","#Suppliers and CMOs","sq-quest","sq-eval","sq-scar","sq-scn","sq-asl","sq-fai","sq-sqa","sq-cmo","#Audits and quality planning","qa-iap","qa-iac","qa-qp","#Documents","qa-sop","qa-wi","qa-pol","#Inspection and validation","qa-vis","qa-prot","qa-rep","qa-iq","qa-oq","qa-pq","qa-tmv","qa-mvp","qa-mvpr","#Non-Product software","qa-nps","qa-npsl","#Training","qa-trn","qa-gtr"],[["Coming soon","More tools and ready-to-use QMS templates for daily QA work.","tmpl"]]],
   stats:["Statistics","Statistics","Sampling plans, measurement system analysis and attribute agreement.",["sampling","msa","grr"],[]]};
 /* ---- 1.8.1 title case for form headings, and Daily QA Work sub-tabs ---- */
 const TC_SMALL=new Set("a an and as at but by for from in into nor of on or per the to vs via with".split(" "));
@@ -2119,6 +2149,12 @@ function tcBlocks(B){ B.forEach(b=>{ if(b.h1) b.h1=tc(b.h1); if(b.h2) b.h2=tc(b.
 let DAILY_TAB=null; try{ DAILY_TAB=localStorage.getItem("qah-daily-tab"); }catch(e){}
 function dailyGroups(G){ const out=[]; let cur=null; G[3].forEach(id=>{ if(id[0]==="#"){ cur={h:id.slice(1),ids:[]}; out.push(cur); } else { if(!cur){ cur={h:"Tools",ids:[]}; out.push(cur); } cur.ids.push(id); } }); return out; }
 function dailySetTab(id){ const g=dailyGroups(TOOLGROUPS.daily).find(x=>x.ids.includes(id)); if(g){ DAILY_TAB=g.h; try{ localStorage.setItem("qah-daily-tab",g.h); }catch(e){} } }
+const TOOL_SHORT={impact:"SME and regulatory impact of a change, Word and PDF.","qa-ncr":"Contain, investigate and disposition a nonconformity.","qa-mrb":"Disposition of nonconforming material.","qa-dev":"Pre-approved departure or waiver, with risk.","qa-capa":"Root cause, actions and effectiveness check.",
+ "sq-quest":"Baseline data from prospective suppliers.","sq-eval":"Risk-based supplier qualification and approval.","sq-scar":"Corrective action for supplier nonconformities.","sq-scn":"Evaluate supplier-initiated changes.","sq-asl":"Controlled list of approved suppliers.","sq-fai":"First article check of a subcontracted item.","sq-sqa":"Short quality agreement for lower-risk suppliers.","sq-cmo":"Full quality agreement for contract manufacturers.",
+ "qa-iap":"Risk-based annual audit programme.","qa-iac":"ISO 13485 clause 4–8 audit questions.","qa-qp":"Quality activities, roles and controls by phase.",
+ "qa-sop":"Standard operating procedure layout.","qa-wi":"Step-by-step task instruction.","qa-pol":"Policy statement and commitments.",
+ "qa-vis":"Inspection conditions, sampling and defects.","qa-prot":"Protocol with pre-set acceptance criteria.","qa-rep":"Results against criteria and conclusion.","qa-iq":"Installation checks, utilities and calibration.","qa-oq":"Function tests and runs at the process limits.","qa-pq":"Routine runs, sampling and capability.","qa-tmv":"Gage R&R, bias and attribute agreement.","qa-mvp":"Validation policy and inventory.","qa-mvpr":"Period results and validated state.",
+ "qa-nps":"GxP relevance and risk-based assurance.","qa-npsl":"Inventory of business software.","qa-trn":"One person's training and effectiveness.","qa-gtr":"Session record with attendance sheet."};
 function renderTools(which){
   const G=TOOLGROUPS[which]||TOOLGROUPS.daily;
   const m=document.getElementById("main"); m.innerHTML="";
@@ -2127,15 +2163,10 @@ function renderTools(which){
   const groups=dailyGroups(G); let ids=G[3];
   let lay=null;
   if(groups.length>1){ const cur=(DAILY_TAB&&groups.find(x=>x.h===DAILY_TAB))?DAILY_TAB:groups[0].h;
-    const pick=k=>{ DAILY_TAB=k; try{ localStorage.setItem("qah-daily-tab",k); }catch(e){} closeDailySheet(); renderTools(which); const t=document.querySelector(".dLay"); if(t&&t.getBoundingClientRect().top<0) t.scrollIntoView({block:"start"}); };
-    const items=()=>groups.map(x=>el("button",{class:"dItem",type:"button","aria-current":String(x.h===cur),onclick:()=>pick(x.h)}, el("span",{},tc(x.h)), el("i",{"aria-label":x.ids.length+" forms"},String(x.ids.length))));
-    const ci=groups.findIndex(x=>x.h===cur), cg=groups[ci];
-    m.append(el("button",{class:"dPick",type:"button","aria-haspopup":"dialog",onclick:()=>openDailySheet(items,cur)},
-      el("span",{}, el("small",{},"QMS area · "+(ci+1)+" of "+groups.length), el("b",{},tc(cg.h)), el("em",{},"("+cg.ids.length+")")),
-      (()=>{ const v=document.createElementNS("http://www.w3.org/2000/svg","svg"); v.setAttribute("viewBox","0 0 24 24"); v.setAttribute("fill","none"); v.setAttribute("stroke-width","2"); v.setAttribute("stroke-linecap","round"); v.setAttribute("aria-hidden","true"); v.innerHTML='<path d="M6 9l6 6 6-6"/>'; return v; })()));
-    lay=el("div",{class:"dLay"}, el("nav",{class:"dSide","aria-label":"QMS area"}, el("h3",{},"QMS area"), ...items()));
-    ids=cg.ids; }
-  ids.forEach(id=>{ if(id[0]==="#") return; const t=TOOLS.find(x=>x[0]===id); if(!t) return; const [k,lab,sub,ic]=t; g.append(el("button",{class:"choiceBtn samp toolCard",type:"button",onclick:()=>{ location.hash=k; }}, el("span",{class:"toolIco"},ico(ic)), el("b",{},lab), el("span",{},sub))); });
+    const nav=areaNav({label:"QMS area",unit:"forms",items:groups.map(x=>({k:x.h,l:tc(x.h),n:x.ids.length})),cur,onPick:k=>{ DAILY_TAB=k; try{ localStorage.setItem("qah-daily-tab",k); }catch(e){} renderTools(which); }});
+    m.append(nav.pick); lay=el("div",{class:"dLay"}, nav.side);
+    ids=groups.find(x=>x.h===cur).ids; }
+  ids.forEach(id=>{ if(id[0]==="#") return; const t=TOOLS.find(x=>x[0]===id); if(!t) return; const [k,lab,sub,ic]=t; const sh=lay?(TOOL_SHORT[k]||sub):sub; g.append(el("button",Object.assign({class:"choiceBtn samp toolCard",type:"button",onclick:()=>{ location.hash=k; }},lay?{title:sub}:{}), el("span",{class:"toolIco"},ico(ic)), el("b",{},lab), el("span",{},sh))); });
   if(groups.length<=1) G[4].forEach(([lab,sub,ic])=>g.append(el("div",{class:"choiceBtn toolCard soon","aria-disabled":"true"}, el("span",{class:"toolIco"},ico(ic)), el("b",{},lab), el("span",{},sub))));
   if(lay){ lay.append(g); m.append(lay); dailyStick(); } else m.append(g); tcDom(m);
 }
@@ -2145,9 +2176,20 @@ window.addEventListener("hashchange",()=>closeDailySheet());
 let DAILY_SHEET=null;
 function closeDailySheet(){ if(!DAILY_SHEET) return; const [bg,ret]=DAILY_SHEET; DAILY_SHEET=null; bg.remove(); document.removeEventListener("keydown",dailySheetKey); try{ (document.querySelector(".dPick")||ret).focus({preventScroll:true}); }catch(e){} }
 function dailySheetKey(e){ if(e.key==="Escape") closeDailySheet(); }
-function openDailySheet(items,cur){ closeDailySheet(); const sh=el("div",{class:"dSheet",role:"dialog","aria-modal":"true","aria-label":"Choose QMS area"}, el("div",{class:"grab"}), el("h3",{},"Choose QMS area"), ...items());
+function openDailySheet(items,label){ closeDailySheet(); const sh=el("div",{class:"dSheet",role:"dialog","aria-modal":"true","aria-label":"Choose "+label.toLowerCase()}, el("div",{class:"grab"}), el("h3",{},"Choose "+label.toLowerCase()), ...items());
   const bg=el("div",{class:"dSheetBg",onclick:e=>{ if(e.target===bg) closeDailySheet(); }}, sh); document.body.append(bg); DAILY_SHEET=[bg,document.activeElement]; document.addEventListener("keydown",dailySheetKey);
   (sh.querySelector('.dItem[aria-current="true"]')||sh.querySelector(".dItem")).focus(); }
+/* side menu (wide screens) + pinned picker with bottom sheet (phone), shared by Daily QA Work and Risk management */
+function areaNav(o){
+  const cur=o.cur, ci=Math.max(0,o.items.findIndex(x=>x.k===cur)), cg=o.items[ci];
+  const pick=k=>{ closeDailySheet(); o.onPick(k); dailyStick(); const t=document.querySelector(".dLay"); if(t&&t.getBoundingClientRect().top<0) t.scrollIntoView({block:"start"}); };
+  const items=()=>o.items.map(x=>el("button",{class:"dItem",type:"button","aria-current":String(x.k===cur),onclick:()=>pick(x.k)}, el("span",{},x.l), x.n!=null?el("i",{"aria-label":x.n+" "+(o.unit||"items")},String(x.n)):""));
+  const v=document.createElementNS("http://www.w3.org/2000/svg","svg"); v.setAttribute("viewBox","0 0 24 24"); v.setAttribute("fill","none"); v.setAttribute("stroke-width","2"); v.setAttribute("stroke-linecap","round"); v.setAttribute("aria-hidden","true"); v.innerHTML='<path d="M6 9l6 6 6-6"/>';
+  const btn=el("button",{class:"dPick",type:"button","aria-haspopup":"dialog",onclick:()=>openDailySheet(items,o.label)},
+    el("span",{}, el("small",{},o.label+" · "+(ci+1)+" of "+o.items.length), el("b",{},cg.l), cg.n!=null?el("em",{},"("+cg.n+")"):""), v);
+  setTimeout(dailyStick,0);
+  return {pick:btn, side:el("nav",{class:"dSide","aria-label":o.label}, el("h3",{},o.label), ...items())};
+}
 /* ---------- results entry, statistics and export ---------- */
 if(!ss.res) ss.res={method:"count",count:"",raw:"",LSL:"",USL:"",ac:"",re:"",fname:"",done:false};
 if(!ss.cr) ss.cr={type:"attr",n:"",fails:"",c:0,raw:"",LSL:"",USL:"",fname:"",done:false};
@@ -2488,7 +2530,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="1.10.1", APPDATE="18-NOV-2026";
+const APPVER="1.11.0", APPDATE="18-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Asaf Ben Zion. All rights reserved.";
 const LEGAL=[["Copyright", "No part of this handbook’s original content may be copied or redistributed without written permission. Cited regulations, standards and guidance, and their links, remain the property of their official publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, data selection and design, developed with AI tools, and has been verified against requirements set by the author and against the official sources."], ["Sources", "Sources are limited to official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases. EU: EUR-Lex and European Commission pages, including MDCG guidance."], ["Important", "This application is intended for training only. Results from its tools require human review, verification and approval. Always check the linked source before citing anything in an audit response."]];
@@ -2526,9 +2568,14 @@ function svyText(d){
   if(d.general) L.push("7 General: "+d.general);
   return L.join("\n");
 }
+function svyNorm(txt){
+  const HD=/Quick\s*Survey\s*[·•∙⋅\-|:–]\s*Medical\s*Device\s*QA\s*Handbook/i;
+  return String(txt||"").replace(/\r/g,"").replace(/[\u00a0\u2007\u202f\t]/g," ").replace(/[\u200b-\u200f\u202a-\u202e\u2066-\u2069\ufeff]/g,"").replace(/[•∙⋅・]/g,"·").replace(/[*_~]{1,2}(?=\S)|(?<=\S)[*_~]{1,2}/g,"")
+    .split("\n").map(l=>{ l=l.replace(/^\s*(?:>\s*)+/,""); const m=l.match(HD); if(m) return SVY_HEAD+l.slice(m.index+m[0].length); return l.replace(/^\s*\[?\d{1,4}[./-]\d{1,2}[./-]\d{1,4},?\s+\d{1,2}:\d{2}(?::\d{2})?\s*(?:[AaPp]\.?[Mm]\.?)?\]?\s*(?:-\s*)?(?:[^:\n]{1,40}:\s*)?(?=(?:Sent:|\d[ab]? ))/,""); }).join("\n");
+}
 function svyParse(txt){
   const out=[];
-  String(txt).split(/^(?=Quick Survey · Medical Device QA Handbook)/m).forEach(p=>{
+  svyNorm(txt).split(/^(?=Quick Survey · Medical Device QA Handbook)/m).forEach(p=>{
     if(!p.startsWith(SVY_HEAD)) return;
     const lines=p.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
     const e={raw:lines.join("\n"), at:"", ver:"", r:{}, c:{}, mistakes:"", again:"", help:"", general:"", handled:false};
@@ -2537,7 +2584,7 @@ function svyParse(txt){
       let m=ln.match(/^Sent:\s*(.*)$/); if(m){ e.at=m[1]; return; }
       m=ln.match(/^(\d)([ab])? [^:]+:\s*(.*)$/); if(!m) return;
       const key=m[1]+(m[2]||""), v=m[3], rk={1:"overall",2:"nav",3:"train",4:"insp"}[m[1]];
-      if(rk&&!m[2]){ const q=v.match(/^(?:(\d)\/5|–)(?:\s*\|\s*(.*))?$/); if(q){ if(q[1]) e.r[rk]=+q[1]; if(q[2]) e.c[rk]=q[2]; } return; }
+      if(rk&&!m[2]){ const q=v.match(/^(?:(\d)\s*\/\s*5|[–-])(?:\s*\|\s*(.*))?$/); if(q){ if(q[1]) e.r[rk]=+q[1]; if(q[2]) e.c[rk]=q[2]; } return; }
       if(key==="5") e.mistakes=v; else if(key==="6a") e.again=v; else if(key==="6b") e.help=v; else if(key==="7") e.general=v;
     });
     e.id=svyHash(e.raw); out.push(e);
@@ -2600,7 +2647,7 @@ function svySave(a){ try{ localStorage.setItem(SVY_KEY,JSON.stringify(a)); retur
 function svyInbox(host){
   let rows=svyLoad(), hideDone=false;
   const ta=el("textarea",{class:"svyTa",rows:"3","aria-label":"Paste survey answers received",placeholder:"Paste the survey answers you received (WhatsApp, email…). Several at once is fine."});
-  const msg=el("p",{class:"vvSt",role:"status"}), bar=el("div",{class:"svyBar"}), list=el("div",{class:"vvList"});
+  const msg=el("p",{class:"vvSt svyMsg2",role:"status","aria-live":"polite"}), bar=el("div",{class:"svyBar"}), list=el("div",{class:"vvList"});
   const add=el("button",{class:"tab",type:"button"},"Add to inbox");
   const stars=n=>n?"★".repeat(n)+"☆".repeat(5-n):"–";
   const paint=()=>{
@@ -2624,7 +2671,7 @@ function svyInbox(host){
   };
   add.addEventListener("click",()=>{
     const found=svyParse(ta.value);
-    if(!found.length){ msg.textContent="No survey answers found in the pasted text."; return; }
+    if(!found.length){ msg.textContent=ta.value.trim()?"No survey answers found. The pasted text must include the line “Quick Survey · Medical Device QA Handbook” and the answers below it.":"Paste the answers first, then press Add to inbox."; return; }
     let n=0, dup=0; found.forEach(e=>{ if(rows.some(x=>x.id===e.id)) dup++; else { rows.push(e); n++; } });
     const ok=svySave(rows); ta.value=""; msg.textContent=n+" added"+(dup?", "+dup+" already in the inbox":"")+"."+(ok?"":" Could not save on this device.");
     paint();
@@ -3009,6 +3056,59 @@ function audResult(st){ const right=st.asked.filter(a=>a.ok).length; const pct=M
   return {right,pct,pass:pct>=85,by,fb}; }
 /* ===== Audit mode UI ===== */
 let AUD=null;
+/* 1.11.0 investigator portraits: one person per session (gender from the session seed), expression changes per question, "concerned" after 30 s */
+const INV_LOOKS=[
+ {g:"m",skin:"#e2b48f",skinD:"#c48f69",hair:"#2f2621",gray:"#7d756f",jacket:"#26324a",jacketD:"#1b2436",shirt:"#eef3f9",shirtD:"#cfd9e6",glasses:true,name:"Investigator"},
+ {g:"m",skin:"#a8714c",skinD:"#87573a",hair:"#1d1714",gray:"#5d5753",jacket:"#3a3f48",jacketD:"#2a2e35",shirt:"#f6f7f9",shirtD:"#d5d9df",glasses:false,name:"Investigator"},
+ {g:"f",skin:"#ecc3a2",skinD:"#cf9f7c",hair:"#5a3a26",jacket:"#2b3a57",jacketD:"#1f2a40",shirt:"#f7f9fc",shirtD:"#d6dde8",glasses:false,name:"Investigator"},
+ {g:"f",skin:"#c08a63",skinD:"#9c6a47",hair:"#231a16",jacket:"#3d3b45",jacketD:"#2b2a31",shirt:"#eaf1f8",shirtD:"#c9d5e3",glasses:true,name:"Investigator"}];
+const INV_EXPR=["neutral","attentive","skeptical","stern","reading"];
+const INV_FACE={
+ neutral:{bl:"M39.5 40.2 Q44 38.9 48.2 40",br:"M51.8 40 Q56 38.9 60.5 40.2",m:"M45.2 59.4 Q50 60.2 54.8 59.4",ex:0,ey:0,lid:0},
+ attentive:{bl:"M39.5 39.2 Q44 37.4 48.2 38.8",br:"M51.8 38.8 Q56 37.4 60.5 39.2",m:"M45 58.8 Q50 61.2 55 58.8",ex:0,ey:-0.2,lid:0},
+ skeptical:{bl:"M39.5 38.6 Q44 35.9 48.2 38.4",br:"M51.8 40.6 Q56 40 60.5 40.6",m:"M45.4 59.8 Q50 59.6 54.8 58.4",ex:0.6,ey:0,lid:0.35},
+ stern:{bl:"M39.5 39.3 Q44 39.6 48.4 41.4",br:"M51.6 41.4 Q56 39.6 60.5 39.3",m:"M45.6 59.9 L54.4 59.9",ex:0,ey:0,lid:0.45},
+ reading:{bl:"M39.5 40.8 Q44 39.8 48.2 40.6",br:"M51.8 40.6 Q56 39.8 60.5 40.8",m:"M45.6 59.6 Q50 60 54.4 59.6",ex:0,ey:0.9,lid:0.75},
+ concerned:{bl:"M39.5 40.8 Q44 39.6 48.4 37.9",br:"M51.6 37.9 Q56 39.6 60.5 40.8",m:"M45.2 60.4 Q50 58.6 54.8 60.4",ex:-0.9,ey:-0.3,lid:0.15}};
+function invSvg(look,expr){
+  const L=INV_LOOKS[look]||INV_LOOKS[0], F=INV_FACE[expr]||INV_FACE.neutral, id="iv"+look+expr;
+  const eye=(cx)=>{ const cy=45; const lidY=cy-1.7+F.lid*2.2;
+    return '<ellipse cx="'+cx+'" cy="'+cy+'" rx="2.7" ry="1.75" fill="#fbfbfb"/><circle cx="'+(cx+F.ex)+'" cy="'+(cy+F.ey)+'" r="1.35" fill="#3a2a20"/><circle cx="'+(cx+F.ex+0.45)+'" cy="'+(cy+F.ey-0.45)+'" r="0.38" fill="#fff"/>'
+      +'<path d="M'+(cx-3)+' '+(cy-2.4)+' L'+(cx+3)+' '+(cy-2.4)+' L'+(cx+3)+' '+lidY+' Q'+cx+' '+(lidY-0.9)+' '+(cx-3)+' '+lidY+' Z" fill="'+L.skin+'"/>'
+      +'<path d="M'+(cx-2.8)+' '+lidY+' Q'+cx+' '+(lidY-1)+' '+(cx+2.8)+' '+lidY+'" fill="none" stroke="#5b4035" stroke-width="0.6" stroke-linecap="round"/>'; };
+  const backHair=L.g==="f"?'<path d="M31.5 47 C29.5 27 40 19.5 50 19.5 C61 19.5 71 26 68.6 48 C68 58 67 65 64 68 L36 68 C33 65 32 58 31.5 47Z" fill="'+L.hair+'"/>':'';
+  const frontHair=L.g==="f"
+    ?'<path d="M34.6 42 C34.6 28 44 23.6 52 24 C61 24.5 66.4 30 65.6 42 C63 35 58 31.4 50 31.8 C44 32.4 39 36 34.6 42Z" fill="'+L.hair+'"/><path d="M52 24 C46 27 42 31 41 36" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="1"/>'
+    :'<path d="M34.4 41 C33.4 27 41.6 22.4 50 22.4 C59.6 22.4 66.6 27.4 65.6 41 C64.4 35.4 61 31.4 56 30.6 C50 29.8 44 30 40.6 32 C37.4 34 35.4 37 34.4 41Z" fill="'+L.hair+'"/><path d="M34.6 40.5 C34.6 38.6 35 37.2 35.6 36 L36.2 43 Z M65.4 40.5 C65.4 38.6 65 37.2 64.4 36 L63.8 43 Z" fill="'+L.gray+'"/>';
+  const glasses=L.glasses?'<g fill="none" stroke="#2c2a2a" stroke-width="0.85"><rect x="39.6" y="42" width="8.8" height="6.2" rx="2.2"/><rect x="51.6" y="42" width="8.8" height="6.2" rx="2.2"/><path d="M48.4 44.4 Q50 43.4 51.6 44.4 M39.6 44.2 L35.8 43.4 M60.4 44.2 L64.2 43.4"/></g>':'';
+  return '<svg viewBox="13 15 74 74" aria-hidden="true"><defs><clipPath id="'+id+'c"><circle cx="50" cy="52" r="37"/></clipPath>'
+   +'<radialGradient id="'+id+'s" cx="45%" cy="38%" r="65%"><stop offset="0" stop-color="'+L.skin+'"/><stop offset="1" stop-color="'+L.skinD+'"/></radialGradient>'
+   +'<linearGradient id="'+id+'b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9eef3"/><stop offset="1" stop-color="#c9d3dc"/></linearGradient>'
+   +'<linearGradient id="'+id+'j" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="'+L.jacketD+'"/><stop offset=".5" stop-color="'+L.jacket+'"/><stop offset="1" stop-color="'+L.jacketD+'"/></linearGradient></defs>'
+   +'<g clip-path="url(#'+id+'c)"><rect width="100" height="100" fill="url(#'+id+'b)"/><rect x="0" y="0" width="100" height="58" fill="rgba(255,255,255,.25)"/>'
+   +backHair
+   +'<path d="M43 58 L43 73 Q50 79 57 73 L57 58 Z" fill="'+L.skinD+'"/>'
+   +'<path d="M6 104 C8 82 24 72.5 41 71 L50 82 L59 71 C76 72.5 92 82 94 104 Z" fill="url(#'+id+'j)"/>'
+   +'<path d="M40.6 71.2 L50 100 L59.4 71.2 L57 70.4 L50 76 L43 70.4 Z" fill="'+L.shirt+'"/>'
+   +'<path d="M50 80 L50 100" stroke="'+L.shirtD+'" stroke-width="0.7"/><circle cx="50" cy="86" r="0.95" fill="#9aa5b3"/><circle cx="50" cy="93" r="0.95" fill="#9aa5b3"/>'
+   +'<path d="M43 69.8 L50 76.4 L45.6 83.6 L39.4 72.6 Z" fill="'+L.shirt+'" stroke="'+L.shirtD+'" stroke-width="0.6"/><path d="M57 69.8 L50 76.4 L54.4 83.6 L60.6 72.6 Z" fill="'+L.shirt+'" stroke="'+L.shirtD+'" stroke-width="0.6"/>'
+   +'<path d="M41 71 L47.6 84 L44 100 M59 71 L52.4 84 L56 100" fill="none" stroke="'+L.jacketD+'" stroke-width="1.2"/>'
+   +'<g transform="translate(60.5 75) rotate(-4)"><rect width="9" height="11.5" rx="1" fill="#fff" stroke="#aab4c0" stroke-width="0.4"/><rect width="9" height="2.6" rx="1" fill="#2f5d8a"/><circle cx="4.5" cy="5.8" r="1.6" fill="#c9d2dc"/><rect x="1.6" y="8.4" width="5.8" height="0.8" fill="#c9d2dc"/></g>'
+   +'<ellipse cx="34.8" cy="46.5" rx="2.6" ry="4.2" fill="'+L.skinD+'"/><ellipse cx="65.2" cy="46.5" rx="2.6" ry="4.2" fill="'+L.skinD+'"/>'
+   +'<path d="M35 44 C35 30 41.5 25.5 50 25.5 C58.5 25.5 65 30 65 44 C65 55 59.5 63.5 50 63.5 C40.5 63.5 35 55 35 44Z" fill="url(#'+id+'s)"/>'
+   +'<path d="M38 55 C41 61 45.5 63.5 50 63.5 C54.5 63.5 59 61 62 55 C59 59 55 61 50 61 C45 61 41 59 38 55Z" fill="'+L.skinD+'" opacity=".45"/>'
+   +frontHair
+   +'<path d="'+F.bl+'" fill="none" stroke="'+L.hair+'" stroke-width="1.5" stroke-linecap="round"/><path d="'+F.br+'" fill="none" stroke="'+L.hair+'" stroke-width="1.5" stroke-linecap="round"/>'
+   +eye(44)+eye(56)+glasses
+   +'<path d="M50.2 46.4 Q48.6 51.8 49.4 53.4 Q50.6 54.3 52.2 53.4" fill="none" stroke="'+L.skinD+'" stroke-width="0.9" stroke-linecap="round"/>'
+   +'<path d="'+F.m+'" fill="none" stroke="#8a4c40" stroke-width="1.25" stroke-linecap="round"/>'
+   +(L.g==="f"?'<path d="M45.4 59.6 Q50 61.2 54.6 59.6" fill="none" stroke="#b66a60" stroke-width="0.5" opacity=".6"/>':'')
+   +'</g><circle cx="50" cy="52" r="36.7" fill="none" stroke="rgba(0,0,0,.1)" stroke-width=".6"/></svg>';
+}
+const INV_WATCH='<svg viewBox="0 0 64 48" aria-hidden="true"><path d="M12 30 C4 30 3 20 10 18 C9 9 20 6 25 11 C29 3 43 3 46 11 C54 9 61 16 57 23 C63 28 58 37 50 35 C47 42 35 42 32 37 C27 42 16 40 12 30Z" fill="#fff" stroke="#9aa5b3" stroke-width="1.2"/><circle cx="7" cy="40" r="3" fill="#fff" stroke="#9aa5b3" stroke-width="1"/><circle cx="2.6" cy="46" r="1.7" fill="#fff" stroke="#9aa5b3" stroke-width="0.9"/>'
+ +'<g transform="translate(32 22)"><rect x="-4" y="-14" width="8" height="7" rx="1.5" fill="#5b6675"/><rect x="-4" y="7" width="8" height="7" rx="1.5" fill="#5b6675"/><circle r="8" fill="#f4f6f8" stroke="#3b4350" stroke-width="2"/><path d="M0 0 L0 -5 M0 0 L3.6 2" stroke="#3b4350" stroke-width="1.6" stroke-linecap="round"/><circle r="1" fill="#3b4350"/></g></svg>';
+function invPick(st){ const s=Math.abs(st.seed|0); return s%INV_LOOKS.length; }
+function invExpr(st,k){ let x=Math.abs(st.seed|0)+1; const o=INV_EXPR.slice(); for(let i=o.length-1;i>0;i--){ x=(x*1103515245+12345)%2147483648; const j=Math.floor(x/65536)%(i+1); [o[i],o[j]]=[o[j],o[i]]; } return o[k%o.length]; }
 const AUDITOR='<svg viewBox="0 0 64 64" aria-hidden="true"><circle class="avBg" cx="32" cy="32" r="31" fill="#e8f2f9"/><circle class="avBody" cx="32" cy="25" r="10" fill="#4b5b9a"/><path class="avBody" d="M14 54c2-10 9-15 18-15s16 5 18 15" fill="#4b5b9a"/><path class="avBrow" d="M24 19l6 2M40 19l-6 2" stroke="#fff" stroke-width="2" stroke-linecap="round"/><rect x="24" y="22" width="16" height="5" rx="2.5" fill="none" stroke="#fff" stroke-width="2"/><rect x="40" y="40" width="10" height="13" rx="1.5" fill="#fff" stroke="#b98a35" stroke-width="1.6"/><path d="M42 44h6M42 47h6M42 50h4" stroke="#b98a35" stroke-width="1.2"/></svg>';
 function audIco(k){ const s=document.createElementNS("http://www.w3.org/2000/svg","svg"); s.setAttribute("viewBox","0 0 24 24"); s.setAttribute("class","ico"); s.innerHTML=AUD_ICONS[k]||""; return s; }
 const AUD_LOC={complaint:"Complaint handling unit",supplier:"Purchasing office",validation:"Production floor",design:"Design file room",risk:"Conference room · risk file",labeling:"Labeling room",mgmt:"Conference room · management review",nc:"Nonconforming material area",training:"Training records office",calibration:"Metrology lab",audit:"QA office",software:"QA office · validation files",field:"Regulatory affairs office",sterility:"Sterilization and packaging area",trace:"Warehouse and records room",cyber:"Software engineering",pms:"Regulatory affairs office",reprocess:"Reprocessing lab",service:"Service department",docs:"Document control office",data:"QA office"};
@@ -3070,11 +3170,12 @@ function renderAudit(){
   m.append(el("div",{class:"audScene"}, el("span",{class:"sceneLoc"}, audClock(st.asked.length)+" · "+audLoc(n.t)),
     newTopic?el("div",{class:"recReq"}, el("b",{},"Records requested"), el("span",{},audRec(n.t,c))):null));
   if(AUD.qKey!==st.node+"#"+st.asked.length){ AUD.qKey=st.node+"#"+st.asked.length; AUD.qStart=Date.now(); AUD.qStop=null; }
-  const bubble=el("div",{class:"audQ"}); const av=el("div",{class:"avatar"}); av.innerHTML=AUDITOR;
+  const bubble=el("div",{class:"audQ"}); const av=el("div",{class:"avatar inv"}); const look=invPick(st), ex0=invExpr(st,st.asked.length); let shown=null;
+  const think=el("div",{class:"invThink","aria-hidden":"true",hidden:""}); think.innerHTML=INV_WATCH;
   const tm=el("div",{class:"audTimer",role:"timer","aria-label":"Seconds on this question"}); const tmTxt=el("b",{},"0");
-  const draw=()=>{ const ms=(AUD.qStop||Date.now())-AUD.qStart; const sec=Math.floor(ms/1000); tm.innerHTML=audTimerSvg(sec); tmTxt.textContent=String(sec); tm.append(tmTxt); const late=sec>45; av.classList.toggle("angry",late); tm.classList.toggle("late",late); av.title=late?"The investigator is getting impatient":""; };
+  const draw=()=>{ const ms=(AUD.qStop||Date.now())-AUD.qStart; const sec=Math.floor(ms/1000); tm.innerHTML=audTimerSvg(sec); tmTxt.textContent=String(sec); tm.append(tmTxt); const late=sec>=30; const ex=late?"concerned":ex0; if(ex!==shown){ av.innerHTML=invSvg(look,ex); shown=ex; } av.classList.toggle("late",late); think.hidden=!late; tm.classList.toggle("late",late); av.title=late?"The investigator is concerned about the time":""; };
   draw(); if(!AUD.qStop) audTick=setInterval(()=>{ if(!document.body.contains(tm)){ clearInterval(audTick); audTick=null; return; } draw(); },250);
-  bubble.append(el("div",{class:"avCol"}, av, tm), el("div",{class:"speech"}, el("span",{class:"audTopic"},AUD_TOPICS[n.t]), el("p",{},audFill(n.q,c))));
+  bubble.append(el("div",{class:"avCol"}, av, think, tm), el("div",{class:"speech"}, el("span",{class:"audTopic"},AUD_TOPICS[n.t]), el("p",{},audFill(n.q,c))));
   m.append(bubble);
   const list=el("div",{class:"audOpts"});
   opts.forEach((o,i)=>{ const b=el("button",{class:"opt audOpt",type:"button",onclick:()=>{ if(AUD.pick!==null) return; AUD.pick=i; AUD.qStop=Date.now(); const key=AUD.qKey; renderAudit();
@@ -3092,7 +3193,7 @@ function renderAuditOpening(m){
   const st=AUD.st, c=st.c;
   const story=AUD_TOPICS[AUD_NODES[st.plan[0]].t]||"Case review";
   const areas=[...new Set(st.plan.slice(1).map(p=>AUD_NODES[p]&&AUD_NODES[p].t).filter(Boolean))].slice(0,6).map(t=>AUD_TOPICS[t]);
-  const av=el("div",{class:"avatar"}); av.innerHTML=AUDITOR;
+  const av=el("div",{class:"avatar inv"}); av.innerHTML=invSvg(invPick(st),"attentive");
   const sec=el("section",{class:"card audOpen"});
   sec.append(el("div",{class:"eyebrow"},"Opening meeting · Day 1 · 09:00"));
   sec.append(el("div",{class:"audQ"}, av, el("div",{class:"speech"}, el("span",{class:"audTopic"},"Investigator"),
@@ -3102,7 +3203,7 @@ function renderAuditOpening(m){
   if(st.kind!=="topic") sec.append(el("div",{class:"agenda"}, el("b",{},"Areas the investigator expects to cover"), ul, el("small",{},"The trail may change depending on your answers.")));
   else sec.append(el("div",{class:"agenda"}, el("b",{},"Scope"), el("p",{},st.N+" questions on "+st.scen.ttitle.toLowerCase()+". The trail may change depending on your answers.")));
   sec.append(el("div",{class:"howTo"}, el("b",{},"How this works"),
-    el("p",{},"Answer as you would in a real inspection: precise, backed by records, no guessing. Once you choose an answer it’s final, and the next question follows after a second. The stopwatch under the investigator counts the seconds; after 45 seconds he gets impatient. You’ll see your score, the observations and the correct answers at the closing meeting.")));
+    el("p",{},"Answer as you would in a real inspection: precise, backed by records, no guessing. Once you choose an answer it’s final, and the next question follows after a second. The stopwatch under the investigator counts the seconds; after 30 seconds the investigator starts to worry about the time. You’ll see your score, the observations and the correct answers at the closing meeting.")));
   sec.append(el("div",{class:"mact"}, el("button",{class:"reset",type:"button",onclick:()=>{ AUD=null; renderAudit(); }},st.kind==="topic"?"Choose another scenario":"Choose another case"),
     el("button",{class:"cta",type:"button",onclick:()=>{ AUD.phase="q"; renderAudit(); window.scrollTo({top:0}); }},"Start the inspection →")));
   m.append(sec);
@@ -3113,7 +3214,7 @@ function renderAuditReport(m){
   const rep=el("section",{class:"card audReport"});
   const ring=el("div",{class:"bigRing"}); ring.innerHTML=ringSvg(r.pct,100,130);
   rep.append(el("div",{class:"repHead"}, ring, el("div",{}, el("div",{class:"eyebrow"},"Closing meeting · "+st.c.id), el("h3",{},st.c.name), el("p",{}, el("b",{},r.right+" of "+st.asked.length)," answers acceptable · pass mark 85%")), el("div",{class:"stamp "+(r.pass?"pass":"fail")},r.pass?"PASS":"FAIL")));
-  const av=el("div",{class:"avatar sm"}); av.innerHTML=AUDITOR;
+  const av=el("div",{class:"avatar inv sm"}); av.innerHTML=invSvg(invPick(st),r.pass?"attentive":"stern");
   rep.append(el("div",{class:"audQ"}, av, el("div",{class:"speech"}, el("span",{class:"audTopic"},"Investigator’s summary"), el("p",{},r.fb))));
   const wrong=st.asked.filter(a=>!a.ok);
   rep.append(el("h3",{class:"secTitle"},wrong.length?"Observations ("+wrong.length+")":"Observations"));
@@ -3738,6 +3839,38 @@ const DEVT={
   hz:["Use-related: misunderstood instructions, missed alarms, wrong set-up","Environment: humidity, temperature, pets, children, travel","Electrical and mechanical: unsupervised use, damaged cables","Information: misread results, no professional to check them"],
   an:["URRA with lay-user profiles (age, vision, dexterity, literacy)","Formative evaluation early and often","DFMEA for robustness to the home environment","Review of complaints and known use problems of similar devices"],std:["IEC 60601-1-11 (home healthcare environment)","IEC 62366-1 and FDA human factors guidance","EN ISO 15223-1 (symbols)"],
   ex:{hz:"Functionality (alarm)",seq:"Alarm volume turned down at night; carrier asleep in another room",hs:"Alarm condition not noticed",harm:"Hypoxia not treated in time"}},
+ cardio:{l:"Cardiovascular catheter or delivery system",d:"Interventional devices used in vessels or the heart: catheters, guidewires, balloons, sheaths, transcatheter delivery systems.",q:[3,4,8,13,22,24,26,28,31,33],
+  hz:["Mechanical: kinking, tip or shaft fracture, balloon burst, detachment of a component in the vessel","Biological and chemical: haemocompatibility, particulates from coatings, residues","Delivery: wrong deployment position, premature or failed release of an implant","Use-related: wrong device size, poor visibility under fluoroscopy, incompatible accessories"],
+  an:["DFMEA for tensile, torque, burst and coating integrity","PFMEA for bonding, coating and sterilization","URRA for preparation, navigation and deployment steps","FTA for embolization or vessel perforation"],std:["ISO 10555 series (intravascular catheters)","ISO 25539 series (endovascular devices)","ISO 10993-4 (interactions with blood)"],
+  ex:{hz:"Mechanical energy (tensile load)",seq:"Weak bond between tip and shaft passes inspection; physician pulls back against resistance",hs:"Catheter tip separates inside the artery",harm:"Embolization needing retrieval or surgery"}},
+ energy:{l:"Energy-based surgical device",d:"Devices that cut, coagulate or ablate tissue with energy: electrosurgical, RF ablation, ultrasonic, laser and cryo systems.",q:[3,5,10,14,18,19,28,31,32,35],
+  hz:["Electrical: patient burns at the return electrode, capacitive coupling, unintended activation","Thermal: lateral thermal spread, hot instrument tips, fire with oxygen or alcohol prep","Radiation: laser exposure of eyes and skin, reflection from instruments","Smoke and plume: chemical and biological content of surgical smoke"],
+  an:["DFMEA for energy output control and activation","FTA for unintended energy delivery","URRA for set-up, foot pedal and accessory selection","SFMEA for output control software"],std:["IEC 60601-1 and IEC 60601-2-2 (high-frequency surgical equipment)","IEC 60825-1 and IEC 60601-2-22 (lasers)","IEC 60601-1-8 (alarms) where alarms are used"],
+  ex:{hz:"Electrical energy (HF current)",seq:"Return electrode partly peels off during a long procedure; no contact-quality monitor alarm",hs:"High current density under a small electrode area",harm:"Skin burn at the return electrode site"}},
+ imaging:{l:"Imaging system",d:"Diagnostic imaging equipment: X-ray, fluoroscopy, CT, MRI and ultrasound systems and their workstations.",q:[5,10,11,12,14,16,18,19,21,31,35],
+  hz:["Radiation: excess ionizing dose, unnecessary exposure of staff","Magnetic field: projectile objects, implant interaction, RF heating (MRI)","Diagnostic information: artefacts, wrong orientation or laterality, image linked to the wrong patient","Mechanical: moving gantry or table, crushing, patient falls"],
+  an:["DFMEA for dose control and interlocks","FTA for “wrong image or wrong patient”","SFMEA for acquisition and reconstruction software","URRA for positioning, protocol selection and dose display"],std:["IEC 60601-2-54 (radiography and fluoroscopy), IEC 60601-2-44 (CT)","IEC 60601-2-33 (MRI) and IEC 60601-2-37 (ultrasound)","IEC 62304 and DICOM (NEMA PS3)"],
+  ex:{hz:"Ionizing radiation",seq:"Adult protocol stays selected for a child; dose display is not checked",hs:"Child receives an adult dose",harm:"Avoidable radiation exposure with increased long-term risk"}},
+ critical:{l:"Life-support or critical-care device",d:"Devices whose failure can quickly harm the patient: ventilators, infusion pumps, anaesthesia systems, dialysis and heart-lung machines.",q:[5,6,10,11,15,17,18,19,31,32,35],
+  hz:["Functionality: loss of essential performance, no alarm on failure","Delivery: over- or under-infusion, wrong ventilation volume or pressure","Use-related: programming errors, alarm fatigue, wrong set-up of disposables","Power: battery depletion, failure on mains loss"],
+  an:["FTA for loss of essential performance","DFMEA including single-fault conditions","URRA for programming and alarm response","SFMEA for control and alarm software"],std:["ISO 80601-2-12 (critical care ventilators)","IEC 60601-2-24 (infusion pumps)","IEC 60601-1-8 (alarm systems)"],
+  ex:{hz:"Delivery quantity (over-infusion)",seq:"User enters 50 instead of 5.0 mL/h; dose limit not set in the drug library",hs:"Pump runs at ten times the intended rate",harm:"Overdose with serious injury"}},
+ wearable:{l:"Wearable or connected device",d:"Body-worn and connected devices: sensors, patches, wearable monitors and pumps that link to an app or the cloud.",q:[3,4,11,12,15,19,20,21,29,31,34],
+  hz:["Data: lost or delayed readings, wrong pairing with another user’s device","Cybersecurity: unauthorized access through the wireless link or the app","Biological: skin irritation or sensitization from adhesives","Use-related: wrong placement, notifications muted, battery not charged"],
+  an:["Security risk assessment linked to safety risk","SFMEA for the device, app and cloud parts","URRA for application, pairing and alerts","Wireless coexistence and EMC risk review"],std:["IEC 60601-1-11 (home healthcare environment)","IEC 81001-5-1 and AAMI TIR57 (security)","ANSI C63.27 (wireless coexistence)"],
+  ex:{hz:"Incorrect information (data link)",seq:"Phone app is paired to a family member’s sensor after a reinstall",hs:"Patient doses insulin based on another person’s readings",harm:"Severe hypoglycaemia"}},
+ ophth:{l:"Ophthalmic device",d:"Devices for the eye: intraocular lenses, contact lenses, ophthalmic viscosurgical devices and ophthalmic lasers.",q:[2,3,4,5,8,22,23,24,28,33],
+  hz:["Optical: wrong power, glare, poor image quality","Biological and chemical: toxic anterior segment syndrome from residues, endotoxin","Mechanical: haptic breakage, decentration, damage during injection","Radiation: laser exposure of the retina or the user"],
+  an:["DFMEA for optical and mechanical properties","PFMEA for cleaning, polishing and sterilization","URRA for loading and injection of the lens","Clinical and PMCF data as probability inputs"],std:["ISO 11979 series (intraocular lenses)","ISO 18369 series (contact lenses)","IEC 60825-1 (laser safety)"],
+  ex:{hz:"Chemical (process residue)",seq:"Polishing compound not fully removed; cleaning validation did not cover the new compound",hs:"Residue introduced into the eye with the lens",harm:"Toxic anterior segment syndrome"}},
+ dental:{l:"Dental device",d:"Dental implants, restorative materials, orthodontic appliances and dental equipment.",q:[2,3,4,8,9,22,23,24,25,28],
+  hz:["Mechanical: implant or abutment fracture, screw loosening","Biological and chemical: cytotoxic or sensitizing materials, residual monomer","Reprocessing: cross-contamination from handpieces and instruments","Use-related: wrong component combination, over-torque"],
+  an:["DFMEA with fatigue and wear failure modes","Biological evaluation and material risk review","URRA for component selection and torque steps","Reprocessing validation for reusable parts"],std:["ISO 14801 (fatigue testing of dental implants)","ISO 7405 (biocompatibility of dental devices)","ISO 10993-1 (biological evaluation)"],
+  ex:{hz:"Mechanical energy (cyclic chewing load)",seq:"Narrow implant used in a molar site against the instructions",hs:"Implant body overloaded by chewing forces",harm:"Implant fracture and surgery to remove it"}},
+ wound:{l:"Wound care and dressings",d:"Dressings, negative-pressure wound therapy, skin substitutes and dressings that contain substances such as antimicrobials.",q:[3,4,6,8,10,17,22,23,26,29],
+  hz:["Biological: infection, maceration, loss of sterility","Chemical: cytotoxic or sensitizing components, antimicrobial release","Mechanical: adhesive trauma when removed, retained dressing fragments","Use-related: wrong dressing for the wound type, change interval missed"],
+  an:["DFMEA for absorbency, adhesion and integrity","Biological evaluation including release of substances","URRA for application and removal","Classification check for dressings with medicinal substances (MDR Annex VIII, Rule 14)"],std:["EN 13726 (test methods for wound dressings)","ISO 10993 series (biological evaluation)","IEC 60601-1 for powered negative-pressure units"],
+  ex:{hz:"Mechanical (retained material)",seq:"Foam pieces cut to fit a deep wound; the number used is not recorded",hs:"Foam fragment left in the wound at dressing change",harm:"Wound infection and delayed healing"}},
  ivd:{l:"IVD medical device",d:"In vitro diagnostic analysers, reagents, rapid tests and self-tests. Harm usually arises indirectly, through an incorrect or delayed result.",q:[1,11,12,15,19,21,22,31,37],
   hz:["Incorrect result: false positive, false negative, wrong value","Delayed result for a time-critical decision","Result reported for the wrong patient or sample","Biological: exposure of the user to infectious specimens"],
   an:["Analytical and clinical performance as risk inputs (ISO/TR 24971 Annex H)","FTA for “incorrect result reported”","URRA for sample handling and result interpretation","Post-market performance monitoring"],std:["ISO/TR 24971 Annex H","ISO 15197 (glucose self-testing), CLSI EP guidance","IVDR 2017/746 Annex I"],
@@ -3764,8 +3897,9 @@ function renderRisk(){
   const dv=el("div",{class:"card devCard"}, el("label",{class:"rField"}, el("span",{},"Device type"), selectEl(Object.entries(DEVT).map(([k,v])=>[k,v.l]),rm.dev,v=>{ rm.dev=v; rm._save(); renderRisk(); },{"aria-label":"Device type"})), el("p",{class:"src"},DEVT[rm.dev].d));
   dv.append(el("a",{class:"cta rmToolsLink",href:"#rmtools"},"Risk Management Tools: create a worksheet →"));
   m.append(dv);
-  m.append(tabRow(RM_TABS,rm.tab,k=>{ rm.tab=k; rm._save(); renderRisk(); }));
-  const p=el("div",{class:"panel"}); m.append(p);
+  const nav=areaNav({label:"Topic",items:RM_TABS.map(([k,l])=>({k,l})),cur:rm.tab,onPick:k=>{ rm.tab=k; rm._save(); renderRisk(); }});
+  nav.pick.classList.add("rmPick"); m.append(nav.pick);
+  const p=el("div",{class:"panel"}); m.append(el("div",{class:"dLay rmLay"}, nav.side, p));
   ({over:rmOver,gloss:rmGloss,pha:rmPha,ana:rmAna,acc:rmAcc,fmea:rmFmea,fta:rmFta,urra:rmUrra,drafts:rmDrafts})[rm.tab](p);
   p.append(el("p",{class:"src"},"Content is a paraphrased summary for training. It does not replace the standards: ISO 14971:2019 (with EN ISO 14971:2019+A11:2021 for the EU), ISO/TR 24971:2020 and IEC 62366-1:2015+A1:2020. Use your licensed copies for exact requirements."));
 }
@@ -4072,14 +4206,19 @@ function rmFmea(p){
 }
 /* ---- Risk Management Tools picker (from Useful tools) ---- */
 const RM_TOOLS=[["PHA","Preliminary hazard analysis at concept stage",{tab:"pha"}],["Risk analysis","Hazard analysis: hazard → harm with severity and probability",{tab:"ana",anaSub:"ha"}],["Risk Acceptability Matrix","Severity and probability scales and acceptability regions",{tab:"acc"}],["FTA","Fault tree calculator with AND/OR gates",{tab:"fta"}],["System diagram & System Risk Analysis","Sub-systems and components with IDs; top-level risk analysis",{tab:"fmea",wsType:"sra"}],["dFMEA","Design FMEA",{tab:"fmea",wsType:"dfmea"}],["pFMEA","Process FMEA",{tab:"fmea",wsType:"pfmea"}],["uFMEA","Use FMEA",{tab:"fmea",wsType:"ufmea"}],["sFMEA","Software FMEA",{tab:"fmea",wsType:"sfmea"}],["URRA","Use-related risk analysis (IEC 62366-1)",{tab:"urra",urraSub:"ws"}],["Drafts","All saved risk documents: rename, edit, export, delete",{tab:"drafts"}]];
+const RMT_GROUPS=[["Hazard and risk analysis",["PHA","Risk analysis","Risk Acceptability Matrix"]],["System analysis and FMEA",["System diagram & System Risk Analysis","dFMEA","pFMEA","uFMEA","sFMEA"]],["FTA and usability",["FTA","URRA"]],["Saved drafts",["Drafts"]]];
+const RMT_ICO={"PHA":"search","Risk analysis":"risk","Risk Acceptability Matrix":"gauge","System diagram & System Risk Analysis":"map","dFMEA":"list","pFMEA":"factory","uFMEA":"eye","sFMEA":"tmpl","FTA":"chart","URRA":"train","Drafts":"dates"};
+let RMT_TAB=null; try{ RMT_TAB=localStorage.getItem("qah-rmt-tab"); }catch(e){}
 function renderRmTools(){
   const m=document.getElementById("main"); m.innerHTML="";
   m.append(toolHead("Risk Management Tools","Choose what you want to create. Every worksheet gives each row an ID and can trace it to the system diagram and the System Risk Analysis."));
   const dv=el("div",{class:"card devCard"}, el("label",{class:"rField"}, el("span",{},"Device type"), selectEl(Object.entries(DEVT).map(([k,v])=>[k,v.l]),rm.dev,v=>{ rm.dev=v; rm._save(); },{"aria-label":"Device type"})));
   m.append(dv);
   const g=el("div",{class:"choiceGrid toolGrid"});
-  RM_TOOLS.forEach(([t,s,o])=>g.append(el("button",{class:"choiceBtn riskc toolCard",type:"button",onclick:()=>{ Object.assign(rm,o); rm._save(); location.hash="risk"; }}, el("b",{},t), el("span",{},s))));
-  m.append(g);
+  const cur=RMT_GROUPS.some(x=>x[0]===RMT_TAB)?RMT_TAB:RMT_GROUPS[0][0], grp=RMT_GROUPS.find(x=>x[0]===cur);
+  const nav=areaNav({label:"Tool group",unit:"tools",items:RMT_GROUPS.map(([k,ts])=>({k,l:k,n:ts.length})),cur,onPick:k=>{ RMT_TAB=k; try{ localStorage.setItem("qah-rmt-tab",k); }catch(e){} renderRmTools(); }});
+  RM_TOOLS.filter(x=>grp[1].includes(x[0])).forEach(([t,s,o])=>g.append(el("button",{class:"choiceBtn riskc toolCard",type:"button",onclick:()=>{ Object.assign(rm,o); rm._save(); location.hash="risk"; }}, el("span",{class:"toolIco"},ico(RMT_ICO[t]||"risk")), el("b",{},t), el("span",{},s))));
+  m.append(nav.pick, el("div",{class:"dLay"}, nav.side, g));
 }
 /* ---- FTA and other techniques ---- */
 function ftaDefault(){ return {top:"Patient harmed by over-delivery",tg:"OR",g:[{n:"Control fault not detected",gate:"AND",e:[{n:"Control software fault",p:"1e-3"},{n:"Independent watchdog fails",p:"1e-3"}]},{n:"Use error not caught",gate:"AND",e:[{n:"Wrong value entered",p:"1e-2"},{n:"Confirmation screen ignored",p:"5e-2"}]},{n:"Hardware runaway",gate:"OR",e:[{n:"Motor driver short",p:"1e-6"}]}]}; }
@@ -5194,6 +5333,25 @@ Object.assign(SQF,{
   runs:[{run:"1",date:"2026-07-20, shift A",lot:"CDS-26-0720A",op:"Operator 1",res:"0/59 leaks; strength mean 2.92, SD 0.18 N/15 mm",pf:"Pass"},{run:"2",date:"2026-07-21, shift B",lot:"CDS-26-0721B",op:"Operator 2",res:"0/59 leaks; mean 2.88, SD 0.21",pf:"Pass"},{run:"3",date:"2026-07-22, shift A",lot:"CDS-26-0722A",op:"Operator 3",res:"0/59 leaks; mean 2.95, SD 0.17",pf:"Pass"}],
   cap:"Pooled Ppk ≈ 2.5 (≥ 1.33)",devs:"None.",conc:"The sealing process on PS-2 is capable and stable at the nominal settings. PQ passed; PS-2 released for routine production of CDS-6F.",reval:"Change of pouch material or supplier, sealer repair affecting jaws or controls, adverse seal trend, or 2-year periodic review.",
   sign:QA_SIGNED([["Executed by","R. Novak"],["Engineering","S. Ortiz"],["Quality Assurance","D. Levi"]],"2026-07-24")}},
+
+"qa-tmv":{code:"TMV",doc:"FRM-VAL-006",short:"TMV protocol / report",file:"TMV",t:"Test Method Validation (TMV) Template",titleKey:"tm",
+ sub:"Shows that a test or inspection method gives reliable results for its intended use: method, measurement system study, acceptance criteria, results and conclusion.",
+ intro:"Validate a test method before its results are used to accept product or to support design verification and process validation. Variable methods usually need repeatability and reproducibility (gage R&R), bias and, where relevant, linearity; attribute methods need an attribute agreement study with known good and bad samples.",
+ refs:"ISO 13485:2016 7.5.6, 7.6, 8.2.6; AIAG Measurement Systems Analysis reference manual (gage R&R and attribute agreement); ISO 5725 series (accuracy of measurement methods)",sampleName:"seal strength test method TM-012",sampleDate:"02 Jul 2026, 10:00",
+ secs:[
+  {h:"1. Test method",f:[["tm","text","Test method name and number"],["docno","text","TMV number and revision"],["mtype","sel","Method type",["Variable (measured value)","Attribute (pass / fail)","Visual inspection"]],["use","area","Intended use and the specification it checks"],["equip","text","Equipment and fixtures"],["obj","area","Objective"]]},
+  {h:"2. Prerequisites",f:[["p1","yna","Is the test method procedure approved (draft for validation)?"],["p2","yna","Is the equipment qualified and calibrated?"],["p3","yna","Are the operators trained on the method?"],["p4","yna","Are the samples representative of the specification range (including near the limits)?"]]},
+  {h:"3. Study design and acceptance criteria",f:[["design","area","Study design (parts, operators, repeats, randomization)"],["acc","tbl","Acceptance criteria",[["p","Parameter"],["c","Criterion"],["why","Rationale"]],[]]]},
+  {h:"4. Results",f:[["res","tbl","Results",[["p","Parameter"],["r","Result"],["pf","Pass / fail",["Pass","Fail"]]],[]],["devs","area","Deviations"]]},
+  {h:"5. Conclusion",f:[["conc","area","Conclusion"],["lim","text","Limitations and conditions of use"],["reval","text","Revalidation triggers"]]},
+  {h:"6. Approval",f:[QA_SIGN(["Executed by","Engineering","Quality Assurance"])]}],
+ sample:{tm:"Seal peel strength, TM-012 rev 2 (tensile tester, per ASTM F88)",docno:"TMV-TM012-01 rev 1",mtype:"Variable (measured value)",use:"Measures seal peel strength of pouch PKG-301 against the internal specification of ≥ 1.5 N/15 mm. Results are used for lot release and for the PS-2 sealer OQ and PQ.",equip:"Tensile tester TT-3 with 50 N load cell; 15 mm strip cutter; grip fixture FX-12",obj:"Show that TM-012 is repeatable, reproducible and unbiased enough to decide pass or fail against the 1.5 N/15 mm limit.",
+  p1:{a:"Y",c:"TM-012 rev 2 released for validation."},p2:{a:"Y",c:"TT-3 IQ/OQ approved; load cell calibrated to 2027-05-31."},p3:{a:"Y",c:"Three operators trained (TRN-2026-141 to 143)."},p4:{a:"Y",c:"10 sealed strips chosen from 1.6 to 4.2 N/15 mm, including seals made at the low sealer limit."},
+  design:"Crossed gage R&R: 10 parts × 3 operators × 3 repeats, run in random order; strips cut from the same seals so that each part is measured as close to the same location as possible. Bias checked with a 10 N reference weight, 10 readings.",
+  acc:[{p:"%GRR (of tolerance)",c:"≤ 10% acceptable; 10–30% only with justification",why:"Measurement error must be small compared with the distance to the limit"},{p:"Number of distinct categories (ndc)",c:"≥ 5",why:"Method must separate parts across the range"},{p:"Bias",c:"Within ± 1% of the reference",why:"Results must not shift pass / fail decisions"}],
+  res:[{p:"%GRR (of tolerance)",r:"8.6%",pf:"Pass"},{p:"ndc",r:"9",pf:"Pass"},{p:"Bias",r:"+0.4% (10.04 N mean)",pf:"Pass"}],
+  devs:"None.",conc:"TM-012 rev 2 is validated for seal peel strength of PKG-301. It may be used for lot release and for process validation.",lim:"Valid for PKG-301 Tyvek/film seals 1–5 N/15 mm with fixture FX-12.",reval:"Change of tester, load cell, fixture, strip preparation or material; adverse calibration result; 3-year review.",
+  sign:QA_SIGNED([["Executed by","R. Novak"],["Engineering","S. Ortiz"],["Quality Assurance","D. Levi"]],"2026-07-02")}},
 
 "qa-nps":{code:"NPS",doc:"FRM-SW-001",short:"software assessment",file:"Non_Product_Software_Assessment",t:"Non-Product / Non-GxP Software Assessment",titleKey:"sw",
  sub:"Decides whether software used in the business is GxP-relevant (production or QMS use), and if so the risk-based assurance needed; non-GxP software is recorded with a rationale.",
