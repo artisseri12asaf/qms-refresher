@@ -1140,6 +1140,14 @@ footer#siteFoot .legalBody p.imp{font-size:14px; color:var(--ink)}
 
 /* 1.6.0 sample assessments */
 .iaSamples{display:flex; flex-wrap:wrap; gap:4px 14px; align-items:center; margin:2px 0 8px}
+
+/* 1.7.0 supplier and CMO forms */
+.sqClause{border-left:3px solid var(--line); padding:4px 0 4px 12px; margin:8px 0}
+.sqClause b{display:block; font-size:15px} .sqClause p{margin:4px 0 0; font-size:15px; color:var(--ink)}
+.sqTbl{display:grid; gap:8px; margin:8px 0}
+.sqRow{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:6px 10px; align-items:end; border:1px solid var(--line); border-radius:12px; padding:10px; background:var(--paper)}
+.sqRow .linkBtn.del{justify-self:start}
+.sqQ .iaQL{font-size:15px}
 </style>
 </head>
 <body>
@@ -1252,7 +1260,7 @@ function phoneBar(active){
   }
   sheetSet(null);
   const isCh=CH.some(x=>x.id===active);
-  bar.querySelectorAll(".tbBtn").forEach(b=>b.classList.toggle("cur",(PB_G[b.dataset.g]||[]).includes(active)||(isCh&&b.dataset.g==="Explore")));
+  bar.querySelectorAll(".tbBtn").forEach(b=>b.classList.toggle("cur",(PB_G[b.dataset.g]||[]).includes(active)||(isCh&&b.dataset.g==="Explore")||(b.dataset.g==="Tools"&&typeof SQF!=="undefined"&&!!SQF[active])));
 }
 function renderNav(active){
   const c=CH.find(x=>x.id===active)||{part:"none"};
@@ -1264,7 +1272,7 @@ function renderNav(active){
   const r2=document.getElementById("navRow2"); r2.innerHTML="";
   const NK=Object.fromEntries(NAV.map(x=>[x[0],x]));
   const PARTK={iso:"basics",qmsr:"qms",mdr:"eu",fdapre:"fda"};
-  const navBtn=([k,l,ic])=>el("button",{class:"navBtn n-"+ic,type:"button","aria-current":String(active===k||(PARTK[k]&&c.part===PARTK[k])||(k==="daily"&&["tools","impact"].includes(active))||(k==="stats"&&["sampling","msa","grr"].includes(active))||(k==="risk"&&active==="rmtools")),onclick:()=>{ if(k==="random"){ rnd.cur=null; } const t=PARTK[k]?CH.find(x=>x.part===PARTK[k]).id:k; if(location.hash==="#"+t) route(); else location.hash=t; }}, ico(ic), el("span",{},l));
+  const navBtn=([k,l,ic])=>el("button",{class:"navBtn n-"+ic,type:"button","aria-current":String(active===k||(PARTK[k]&&c.part===PARTK[k])||(k==="daily"&&(["tools","impact"].includes(active)||!!(typeof SQF!=="undefined"&&SQF[active])))||(k==="stats"&&["sampling","msa","grr"].includes(active))||(k==="risk"&&active==="rmtools")),onclick:()=>{ if(k==="random"){ rnd.cur=null; } const t=PARTK[k]?CH.find(x=>x.part===PARTK[k]).id:k; if(location.hash==="#"+t) route(); else location.hash=t; }}, ico(ic), el("span",{},l));
   const grp=(lab,keys)=>el("div",{class:"navGroup","data-g":lab}, el("span",{class:"navLab"},lab), el("div",{class:"navRowG c"+keys.length}, ...keys.map(k=>navBtn(NK[k]))));
   if(!window.NAVSEARCH) window.NAVSEARCH=searchWidget();
   { const ni=NAVSEARCH.querySelector("input"), nb=NAVSEARCH.querySelector(".qres"); if(ni && document.activeElement!==ni){ ni.value=""; nb.innerHTML=""; nb.classList.remove("open"); } }
@@ -2027,8 +2035,16 @@ const TOOLS=[["sampling","Sample size tool (ISO 2859-1:2026)","Lot acceptance pl
  ["msa","Measurement System Analysis (MSA)","Resolution, Type 1 gauge study (Cg, Cgk), bias and linearity, and stability charts, with Excel and PDF export.","chart",true],
  ["rmtools","Risk Management Tools","Create a PHA, risk analysis, risk acceptability matrix, FTA, system risk analysis, dFMEA, pFMEA, uFMEA, sFMEA or URRA, with IDs and traceability.","risk",true],
  ["impact","Change Impact Assessment","Generator for change impact assessments: SME impact with risk-file links, then FDA and EU MDR regulatory assessment, with Word and PDF output.","change",true],
+ ["sq-quest","Supplier Questionnaire / Self-Assessment","Baseline data from prospective suppliers: certifications, regulatory history, capabilities, sub-tier control and financial stability.","survey",true],
+ ["sq-eval","Supplier Evaluation & Approval","Risk-based qualification or re-evaluation: category A–D, evidence, audit results and the QA decision for the ASL.","factory",true],
+ ["sq-scar","Supplier Corrective Action Request (SCAR)","Containment, root cause, actions and verification of effectiveness for supplier nonconformities.","risk",true],
+ ["sq-scn","Supplier Change Notification (SCN) Evaluation","Review and approve or reject supplier-initiated changes, with impact assessment and required actions.","swap",true],
+ ["sq-asl","Approved Supplier List (ASL)","The controlled list of approved suppliers by category (A Critical, B Major, C Minor, D Development / Administrative).","list",true],
+ ["sq-fai","First Article Inspection (FAI)","FAI form for an item made by a subcontractor: equipment, ballooned characteristics, certificates and result.","caliper",true],
+ ["sq-sqa","Supplier Quality Agreement – Short","A concise ISO 13485-aligned quality agreement for lower-criticality suppliers.","agree",true],
+ ["sq-cmo","CMO Quality Agreement","An extensive quality agreement for contract manufacturers, with a responsibility matrix and regulatory duties.","agree",true],
  ["grr","Gauge R&R / Kappa test","A guide to choose between variable Gauge R&R and attribute agreement (Kappa), sample definitions with defect notes and photos, analysis, and the test protocol and report.","gauge",true]];
-const TOOLGROUPS={daily:["Daily QA Work","Tools for daily QA work","Assess changes now; more daily QA tools are on the way.",["impact"],[["Coming soon","More tools and ready-to-use QMS templates for daily QA work.","tmpl"]]],
+const TOOLGROUPS={daily:["Daily QA Work","Tools for daily QA work","Assess changes, and manage suppliers and CMOs with ready-to-use forms. Each form has a filled sample and exports to Word and PDF.",["impact","sq-quest","sq-eval","sq-scar","sq-scn","sq-asl","sq-fai","sq-sqa","sq-cmo"],[["Coming soon","More tools and ready-to-use QMS templates for daily QA work.","tmpl"]]],
   stats:["Statistics","Statistics","Sampling plans, measurement system analysis and attribute agreement.",["sampling","msa","grr"],[]]};
 function renderTools(which){
   const G=TOOLGROUPS[which]||TOOLGROUPS.daily;
@@ -2320,6 +2336,11 @@ const ICONS={
  mdr:'<circle cx="12" cy="12" r="9"/><path d="M12 6.5v.01M15.9 8.1v.01M17.5 12v.01M15.9 15.9v.01M12 17.5v.01M8.1 15.9v.01M6.5 12v.01M8.1 8.1v.01" stroke-width="2.6"/>',
  fdapre:'<path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>',
  gloss:'<path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/><path d="M9 8h6M9 11h4"/>',
+ factory:'<path d="M3 21V10l6 4V10l6 4V6l6 3v12z"/><path d="M7 17h2M12 17h2M17 17h2"/>',
+ list:'<path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1.2"/><circle cx="4.5" cy="12" r="1.2"/><circle cx="4.5" cy="18" r="1.2"/>',
+ agree:'<path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10 14h6M10 17.5h3.5"/>',
+ caliper:'<path d="M4 4h16v4H4z"/><path d="M7 8v12M17 8v6"/>',
+ swap:'<path d="M4 8h13l-3-3M20 16H7l3 3"/>',
  survey:'<rect x="5" y="5" width="14" height="16" rx="2"/><path d="M9 3h6v4H9z"/><path d="M9 12l2 2 4-4"/><path d="M9 17h6"/>',
  search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>',
  audit:'<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v3h6V3M8.5 12l2.5 2.5 4.5-5"/>'
@@ -2372,7 +2393,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="1.6.0", APPDATE="18-NOV-2026";
+const APPVER="1.7.0", APPDATE="18-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Asaf Ben Zion. All rights reserved.";
 const LEGAL=[["Copyright", "No part of this handbook’s original content may be copied or redistributed without written permission. Cited regulations, standards and guidance, and their links, remain the property of their official publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, data selection and design, developed with AI tools, and has been verified against requirements set by the author and against the official sources."], ["Sources", "Sources are limited to official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases. EU: EUR-Lex and European Commission pages, including MDCG guidance."], ["Important", "This application is intended for training only. Results from its tools require human review, verification and approval. Always check the linked source before citing anything in an audit response."]];
@@ -3197,7 +3218,7 @@ function plotCard(t,svg){ const c=el("div",{class:"plotCard"}, el("div",{class:"
 function statGrid(rows){ const g=el("div",{class:"statGrid"}); rows.forEach(([k,v])=>g.append(el("div",{class:"statCell"+(String(v).length>28?" wide":"")}, el("span",{},k), el("b",{},String(v))))); return g; }
 function selectEl(opts,val,on,attrs){ const s=el("select",Object.assign({class:"rIn"},attrs||{})); opts.forEach(o=>{ const [v,l]=Array.isArray(o)?o:[o,o]; const op=el("option",{value:String(v)},l); if(String(v)===String(val)) op.selected=true; s.append(op); }); s.addEventListener("change",()=>on(s.value)); return s; }
 function txtField(lab,val,on,ph,area){ const i=el(area?"textarea":"input",area?{class:"rData",rows:"2",placeholder:ph||""}:{type:"text",class:"rIn",placeholder:ph||""}); i.value=val||""; i.addEventListener("input",()=>on(i.value)); return el("label",{class:"rField"}, el("span",{},lab), i); }
-function toolHead(title,sub,back){ const B=/Impact/.test(title)?["#daily","Daily QA Work"]:/Risk/.test(title)?["#risk","Risk management"]:["#stats","Statistics"]; return el("section",{class:"chHead sampHead"}, el("div",{class:"eyebrow"}, el("a",{href:B[0],class:"backLnk"},"‹ "+B[1])), el("h2",{},title), el("p",{},sub)); }
+function toolHead(title,sub,back){ const B=back||(/Impact/.test(title)?["#daily","Daily QA Work"]:/Risk/.test(title)?["#risk","Risk management"]:["#stats","Statistics"]); return el("section",{class:"chHead sampHead"}, el("div",{class:"eyebrow"}, el("a",{href:B[0],class:"backLnk"},"‹ "+B[1])), el("h2",{},title), el("p",{},sub)); }
 function tabRow(list,cur,on){ const t=el("div",{class:"tabs toolTabs",role:"tablist"}); list.forEach(([k,l])=>t.append(el("button",{class:"tab",type:"button",role:"tab","aria-selected":String(cur===k),onclick:()=>on(k)},l))); return t; }
 /* generic document for the new tools */
 function mkDoc(tool,title,sections,decision,extraSheets,opts){
@@ -4503,7 +4524,7 @@ function buildDocx(blocks,title){
 const IA_PDFCOLS={q:[[0,6],[34,40],[266,6],[304,34]],d:[[0,6],[34,38],[258,38]],r:[[0,20],[124,20],[248,21],[372,21]],a:[[0,7],[40,48],[320,30]],s:[[0,20],[124,20],[248,11],[318,14],[408,14]]};
 function iaPdf(blocks,title,sub){ const secs=[]; let cur=null; blocks.forEach(b=>{ if(b.h1) return; if(b.h2||b.h3){ cur={h:b.h2||b.h3,rows:[]}; secs.push(cur); return; } if(!cur){ cur={h:"",rows:[]}; secs.push(cur); }
     if(b.p) cur.rows.push([b.p]);
-    if(b.table){ if(b.pdf&&IA_PDFCOLS[b.pdf]) cur.rows.push({table:{cols:IA_PDFCOLS[b.pdf],head:b.head?b.table[0]:null,rows:b.head?b.table.slice(1):b.table}}); else (b.head?b.table.slice(1):b.table).forEach(r=>cur.rows.push([r[0],r.slice(1).join(" | ")])); } });
+    if(b.table){ if(b.pdfCols||(b.pdf&&IA_PDFCOLS[b.pdf])) cur.rows.push({table:{cols:b.pdfCols||IA_PDFCOLS[b.pdf],head:b.head?b.table[0]:null,rows:b.head?b.table.slice(1):b.table}}); else (b.head?b.table.slice(1):b.table).forEach(r=>cur.rows.push([r[0],r.slice(1).join(" | ")])); } });
   return buildPdf({title,subtitle:sub,footer:title,sections:secs.filter(s=>s.rows.length||s.h),decision:null,hist:null,data:[]}); }
 function iaOut(p,a,touch){
   const C=iaClass(a); const missRa=raMissing(a);
@@ -4524,11 +4545,275 @@ function iaOut(p,a,touch){
   p.append(prev);
 }
 
+const SQ_CAT=["A – Critical","B – Major","C – Minor","D – Development / Administrative"];
+const SQF={
+"sq-quest":{code:"SQQ",doc:"FRM-SQ-001",short:"questionnaire",file:"Supplier_Questionnaire",t:"Supplier Questionnaire / Self-Assessment",titleKey:"name",
+ sub:"Sent to prospective suppliers to collect baseline data: certifications, regulatory history, capabilities, sub-tier control and financial stability.",
+ intro:"The supplier completes this form before qualification. It is input to the risk-based evaluation (FRM-SQ-002); it does not approve the supplier on its own.",
+ refs:"ISO 13485:2016 7.4.1; 21 CFR 820.10 (QMSR); MDR Annex IX 2.2",sampleName:"precision moulding supplier",sampleDate:"03 Nov 2026, 10:20",
+ secs:[
+  {h:"1. Company information",f:[["name","text","Legal company name"],["addr","area","Registered address"],["web","text","Website"],["contact","text","Quality contact (name, title, e-mail, phone)"],["emp","text","Number of employees"],["years","text","Years in business"],["owner","text","Ownership / parent company"],
+   ["sites","tbl","Sites that would supply us",[["site","Site"],["address","Address"],["act","Activities"]],[]]]},
+  {h:"2. Products and services offered",f:[["prod","area","Products or services you would supply to us"],["mkts","text","Main markets / industries served"],["md","yna","Do you currently supply medical device manufacturers?","list typical products"]]},
+  {h:"3. Quality management system and certifications",f:[["q13485","yna","Is the site certified to ISO 13485:2016?","certificate number, certification body, expiry"],["q9001","yna","Is the site certified to ISO 9001:2015?"],["qoth","yna","Other relevant certifications (e.g. ISO 14001, ISO/IEC 17025, ISO 14644 cleanroom)?"],["qfda","yna","Is the site registered with FDA (21 CFR 807) or with another authority?"],["qproc","yna","Do you have documented procedures for document control, change control, nonconformance, CAPA, internal audit, supplier control, training and calibration?"],["qrec","yna","Are records kept for an agreed period and retrievable on request?","state the retention period"]]},
+  {h:"4. Regulatory and compliance history (last 5 years)",f:[["rfda","yna","Has the site had an FDA inspection?","outcome: NAI / VAI / OAI, 483 observations"],["rwl","yna","Any FDA warning letter, import alert or notified body certificate suspension?"],["rrec","yna","Any recall or field action involving products you supplied?"],["rcust","yna","Any major customer audit finding still open?"]]},
+  {h:"5. Manufacturing capabilities",f:[["mclean","yna","Do you have a controlled environment or cleanroom?","ISO 14644-1 class and monitoring"],["mval","yna","Do you validate special processes (e.g. moulding, welding, cleaning, sterilization)?"],["mtrace","yna","Is lot traceability maintained from raw material to shipment?"],["mcal","yna","Is equipment calibrated and maintained to a schedule, traceable to national standards?"],["mcap","text","Current capacity utilisation (%)"],
+   ["proc","tbl","Key processes",[["p","Process"],["w","In-house or outsourced",["In-house","Outsourced"]],["v","Validated",["Yes","No","N/A"]]],[]]]},
+  {h:"6. Sub-tier suppliers",f:[["ssub","yna","Do you use sub-tier suppliers or subcontractors for our products?"],["sctrl","yna","Are they qualified and monitored, with our requirements flowed down?"],["snot","yna","Will you notify us before changing a sub-tier supplier, material, process or site?"]]},
+  {h:"7. Financial stability and business continuity",f:[["frev","sel","Annual revenue (range)",["< 5 M","5–50 M","50–250 M","> 250 M"]],["ffin","yna","Can financial statements or a credit report be provided on request?"],["fbcp","yna","Do you have a business continuity plan (including single-site risk)?"],["fins","yna","Do you hold product liability insurance?"]]},
+  {h:"8. Substances and environment",f:[["eroh","yna","Can you provide REACH / RoHS declarations and material composition on request?"],["elatex","yna","Is the process free of natural rubber latex?"]]},
+  {h:"9. Declaration",f:[["note","note","I confirm that the information above is complete and correct."],["dname","text","Name"],["dtitle","text","Title"],["ddate","date","Date"],["dsig","text","Signature"]]}],
+ sample:{name:"Precision Moulding Demo Ltd.",addr:"12 Industrial Park Road, Demo City 4500, Country X",web:"www.precisionmoulding-demo.example",contact:"A. Rossi, Quality Manager, a.rossi@pm-demo.example, +00 123 4567",emp:"180",years:"22",owner:"Privately held; no parent company",
+  sites:[{site:"Plant 1",address:"12 Industrial Park Road, Demo City",act:"Injection moulding (ISO 7 cleanroom), assembly, packaging"},{site:"Plant 2",address:"3 River Street, Demo City",act:"Tool making and maintenance"}],
+  prod:"Injection-moulded thermoplastic components (PC, ABS, PP, PEEK) for catheter hubs, housings and connectors; cleanroom assembly and bagging.",mkts:"Medical devices 70%, diagnostics 20%, laboratory 10%",
+  md:{a:"Y",c:"Catheter hubs, luer connectors and instrument housings for 9 device manufacturers."},
+  q13485:{a:"Y",c:"Cert. MD-13485-0457, issued by a certification body (demo), valid to 2028-03-31."},q9001:{a:"N",c:"Not held separately; ISO 13485 covers the scope."},qoth:{a:"Y",c:"ISO 14001:2015; cleanroom classified to ISO 14644-1 class 7."},qfda:{a:"N",c:"Not required: component supplier (21 CFR 820.1(a)(2))."},qproc:{a:"Y",c:"Quality manual QM-01 rev 9 lists all procedures; copies available on request."},qrec:{a:"Y",c:"15 years or as agreed with the customer."},
+  rfda:{a:"NA",c:"Not applicable: component supplier, not FDA-registered."},rwl:{a:"N",c:"None."},rrec:{a:"N",c:"None in the last 5 years."},rcust:{a:"N",c:"All customer audit findings closed; last audit 2026-05."},
+  mclean:{a:"Y",c:"ISO 7 moulding cleanroom (420 m²); particle counts monthly, viable monitoring quarterly."},mval:{a:"Y",c:"Moulding validated by IQ/OQ/PQ with scientific moulding; cleaning validated."},mtrace:{a:"Y",c:"Resin lot → work order → finished lot in the ERP; labels carry the lot number."},mcal:{a:"Y",c:"Calibration by an ISO/IEC 17025 accredited lab; schedule in the CMMS."},mcap:"72%",
+  proc:[{p:"Injection moulding",w:"In-house",v:"Yes"},{p:"Ultrasonic welding",w:"In-house",v:"Yes"},{p:"Pad printing",w:"In-house",v:"Yes"},{p:"Ethylene oxide sterilization",w:"Outsourced",v:"N/A"}],
+  ssub:{a:"Y",c:"Resin distributor and a tooling steel supplier."},sctrl:{a:"Y",c:"Approved supplier list; resin supplied with CoA per lot; requirements flowed down in purchase orders."},snot:{a:"Y",c:"Agree to notify at least 90 days before the change."},
+  frev:"5–50 M",ffin:{a:"Y",c:"Audited financial statements under NDA."},fbcp:{a:"Y",c:"BCP-02: second moulding site qualified for 60% of capacity."},fins:{a:"Y",c:"Product liability cover 5 M (demo)."},
+  eroh:{a:"Y",c:"REACH SVHC and RoHS declarations per resin grade."},elatex:{a:"Y",c:"Latex-free gloves and materials only."},
+  dname:"A. Rossi",dtitle:"Quality Manager",ddate:"2026-11-03",dsig:"A. Rossi (signed)"}},
+
+"sq-eval":{code:"SQE",doc:"FRM-SQ-002",short:"evaluation",file:"Supplier_Evaluation",t:"Supplier Evaluation & Approval Form (Initial & Re-evaluation)",titleKey:"supplier",
+ sub:"Documents the risk-based qualification decision, the category (A–D), evaluation and audit results, and the QA sign-off to add or keep a supplier on the Approved Supplier List.",
+ intro:"Use one form per supplier site and evaluation. The category drives the controls: A – Critical, B – Major, C – Minor, D – Development / Administrative. Controls must be proportionate to the risk of the purchased product (ISO 13485 7.4.1).",
+ refs:"ISO 13485:2016 4.1.5, 7.4.1, 7.4.3; 21 CFR 820.10 (QMSR); MDR Annex IX 2.2",sampleName:"initial evaluation of a moulding supplier",sampleDate:"10 Nov 2026, 14:05",
+ secs:[
+  {h:"1. Supplier and scope",f:[["supplier","text","Supplier name"],["site","text","Site address"],["scope","area","Products or services to be supplied"],["etype","sel","Evaluation type",["Initial qualification","Periodic re-evaluation","Re-evaluation after a quality issue","Re-evaluation after a change"]],["req","text","Requested by"],["parts","text","Part numbers concerned"]]},
+  {h:"2. Risk-based classification",d:"A Yes in 2.1–2.4 usually means category A or B.",f:[["r1","yna","Can a failure of the purchased product affect patient or user safety or device performance?"],["r2","yna","Is it a finished device, a sterile or patient-contacting item, or a special process (e.g. sterilization, coating)?"],["r3","yna","Is the product made to our specification (custom) rather than off-the-shelf?"],["r4","yna","Is the supplier a single or sole source?"],["r5","yna","Is it a critical subcontractor or crucial supplier for notified body purposes?"],["cat","sel","Category assigned",SQ_CAT],["catwhy","area","Rationale for the category"]]},
+  {h:"3. Evaluation methods and results",f:[["meth","tbl","Evidence reviewed",[["m","Method"],["res","Result"],["ref","Reference"]],[{m:"Supplier questionnaire (FRM-SQ-001)",res:"",ref:""},{m:"Certificate review",res:"",ref:""},{m:"On-site or remote audit",res:"",ref:""},{m:"Samples / first article inspection",res:"",ref:""}]]]},
+  {h:"4. Audit summary",f:[["adate","date","Audit date"],["aud","text","Lead auditor"],["ascope","text","Audit scope / standard"],["amaj","text","Major findings (number)"],["amin","text","Minor findings (number)"],["acapa","text","Supplier corrective action plan and status"]]},
+  {h:"5. Performance data (re-evaluation)",f:[["otd","text","On-time delivery (%) in the period"],["ppm","text","Quality (rejected ppm or % lots rejected)"],["scar","text","SCARs issued / open"],["cmp","text","Complaints attributed to the supplier"]]},
+  {h:"6. Decision",f:[["dec","sel","Decision",["Approved","Conditionally approved","Not approved","Disqualified"]],["cond","area","Conditions or follow-up actions"],["qa","sel","Quality agreement required",["CMO quality agreement","Supplier quality agreement – short","Full supplier quality agreement","None (category D)"]],["reval","sel","Re-evaluation interval",["12 months","24 months","36 months","As needed"]],["asl","text","ASL entry / supplier ID"]]},
+  {h:"7. Approval",f:[["sign","tbl","Sign-off",[["fn","Function"],["nm","Name"],["dt","Date"],["sg","Signature"]],[{fn:"Quality Assurance (approval)",nm:"",dt:"",sg:""},{fn:"Purchasing",nm:"",dt:"",sg:""},{fn:"Engineering",nm:"",dt:"",sg:""}]]]}],
+ sample:{supplier:"Precision Moulding Demo Ltd.",site:"Plant 1, 12 Industrial Park Road, Demo City",scope:"Moulded catheter hub (PC) and strain relief (TPU) for the catheter delivery system CDS-6F, supplied clean and bagged.",etype:"Initial qualification",req:"R. Novak, Manufacturing Engineering",parts:"40-1102 (hub), 40-1105 (strain relief)",
+  r1:{a:"Y",c:"Hub bond failure could detach the hub during use."},r2:{a:"Y",c:"Hub is in indirect blood contact (fluid path)."},r3:{a:"Y",c:"Custom tool to our drawing DWG-40-1102."},r4:{a:"Y",c:"Single source until a second tool is built in 2027."},r5:{a:"Y",c:"Listed as a critical subcontractor in the technical documentation."},
+  cat:"A – Critical",catwhy:"Patient-contacting, custom, single-source component affecting safety; on-site audit, quality agreement and annual re-evaluation required.",
+  meth:[{m:"Supplier questionnaire (FRM-SQ-001)",res:"Acceptable; ISO 13485 certified",ref:"SQQ-001"},{m:"Certificate review",res:"Valid to 2028-03-31; scope covers moulding and assembly",ref:"Cert. MD-13485-0457"},{m:"On-site or remote audit",res:"On-site audit: 0 major, 2 minor findings",ref:"AUD-2026-031"},{m:"Samples / first article inspection",res:"FAI accepted, all 42 characteristics in tolerance",ref:"FAI-2026-014"}],
+  adate:"2026-10-21",aud:"D. Levi (Supplier Quality)",ascope:"ISO 13485:2016 clauses 4–8 at Plant 1; moulding process validation",amaj:"0",amin:"2",acapa:"CAPA plan received 2026-10-30; both minors (training record gaps, one overdue calibration) closed 2026-11-07.",
+  otd:"N/A – initial qualification (pilot lots 100% on time)",ppm:"0 rejects in 3 pilot lots",scar:"0 issued / 0 open",cmp:"None (new supplier)",
+  dec:"Approved",cond:"Quarterly performance review for the first year; second tool by Q3 2027 to remove single-source risk.",qa:"Full supplier quality agreement",reval:"12 months",asl:"SUP-240",
+  sign:[{fn:"Quality Assurance (approval)",nm:"D. Levi",dt:"2026-11-10",sg:"e-signed (demo)"},{fn:"Purchasing",nm:"M. Gold",dt:"2026-11-10",sg:"e-signed (demo)"},{fn:"Engineering",nm:"R. Novak",dt:"2026-11-10",sg:"e-signed (demo)"}]}},
+
+"sq-scar":{code:"SCAR",doc:"FRM-SQ-003",short:"SCAR",file:"SCAR",t:"Supplier Corrective Action Request (SCAR)",titleKey:"title",
+ sub:"Issued to a supplier for incoming defects, audit findings or trend failures. Requires containment, root cause, corrective action and verification of effectiveness.",
+ intro:"Sections 1–2 are completed by our quality team; sections 3–6 by the supplier; section 7 by our quality team at closure. Typical timelines: containment within 2 working days, root cause and action plan within 30 days.",
+ refs:"ISO 13485:2016 7.4.1, 8.3, 8.5.2; 21 CFR 820.10 (QMSR)",sampleName:"short shot on moulded hubs",sampleDate:"05 Oct 2026, 08:40",
+ secs:[
+  {h:"1. Request",f:[["title","text","SCAR title"],["supplier","text","Supplier and site"],["contact","text","Supplier contact"],["part","text","Part number, revision and description"],["lot","text","Lot / PO number"],["qty","text","Quantity received / inspected / rejected"],["src","sel","Source",["Incoming inspection","Production / in-process","Audit finding","Trend / performance","Customer complaint","Field return"]],["sev","sel","Severity",["Critical","Major","Minor"]],["desc","area","Description of the nonconformity"],["reqt","text","Requirement not met (drawing, specification, clause)"],["evid","text","Evidence attached (photos, NCR, data)"],["due1","date","Containment due"],["due2","date","Root cause and action plan due"]]},
+  {h:"2. Our immediate actions",f:[["ours","area","Containment at our site (quarantine, sorting, NCR)"],["ncr","text","NCR number"]]},
+  {h:"3. Supplier containment",f:[["cont","tbl","Containment actions",[["where","Location"],["qty","Quantity checked"],["res","Result"],["dt","Date"]],[{where:"Stock at supplier",qty:"",res:"",dt:""},{where:"Work in process",qty:"",res:"",dt:""},{where:"In transit / at customer",qty:"",res:"",dt:""}]]]},
+  {h:"4. Root cause",f:[["meth","text","Method used (e.g. 5 Whys, fishbone, fault tree)"],["rcOcc","area","Root cause of occurrence"],["rcEsc","area","Root cause of escape (why it was not detected)"]]},
+  {h:"5. Corrective and preventive actions",f:[["acts","tbl","Actions",[["a","Action"],["t","Type",["Corrective","Preventive","Systemic"]],["o","Owner"],["d","Due date"],["s","Status",["Open","Done"]]],[]]]},
+  {h:"6. Verification of effectiveness",f:[["veMeth","text","Method and criteria"],["veRes","area","Result and evidence"]]},
+  {h:"7. Evaluation and closure (our quality team)",f:[["eval","sel","Response evaluation",["Accepted","Rejected – resubmit","Accepted with follow-up"]],["fu","area","Comments / follow-up"],["cby","text","Closed by"],["cdate","date","Closure date"]]}],
+ sample:{title:"Short shots on catheter hubs 40-1102",supplier:"Precision Moulding Demo Ltd., Plant 1",contact:"A. Rossi, Quality Manager",part:"40-1102 rev C, catheter hub (PC)",lot:"Lot PM-26-0912 / PO 4500-1187",qty:"5,000 received / 315 inspected / 9 rejected",src:"Incoming inspection",sev:"Major",
+  desc:"9 of 315 hubs inspected show incomplete fill (short shot) at the luer thread; thread gauge does not engage.",reqt:"DWG-40-1102 rev C, note 4 (complete fill) and ISO 80369-7 luer gauging",evid:"NCR-2026-118 with 6 photos and gauge results",due1:"2026-10-07",due2:"2026-11-04",
+  ours:"Lot quarantined; 100% visual and gauge sort of remaining stock (4,685 pcs): 41 additional rejects; production fed from lot PM-26-0905 after sorting.",ncr:"NCR-2026-118",
+  cont:[{where:"Stock at supplier",qty:"12,000",res:"14 rejects removed",dt:"2026-10-06"},{where:"Work in process",qty:"3,200",res:"0 rejects after process adjustment",dt:"2026-10-06"},{where:"In transit / at customer",qty:"4,685 at customer",res:"Sorted by customer; 41 rejects returned",dt:"2026-10-07"}],
+  meth:"5 Whys and fishbone, confirmed by mould-flow check",rcOcc:"Partially blocked gate on cavity 3 after a material change-over; hot-runner temperature drifted 8 °C low because the zone thermocouple was loose.",rcEsc:"In-process check was visual only at 2-hour intervals; no gauge check of the thread and no cavity-specific sampling.",
+  acts:[{a:"Replace and secure hot-runner thermocouples; add temperature alarm at ± 3 °C",t:"Corrective",o:"Tooling lead",d:"2026-10-14",s:"Done"},{a:"Add go/no-go thread gauge to the hourly in-process check, per cavity",t:"Corrective",o:"QC supervisor",d:"2026-10-14",s:"Done"},{a:"Include gate inspection in the change-over checklist for all hot-runner moulds",t:"Systemic",o:"Production manager",d:"2026-10-28",s:"Done"}],
+  veMeth:"Next 5 lots: 315 pcs per lot gauge-checked at incoming, acceptance number 0; cavity 3 tracked separately.",veRes:"Lots PM-26-0920 to 0941: 1,575 pcs checked, 0 rejects; hot-runner alarm log shows no excursions.",
+  eval:"Accepted",fu:"Root cause and actions accepted; effectiveness confirmed on 5 lots. Return to normal inspection.",cby:"D. Levi (Supplier Quality)",cdate:"2026-11-12"}},
+
+"sq-scn":{code:"SCN",doc:"FRM-SQ-004",short:"SCN evaluation",file:"SCN_Evaluation",t:"Supplier Change Notification (SCN) Evaluation Form",titleKey:"title",
+ sub:"Used to review and approve or reject changes initiated by a supplier, such as a sub-tier vendor switch, raw material change or site relocation.",
+ intro:"No supplier change may be used in our product before approval. Link the decision to internal change control and, where needed, a Change Impact Assessment.",
+ refs:"ISO 13485:2016 7.4.1, 7.4.2, 7.3.9; 21 CFR 820.10 (QMSR); MDR Annex IX 2.4",sampleName:"resin supplier site relocation",sampleDate:"14 Nov 2026, 11:30",
+ secs:[
+  {h:"1. Notification",f:[["title","text","Change title"],["scn","text","Supplier SCN reference"],["supplier","text","Supplier and site"],["rcv","date","Date received"],["lead","text","Notice given (days before implementation)"],["ctype","sel","Type of change",["Raw material","Sub-tier supplier","Manufacturing process","Equipment or tooling","Site relocation","Specification or drawing","Test method","Packaging","Discontinuation / end of life"]],["desc","area","Description of the change"],["parts","text","Affected part numbers"],["impl","date","Proposed implementation date"],["sdata","text","Supporting data provided by the supplier"]]},
+  {h:"2. Impact assessment",f:[["i1","yna","Does it affect form, fit or function of the part?"],["i2","yna","Does it affect material composition or biocompatibility?"],["i3","yna","Does it require process validation or revalidation (supplier or ours)?"],["i4","yna","Does it affect sterilization, packaging or shelf life?"],["i5","yna","Does it require a regulatory submission or notified body notification?"],["i6","yna","Does it affect labeling or UDI?"],["i7","yna","Does it affect the risk management file?"],["i8","yna","Does it affect supply continuity (last-time buy, transition stock)?"]]},
+  {h:"3. Required actions",f:[["acts","tbl","Actions before approval",[["a","Action"],["o","Owner"],["d","Due date"],["s","Status",["Open","Done"]]],[]]]},
+  {h:"4. Decision",f:[["dec","sel","Decision",["Approved","Approved with conditions","Rejected"]],["cond","area","Conditions / rationale"],["cc","text","Internal change control number (CC / ECR / ECO)"],["eff","text","Effective lot or date"],["notif","date","Supplier informed on"]]},
+  {h:"5. Approval",f:[["sign","tbl","Sign-off",[["fn","Function"],["nm","Name"],["dt","Date"],["sg","Signature"]],[{fn:"Supplier Quality",nm:"",dt:"",sg:""},{fn:"Engineering",nm:"",dt:"",sg:""},{fn:"Regulatory Affairs",nm:"",dt:"",sg:""}]]]}],
+ sample:{title:"Resin compounding moved to a new site",scn:"SCN-PM-2026-07",supplier:"Precision Moulding Demo Ltd. (resin compounder: sub-tier)",rcv:"2026-08-12",lead:"125",ctype:"Site relocation",desc:"The sub-tier compounder of the PC resin grade used for hubs moves compounding from Site North to Site South. Same formulation, equipment model and process parameters.",parts:"40-1102 (hub), 40-1105 (strain relief)",impl:"2026-12-15",sdata:"Equivalence report (melt flow, IR spectrum, mechanical data) on 3 lots; new site ISO 13485 certificate",
+  i1:{a:"N",c:"Same grade and dimensions; supplier shows equivalent melt flow and mechanicals."},i2:{a:"Y",c:"Same formulation, but a new site: compare extractables (ISO 10993-18) on one lot."},i3:{a:"Y",c:"Moulder runs an OQ confirmation run with the new resin source."},i4:{a:"N",c:"EO process and packaging unchanged; resin mass unchanged."},i5:{a:"N",c:"RA: no 510(k); EU: not a crucial-supplier change per NBOG BPG 2014-3 (sub-tier, equivalent material)."},i6:{a:"N",c:"No labeling or UDI change."},i7:{a:"N",c:"Risk file reviewed; no new hazard."},i8:{a:"Y",c:"8 weeks of transition stock from the old site agreed."},
+  acts:[{a:"Chemical equivalence (FTIR, extractables) on 1 lot from Site South",o:"Biocompatibility lead",d:"2026-10-05",s:"Done"},{a:"Moulder OQ confirmation run, 3 lots, full dimensional check",o:"Supplier Quality",d:"2026-10-30",s:"Done"},{a:"Update approved source in ERP and ASL",o:"Purchasing",d:"2026-11-12",s:"Done"}],
+  dec:"Approved with conditions",cond:"First 3 lots from Site South on tightened incoming inspection; CoA must state the compounding site.",cc:"ECR-2026-0611",eff:"Hub lots moulded from 2026-12-15",notif:"2026-11-14",
+  sign:[{fn:"Supplier Quality",nm:"D. Levi",dt:"2026-11-13",sg:"e-signed (demo)"},{fn:"Engineering",nm:"R. Novak",dt:"2026-11-13",sg:"e-signed (demo)"},{fn:"Regulatory Affairs",nm:"M. Haddad",dt:"2026-11-14",sg:"e-signed (demo)"}]}},
+"sq-asl":{code:"ASL",doc:"FRM-SQ-005",short:"ASL",file:"Approved_Supplier_List",t:"Approved Supplier List (ASL)",titleKey:"title",
+ sub:"The controlled list of approved suppliers with category (A–D), scope, certification, approval status and re-evaluation dates.",
+ intro:"Categories: A – Critical (finished devices, CMOs, sterile, patient-contacting or safety-critical items, special processes; failure can directly affect safety or performance). B – Major (custom parts or services that affect conformity but are verified downstream, e.g. machined parts, calibration and test labs). C – Minor (catalogue or low-risk items and services with indirect impact). D – Development / Administrative (prototype or R&D supply not used in released product, and services with no product impact). Purchase only from approved suppliers within their approved scope.",
+ refs:"ISO 13485:2016 7.4.1 (records of evaluation and selection); 21 CFR 820.10 (QMSR)",sampleName:"ASL with 10 suppliers",sampleDate:"15 Nov 2026, 09:00",
+ secs:[
+  {h:"1. List control",f:[["title","text","List title"],["rev","text","Revision"],["eff","date","Effective date"],["owner","text","Owner"],["appr","text","Approved by (QA)"]]},
+  {h:"2. Approved suppliers",f:[["list","tbl","Suppliers",[["id","Supplier ID"],["nm","Supplier and site"],["scope","Approved scope"],["cat","Category",SQ_CAT],["cert","Cert. / expiry"],["st","Status",["Approved","Conditionally approved","Probation","Disqualified"]],["ad","Approved on"],["nx","Next review"],["qa","Quality agreement"]],[]]]}],
+ sample:{title:"Approved Supplier List – Catheter and infusion product lines",rev:"14",eff:"2026-11-15",owner:"Supplier Quality",appr:"D. Levi, QA Manager",
+  list:[{id:"SUP-240",nm:"Precision Moulding Demo Ltd., Plant 1",scope:"Moulded hubs and strain reliefs",cat:"A – Critical",cert:"ISO 13485, to 2028-03",st:"Approved",ad:"2026-11-10",nx:"2027-11",qa:"Full SQA QA-240"},
+   {id:"SUP-118",nm:"Liner Tubing Demo Co.",scope:"PTFE inner liners",cat:"A – Critical",cert:"ISO 13485, to 2027-06",st:"Approved",ad:"2019-04-02",nx:"2027-04",qa:"Full SQA QA-118"},
+   {id:"SUP-301",nm:"Sterile Services Demo GmbH",scope:"EO sterilization (contract sterilizer)",cat:"A – Critical",cert:"ISO 13485 and ISO 11135, to 2028-01",st:"Approved",ad:"2021-09-15",nx:"2027-09",qa:"Full SQA QA-301"},
+   {id:"CMO-007",nm:"Contract Assembly Demo S.A.",scope:"Finished infusion sets (CMO)",cat:"A – Critical",cert:"ISO 13485 + MDSAP, to 2027-12",st:"Approved",ad:"2022-02-20",nx:"2027-02",qa:"CMO QA CMO-007"},
+   {id:"SUP-312",nm:"Elastomer Seals Demo Inc.",scope:"Reservoir plunger seals",cat:"A – Critical",cert:"ISO 13485, to 2029-05",st:"Conditionally approved",ad:"2026-10-28",nx:"2027-04",qa:"Full SQA QA-312"},
+   {id:"SUP-155",nm:"Machined Parts Demo Ltd.",scope:"Stainless steel fixtures and pins",cat:"B – Major",cert:"ISO 9001, to 2027-08",st:"Approved",ad:"2020-06-11",nx:"2028-06",qa:"Short SQA"},
+   {id:"SUP-190",nm:"Calibration Lab Demo",scope:"Calibration of gauges and torque tools",cat:"B – Major",cert:"ISO/IEC 17025 accreditation, to 2028-02",st:"Approved",ad:"2018-01-15",nx:"2028-01",qa:"Short SQA"},
+   {id:"SUP-402",nm:"Carton Print Demo Ltd.",scope:"Shipping cartons (not sterile barrier)",cat:"C – Minor",cert:"ISO 9001, to 2027-11",st:"Approved",ad:"2023-03-09",nx:"2029-03",qa:"Short SQA"},
+   {id:"SUP-455",nm:"Cleanroom Laundry Demo",scope:"Cleanroom garment laundering",cat:"B – Major",cert:"ISO 9001, to 2027-05",st:"Probation",ad:"2024-07-01",nx:"2026-12",qa:"Short SQA"},
+   {id:"SUP-901",nm:"Rapid Prototype Demo Lab",scope:"3D-printed prototypes for R&D only",cat:"D – Development / Administrative",cert:"None required",st:"Approved",ad:"2025-02-14",nx:"As needed",qa:"None"}]}},
+
+"sq-fai":{code:"FAI",doc:"FRM-SQ-006",short:"FAI report",file:"FAI_Report",t:"First Article Inspection (FAI) Form – Subcontracted Item",titleKey:"part",
+ sub:"Verifies that the first parts made by a subcontractor meet every drawing and specification requirement before routine supply.",
+ intro:"Perform an FAI for a new part, new supplier or site, drawing or process change, new tooling, or after a long production gap. Every drawing characteristic is numbered (ballooned) and measured.",
+ refs:"ISO 13485:2016 7.4.3, 8.2.6, 7.6; 21 CFR 820.10 (QMSR)",sampleName:"moulded catheter hub",sampleDate:"20 Oct 2026, 13:15",
+ secs:[
+  {h:"1. Item and supplier",f:[["fai","text","FAI number"],["supplier","text","Subcontractor and site"],["part","text","Part number, revision and description"],["po","text","PO and lot number"],["qty","text","Quantity submitted / sampled"],["why","sel","Reason for FAI",["New part","New supplier or site","Drawing or specification change","Process change","New or repaired tooling","Production gap over 24 months"]],["docs","text","Drawing and specification references"]]},
+  {h:"2. Measuring equipment",f:[["eq","tbl","Equipment used",[["id","Equipment ID"],["d","Description"],["cal","Calibration due"]],[]]]},
+  {h:"3. Characteristics",f:[["ch","tbl","Dimensional and functional characteristics",[["b","Balloon"],["c","Characteristic"],["n","Nominal"],["t","Tolerance"],["s1","Sample 1"],["s2","Sample 2"],["s3","Sample 3"],["r","Result",["Accept","Reject"]]],[]]]},
+  {h:"4. Material, documents and other checks",f:[["m1","yna","Material certificate (CoA / CoC) matches the specified grade?"],["m2","yna","Process certificates provided where required (e.g. passivation, sterilization)?"],["m3","yna","Visual and cosmetic requirements met?"],["m4","yna","Functional tests passed?"],["m5","yna","Packaging, labeling and lot identification correct?"]]},
+  {h:"5. Result",f:[["res","sel","FAI result",["Accepted","Accepted with deviation","Rejected"]],["dev","text","Deviation / NCR number"],["insp","text","Inspector and date"],["qa","text","QA approval and date"]]}],
+ sample:{fai:"FAI-2026-014",supplier:"Precision Moulding Demo Ltd., Plant 1",part:"40-1102 rev C, catheter hub, polycarbonate",po:"PO 4500-1102 / lot PM-26-0801",qty:"5 submitted / 3 measured per cavity (cavity 1 shown)",why:"New part",docs:"DWG-40-1102 rev C; SPEC-MAT-PC-02; ISO 80369-7",
+  eq:[{id:"GA-112",d:"Vision measuring system",cal:"2027-03-31"},{id:"GA-087",d:"Luer go/no-go gauge set (ISO 80369-7)",cal:"2027-01-15"},{id:"GA-140",d:"Tensile tester 500 N",cal:"2027-05-20"}],
+  ch:[{b:"1",c:"Overall length",n:"18.00 mm",t:"± 0.10",s1:"18.03",s2:"17.98",s3:"18.01",r:"Accept"},{b:"2",c:"Bore diameter",n:"1.60 mm",t:"± 0.03",s1:"1.61",s2:"1.60",s3:"1.62",r:"Accept"},{b:"3",c:"Flange diameter",n:"7.50 mm",t:"± 0.05",s1:"7.52",s2:"7.49",s3:"7.51",r:"Accept"},{b:"4",c:"Luer thread gauging",n:"Go / no-go",t:"Per ISO 80369-7",s1:"Pass",s2:"Pass",s3:"Pass",r:"Accept"},{b:"5",c:"Hub pull-off force (bonded)",n:"≥ 15 N",t:"min",s1:"38.2",s2:"41.0",s3:"39.6",r:"Accept"}],
+  m1:{a:"Y",c:"CoA lot R-5521 matches PC grade in SPEC-MAT-PC-02."},m2:{a:"NA",c:"Not applicable: no post-processing on this part."},m3:{a:"Y",c:"No flash, sink or black specks at 10× per visual standard VS-04."},m4:{a:"Y",c:"Leak test 300 kPa, 30 s: no leaks (5/5)."},m5:{a:"Y",c:"Bagged 100/bag, label with part, rev and lot; matches PO."},
+  res:"Accepted",dev:"None",insp:"K. Mendel, 2026-10-20",qa:"D. Levi, 2026-10-21"}},
+"sq-sqa":{code:"SQA",doc:"FRM-SQ-007",short:"short quality agreement",file:"Supplier_Quality_Agreement_Short",t:"Supplier Quality Agreement – Short Form (lower criticality)",titleKey:"supplier",
+ sub:"A concise quality agreement for category B (where justified) and C suppliers, aligned with ISO 13485:2016. Critical suppliers and CMOs need a full agreement.",
+ intro:"This agreement sets the quality requirements for products or services that can affect the quality of the Company's products or its quality management system. It complements the purchase orders and specifications; where a product specification and this agreement conflict, the specification governs.",
+ refs:"ISO 13485:2016 4.1.5, 7.4; 21 CFR 820.10 (QMSR); MDR Annex IX 2.2 and 3.4",sampleName:"carton printing supplier",sampleDate:"01 Nov 2026, 16:00",
+ secs:[
+  {h:"1. Parties and scope",f:[["company","text","Company (customer) legal name and address"],["supplier","text","Supplier legal name"],["saddr","area","Supplier address(es) covered"],["scope","area","Products or services covered"],["cat","sel","Supplier category",SQ_CAT],["eff","date","Effective date"]]},
+  {h:"2. Quality requirements",f:[
+   ["","clause","2.1 Quality management system","The Supplier maintains a documented quality management system appropriate to the products or services supplied, with the resources needed to keep it effective, and checks it by internal audits (ISO 13485 4.1, 6.1, 8.2.4). The Supplier informs the Company if its certification is suspended, withdrawn or changed in scope."],
+   ["","clause","2.2 Personnel and work environment","The Supplier uses competent, trained personnel and maintains the infrastructure, work environment and cleanliness needed to avoid adverse effects on product quality (ISO 13485 6.2, 6.3, 6.4)."],
+   ["","clause","2.3 Specifications and documents","The Supplier controls the current revision of all specifications, drawings and documents received from the Company and prevents the use of obsolete versions (ISO 13485 4.2.4)."],
+   ["ret","text","2.4 Record retention period","e.g. at least the device lifetime defined by the Company, and not less than 10 years"],
+   ["","clause","2.4 Records","The Supplier keeps records that show conformity to requirements, legible and retrievable, for the period stated above or longer where the law requires. Electronic records are protected against loss and unauthorized change (ISO 13485 4.2.5)."],
+   ["","clause","2.5 Identification and traceability","The Supplier identifies materials and products through receipt, processing, test, storage and shipment, and keeps lot traceability to its raw materials (ISO 13485 7.5.8, 7.5.9)."],
+   ["","clause","2.6 Sub-tier suppliers","The Supplier controls its own suppliers in proportion to risk and flows down the Company's requirements. It does not subcontract the products or services covered without the Company's prior written approval (ISO 13485 7.4.1)."],
+   ["","clause","2.7 Process control and equipment","The Supplier controls processes that affect quality, validates them where the output cannot be fully verified, and keeps monitoring and measuring equipment calibrated and traceable to national or international standards (ISO 13485 7.5.1, 7.5.6, 7.6)."],
+   ["","clause","2.8 Acceptance and release","The Supplier performs and records incoming, in-process and final acceptance activities and ships only conforming, released product. A certificate of conformance is supplied with each lot when the Company requests it (ISO 13485 8.2.6)."],
+   ["","clause","2.9 Nonconforming product and escapes","The Supplier identifies, segregates and dispositions nonconforming product. Product is not shipped under deviation, reworked or repaired without the Company's prior written approval. If shipped product may be nonconforming, the Supplier notifies the Company within the time stated below and supports containment (ISO 13485 8.3)."],
+   ["esc","text","2.9 Escape notification time","e.g. 2 working days"],
+   ["chg","text","2.10 Change notification lead time","e.g. 90 days"],
+   ["","clause","2.10 Change notification","The Supplier does not change the product, materials, process, equipment, test methods, sub-tier suppliers or manufacturing site without written notice at least the lead time stated above before implementation, and the Company's written approval (ISO 13485 7.4.2)."],
+   ["","clause","2.11 Corrective action","The Supplier maintains a corrective action process and responds to Supplier Corrective Action Requests within the agreed timeframes, including root cause and verification of effectiveness (ISO 13485 8.5.2)."],
+   ["","clause","2.12 Packaging, handling and shipment","Packaging protects the product from damage, deterioration and contamination during handling, storage and transport; labels and shipping documents identify the product, lot and, where relevant, expiry and storage conditions (ISO 13485 7.5.11)."],
+   ["","clause","2.13 Audits and inspections","The Company, its notified body and competent regulatory authorities may audit the Supplier's relevant processes and records, including unannounced audits by the notified body (MDR Annex IX 3.4). The Supplier informs the Company promptly of any authority inspection or finding that concerns the products supplied."],
+   ["","clause","2.14 Complaints, recalls and regulatory support","The Supplier supports investigations of complaints involving its products, provides the information the Company needs for regulatory submissions and reporting, and informs the Company promptly if supplied products become subject to a recall. Decisions on field actions for the Company's devices remain with the Company."],
+   ["","clause","2.15 Substances","On request, the Supplier provides material composition and declarations needed for REACH, RoHS and similar regulations, and informs the Company of any substance of concern."],
+   ["","clause","2.16 Term and survival","This agreement applies while purchase orders are open and for as long as records must be kept. Obligations on records, nonconforming product, complaints, recalls and audits survive termination."]]},
+  {h:"3. Acceptance",f:[["sign","tbl","Signatures",[["party","Party"],["nm","Name"],["ti","Title"],["dt","Date"],["sg","Signature"]],[{party:"Company – Quality",nm:"",ti:"",dt:"",sg:""},{party:"Supplier – Quality",nm:"",ti:"",dt:"",sg:""}]]]}],
+ sample:{company:"MedCo Demo Ltd., 1 Health Way, Demo City",supplier:"Carton Print Demo Ltd.",saddr:"Unit 4, Print Park, Demo Town 2200",scope:"Printed corrugated shipping cartons and inserts (not part of the sterile barrier system) to drawings PKG-210 and PKG-215.",cat:"C – Minor",eff:"2026-11-01",ret:"10 years from delivery, or longer if the Company requests it in writing",esc:"2 working days",chg:"90 days",
+  sign:[{party:"Company – Quality",nm:"D. Levi",ti:"QA Manager",dt:"2026-11-01",sg:"e-signed (demo)"},{party:"Supplier – Quality",nm:"P. Novak",ti:"Quality Lead",dt:"2026-10-30",sg:"e-signed (demo)"}]}},
+
+"sq-cmo":{code:"CMOQA",doc:"FRM-SQ-008",short:"CMO quality agreement",file:"CMO_Quality_Agreement",t:"Quality Agreement – Contract Manufacturing Organization (CMO)",titleKey:"cmo",
+ sub:"An extensive quality agreement for a CMO that makes finished devices or critical sub-assemblies for the legal manufacturer, with a responsibility matrix and regulatory duties.",
+ intro:"This agreement defines the quality responsibilities of the legal manufacturer (the Company) and the contract manufacturer (the CMO). The Company keeps full responsibility for the conformity of its devices; the CMO's activities are controlled as an outsourced process (ISO 13485 4.1.5). Commercial terms are in a separate supply agreement; where the two conflict on quality matters, this agreement governs.",
+ refs:"ISO 13485:2016 4.1.5, 7.4, 7.5, 8.2–8.5; 21 CFR 820.10 (QMSR), 803, 806, 830; MDR Art. 10, Annex IX 2.2 and 3.4, Art. 10a",sampleName:"infusion set contract manufacturer",sampleDate:"08 Nov 2026, 09:45",
+ secs:[
+  {h:"1. Parties, scope and products",f:[["company","text","Legal manufacturer (Company), name and address"],["cmo","text","Contract manufacturer (CMO), legal name"],["csite","area","CMO manufacturing site(s) covered"],["prods","tbl","Products covered",[["pn","Part / catalogue number"],["d","Description"],["cl","Class (US / EU)"]],[]],["eff","date","Effective date"],["term","text","Term and review interval"]]},
+  {h:"2. Regulatory status and contacts",f:[["certs","text","CMO certifications (e.g. ISO 13485, MDSAP) and expiry"],["reg","text","CMO registrations (e.g. FDA establishment registration as contract manufacturer)"],["cco","text","Company quality contact"],["ccm","text","CMO quality contact"]]},
+  {h:"3. Responsibility matrix",d:"Legal-manufacturer duties (registration, labeling as manufacturer, vigilance, field actions and post-market surveillance) stay with the Company.",f:[["rm","tbl","Who does what",[["act","Activity"],["who","Responsible",["Company","CMO","Shared"]],["note","Notes"]],[{act:"Design and design changes; design and development file",who:"",note:""},{act:"Medical device file / device master record (owner)",who:"",note:""},{act:"Purchasing and approved sources for components",who:"",note:""},{act:"Incoming inspection",who:"",note:""},{act:"Manufacturing, in-process controls and environment",who:"",note:""},{act:"Process and software validation",who:"",note:""},{act:"Labeling content (approval) and UDI assignment",who:"",note:""},{act:"Label printing and labeling operations",who:"",note:""},{act:"Sterilization (contract sterilizer control)",who:"",note:""},{act:"Batch / device history record review",who:"",note:""},{act:"Manufacturing release",who:"",note:""},{act:"Final release for distribution",who:"",note:""},{act:"Storage and shipment",who:"",note:""},{act:"Complaint handling and investigation",who:"",note:""},{act:"MDR / vigilance reporting, field actions",who:"",note:""},{act:"CAPA",who:"",note:""},{act:"Change control",who:"",note:""},{act:"Regulatory registrations and listings for the device",who:"",note:""}]]]},
+  {h:"4. Quality requirements",f:[
+   ["","clause","4.1 Quality management system","The CMO maintains a QMS certified to ISO 13485:2016 that covers the products and site(s) above, and meets the regulations applicable to the markets listed by the Company (for the US, the QMSR, 21 CFR 820). The CMO informs the Company within 5 working days of any change, suspension or withdrawal of certification."],
+   ["","clause","4.2 Documents and the medical device file","The Company owns the specifications, drawings, labeling and the medical device file. The CMO works only to released Company documents and its own procedures approved for the products, and keeps controlled copies (ISO 13485 4.2.3, 4.2.4)."],
+   ["","clause","4.3 Purchasing and sub-tier suppliers","The CMO buys components only from sources approved by the Company where so specified, controls its suppliers in proportion to risk, flows down the requirements of this agreement, and does not subcontract any process without the Company's written approval (ISO 13485 7.4)."],
+   ["","clause","4.4 Production, environment and validation","The CMO controls production and the work environment as specified, validates processes whose output cannot be fully verified (including sterilization, packaging sealing and production software), and gives the Company the validation protocols and reports for approval before routine production (ISO 13485 6.4, 7.5.1, 7.5.6, 7.5.7)."],
+   ["","clause","4.5 Equipment, calibration and maintenance","Production and test equipment is qualified, maintained and calibrated to traceable standards. Product made with out-of-calibration equipment is assessed as potentially nonconforming (ISO 13485 6.3, 7.6)."],
+   ["","clause","4.6 Labeling and UDI","The CMO applies only labeling approved by the Company, controls label printing, issue and reconciliation, and verifies UDI carriers. The Company assigns UDIs and keeps database entries (GUDID, EUDAMED) up to date."],
+   ["","clause","4.7 Records and device history","For every lot or serial number the CMO keeps a complete batch or device history record, including quantities, acceptance records, labeling used and UDI, and supplies it or a summary with each shipment. Records are kept for the retention period below, protected against loss and unauthorized change (ISO 13485 4.2.5, 7.5.1)."],
+   ["ret","text","4.7 Record retention period","e.g. lifetime of the device and at least 15 years from manufacture"],
+   ["","clause","4.8 Release","The CMO performs manufacturing release after completing all specified acceptance activities and record review. The Company performs final release for distribution unless it delegates release in writing (ISO 13485 8.2.6)."],
+   ["","clause","4.9 Nonconforming product and deviations","Nonconforming product is identified, segregated and dispositioned per agreed procedures. Planned deviations, rework, concessions and use-as-is decisions need the Company's prior written approval. The CMO notifies the Company within the time below if shipped product may be nonconforming (ISO 13485 8.3)."],
+   ["esc","text","4.9 Notification time for possibly nonconforming shipped product","e.g. 24 hours"],
+   ["","clause","4.10 Change control","The CMO does not change materials, components, suppliers, processes, equipment, software, test methods, facilities or site without the Company's prior written approval. Changes are notified at least the lead time below to allow the Company to assess regulatory impact (e.g. 510(k) or notified body notification) before implementation (ISO 13485 7.4.2, 7.3.9)."],
+   ["chg","text","4.10 Change notification lead time","e.g. 180 days for major changes, 60 days for minor changes"],
+   ["","clause","4.11 Complaints, adverse events and field actions","The CMO forwards any complaint or information about a possible adverse event concerning the products to the Company within the time below and supports investigations. As legal manufacturer, the Company decides on reportability and submits reports (21 CFR 803; MDR Art. 87) and decides on corrections, removals and field safety corrective actions (21 CFR 806; MDR Art. 89). The CMO executes agreed actions."],
+   ["cmp","text","4.11 Complaint forwarding time","e.g. 1 working day; same day for a death or serious injury"],
+   ["","clause","4.12 CAPA","The CMO maintains a CAPA process, investigates nonconformities and complaints attributed to its processes, and responds to Company CAPA or SCAR requests within agreed timeframes, including verification of effectiveness (ISO 13485 8.5.2)."],
+   ["","clause","4.13 Audits and inspections","The Company, its notified body and regulatory authorities may audit the CMO's site and records, including unannounced notified body audits (MDR Annex IX 3.4). The CMO informs the Company within 24 hours of an authority inspection or request concerning the products, shares related findings, and agrees responses that concern the products with the Company."],
+   ["","clause","4.14 Quality metrics and reviews","The parties review quality performance at agreed intervals, using the KPIs below, and record actions. Inputs feed the Company's management review and post-market surveillance."],
+   ["kpi","tbl","4.14 KPIs",[["k","KPI"],["t","Target"],["f","Review frequency"]],[]],
+   ["","clause","4.15 Supply continuity","The CMO keeps a business continuity plan and informs the Company as early as possible, and at least 6 months ahead where foreseeable, of any expected interruption or discontinuation of supply, so the Company can meet its own notification duties (e.g. MDR Art. 10a)."],
+   ["","clause","4.16 Termination and transfer","On termination the CMO completes or transfers open lots as agreed, returns Company-owned tooling, documents and materials, and keeps or transfers records so they stay available for the full retention period. Obligations on records, complaints, field actions, audits and confidentiality survive termination."]]},
+  {h:"5. Approval",f:[["sign","tbl","Signatures",[["party","Party"],["nm","Name"],["ti","Title"],["dt","Date"],["sg","Signature"]],[{party:"Company – Quality",nm:"",ti:"",dt:"",sg:""},{party:"Company – Regulatory Affairs",nm:"",ti:"",dt:"",sg:""},{party:"CMO – Quality",nm:"",ti:"",dt:"",sg:""},{party:"CMO – Operations",nm:"",ti:"",dt:"",sg:""}]]]}],
+ sample:{company:"MedCo Demo Ltd., 1 Health Way, Demo City (legal manufacturer)",cmo:"Contract Assembly Demo S.A.",csite:"Plant B, 45 Avenue of Industry, Demo Ville 7100 (ISO 7 cleanroom assembly and packaging)",
+  prods:[{pn:"IS-80",d:"Infusion set, 80 cm, 6 mm cannula, sterile, single use",cl:"US II / EU IIa"},{pn:"IS-110",d:"Infusion set, 110 cm, 9 mm cannula, sterile, single use",cl:"US II / EU IIa"}],
+  eff:"2026-11-08",term:"3 years; reviewed every 2 years or after a significant change",certs:"ISO 13485:2016 and MDSAP, to 2027-12",reg:"FDA establishment registration as contract manufacturer (demo number)",cco:"D. Levi, QA Manager, quality@medco-demo.example",ccm:"F. Duarte, Quality Director, quality@ca-demo.example",
+  rm:[{act:"Design and design changes; design and development file",who:"Company",note:"CMO gives manufacturability input"},{act:"Medical device file / device master record (owner)",who:"Company",note:"CMO holds controlled copies"},{act:"Purchasing and approved sources for components",who:"Shared",note:"Company approves sources for cannula and tubing; CMO buys"},{act:"Incoming inspection",who:"CMO",note:"Plans approved by the Company"},{act:"Manufacturing, in-process controls and environment",who:"CMO",note:"ISO 7 cleanroom"},{act:"Process and software validation",who:"Shared",note:"CMO executes; Company approves protocols and reports"},{act:"Labeling content (approval) and UDI assignment",who:"Company",note:"GUDID and EUDAMED by the Company"},{act:"Label printing and labeling operations",who:"CMO",note:"Line clearance and reconciliation per lot"},{act:"Sterilization (contract sterilizer control)",who:"Shared",note:"CMO manages the sterilizer; Company approves validation"},{act:"Batch / device history record review",who:"CMO",note:"Copy to the Company with each lot"},{act:"Manufacturing release",who:"CMO",note:"After DHR review"},{act:"Final release for distribution",who:"Company",note:"Within 3 working days of DHR receipt"},{act:"Storage and shipment",who:"CMO",note:"Ships to the Company's distribution centre"},{act:"Complaint handling and investigation",who:"Shared",note:"Company owns; CMO investigates its processes"},{act:"MDR / vigilance reporting, field actions",who:"Company",note:"CMO executes agreed actions"},{act:"CAPA",who:"Shared",note:"Each party for its own processes"},{act:"Change control",who:"Shared",note:"Company approval before implementation"},{act:"Regulatory registrations and listings for the device",who:"Company",note:"Company holds the 510(k) and EU certificate; CMO supplies data on request"}],
+  ret:"Lifetime of the device and at least 15 years from manufacture",esc:"24 hours",chg:"180 days for major changes, 60 days for minor changes",cmp:"1 working day; same day for a death or serious injury",
+  kpi:[{k:"Lot acceptance rate at final release",t:"≥ 99%",f:"Quarterly"},{k:"On-time delivery",t:"≥ 95%",f:"Monthly"},{k:"Complaint rate attributed to CMO processes",t:"< 5 per million units",f:"Quarterly"},{k:"CAPA on time",t:"≥ 90%",f:"Quarterly"}],
+  sign:[{party:"Company – Quality",nm:"D. Levi",ti:"QA Manager",dt:"2026-11-08",sg:"e-signed (demo)"},{party:"Company – Regulatory Affairs",nm:"J. Katz",ti:"RA Manager",dt:"2026-11-08",sg:"e-signed (demo)"},{party:"CMO – Quality",nm:"F. Duarte",ti:"Quality Director",dt:"2026-11-07",sg:"e-signed (demo)"},{party:"CMO – Operations",nm:"L. Ferreira",ti:"Plant Manager",dt:"2026-11-07",sg:"e-signed (demo)"}]}}
+};
+
+/* ===================== 1.7.0 Supplier and CMO quality forms (generic form engine) ===================== */
+/* Field kinds: [k,"text"|"area"|"date",label,placeholder] · [k,"sel",label,options] · [k,"yna",question,hint]
+   [k,"tbl",label,[[key,label,options?],...],defaultRows] · ["","clause",heading,text] · ["","note",text] */
+const SQ_STORE=lsGet("sc-sq-v1",{seq:{},list:[],cur:{}});
+const sqSave=()=>{ if(!lsSet("sc-sq-v1",SQ_STORE)) flash("Browser storage is full: export and delete older forms."); };
+const SQ_ANS={Y:"Yes",N:"No",NA:"N/A"};
+function sqNew(fid,vals){ const F=SQF[fid]; SQ_STORE.seq[fid]=(SQ_STORE.seq[fid]||0)+1; const ts=nowTs();
+  const r={id:F.code+"-"+String(SQ_STORE.seq[fid]).padStart(3,"0"),form:fid,created:ts,updated:ts,v:{}};
+  F.secs.forEach(S=>S.f.forEach(x=>{ if(x[1]==="tbl") r.v[x[0]]=JSON.parse(JSON.stringify(x[4]||[])); }));
+  if(vals) Object.assign(r.v,JSON.parse(JSON.stringify(vals)));
+  SQ_STORE.list.unshift(r); SQ_STORE.cur[fid]=r.id; sqSave(); return r; }
+function sqLoadSample(fid){ const F=SQF[fid]; const r=sqNew(fid,F.sample); r.created=F.sampleDate||r.created; r.sample=true; sqSave(); return r; }
+function sqFields(F){ const out=[]; F.secs.forEach(S=>S.f.forEach(x=>{ if(x[0]&&!["clause","note"].includes(x[1])) out.push(x); })); return out; }
+function sqFilled(x,v){ const val=v[x[0]]; if(x[1]==="yna") return !!(val&&val.a); if(x[1]==="tbl") return Array.isArray(val)&&val.length>0&&val.every(r=>x[3].every(([c])=>String(r[c]??"").trim())); return !!String(val??"").trim(); }
+function sqProgress(F,r){ const fs=sqFields(F); const done=fs.filter(x=>sqFilled(x,r.v)).length; return [done,fs.length]; }
+function sqSecNo(S){ const m=/^(\d+)\./.exec(S.h); return m?m[1]:""; }
+function renderSqForm(fid){
+  const F=SQF[fid]; const m=document.getElementById("main"); m.innerHTML="";
+  m.append(toolHead(F.t,F.sub,["#daily","Daily QA Work"]));
+  const mine=SQ_STORE.list.filter(r=>r.form===fid); const cur=mine.find(r=>r.id===SQ_STORE.cur[fid])||null;
+  const lst=el("div",{class:"card"}, el("div",{class:"wsHead"}, el("h3",{class:"secTitle"},"Records"), el("button",{class:"cta",type:"button",onclick:()=>{ sqNew(fid); renderSqForm(fid); }},"+ New "+F.short)));
+  lst.append(el("div",{class:"iaSamples"}, el("span",{class:"src"},"Filled example to learn from:"), el("button",{class:"linkBtn",type:"button",onclick:()=>{ sqLoadSample(fid); renderSqForm(fid); }},"Load sample: "+F.sampleName)));
+  if(!mine.length) lst.append(el("p",{class:"src"},"No records yet. Start a new one or load the sample."));
+  mine.forEach(x=>{ const [d,n]=sqProgress(F,x); lst.append(el("div",{class:"iaRow"+(cur&&x.id===cur.id?" on":"")}, el("button",{class:"linkBtn",type:"button",onclick:()=>{ SQ_STORE.cur[fid]=x.id; sqSave(); renderSqForm(fid); }}, el("span",{class:"idTag"},x.id)," "+(x.v[F.titleKey]||"Untitled")+(x.sample?" (sample)":"")), el("span",{class:"src"},d+" of "+n+" fields · saved "+x.updated),
+    el("button",{class:"linkBtn del",type:"button",onclick:()=>modalConfirm("Delete "+x.id+"?","Delete this record? This cannot be undone.","Delete",()=>{ SQ_STORE.list=SQ_STORE.list.filter(y=>y!==x); if(SQ_STORE.cur[fid]===x.id) delete SQ_STORE.cur[fid]; sqSave(); renderSqForm(fid); })},"Delete"))); });
+  m.append(lst);
+  if(!cur) { m.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"About this form"), el("p",{},F.intro), el("p",{class:"src"},"References: "+F.refs))); return; }
+  const v=cur.v; const st=el("p",{class:"src",role:"status"});
+  const touch=()=>{ cur.updated=nowTs(); sqSave(); const [d,n]=sqProgress(F,cur); st.textContent=d+" of "+n+" fields completed."; };
+  const p=el("div",{class:"panel"}); m.append(p);
+  p.append(el("div",{class:"card"}, el("p",{},F.intro), el("p",{class:"src"},F.doc+" · "+cur.id+" · opened on "+cur.created+" · References: "+F.refs), st));
+  F.secs.forEach(S=>{ const c=el("div",{class:"card"}, el("h3",{class:"secTitle"},S.h)); if(S.d) c.append(el("p",{class:"src"},S.d)); let qn=0; const sn=sqSecNo(S);
+    S.f.forEach(x=>{ const [k,t,l]=x;
+      if(t==="note"){ c.append(el("p",{class:"src"},l)); return; }
+      if(t==="clause"){ c.append(el("div",{class:"sqClause"}, el("b",{},l), el("p",{},x[3]))); return; }
+      if(t==="text"||t==="date"||t==="area"){ c.append(txtField(l,v[k],val=>{ v[k]=val; touch(); },x[3]||(t==="date"?"YYYY-MM-DD":""),t==="area")); return; }
+      if(t==="sel"){ c.append(el("label",{class:"rField"}, el("span",{},l), selectEl([["","—"],...x[3].map(o=>[o,o])],v[k]||"",val=>{ v[k]=val; touch(); }))); return; }
+      if(t==="yna"){ qn++; const num=(sn?sn+".":"")+qn; const a=v[k]=v[k]||{a:"",c:""}; const row=el("div",{class:"iaQ2 sqQ"});
+        const bs=el("div",{class:"gbTog"}); [["Y","g"],["N","n"],["NA","x"]].forEach(([o,cl])=>bs.append(el("button",{type:"button",class:"gb "+cl,"aria-pressed":String(a.a===o),onclick:e=>{ a.a=(a.a===o?"":o); [...bs.children].forEach((b,i)=>b.setAttribute("aria-pressed",String(["Y","N","NA"][i]===a.a))); touch(); }},SQ_ANS[o])));
+        row.append(el("div",{class:"iaQL"}, el("span",{class:"idTag"},num), el("span",{}, l, x[3]?el("small",{class:"src"}," "+x[3]):"")), el("div",{class:"iaQR"}, bs, txtField("Comment / evidence",a.c,val=>{ a.c=val; touch(); },"",true)));
+        c.append(row); return; }
+      if(t==="tbl"){ const cols=x[3]; const box=el("div",{class:"sqTbl"}); const rows=v[k]=Array.isArray(v[k])?v[k]:[];
+        const draw=()=>{ box.innerHTML=""; box.append(el("b",{},l)); rows.forEach((r,i)=>{ const g=el("div",{class:"sqRow"}); cols.forEach(([ck,cl,opts])=>{ if(opts) g.append(el("label",{class:"rField"}, el("span",{},cl), selectEl([["","—"],...opts.map(o=>[o,o])],r[ck]||"",val=>{ r[ck]=val; touch(); }))); else g.append(txtField(cl,r[ck],val=>{ r[ck]=val; touch(); })); });
+            g.append(el("button",{class:"linkBtn del",type:"button","aria-label":"Delete row "+(i+1),onclick:()=>{ rows.splice(i,1); touch(); draw(); }},"Delete row")); box.append(g); });
+          box.append(el("button",{class:"linkBtn",type:"button",onclick:()=>{ const r={}; cols.forEach(([ck])=>r[ck]=""); rows.push(r); touch(); draw(); }},"+ Add row")); };
+        draw(); c.append(box); return; } });
+    p.append(c); });
+  touch();
+  const ttl=F.short+" "+cur.id;
+  const blocks=sqDoc(F,cur);
+  toolExport(p,Object.assign(cur,{_save:()=>{ cur.updated=nowTs(); sqSave(); }}),cur.id+"_"+F.file,[["Export Word (.docx)","docx",()=>buildDocx(sqDoc(F,cur),ttl)],["Export PDF","pdf",()=>iaPdf(sqDoc(F,cur),ttl,"Medical Device QA Handbook - "+F.t+" - "+F.doc+" - opened on "+cur.created)]],"Word and PDF files follow the sections above. Fields left empty print as a blank line to fill in by hand.");
+  const prev=el("div",{class:"card iaPrev"}); blocks.forEach(b=>{ if(b.h1) prev.append(el("h3",{class:"secTitle"},b.h1)); else if(b.h2) prev.append(el("h4",{},b.h2)); else if(b.h3) prev.append(el("b",{class:"iaH3"},b.h3)); else if(b.p) prev.append(el("p",{},b.p)); else if(b.table){ const tb=el("table",{class:"map rmTbl"}); b.table.forEach((r,i)=>tb.append(el("tr",{}, ...r.map((cc,j)=>el((b.head&&i===0)||(!b.head&&j===0)?"th":"td",{},String(cc)))))); prev.append(el("div",{class:"tblWrap"},tb)); } });
+  p.append(prev);
+}
+function sqCols(n,first){ const W=478, f=first&&n>2?first:W/n, rest=n>1?(W-f)/(n-1):W; const cols=[]; let x=0; for(let i=0;i<n;i++){ const w=i===0?f:rest; cols.push([Math.round(x),Math.max(4,Math.floor(w/5.5))]); x+=w; } return cols; }
+function sqDoc(F,r){
+  const v=r.v, B=[], blank="________________";
+  B.push({h1:F.t},{p:F.doc+" · Record "+r.id+" · Opened on "+r.created});
+  F.secs.forEach(S=>{ B.push({h2:S.h}); if(S.d) B.push({p:S.d}); let kv=[], qs=[], qn=0; const sn=sqSecNo(S);
+    const flush=()=>{ if(kv.length){ B.push({table:kv}); kv=[]; } if(qs.length){ B.push({table:[["#","Question","Answer","Comment / evidence"],...qs],head:true,w:[900,4300,800,3600],pdf:"q"}); qs=[]; } };
+    S.f.forEach(x=>{ const [k,t,l]=x;
+      if(t==="note"){ flush(); B.push({p:l}); return; }
+      if(t==="clause"){ flush(); B.push({h3:l},{p:x[3]}); return; }
+      if(t==="yna"){ if(kv.length){ B.push({table:kv}); kv=[]; } qn++; const a=v[k]||{}; qs.push([(sn?sn+".":"")+qn,l,SQ_ANS[a.a]||blank,a.c||(a.a?"-":"")]); return; }
+      if(t==="tbl"){ flush(); const cols=x[3], rows=(v[k]||[]).length?v[k]:[{}]; const n=cols.length; B.push({p:l},{table:[cols.map(c=>c[1]),...rows.map(rr=>cols.map(([ck])=>String(rr[ck]??"").trim()||" "))],head:true,w:Array(n).fill(Math.floor(9600/n)),pdfCols:sqCols(n)}); return; }
+      if(qs.length){ B.push({table:[["#","Question","Answer","Comment / evidence"],...qs],head:true,w:[900,4300,800,3600],pdf:"q"}); qs=[]; }
+      kv.push([l,String(v[k]??"").trim()||blank]); });
+    flush(); });
+  return B;
+}
+
 function navPinned(){ return getComputedStyle(document.getElementById("navRow2")).position==="sticky"; }
 function pinScroll(){ const a=document.getElementById("navAnchor"); const y=a?a.getBoundingClientRect().top+window.scrollY:0; if(window.scrollY>y) window.scrollTo({top:y}); }
 function route(){
   const id=(location.hash||"").slice(1)||"home";
-  { const sec=["random","dilemmas","audit"].includes(id)?"practice":["tools","daily","stats","sampling","msa","grr","rmtools","impact","risk"].includes(id)?"tools":"learn"; document.documentElement.dataset.sec=sec; }
+  { const sec=["random","dilemmas","audit"].includes(id)?"practice":["tools","daily","stats","sampling","msa","grr","rmtools","impact","risk"].includes(id)||SQF[id]?"tools":"learn"; document.documentElement.dataset.sec=sec; }
+  if(SQF[id]){ closeModal(); renderNav(id); renderSqForm(id); totals(); try{ if(navPinned()) pinScroll(); else window.scrollTo({top:0}); }catch(e){} return; }
   if(["home","explore","dilemmas","map","sampling","tools","daily","stats","dates","audit","risk","msa","grr","rmtools","impact"].includes(id)){ closeModal(); renderNav(id); ({home:()=>renderHome(false),explore:()=>renderHome(true),dilemmas:renderDilemmas,map:renderMap,sampling:renderSampling,tools:()=>renderTools("daily"),daily:()=>renderTools("daily"),stats:()=>renderTools("stats"),risk:renderRisk,msa:renderMsa,grr:renderGrr,rmtools:renderRmTools,impact:renderImpact,dates:renderDates,audit:renderAudit})[id](); totals(); try{ if(navPinned()) pinScroll(); else window.scrollTo({top:0}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
   if(id==="random"){ closeModal(); renderNav("random"); renderRandom(); totals(); try{ if(navPinned()) pinScroll(); else window.scrollTo({top:document.getElementById("dnav").offsetTop}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
   const valid=CH.some(c=>c.id===id)?id:CH[0].id;
