@@ -1170,6 +1170,13 @@ footer#siteFoot .legalBody p.imp{font-size:14px; color:var(--ink)}
  .dLay{display:block; margin-top:0}
  .dSide{display:none}
  .dLay .toolGrid{grid-template-columns:1fr}
+ .dLay .toolGrid{gap:8px}
+ .dLay .toolGrid .toolCard{display:flex !important; align-items:center; gap:12px; min-height:0 !important; padding:10px 12px !important; border-left-width:4px}
+ .dLay .toolGrid .toolCard > span:not(.toolIco){display:none}
+ .dLay .toolGrid .toolCard .toolIco{width:34px; height:34px; flex:none; border-radius:9px}
+ .dLay .toolGrid .toolCard .toolIco .ico{width:19px; height:19px}
+ .dLay .toolGrid .toolCard > b{flex:1; font-size:15.5px; line-height:1.25; font-weight:650}
+ .dLay .toolGrid .toolCard::after{content:""; flex:none; width:8px; height:8px; border-right:2px solid var(--muted); border-top:2px solid var(--muted); transform:rotate(45deg); margin-right:4px; opacity:.7}
  .dPick{all:unset; box-sizing:border-box; cursor:pointer; position:sticky; top:8px; z-index:16; display:flex; align-items:center; justify-content:space-between; gap:10px; width:100%; margin:12px 0; padding:11px 14px; background:var(--card); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); color:var(--ink)}
  .dPick:focus-visible{outline:2px solid var(--qms)}
  .dPick small{display:block; font:700 10.5px var(--body); letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:2px}
@@ -2481,7 +2488,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="1.10.0", APPDATE="18-NOV-2026";
+const APPVER="1.10.1", APPDATE="18-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Asaf Ben Zion. All rights reserved.";
 const LEGAL=[["Copyright", "No part of this handbook’s original content may be copied or redistributed without written permission. Cited regulations, standards and guidance, and their links, remain the property of their official publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, data selection and design, developed with AI tools, and has been verified against requirements set by the author and against the official sources."], ["Sources", "Sources are limited to official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases. EU: EUR-Lex and European Commission pages, including MDCG guidance."], ["Important", "This application is intended for training only. Results from its tools require human review, verification and approval. Always check the linked source before citing anything in an audit response."]];
