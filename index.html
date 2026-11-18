@@ -1154,6 +1154,36 @@ footer#siteFoot .legalBody p.imp{font-size:14px; color:var(--ink)}
 
 /* 1.8.1 Daily QA Work sub-tabs */
 #main > .toolTabs{margin:12px 0 4px}
+/* 1.10.0 Daily QA Work: side menu (desktop) and area picker with bottom sheet (phone) */
+.dLay{display:grid; grid-template-columns:236px minmax(0,1fr); gap:16px; align-items:start; margin-top:14px}
+.dSide{position:sticky; top:calc(var(--stickH,0px) + 12px); background:var(--card); border:1px solid var(--line); border-radius:14px; padding:8px; box-shadow:var(--shadow)}
+.dSide h3,.dSheet h3{margin:6px 10px 8px; font:700 11px var(--body); letter-spacing:.08em; text-transform:uppercase; color:var(--muted)}
+.dItem{all:unset; box-sizing:border-box; cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:10px; width:100%; font:600 14px/1.3 var(--body); color:var(--ink); padding:9px 10px; border-radius:8px}
+.dItem:hover{background:var(--paper)}
+.dItem:focus-visible{outline:2px solid var(--qms); outline-offset:1px}
+.dItem[aria-current=true]{background:var(--qms-soft); color:var(--qms); box-shadow:inset 3px 0 0 var(--qms)}
+.dItem i{font-style:normal; font-size:12px; font-weight:600; color:var(--muted); min-width:18px; text-align:right}
+.dItem[aria-current=true] i{color:var(--qms)}
+.dLay .toolGrid{margin:0; grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.dPick{display:none}
+@media (max-width:760px){
+ .dLay{display:block; margin-top:0}
+ .dSide{display:none}
+ .dLay .toolGrid{grid-template-columns:1fr}
+ .dPick{all:unset; box-sizing:border-box; cursor:pointer; position:sticky; top:8px; z-index:16; display:flex; align-items:center; justify-content:space-between; gap:10px; width:100%; margin:12px 0; padding:11px 14px; background:var(--card); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); color:var(--ink)}
+ .dPick:focus-visible{outline:2px solid var(--qms)}
+ .dPick small{display:block; font:700 10.5px var(--body); letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:2px}
+ .dPick b{font:600 15.5px var(--body)}
+ .dPick em{font-style:normal; font-weight:600; color:var(--muted); margin-left:4px}
+ .dPick svg{width:20px; height:20px; flex:none; stroke:var(--qms)}
+}
+.dSheetBg{position:fixed; inset:0; z-index:200; background:rgba(8,20,18,.45); display:flex; align-items:flex-end; animation:dFade .15s ease-out}
+.dSheet{background:var(--card); width:100%; max-height:80vh; overflow:auto; border-radius:18px 18px 0 0; padding:8px 8px calc(16px + env(safe-area-inset-bottom)); box-shadow:0 -8px 30px rgba(0,0,0,.2); animation:dUp .2s ease-out}
+.dSheet .grab{width:40px; height:4px; border-radius:4px; background:var(--line); margin:4px auto 10px}
+.dSheet .dItem{font-size:15.5px; padding:13px 12px; border-radius:10px}
+.dSheet .dItem i{font-size:14px}
+@keyframes dUp{from{transform:translateY(100%)}to{transform:none}}
+@keyframes dFade{from{opacity:0}to{opacity:1}}
 </style>
 </head>
 <body>
@@ -2088,13 +2118,29 @@ function renderTools(which){
   m.append(el("section",{class:"chHead"}, el("div",{class:"eyebrow"},"Tools · "+G[0]), el("h2",{},G[1]), el("p",{},G[2])));
   const g=el("div",{class:"choiceGrid toolGrid"});
   const groups=dailyGroups(G); let ids=G[3];
+  let lay=null;
   if(groups.length>1){ const cur=(DAILY_TAB&&groups.find(x=>x.h===DAILY_TAB))?DAILY_TAB:groups[0].h;
-    m.append(tabRow(groups.map(x=>[x.h,tc(x.h)+" ("+x.ids.length+")"]),cur,k=>{ DAILY_TAB=k; try{ localStorage.setItem("qah-daily-tab",k); }catch(e){} renderTools(which); }));
-    ids=groups.find(x=>x.h===cur).ids; }
+    const pick=k=>{ DAILY_TAB=k; try{ localStorage.setItem("qah-daily-tab",k); }catch(e){} closeDailySheet(); renderTools(which); const t=document.querySelector(".dLay"); if(t&&t.getBoundingClientRect().top<0) t.scrollIntoView({block:"start"}); };
+    const items=()=>groups.map(x=>el("button",{class:"dItem",type:"button","aria-current":String(x.h===cur),onclick:()=>pick(x.h)}, el("span",{},tc(x.h)), el("i",{"aria-label":x.ids.length+" forms"},String(x.ids.length))));
+    const ci=groups.findIndex(x=>x.h===cur), cg=groups[ci];
+    m.append(el("button",{class:"dPick",type:"button","aria-haspopup":"dialog",onclick:()=>openDailySheet(items,cur)},
+      el("span",{}, el("small",{},"QMS area · "+(ci+1)+" of "+groups.length), el("b",{},tc(cg.h)), el("em",{},"("+cg.ids.length+")")),
+      (()=>{ const v=document.createElementNS("http://www.w3.org/2000/svg","svg"); v.setAttribute("viewBox","0 0 24 24"); v.setAttribute("fill","none"); v.setAttribute("stroke-width","2"); v.setAttribute("stroke-linecap","round"); v.setAttribute("aria-hidden","true"); v.innerHTML='<path d="M6 9l6 6 6-6"/>'; return v; })()));
+    lay=el("div",{class:"dLay"}, el("nav",{class:"dSide","aria-label":"QMS area"}, el("h3",{},"QMS area"), ...items()));
+    ids=cg.ids; }
   ids.forEach(id=>{ if(id[0]==="#") return; const t=TOOLS.find(x=>x[0]===id); if(!t) return; const [k,lab,sub,ic]=t; g.append(el("button",{class:"choiceBtn samp toolCard",type:"button",onclick:()=>{ location.hash=k; }}, el("span",{class:"toolIco"},ico(ic)), el("b",{},lab), el("span",{},sub))); });
   if(groups.length<=1) G[4].forEach(([lab,sub,ic])=>g.append(el("div",{class:"choiceBtn toolCard soon","aria-disabled":"true"}, el("span",{class:"toolIco"},ico(ic)), el("b",{},lab), el("span",{},sub))));
-  m.append(g); tcDom(m);
+  if(lay){ lay.append(g); m.append(lay); dailyStick(); } else m.append(g); tcDom(m);
 }
+function dailyStick(){ const n=document.getElementById("navRow2"); const h=(n&&getComputedStyle(n).position==="sticky")?n.offsetHeight:0; document.documentElement.style.setProperty("--stickH",h+"px"); }
+window.addEventListener("resize",()=>{ if(document.querySelector(".dLay")) dailyStick(); });
+window.addEventListener("hashchange",()=>closeDailySheet());
+let DAILY_SHEET=null;
+function closeDailySheet(){ if(!DAILY_SHEET) return; const [bg,ret]=DAILY_SHEET; DAILY_SHEET=null; bg.remove(); document.removeEventListener("keydown",dailySheetKey); try{ (document.querySelector(".dPick")||ret).focus({preventScroll:true}); }catch(e){} }
+function dailySheetKey(e){ if(e.key==="Escape") closeDailySheet(); }
+function openDailySheet(items,cur){ closeDailySheet(); const sh=el("div",{class:"dSheet",role:"dialog","aria-modal":"true","aria-label":"Choose QMS area"}, el("div",{class:"grab"}), el("h3",{},"Choose QMS area"), ...items());
+  const bg=el("div",{class:"dSheetBg",onclick:e=>{ if(e.target===bg) closeDailySheet(); }}, sh); document.body.append(bg); DAILY_SHEET=[bg,document.activeElement]; document.addEventListener("keydown",dailySheetKey);
+  (sh.querySelector('.dItem[aria-current="true"]')||sh.querySelector(".dItem")).focus(); }
 /* ---------- results entry, statistics and export ---------- */
 if(!ss.res) ss.res={method:"count",count:"",raw:"",LSL:"",USL:"",ac:"",re:"",fname:"",done:false};
 if(!ss.cr) ss.cr={type:"attr",n:"",fails:"",c:0,raw:"",LSL:"",USL:"",fname:"",done:false};
@@ -2435,7 +2481,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="1.9.0", APPDATE="18-NOV-2026";
+const APPVER="1.10.0", APPDATE="18-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Asaf Ben Zion. All rights reserved.";
 const LEGAL=[["Copyright", "No part of this handbook’s original content may be copied or redistributed without written permission. Cited regulations, standards and guidance, and their links, remain the property of their official publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, data selection and design, developed with AI tools, and has been verified against requirements set by the author and against the official sources."], ["Sources", "Sources are limited to official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases. EU: EUR-Lex and European Commission pages, including MDCG guidance."], ["Important", "This application is intended for training only. Results from its tools require human review, verification and approval. Always check the linked source before citing anything in an audit response."]];
