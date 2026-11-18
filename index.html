@@ -1151,6 +1151,9 @@ footer#siteFoot .legalBody p.imp{font-size:14px; color:var(--ink)}
 
 /* 1.8.0 QA forms */
 .toolSec{grid-column:1/-1; margin:14px 2px 0; font-size:15px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted)}
+
+/* 1.8.1 Daily QA Work sub-tabs */
+#main > .toolTabs{margin:12px 0 4px}
 </style>
 </head>
 <body>
@@ -2061,14 +2064,26 @@ const TOOLS=[["sampling","Sample size tool (ISO 2859-1:2026)","Lot acceptance pl
  ["grr","Gauge R&R / Kappa test","A guide to choose between variable Gauge R&R and attribute agreement (Kappa), sample definitions with defect notes and photos, analysis, and the test protocol and report.","gauge",true]];
 const TOOLGROUPS={daily:["Daily QA Work","Tools for daily QA work","Ready-to-use QA forms: change control, nonconformance and CAPA, suppliers and CMOs, audits, validation and training. Each form has a filled sample and exports to Word and PDF.",["#Change control","impact","#Nonconformance and CAPA","qa-ncr","qa-mrb","qa-dev","qa-capa","#Suppliers and CMOs","sq-quest","sq-eval","sq-scar","sq-scn","sq-asl","sq-fai","sq-sqa","sq-cmo","#Audits and quality planning","qa-iap","qa-iac","qa-qp","#Inspection, validation and training","qa-vis","qa-mvp","qa-mvpr","qa-trn","qa-gtr"],[["Coming soon","More tools and ready-to-use QMS templates for daily QA work.","tmpl"]]],
   stats:["Statistics","Statistics","Sampling plans, measurement system analysis and attribute agreement.",["sampling","msa","grr"],[]]};
+/* ---- 1.8.1 title case for form headings, and Daily QA Work sub-tabs ---- */
+const TC_SMALL=new Set("a an and as at but by for from in into nor of on or per the to vs via with".split(" "));
+function tc(str){ return String(str).replace(/[A-Za-z][A-Za-z'’.]*/g,(w,off,all)=>{ const pre=all.slice(0,off); if(/[A-Z]/.test(w)||/-$/.test(pre)||/^(e\.g|i\.e|etc)\b/.test(w)) return w; const first=!/[A-Za-z]/.test(pre)||/[:–—(\/]\s*$/.test(pre); if(!first&&TC_SMALL.has(w.toLowerCase())) return w; return w.charAt(0).toUpperCase()+w.slice(1); }); }
+function tcDom(root){ (root||document).querySelectorAll("#main > section h2, #main h3.secTitle, #main .sqClause > b, #main .sqTbl > b, #main .iaH3, #main .iaPrev h4, #main .toolCard > b").forEach(e=>{ [...e.childNodes].forEach(n=>{ if(n.nodeType===3) n.nodeValue=tc(n.nodeValue); }); }); }
+function tcBlocks(B){ B.forEach(b=>{ if(b.h1) b.h1=tc(b.h1); if(b.h2) b.h2=tc(b.h2); if(b.h3) b.h3=tc(b.h3); if(b.lbl) b.p=tc(b.p); if(b.table&&b.head) b.table[0]=b.table[0].map(tc); }); return B; }
+let DAILY_TAB=null; try{ DAILY_TAB=localStorage.getItem("qah-daily-tab"); }catch(e){}
+function dailyGroups(G){ const out=[]; let cur=null; G[3].forEach(id=>{ if(id[0]==="#"){ cur={h:id.slice(1),ids:[]}; out.push(cur); } else { if(!cur){ cur={h:"Tools",ids:[]}; out.push(cur); } cur.ids.push(id); } }); return out; }
+function dailySetTab(id){ const g=dailyGroups(TOOLGROUPS.daily).find(x=>x.ids.includes(id)); if(g){ DAILY_TAB=g.h; try{ localStorage.setItem("qah-daily-tab",g.h); }catch(e){} } }
 function renderTools(which){
   const G=TOOLGROUPS[which]||TOOLGROUPS.daily;
   const m=document.getElementById("main"); m.innerHTML="";
   m.append(el("section",{class:"chHead"}, el("div",{class:"eyebrow"},"Tools · "+G[0]), el("h2",{},G[1]), el("p",{},G[2])));
   const g=el("div",{class:"choiceGrid toolGrid"});
-  G[3].forEach(id=>{ if(id[0]==="#"){ g.append(el("h3",{class:"toolSec"},id.slice(1))); return; } const t=TOOLS.find(x=>x[0]===id); if(!t) return; const [k,lab,sub,ic]=t; g.append(el("button",{class:"choiceBtn samp toolCard",type:"button",onclick:()=>{ location.hash=k; }}, el("span",{class:"toolIco"},ico(ic)), el("b",{},lab), el("span",{},sub))); });
-  G[4].forEach(([lab,sub,ic])=>g.append(el("div",{class:"choiceBtn toolCard soon","aria-disabled":"true"}, el("span",{class:"toolIco"},ico(ic)), el("b",{},lab), el("span",{},sub))));
-  m.append(g);
+  const groups=dailyGroups(G); let ids=G[3];
+  if(groups.length>1){ const cur=(DAILY_TAB&&groups.find(x=>x.h===DAILY_TAB))?DAILY_TAB:groups[0].h;
+    m.append(tabRow(groups.map(x=>[x.h,tc(x.h)+" ("+x.ids.length+")"]),cur,k=>{ DAILY_TAB=k; try{ localStorage.setItem("qah-daily-tab",k); }catch(e){} renderTools(which); }));
+    ids=groups.find(x=>x.h===cur).ids; }
+  ids.forEach(id=>{ if(id[0]==="#") return; const t=TOOLS.find(x=>x[0]===id); if(!t) return; const [k,lab,sub,ic]=t; g.append(el("button",{class:"choiceBtn samp toolCard",type:"button",onclick:()=>{ location.hash=k; }}, el("span",{class:"toolIco"},ico(ic)), el("b",{},lab), el("span",{},sub))); });
+  if(groups.length<=1) G[4].forEach(([lab,sub,ic])=>g.append(el("div",{class:"choiceBtn toolCard soon","aria-disabled":"true"}, el("span",{class:"toolIco"},ico(ic)), el("b",{},lab), el("span",{},sub))));
+  m.append(g); tcDom(m);
 }
 /* ---------- results entry, statistics and export ---------- */
 if(!ss.res) ss.res={method:"count",count:"",raw:"",LSL:"",USL:"",ac:"",re:"",fname:"",done:false};
@@ -2410,7 +2425,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="1.8.0", APPDATE="18-NOV-2026";
+const APPVER="1.8.1", APPDATE="18-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Asaf Ben Zion. All rights reserved.";
 const LEGAL=[["Copyright", "No part of this handbook’s original content may be copied or redistributed without written permission. Cited regulations, standards and guidance, and their links, remain the property of their official publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, data selection and design, developed with AI tools, and has been verified against requirements set by the author and against the official sources."], ["Sources", "Sources are limited to official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases. EU: EUR-Lex and European Commission pages, including MDCG guidance."], ["Important", "This application is intended for training only. Results from its tools require human review, verification and approval. Always check the linked source before citing anything in an audit response."]];
@@ -4341,7 +4356,7 @@ function iaClass(a){ const r=raCalc(a); const safety=["P1.1","P2.2","P10.1","P10
 /* ---- UI ---- */
 let IA_TAB="info";
 function renderImpact(){
-  const m=document.getElementById("main"); m.innerHTML="";
+  const m=document.getElementById("main"); m.innerHTML=""; dailySetTab("impact");
   m.append(toolHead("Change Impact Assessment","Part 1: the change originator and subject matter experts assess the impact, linked to the risk file. Part 2: regulatory affairs assesses FDA and EU MDR impact. Then generate the impact assessment output. Approvals stay in your eQMS change control."));
   const a=iaCur();
   const lst=el("div",{class:"card"}, el("div",{class:"wsHead"}, el("h3",{class:"secTitle"},"Assessments"), el("button",{class:"cta",type:"button",onclick:()=>{ iaNew(); IA_TAB="info"; renderImpact(); }},"+ New assessment")));
@@ -4358,7 +4373,7 @@ function renderImpact(){
   const p=el("div",{class:"panel"}); m.append(p);
   const touch=()=>{ a.updated=nowTs(); iaSave(); const s=document.getElementById("iaStatus"); if(s&&IA_TAB==="p1"){ const miss=iaP1Missing(a); s.className=miss.length?"warn":"okTxt"; s.textContent=miss.length?miss.length+" item(s) still open: "+miss.slice(0,8).join("; ")+(miss.length>8?"…":""):"The impact assessment is complete. Continue with the regulatory assessment."; } };
   const lock=false;
-  ({info:iaInfo,p1:iaP1,ap:iaAp,ra:iaRa,out:iaOut})[IA_TAB](p,a,touch,lock);
+  ({info:iaInfo,p1:iaP1,ap:iaAp,ra:iaRa,out:iaOut})[IA_TAB](p,a,touch,lock); tcDom(m);
 }
 function ynBtns(val,on,dis){ return el("div",{class:"gbTog"}, el("button",{type:"button",class:"gb g","aria-pressed":String(val==="Y"),onclick:()=>on("Y")},"Yes"), el("button",{type:"button",class:"gb n","aria-pressed":String(val==="N"),onclick:()=>on("N")},"No")); }
 function yn(val,on,lock){ const t=ynBtns(val,on); if(lock) [...t.children].forEach(b=>b.disabled=true); return t; }
@@ -4516,9 +4531,9 @@ function iaDocModel(a){
   blocks.push({h2:"6. Change classification"},{table:[["Classification",C.c+(a.cls.override?" (override; automatic: "+C.auto+")":"")],["Basis",a.info.immediate==="Y"?"Immediate action required (potential Critical change: Escalate to Change Review Board or Steering Committee).":cr.preapproval?"Regulatory pre-approval or notified body approval required.":C.safety?"Potential impact on safety, performance or risk.":"No impact on safety, efficacy or quality, and no regulatory pre-approval."],...(a.cls.why?[["Override rationale",a.cls.why]]:[])]});
   blocks.push({h2:"7. Summary"}); iaSummary(a,C).forEach(s=>blocks.push({p:s}));
   blocks.push({h2:"8. Review and approval"},{table:[["Function","Name","Required","Signature","Date"],...IA_FUNCS.filter(([k,,m])=>m||a.appr[k].on).map(([k,l,m])=>{ const r=a.appr[k]; return [l,r.name||(k==="RA"?a.ra.by:"")||"",m?"Mandatory":"Optional",r.sig||"",r.date||""]; })],head:true,w:[2700,2400,1400,1700,1400],pdf:"s"});
-  return blocks;
+  return tcBlocks(blocks);
 }
-function iaSummary(a,C){ const yes=IA_P1.flatMap(T=>T.subs.filter(S=>a.ans[S.id]==="Y").map(S=>IA_NUM[S.id])); const na=IA_P1.filter(T=>T.subs.every(S=>a.ans[S.id]==="NA")).map(T=>IA_NUM[T.id]+" "+T.t.toLowerCase()); const r=C.r, out=[];
+function iaSummary(a,C){ const yes=IA_P1.flatMap(T=>T.subs.filter(S=>a.ans[S.id]==="Y").map(S=>IA_NUM[S.id])); const na=IA_P1.filter(T=>T.subs.every(S=>a.ans[S.id]==="NA")).map(T=>IA_NUM[T.id]+" "+tc(T.t)); const r=C.r, out=[];
   out.push(yes.length?"Impacted items ("+yes.length+"): "+yes.join(", ")+". Required deliverables are listed in section 3.":"No assessed item is impacted.");
   if(na.length) out.push("Not applicable: "+na.join(", ")+".");
   if(r.us) out.push("US: "+r.us.t); if(r.eu) out.push("EU: "+r.eu.t);
@@ -4965,8 +4980,8 @@ function sqFilled(x,v){ const val=v[x[0]]; if(x[1]==="yna") return !!(val&&val.a
 function sqProgress(F,r){ const fs=sqFields(F); const done=fs.filter(x=>sqFilled(x,r.v)).length; return [done,fs.length]; }
 function sqSecNo(S){ const m=/^(\d+)\./.exec(S.h); return m?m[1]:""; }
 function renderSqForm(fid){
-  const F=SQF[fid]; const m=document.getElementById("main"); m.innerHTML="";
-  m.append(toolHead(F.t,F.sub,["#daily","Daily QA Work"]));
+  const F=SQF[fid]; const m=document.getElementById("main"); m.innerHTML=""; dailySetTab(fid);
+  m.append(toolHead(tc(F.t),F.sub,["#daily","Daily QA Work"]));
   const mine=SQ_STORE.list.filter(r=>r.form===fid); const cur=mine.find(r=>r.id===SQ_STORE.cur[fid])||null;
   const lst=el("div",{class:"card"}, el("div",{class:"wsHead"}, el("h3",{class:"secTitle"},"Records"), el("button",{class:"cta",type:"button",onclick:()=>{ sqNew(fid); renderSqForm(fid); }},"+ New "+F.short)));
   lst.append(el("div",{class:"iaSamples"}, el("span",{class:"src"},"Filled example to learn from:"), el("button",{class:"linkBtn",type:"button",onclick:()=>{ sqLoadSample(fid); renderSqForm(fid); }},"Load sample: "+F.sampleName)));
@@ -4974,7 +4989,7 @@ function renderSqForm(fid){
   mine.forEach(x=>{ const [d,n]=sqProgress(F,x); lst.append(el("div",{class:"iaRow"+(cur&&x.id===cur.id?" on":"")}, el("button",{class:"linkBtn",type:"button",onclick:()=>{ SQ_STORE.cur[fid]=x.id; sqSave(); renderSqForm(fid); }}, el("span",{class:"idTag"},x.id)," "+(x.v[F.titleKey]||"Untitled")+(x.sample?" (sample)":"")), el("span",{class:"src"},d+" of "+n+" fields · saved "+x.updated),
     el("button",{class:"linkBtn del",type:"button",onclick:()=>modalConfirm("Delete "+x.id+"?","Delete this record? This cannot be undone.","Delete",()=>{ SQ_STORE.list=SQ_STORE.list.filter(y=>y!==x); if(SQ_STORE.cur[fid]===x.id) delete SQ_STORE.cur[fid]; sqSave(); renderSqForm(fid); })},"Delete"))); });
   m.append(lst);
-  if(!cur) { m.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"About this form"), el("p",{},F.intro), el("p",{class:"src"},"References: "+F.refs))); return; }
+  if(!cur) { m.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"About this form"), el("p",{},F.intro), el("p",{class:"src"},"References: "+F.refs))); tcDom(m); return; }
   const v=cur.v; const st=el("p",{class:"src",role:"status"});
   const touch=()=>{ cur.updated=nowTs(); sqSave(); const [d,n]=sqProgress(F,cur); st.textContent=d+" of "+n+" fields completed."; };
   const p=el("div",{class:"panel"}); m.append(p);
@@ -4996,11 +5011,11 @@ function renderSqForm(fid){
         draw(); c.append(box); return; } });
     p.append(c); });
   touch();
-  const ttl=F.short.charAt(0).toUpperCase()+F.short.slice(1)+" "+cur.id;
+  const ttl=tc(F.short)+" "+cur.id;
   const blocks=sqDoc(F,cur);
   toolExport(p,Object.assign(cur,{_save:()=>{ cur.updated=nowTs(); sqSave(); }}),cur.id+"_"+F.file,[["Export Word (.docx)","docx",()=>buildDocx(sqDoc(F,cur),ttl)],["Export PDF","pdf",()=>iaPdf(sqDoc(F,cur),ttl,"Medical Device QA Handbook - "+F.doc+" - opened on "+cur.created)]],"Word and PDF files follow the sections above. Fields left empty print as a blank line to fill in by hand.");
   const prev=el("div",{class:"card iaPrev"}); blocks.forEach(b=>{ if(b.h1) prev.append(el("h3",{class:"secTitle"},b.h1)); else if(b.h2) prev.append(el("h4",{},b.h2)); else if(b.h3) prev.append(el("b",{class:"iaH3"},b.h3)); else if(b.p) prev.append(el("p",{},b.p)); else if(b.table){ const tb=el("table",{class:"map rmTbl"}); b.table.forEach((r,i)=>tb.append(el("tr",{}, ...r.map((cc,j)=>el((b.head&&i===0)||(!b.head&&j===0)?"th":"td",{},String(cc)))))); prev.append(el("div",{class:"tblWrap"},tb)); } });
-  p.append(prev);
+  p.append(prev); tcDom(m);
 }
 function sqCols(n,first){ const W=478, f=first&&n>2?first:W/n, rest=n>1?(W-f)/(n-1):W; const cols=[]; let x=0; for(let i=0;i<n;i++){ const w=i===0?f:rest; cols.push([Math.round(x),Math.max(4,Math.floor(w/5.5))]); x+=w; } return cols; }
 function sqDoc(F,r){
@@ -5012,11 +5027,11 @@ function sqDoc(F,r){
       if(t==="note"){ flush(); B.push({p:l}); return; }
       if(t==="clause"){ flush(); B.push({h3:l},{p:x[3]}); return; }
       if(t==="yna"){ if(kv.length){ B.push({table:kv}); kv=[]; } qn++; const a=v[k]||{}; qs.push([(sn?sn+".":"")+qn,l,SQ_ANS[a.a]||blank,a.c||(a.a?"-":"")]); return; }
-      if(t==="tbl"){ flush(); const cols=x[3], rows=(v[k]||[]).length?v[k]:[{}]; const n=cols.length; B.push({p:l},{table:[cols.map(c=>c[1]),...rows.map(rr=>cols.map(([ck])=>String(rr[ck]??"").trim()||" "))],head:true,w:Array(n).fill(Math.floor(9600/n)),pdfCols:sqCols(n)}); return; }
+      if(t==="tbl"){ flush(); const cols=x[3], rows=(v[k]||[]).length?v[k]:[{}]; const n=cols.length; B.push({p:l,lbl:true},{table:[cols.map(c=>c[1]),...rows.map(rr=>cols.map(([ck])=>String(rr[ck]??"").trim()||" "))],head:true,w:Array(n).fill(Math.floor(9600/n)),pdfCols:sqCols(n)}); return; }
       if(qs.length){ B.push({table:[["#","Question","Answer","Comment / evidence"],...qs],head:true,w:[900,4300,800,3600],pdf:"q"}); qs=[]; }
       kv.push([l,String(v[k]??"").trim()||blank]); });
     flush(); });
-  return B;
+  return tcBlocks(B);
 }
 
 function navPinned(){ return getComputedStyle(document.getElementById("navRow2")).position==="sticky"; }
