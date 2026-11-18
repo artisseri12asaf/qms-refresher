@@ -1214,6 +1214,19 @@ footer#siteFoot .legalBody p.imp{font-size:14px; color:var(--ink)}
 @keyframes invOut{from{opacity:1}to{opacity:0}}
 @keyframes invTalk{0%,100%{box-shadow:0 0 0 3px var(--qms-soft), 0 0 0 5px rgba(13,117,104,.18)}50%{box-shadow:0 0 0 3px var(--qms-soft), 0 0 0 9px rgba(13,117,104,.30)}}
 @media (prefers-reduced-motion:reduce){ .avatar.inv, .avatar.inv img.invNew, .avatar.inv img.invOld, .avatar.inv.talk{animation:none} }
+/* 1.12.1 read-aloud switch */
+@media (max-width:640px){ .audQ.repQ.inv-side{flex-direction:column; align-items:stretch; --avs:170px} .audQ.repQ.inv-side .avCol{margin:0 auto} .audQ.repQ .speech{border-radius:16px} }
+.invSwitch{display:inline-flex; align-items:center; gap:10px; cursor:pointer; user-select:none; background:var(--card); border:1px solid var(--line); border-radius:99px; padding:7px 10px 7px 14px; min-height:44px; box-sizing:border-box; box-shadow:var(--shadow); font:600 15px var(--body); color:var(--ink)}
+.invSwitch input{position:absolute; opacity:0; width:1px; height:1px}
+.invSwIco{font-size:18px; line-height:1}
+.invTrack{position:relative; width:52px; height:30px; border-radius:99px; background:#c3ccd3; transition:background .2s; flex:none}
+.invTrack i{position:absolute; top:3px; left:3px; width:24px; height:24px; border-radius:50%; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,.3); transition:transform .2s}
+.invSwitch.on .invTrack{background:var(--qms)}
+.invSwitch.on .invTrack i{transform:translateX(22px)}
+.invSwSt{min-width:26px; font-size:13px; color:var(--muted)} .invSwitch.on .invSwSt{color:var(--qms)}
+.invSwitch:has(input:focus-visible){outline:2px solid var(--qms); outline-offset:2px}
+.invCtl .invBtn{min-height:44px; padding:8px 14px; font-size:14px}
+@media (max-width:640px){ .invCtl{justify-content:space-between} .invSwitch{flex:1; justify-content:space-between} }
 /* compact form cards on wide screens */
 @media (min-width:761px){
  .dLay .toolGrid{gap:10px; grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
@@ -2559,7 +2572,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="1.12.0", APPDATE="18-NOV-2026";
+const APPVER="1.12.1", APPDATE="18-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Asaf Ben Zion. All rights reserved.";
 const LEGAL=[["Copyright", "No part of this handbook’s original content may be copied or redistributed without written permission. Cited regulations, standards and guidance, and their links, remain the property of their official publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, data selection and design, developed with AI tools, and has been verified against requirements set by the author and against the official sources."], ["Sources", "Sources are limited to official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases. EU: EUR-Lex and European Commission pages, including MDCG guidance."], ["Important", "This application is intended for training only. Results from its tools require human review, verification and approval. Always check the linked source before citing anything in an audit response."]];
@@ -3096,25 +3109,35 @@ function invPick(st){ const s=Math.abs(st.seed|0); return s%INV_LOOKS.length; }
 function invExpr(st,k){ let x=Math.abs(st.seed|0)+1; const o=INV_EXPR.slice(); for(let i=o.length-1;i>0;i--){ x=(x*1103515245+12345)%2147483648; const j=Math.floor(x/65536)%(i+1); [o[i],o[j]]=[o[j],o[i]]; } return o[k%o.length]; }
 /* 1.12.0 investigator motion, size and position preferences, and read-aloud voice */
 const INV_PREF_KEY="qah-inv-pref";
-function invPref(){ let p={}; try{ p=JSON.parse(localStorage.getItem(INV_PREF_KEY)||"{}")||{}; }catch(e){} return {size:["s","m","l"].includes(p.size)?p.size:"m", place:p.place==="top"?"top":"side", voice:!!p.voice}; }
+function invPref(){ let p={}; try{ p=JSON.parse(localStorage.getItem(INV_PREF_KEY)||"{}")||{}; }catch(e){} return {size:"l", place:p.place==="top"?"top":"side", voice:!!p.voice}; }
 function invPrefSet(k,v){ const p=invPref(); p[k]=v; try{ localStorage.setItem(INV_PREF_KEY,JSON.stringify(p)); }catch(e){} return p; }
 function invSet(av,look,ex){ const old=av.querySelector("img:not(.invOld)"); if(old&&old.dataset.expr===ex) return; const w=document.createElement("div"); w.innerHTML=invSvg(look,ex); const img=w.firstChild; img.classList.add("invNew");
   if(old){ old.classList.add("invOld"); setTimeout(()=>old.remove(),700); } av.append(img); }
+const INV_NOVELTY=/albert|bad news|bahh|bells|boing|bubbles|cellos|good news|jester|organ|superstar|trinoids|whisper|wobble|zarvox|junior|ralph|fred|grandma|grandpa|rocko|shelley|sandy|eddy|flo|reed/i;
 function invVoice(g){ const S=window.speechSynthesis; if(!S) return null; const vs=S.getVoices().filter(v=>/^en/i.test(v.lang)); if(!vs.length) return null;
-  const F=/female|woman|samantha|karen|victoria|zira|susan|serena|moira|tessa|fiona|allison|ava|jenny|aria|libby|sonia|natasha|google uk english female|google us english/i, M=/(^|\W)male|daniel|alex|david|mark|fred|george|guy|ryan|arthur|thomas|oliver|aaron|tom|google uk english male/i;
+  const F=/female|woman|samantha|karen|victoria|zira|susan|serena|moira|tessa|fiona|allison|ava\b|jenny|aria|libby|sonia|natasha|emma|michelle|joanna|kendra|salli|google us english/i, M=/(^|\W)male|daniel|alex\b|david|mark|george|guy|ryan|arthur|thomas|oliver|aaron|tom\b|christopher|eric|brian|matthew|andrew|william/i;
   const want=g==="f"?F:M, avoid=g==="f"?M:F;
-  return vs.find(v=>want.test(v.name)&&!avoid.test(v.name)&&/US|GB|en-(US|GB)/i.test(v.lang))||vs.find(v=>want.test(v.name)&&!avoid.test(v.name))||vs.find(v=>/en-(US|GB)/i.test(v.lang))||vs[0]; }
-function invSpeak(text,g,av){ const S=window.speechSynthesis; if(!S||!invPref().voice) return; try{ S.cancel(); const u=new SpeechSynthesisUtterance(String(text).replace(/\s+/g," ").trim()); u.lang="en-US"; const v=invVoice(g); if(v){ u.voice=v; u.lang=v.lang; } else u.pitch=g==="f"?1.1:0.85; u.rate=0.98;
-  u.onstart=()=>{ if(av) av.classList.add("talk"); }; u.onend=u.onerror=()=>{ if(av) av.classList.remove("talk"); }; S.speak(u); }catch(e){} }
-function invHush(){ try{ if(window.speechSynthesis) window.speechSynthesis.cancel(); }catch(e){} document.querySelectorAll(".avatar.talk").forEach(a=>a.classList.remove("talk")); }
+  const score=v=>(want.test(v.name)&&!avoid.test(v.name)?20:0)+(avoid.test(v.name)?-15:0)+(/natural|neural|enhanced|premium|online/i.test(v.name)?8:0)+(/google|microsoft/i.test(v.name)?3:0)+(/en[-_](US|GB)/i.test(v.lang)?2:0)+(v.localService===false?1:0)+(INV_NOVELTY.test(v.name)?-40:0);
+  return vs.slice().sort((a,b)=>score(b)-score(a))[0]; }
+function invSayText(t){ return String(t).replace(/\s+/g," ").replace(/\be\.g\.,?/gi,"for example,").replace(/\bi\.e\.,?/gi,"that is,").replace(/\bvs\.?(?=\s)/gi,"versus").replace(/\betc\./gi,"etcetera.").replace(/&/g," and ").replace(/±/g," plus or minus ").replace(/≥/g," at least ").replace(/≤/g," at most ").replace(/°C/g," degrees C").replace(/§\s*/g,"section ").replace(/\s+\/\s+/g," or ").replace(/[“”"]/g,"").replace(/\s+/g," ").trim(); }
+function invChunks(t){ const parts=t.split(/(?<=[.!?;:])\s+/); const out=[]; let cur=""; parts.forEach(p=>{ if((cur+" "+p).length>190&&cur){ out.push(cur); cur=p; } else cur=cur?cur+" "+p:p; }); if(cur) out.push(cur); return out; }
+let INV_SAY=0;
+function invSpeak(text,g,av){ const S=window.speechSynthesis; if(!S||!invPref().voice) return; const id=++INV_SAY;
+  const go=()=>{ if(id!==INV_SAY) return; try{ S.cancel(); const v=invVoice(g); const ch=invChunks(invSayText(text)); if(av) av.classList.add("talk");
+    ch.forEach((c,i)=>{ const u=new SpeechSynthesisUtterance(c); if(v){ u.voice=v; u.lang=v.lang; } else { u.lang="en-US"; u.pitch=g==="f"?1.08:0.88; } u.rate=0.95;
+      if(i===ch.length-1) u.onend=u.onerror=()=>{ if(id===INV_SAY&&av) av.classList.remove("talk"); }; S.speak(u); });
+    if(S.paused) S.resume(); }catch(e){} };
+  if(S.getVoices().length) go(); else { let done=false; const f=()=>{ if(!done){ done=true; go(); } }; try{ S.addEventListener("voiceschanged",f,{once:true}); }catch(e){} setTimeout(f,700); } }
+function invHush(){ INV_SAY++; try{ if(window.speechSynthesis) window.speechSynthesis.cancel(); }catch(e){} document.querySelectorAll(".avatar.talk").forEach(a=>a.classList.remove("talk")); }
 if(window.speechSynthesis){ try{ speechSynthesis.getVoices(); speechSynthesis.addEventListener("voiceschanged",()=>{}); }catch(e){} }
 window.addEventListener("hashchange",invHush);
 function invTools(onChange,speakNow){ const P=invPref(); const bar=el("div",{class:"invCtl",role:"group","aria-label":"Investigator display"});
-  const mk=(lab,pressed,fn,title)=>el("button",{type:"button",class:"invBtn","aria-pressed":String(!!pressed),title,onclick:fn},lab);
-  if(window.speechSynthesis) bar.append(mk(P.voice?"🔊 Voice on":"🔈 Voice off",P.voice,()=>{ const q=invPrefSet("voice",!invPref().voice); if(!q.voice) invHush(); onChange(); if(q.voice&&speakNow) speakNow(); },"Read the investigator's words aloud"));
-  const sz=el("div",{class:"invSeg",role:"group","aria-label":"Photo size"}, el("span",{},"Photo"));
-  [["s","S"],["m","M"],["l","L"]].forEach(([k,l])=>sz.append(mk(l,P.size===k,()=>{ invPrefSet("size",k); onChange(); },"Photo size "+l)));
-  bar.append(sz, mk(P.place==="top"?"⇆ Beside":"⇅ Above",false,()=>{ invPrefSet("place",invPref().place==="top"?"side":"top"); onChange(); },P.place==="top"?"Show the photo beside the question":"Show the photo above the question"));
+  if(window.speechSynthesis){ const cb=el("input",{type:"checkbox",role:"switch","aria-label":"Read aloud"}); cb.checked=P.voice;
+    cb.addEventListener("change",()=>{ const q=invPrefSet("voice",cb.checked); sw.classList.toggle("on",q.voice); st.textContent=q.voice?"On":"Off"; if(!q.voice) invHush(); else if(speakNow) speakNow(); });
+    const st=el("b",{class:"invSwSt"},P.voice?"On":"Off");
+    const sw=el("label",{class:"invSwitch"+(P.voice?" on":""),title:"Read the investigator's words aloud"}, cb, el("span",{class:"invSwIco","aria-hidden":"true"},"🔊"), el("span",{class:"invSwLab"},"Read aloud"), el("span",{class:"invTrack","aria-hidden":"true"}, el("i",{})), st);
+    bar.append(sw); }
+  bar.append(el("button",{type:"button",class:"invBtn",title:P.place==="top"?"Show the photo beside the question":"Show the photo above the question",onclick:()=>{ invPrefSet("place",invPref().place==="top"?"side":"top"); onChange(); }},P.place==="top"?"⇆ Photo beside":"⇅ Photo above"));
   return bar; }
 function invLayout(q){ const P=invPref(); q.classList.add("invQ","inv-"+P.place,"invS-"+P.size); return q; }
 const AUDITOR='<svg viewBox="0 0 64 64" aria-hidden="true"><circle class="avBg" cx="32" cy="32" r="31" fill="#e8f2f9"/><circle class="avBody" cx="32" cy="25" r="10" fill="#4b5b9a"/><path class="avBody" d="M14 54c2-10 9-15 18-15s16 5 18 15" fill="#4b5b9a"/><path class="avBrow" d="M24 19l6 2M40 19l-6 2" stroke="#fff" stroke-width="2" stroke-linecap="round"/><rect x="24" y="22" width="16" height="5" rx="2.5" fill="none" stroke="#fff" stroke-width="2"/><rect x="40" y="40" width="10" height="13" rx="1.5" fill="#fff" stroke="#b98a35" stroke-width="1.6"/><path d="M42 44h6M42 47h6M42 50h4" stroke="#b98a35" stroke-width="1.2"/></svg>';
@@ -3209,7 +3232,7 @@ function renderAuditOpening(m){
   const sec=el("section",{class:"card audOpen"});
   sec.append(el("div",{class:"eyebrow"},"Opening meeting · Day 1 · 09:00"));
   const oq=invLayout(el("div",{class:"audQ"}));
-  sec.append(invTools(()=>renderAudit(),()=>invSpeak(oq.querySelector(".speech").innerText.replace(/^Investigator\s*/,""),INV_LOOKS[invPick(st)].g,av)));
+  sec.append(invTools(()=>renderAudit(),()=>invSpeak([...oq.querySelectorAll(".speech p")].map(x=>x.textContent).join(" "),INV_LOOKS[invPick(st)].g,av)));
   sec.append(oq); oq.append(el("div",{class:"avCol"},av), el("div",{class:"speech"}, el("span",{class:"audTopic"},"Investigator"),
     el("p",{},st.kind==="topic"?"Good morning. I’m the investigator assigned to your site. Today I’m focusing on "+audLc(st.scen.ttitle)+". I’ll start with this situation: "+st.scen.sit.replace(/^./,x=>x.toLowerCase())+" Then I’ll look at how the process works in general.":"Good morning. I’m the investigator assigned to your site. This inspection covers the "+c.name.toLowerCase()+". I’ll start with the "+story.toLowerCase().replace(/^for-cause: /,"")+" and then follow the evidence wherever it leads."),
     el("p",{},"Please give me a guide who knows the processes, a scribe, and a back room that can pull records quickly. I’ll share my observations at the closing meeting.")));
@@ -3228,8 +3251,10 @@ function renderAuditReport(m){
   const rep=el("section",{class:"card audReport"});
   const ring=el("div",{class:"bigRing"}); ring.innerHTML=ringSvg(r.pct,100,130);
   rep.append(el("div",{class:"repHead"}, ring, el("div",{}, el("div",{class:"eyebrow"},"Closing meeting · "+st.c.id), el("h3",{},st.c.name), el("p",{}, el("b",{},r.right+" of "+st.asked.length)," answers acceptable · pass mark 85%")), el("div",{class:"stamp "+(r.pass?"pass":"fail")},r.pass?"PASS":"FAIL")));
-  const av=el("div",{class:"avatar inv sm"}); av.innerHTML=invSvg(invPick(st),r.pass?"attentive":"stern");
-  rep.append(el("div",{class:"audQ"}, av, el("div",{class:"speech"}, el("span",{class:"audTopic"},"Investigator’s summary"), el("p",{},r.fb))));
+  const av=el("div",{class:"avatar inv"}); av.innerHTML=invSvg(invPick(st),r.pass?"attentive":"stern"); av.firstChild.classList.add("invNew");
+  const gen=INV_LOOKS[invPick(st)].g, sayRep=()=>invSpeak("Closing meeting. "+r.right+" of "+st.asked.length+" answers were acceptable. "+(r.pass?"You passed. ":"You did not reach the pass mark. ")+r.fb,gen,av);
+  rep.append(invTools(()=>renderAudit(),sayRep), invLayout(el("div",{class:"audQ repQ"}, el("div",{class:"avCol"},av), el("div",{class:"speech"}, el("span",{class:"audTopic"},"Investigator’s summary"), el("p",{},r.fb)))));
+  if(AUD.spoken!=="report"){ AUD.spoken="report"; setTimeout(()=>{ if(document.body.contains(av)) sayRep(); },400); }
   const wrong=st.asked.filter(a=>!a.ok);
   rep.append(el("h3",{class:"secTitle"},wrong.length?"Observations ("+wrong.length+")":"Observations"));
   if(!wrong.length) rep.append(el("p",{class:"src"},"No observations. Every answer was acceptable."));
