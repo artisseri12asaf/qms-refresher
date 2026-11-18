@@ -1227,6 +1227,31 @@ footer#siteFoot .legalBody p.imp{font-size:14px; color:var(--ink)}
 .invSwitch:has(input:focus-visible){outline:2px solid var(--qms); outline-offset:2px}
 .invCtl .invBtn{min-height:44px; padding:8px 14px; font-size:14px}
 @media (max-width:640px){ .invCtl{justify-content:space-between} .invSwitch{flex:1; justify-content:space-between} }
+/* 1.14.0 issue log and screen flow map */
+.issTools{flex-wrap:wrap}
+.issForm{display:grid; gap:8px; padding:12px; border:1px solid var(--line); border-radius:12px; background:var(--paper); margin:8px 0}
+.issRow3{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin:6px 0}
+.issSel{height:38px; padding:4px 8px; font-size:14px}
+.issStats{display:flex; flex-wrap:wrap; gap:6px; margin:6px 0}
+.issPill{font:700 11.5px var(--body); border-radius:99px; padding:2px 9px; background:var(--paper); color:var(--muted); border:1px solid var(--line); white-space:nowrap}
+.issPill.s-Open{background:#fde8e6; color:#a3322b; border-color:#f3c4bf} .issPill.s-Inprogress{background:#fdf1d9; color:#8a5a00; border-color:#f0d9a6}
+.issPill.s-Fixed{background:#e2f3e7; color:#1f7a3d; border-color:#bfe3c9} .issPill.s-Closed{background:#e9eef2; color:#4b5a66} .issPill.s-Accepted{background:#ece8f6; color:#5a4a8a; border-color:#d6cdee}
+.issList{display:grid; gap:6px; margin-top:6px}
+.issItem{border:1px solid var(--line); border-left:4px solid var(--line); border-radius:10px; background:var(--card)}
+.issItem.p-High{border-left-color:#c0392b} .issItem.p-Medium{border-left-color:#d49a2a} .issItem.p-Low{border-left-color:#9fb3c8}
+.issItem summary{display:flex; gap:8px; align-items:center; padding:9px 10px; cursor:pointer; font-size:14px}
+.issItem summary b{font-size:12px; color:var(--muted); white-space:nowrap} .issT{flex:1; min-width:0}
+.issBody{padding:0 12px 12px} .issDl{display:grid; grid-template-columns:auto 1fr; gap:2px 12px; font-size:13px; margin:6px 0} .issDl dt{color:var(--muted)}
+.issFx{display:grid; gap:2px} .issFx span{font-size:11px; color:var(--muted)} .issFx input{height:38px}
+.issNotes{font-size:13px; margin:6px 0; padding-left:18px}
+@media (max-width:640px){ .issRow3{grid-template-columns:1fr} }
+.sfmBox .src{margin-top:0}
+.sfmChips{display:flex; flex-wrap:wrap; gap:6px; margin:8px 0}
+.sfmChip{font:600 12.5px var(--body); border:1px solid var(--line); background:var(--card); color:var(--ink); border-radius:99px; padding:5px 10px; cursor:pointer}
+.sfmChip.alt{border-style:dashed} .sfmChip[aria-pressed=true]{background:#fde8e6; border-color:#d1495b; color:#a3322b}
+.sfmWrap{overflow:auto; border:1px solid var(--line); border-radius:10px; background:#fff; max-height:70vh}
+.sfmWrap svg{display:block; width:1180px; height:auto} .sfmWrap.fit svg{width:100%}
+.sfmWrap.hl .e{opacity:.18} .sfmWrap.hl .n{opacity:.35} .sfmWrap.hl .e.on{opacity:1; stroke:#d1495b; stroke-width:3; marker-end:url(#ahh)} .sfmWrap.hl .n.on{opacity:1} .sfmWrap.hl .n.on rect{stroke:#d1495b; stroke-width:3}
 /* compact form cards on wide screens */
 @media (min-width:761px){
  .dLay .toolGrid{gap:10px; grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
@@ -2594,7 +2619,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="1.13.1", APPDATE="18-NOV-2026";
+const APPVER="1.14.0", APPDATE="18-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Asaf Ben Zion. All rights reserved.";
 const LEGAL=[["Copyright", "No part of this handbook’s original content may be copied or redistributed without written permission. Cited regulations, standards and guidance, and their links, remain the property of their official publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, data selection and design, developed with AI tools, and has been verified against requirements set by the author and against the official sources."], ["Sources", "Sources are limited to official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases. EU: EUR-Lex and European Commission pages, including MDCG guidance."], ["Important", "This application is intended for training only. Results from its tools require human review, verification and approval. Always check the linked source before citing anything in an audit response."]];
@@ -2610,7 +2635,6 @@ renderFooter();
 
 /* ---------- 1.4.1 quick survey (no server: the answers are sent back by message and collected in the hidden menu) ---------- */
 const SVY_HEAD="Quick Survey · Medical Device QA Handbook";
-const SVY_KEY="qah-survey-inbox-v1";
 const SVY_RATE=[
  ["overall","How would you rate your overall experience with the app?","Poor","Excellent"],
  ["nav","How easy was it to navigate between the different screens?","Difficult","Very easy"],
@@ -2622,7 +2646,6 @@ const SVY_AGAIN=[["yes","Yes, definitely"],["prob","Probably"],["unsure","Not su
 const SVY_LAB=Object.fromEntries(SVY_AGAIN);
 const svyOne=t=>String(t||"").replace(/\s+/g," ").trim();
 function svyNow(){ const d=new Date(), p=n=>String(n).padStart(2,"0"); return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate())+" "+p(d.getHours())+":"+p(d.getMinutes()); }
-function svyHash(s){ let h=5381; for(let i=0;i<s.length;i++) h=((h<<5)+h+s.charCodeAt(i))|0; return (h>>>0).toString(36); }
 function svyButton(){ return el("button",{class:"svyBtn",type:"button",onclick:openSurvey}, ico("survey"), el("span",{},"Quick Survey")); }
 function svyText(d){
   const L=[SVY_HEAD+" · v"+APPVER, "Sent: "+d.at];
@@ -2631,29 +2654,6 @@ function svyText(d){
   if(d.again) L.push("6a Use again: "+d.again);
   if(d.general) L.push("7 General: "+d.general);
   return L.join("\n");
-}
-function svyNorm(txt){
-  const HD=/Quick\s*Survey\s*[·•∙⋅\-|:–]\s*Medical\s*Device\s*QA\s*Handbook/i;
-  return String(txt||"").replace(/\r/g,"").replace(/[\u00a0\u2007\u202f\t]/g," ").replace(/[\u200b-\u200f\u202a-\u202e\u2066-\u2069\ufeff]/g,"").replace(/[•∙⋅・]/g,"·").replace(/[*_~]{1,2}(?=\S)|(?<=\S)[*_~]{1,2}/g,"")
-    .split("\n").map(l=>{ l=l.replace(/^\s*(?:>\s*)+/,""); const m=l.match(HD); if(m) return SVY_HEAD+l.slice(m.index+m[0].length); return l.replace(/^\s*\[?\d{1,4}[./-]\d{1,2}[./-]\d{1,4},?\s+\d{1,2}:\d{2}(?::\d{2})?\s*(?:[AaPp]\.?[Mm]\.?)?\]?\s*(?:-\s*)?(?:[^:\n]{1,40}:\s*)?(?=(?:Sent:|\d[ab]? ))/,""); }).join("\n");
-}
-function svyParse(txt){
-  const out=[];
-  svyNorm(txt).split(/^(?=Quick Survey · Medical Device QA Handbook)/m).forEach(p=>{
-    if(!p.startsWith(SVY_HEAD)) return;
-    const lines=p.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
-    const e={raw:lines.join("\n"), at:"", ver:"", r:{}, c:{}, mistakes:"", again:"", help:"", general:"", handled:false};
-    const hv=lines[0].match(/· v([\w.]+)\s*$/); if(hv) e.ver=hv[1];
-    lines.slice(1).forEach(ln=>{
-      let m=ln.match(/^Sent:\s*(.*)$/); if(m){ e.at=m[1]; return; }
-      m=ln.match(/^(\d)([ab])? [^:]+:\s*(.*)$/); if(!m) return;
-      const key=m[1]+(m[2]||""), v=m[3], rk={1:"overall",2:"nav",3:"train",4:"insp"}[m[1]];
-      if(rk&&!m[2]){ const q=v.match(/^(?:(\d)\s*\/\s*5|[–-])(?:\s*\|\s*(.*))?$/); if(q){ if(q[1]) e.r[rk]=+q[1]; if(q[2]) e.c[rk]=q[2]; } return; }
-      if(key==="5") e.mistakes=v; else if(key==="6a") e.again=v; else if(key==="6b") e.help=v; else if(key==="7") e.general=v;
-    });
-    e.id=svyHash(e.raw); out.push(e);
-  });
-  return out;
 }
 function svyStars(key,q,lo,hi,val){
   const wrap=el("fieldset",{class:"svyQ"}, el("legend",{},q));
@@ -2706,45 +2706,70 @@ function openSurvey(){
   form.append(q5,q6,q7, el("p",{class:"svyThanks"},"Thank you for your time. I hope you find the app enjoyable and interesting."), msg, go);
   modal("Quick Survey", form);
 }
-function svyLoad(){ try{ const a=JSON.parse(localStorage.getItem(SVY_KEY)||"[]"); return Array.isArray(a)?a:[]; }catch(e){ return []; } }
-function svySave(a){ try{ localStorage.setItem(SVY_KEY,JSON.stringify(a)); return true; }catch(e){ return false; } }
-function svyInbox(host){
-  let rows=svyLoad(), hideDone=false;
-  const ta=el("textarea",{class:"svyTa",rows:"3","aria-label":"Paste survey answers received",placeholder:"Paste the survey answers you received (WhatsApp, email…). Several at once is fine."});
-  const msg=el("p",{class:"vvSt svyMsg2",role:"status","aria-live":"polite"}), bar=el("div",{class:"svyBar"}), list=el("div",{class:"vvList"});
-  const add=el("button",{class:"tab",type:"button"},"Add to inbox");
-  const stars=n=>n?"★".repeat(n)+"☆".repeat(5-n):"–";
-  const paint=()=>{
-    list.innerHTML=""; bar.innerHTML="";
-    const todo=rows.filter(x=>!x.handled).length;
-    const avg=k=>{ const a=rows.map(x=>x.r&&x.r[k]).filter(Boolean); return a.length?(a.reduce((p,c)=>p+c,0)/a.length).toFixed(1):"–"; };
-    const hide=el("input",{type:"checkbox"}); hide.checked=hideDone; hide.addEventListener("change",()=>{ hideDone=hide.checked; paint(); });
-    bar.append(el("span",{},rows.length+" responses · "+todo+" to review"), el("label",{},hide," Hide treated"));
-    if(rows.length) list.append(el("p",{class:"vvSt"},"Average: overall "+avg("overall")+" · navigation "+avg("nav")+" · training difficulty "+avg("train")+" · Inspection mode "+avg("insp")));
-    const shown=rows.filter(x=>!(hideDone&&x.handled)).sort((a,b)=>String(b.at).localeCompare(String(a.at)));
-    if(!shown.length) list.append(el("p",{class:"vvSt"},rows.length?"All responses are marked as treated.":"No responses yet."));
-    shown.forEach(e=>{
-      const cb=el("input",{type:"checkbox","aria-label":"Mark as read and treated"}); cb.checked=!!e.handled;
-      cb.addEventListener("change",()=>{ e.handled=cb.checked; svySave(rows); paint(); });
-      const dl=el("dl",{}), add2=(k,t)=>{ if(t) dl.append(el("dt",{},k), el("dd",{},t)); };
-      Object.keys(SVY_NM).forEach(k=>{ if(e.r[k]||e.c[k]) add2(SVY_NM[k], (e.r[k]?stars(e.r[k]):"")+(e.c[k]?(e.r[k]?"  ":"")+e.c[k]:"")); });
-      add2("Mistakes",e.mistakes); add2("Use again",e.again); add2("Helps learning",e.help); add2("General",e.general);
-      const rm=el("button",{class:"linkBtn",type:"button",onclick:()=>{ rows=rows.filter(x=>x.id!==e.id); svySave(rows); paint(); }},"Remove");
-      list.append(el("div",{class:"svyRow"+(e.handled?" done":"")}, cb, el("div",{}, el("b",{},"Overall "+stars(e.r.overall)+" · Nav "+stars(e.r.nav)+" · Train "+stars(e.r.train)+" · Insp "+stars(e.r.insp)), el("small",{},e.at+(e.ver?" · v"+e.ver:"")), el("details",{}, el("summary",{},"Show answers"), dl), rm)));
-    });
-  };
-  add.addEventListener("click",()=>{
-    const found=svyParse(ta.value);
-    if(!found.length){ msg.textContent=ta.value.trim()?"No survey answers found. The pasted text must include the line “Quick Survey · Medical Device QA Handbook” and the answers below it.":"Paste the answers first, then press Add to inbox."; return; }
-    let n=0, dup=0; found.forEach(e=>{ if(rows.some(x=>x.id===e.id)) dup++; else { rows.push(e); n++; } });
-    const ok=svySave(rows); ta.value=""; msg.textContent=n+" added"+(dup?", "+dup+" already in the inbox":"")+"."+(ok?"":" Could not save on this device.");
-    paint();
-  });
-  host.append(el("h3",{},"Survey inbox"), el("p",{class:"vvSt"},"Answers sent back by colleagues. Paste them here to read and track them. Stored on this device only."), ta, el("div",{class:"svyBar"},add), msg, bar, list);
+/* ---------- 1.14.0 issue log (hidden menu): bugs and open items, stored on this device ---------- */
+const ISS_KEY="qah-issues-v1";
+const ISS_SEED=[{"id":"ISS-001","t":"Correct answer was often the longest option (answer-length bias).","d":"Correct answer was often the longest option (answer-length bias).","type":"Bug","area":"General","prio":"Medium","st":"Fixed","found":"≤ 1.1.0","fixed":"≤ 1.1.0","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Options rewritten per chapter; noticeably longest now 5.4%."}]},{"id":"ISS-002","t":"44 duplicate questions and 4 duplicate dilemmas.","d":"44 duplicate questions and 4 duplicate dilemmas.","type":"Bug","area":"Content","prio":"Medium","st":"Fixed","found":"≤ 1.1.0","fixed":"≤ 1.1.0","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Removed; 52 new questions added."}]},{"id":"ISS-003","t":"Wrong citations: 820.75 'reserved' (removed), FDARA instead of FDORA for 704(a)(4), annex and form numbers.","d":"Wrong citations: 820.75 'reserved' (removed), FDARA instead of FDORA for 704(a)(4), annex and form numbers.","type":"Bug","area":"Daily QA Work forms","prio":"Medium","st":"Fixed","found":"≤ 1.1.0","fixed":"≤ 1.1.0","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Corrected against eCFR and FDA pages."}]},{"id":"ISS-004","t":"Timeline links pointed to the general MDCG page.","d":"Timeline links pointed to the general MDCG page.","type":"Bug","area":"Regulatory Timeline","prio":"Medium","st":"Fixed","found":"≤ 1.1.0","fixed":"≤ 1.1.0","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Linked to the specific MDCG documents and AI Act pages; titles matched."}]},{"id":"ISS-005","t":"ISO 13485 7.5.9.1 and 7.5.9.2 had no pop-up title; 4-level clause numbers not detected.","d":"ISO 13485 7.5.9.1 and 7.5.9.2 had no pop-up title; 4-level clause numbers not detected.","type":"Bug","area":"General","prio":"Medium","st":"Fixed","found":"≤ 1.1.0","fixed":"≤ 1.1.0","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Titles and detection added in 1.1.0 (TC-14)."}]},{"id":"ISS-006","t":"Test script t35 clicked a disabled option (test defect, not a software defect).","d":"Test script t35 clicked a disabled option (test defect, not a software defect).","type":"Test","area":"Test harness","prio":"Medium","st":"Fixed","found":"≤ 1.1.0","fixed":"≤ 1.1.0","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Selector changed to :not([disabled]); re-run passed."}]},{"id":"ISS-007","t":"in the new inspection content the correct answer was the longest option in 97% of questions.","d":"in the new inspection content the correct answer was the longest option in 97% of questions.","type":"Bug","area":"Inspection mode","prio":"Medium","st":"Fixed","found":"1.2.0","fixed":"1.2.0","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Distractors rewritten and answers shortened; final 17.7% longest (0.9% noticeably)."}]},{"id":"ISS-008","t":"inspection pickers opened by default, and a data table was used before it was defined (page error).","d":"inspection pickers opened by default, and a data table was used before it was defined (page error).","type":"Bug","area":"Inspection mode","prio":"Medium","st":"Fixed","found":"1.2.0","fixed":"1.2.0","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Fixed in code; t39 and t40 re-run passed."}]},{"id":"ISS-009","t":"test scripts t14, t30, t32, t33 tapped menu buttons that moved into the phone bottom bar; t25 read two external /tmp files; t36 used footer ","d":"test scripts t14, t30, t32, t33 tapped menu buttons that moved into the phone bottom bar; t25 read two external /tmp files; t36 used footer selectors removed in 1.1.1 (test defects, not software defects).","type":"Test","area":"Test harness","prio":"Medium","st":"Fixed","found":"1.3.0","fixed":"1.3.0","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Scripts updated; all re-run passed."}]},{"id":"ISS-010","t":"the 1.4.0 survey stored answers in the Claude database, which colleagues without edit rights cannot write to (design defect found before rel","d":"the 1.4.0 survey stored answers in the Claude database, which colleagues without edit rights cannot write to (design defect found before release to users).","type":"Bug","area":"Quick Survey","prio":"Medium","st":"Fixed","found":"1.4.1","fixed":"1.4.1","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Replaced by a message-based design; t44 rewritten and passed."}]},{"id":"ISS-011","t":"in the PDF the Answer column header wrapped to a second line (column one character too narrow).","d":"in the PDF the Answer column header wrapped to a second line (column one character too narrow).","type":"Bug","area":"Export (PDF/Word)","prio":"Medium","st":"Fixed","found":"1.5.0","fixed":"1.5.0","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Column widened and the PDF word-wrap fixed; t29 re-run passed."}]},{"id":"ISS-012","t":"23 of the first 31 drafted dilemmas repeated topics already in the bank (found by a word-overlap check against all 1,019 items).","d":"23 of the first 31 drafted dilemmas repeated topics already in the bank (found by a word-overlap check against all 1,019 items).","type":"Bug","area":"Export (PDF/Word)","prio":"Medium","st":"Fixed","found":"1.5.1","fixed":"1.5.1","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Replaced with new topics; the final 31 have at most 25% word overlap with any existing item and were reviewed by title."}]},{"id":"ISS-013","t":"test t29 still used the old 'CC / DCN / ECO' field label (test defect); the t45 pop-up check clicked a term and the page scroll closed the p","d":"test t29 still used the old 'CC / DCN / ECO' field label (test defect); the t45 pop-up check clicked a term and the page scroll closed the pop-up (test defect).","type":"Test","area":"Navigation","prio":"Medium","st":"Fixed","found":"1.6.0","fixed":"1.6.0","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Both scripts corrected; re-run passed."}]},{"id":"ISS-014","t":"the CMO sample left one note cell empty; in the ASL PDF two long column headers overlapped.","d":"the CMO sample left one note cell empty; in the ASL PDF two long column headers overlapped.","type":"Bug","area":"Export (PDF/Word)","prio":"Medium","st":"Fixed","found":"1.7.0","fixed":"1.7.0","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Note filled; headers shortened; t46 re-run passed."}]},{"id":"ISS-015","t":"the audit checklist sample was dated in the future; test scripts selected tool cards by partial text and opened NCR instead of CAPA (test de","d":"the audit checklist sample was dated in the future; test scripts selected tool cards by partial text and opened NCR instead of CAPA (test defect); tool-card icons rendered as filled shapes; PDF titles started in lower case.","type":"Test","area":"Export (PDF/Word)","prio":"Medium","st":"Fixed","found":"1.8.0","fixed":"1.8.0","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Sample re-dated to October 2026; tests select cards by exact title; icon outline style and title case fixed; t46 and t47 re-run passed."}]},{"id":"ISS-016","t":"OQ sample cited ASTM F88 as if it set the seal-strength limit, and the PQ pooled Ppk was mis-stated (2.28 instead of about 2.5); the softwar","d":"OQ sample cited ASTM F88 as if it set the seal-strength limit, and the PQ pooled Ppk was mis-stated (2.28 instead of about 2.5); the software tab read 'Non-product'.","type":"Bug","area":"Daily QA Work forms","prio":"Medium","st":"Fixed","found":"1.9.0","fixed":"1.9.0","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Wording corrected (internal specification tested per ASTM F88), Ppk recalculated, tab label fixed; t48 re-run passed."}]},{"id":"ISS-017","t":"desktop side menu slid under the pinned top menu when scrolling (wrong element looked up for its height).","d":"desktop side menu slid under the pinned top menu when scrolling (wrong element looked up for its height).","type":"Bug","area":"General","prio":"Medium","st":"Fixed","found":"1.13.1","fixed":"1.13.1","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Lookup fixed to the pinned menu by id; side menu now stays fully visible below it; screenshots re-checked."}]},{"id":"ISS-018","t":"survey inbox rejected answers pasted from WhatsApp or email (date and name prefix, quote marks or changed spaces before the header line) - r","d":"survey inbox rejected answers pasted from WhatsApp or email (date and name prefix, quote marks or changed spaces before the header line) - reported by the owner.","type":"Bug","area":"Quick Survey","prio":"Medium","st":"Fixed","found":"1.13.1","fixed":"1.13.1","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: svyNorm() added before parsing; nine formats tested in t49."}]},{"id":"ISS-019","t":"consecutive questions could show the same investigator expression; tool cards briefly got a literal title \"null\" in the draft code.","d":"consecutive questions could show the same investigator expression; tool cards briefly got a literal title \"null\" in the draft code.","type":"Bug","area":"Inspection mode","prio":"Medium","st":"Fixed","found":"1.13.1","fixed":"1.13.1","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Expressions now follow a shuffled cycle per session; title set only when needed; t49 checks five different expressions."}]},{"id":"ISS-020","t":"in PDF exports text in narrow table columns ran into the next column and looked like words without spaces (e.g. Assessment|Status, GmbH|(con","d":"in PDF exports text in narrow table columns ran into the next column and looked like words without spaces (e.g. Assessment|Status, GmbH|(contract); non-Latin-1 letters were dropped; record line repeated under the title - reported by the owner.","type":"Bug","area":"Export (PDF/Word)","prio":"Medium","st":"Fixed","found":"1.13.1","fixed":"1.13.1","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: PDF engine rebuilt with Helvetica metrics, content-sized columns and word breaking; WinAnsi mapping; titles and captions tidied; all 49 form PDFs re-checked."}]},{"id":"ISS-021","t":"Quality Manual sample declared ISO 13485 7.5.5 (sterile devices) not applicable although the company supplies sterile infusion sets.","d":"Quality Manual sample declared ISO 13485 7.5.5 (sterile devices) not applicable although the company supplies sterile infusion sets.","type":"Bug","area":"Daily QA Work forms","prio":"Medium","st":"Fixed","found":"1.13.1","fixed":"1.13.1","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Replaced by 7.5.3 (installation) with a valid justification."}]},{"id":"ISS-022","t":"in Word exports, tables with many columns split words in the middle (e.g. Agreemen-t, Calibratio-n) and broke dates, because the Word font i","d":"in Word exports, tables with many columns split words in the middle (e.g. Agreemen-t, Calibratio-n) and broke dates, because the Word font is larger than the PDF font - found when the owner asked whether Word had the PDF bug.","type":"Bug","area":"Export (PDF/Word)","prio":"Medium","st":"Fixed","found":"1.13.1","fixed":"1.13.1","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Wide Word tables use 8 pt text and narrow margins; hyphens between digits are non-breaking; all Word samples re-checked."}]},{"id":"ISS-023","t":"Phone, dark mode: copyright text at the bottom of the page is hard to read","d":"Phone, dark mode: copyright text at the bottom of the page is hard to read","type":"Bug","area":"General","prio":"Low","st":"Open","found":"1.13.1","fixed":"","date":"2026-11-18","notes":[]},{"id":"ISS-024","t":"Read aloud: confirm voice quality on a real iPhone and Android phone","d":"Read aloud: confirm voice quality on a real iPhone and Android phone","type":"Verification","area":"Inspection mode","prio":"Medium","st":"Open","found":"1.13.1","fixed":"","date":"2026-11-18","notes":[]},{"id":"ISS-025","t":"Investigator photos: confirm the order of the male attentive and stern photos","d":"Investigator photos: confirm the order of the male attentive and stern photos","type":"Content","area":"Inspection mode","prio":"Low","st":"Open","found":"1.13.1","fixed":"","date":"2026-11-18","notes":[]},{"id":"ISS-026","t":"Daily QA Work: Medium and Low priority tools still to build (19 suggested)","d":"Daily QA Work: Medium and Low priority tools still to build (19 suggested)","type":"Improvement","area":"Daily QA Work forms","prio":"Medium","st":"Open","found":"1.13.1","fixed":"","date":"2026-11-18","notes":[]},{"id":"ISS-027","t":"Some timeline links point to a database or publisher page, not a specific official page","d":"Some timeline links point to a database or publisher page, not a specific official page","type":"Limitation","area":"Regulatory Timeline","prio":"Low","st":"Accepted","found":"1.13.1","fixed":"","date":"2026-11-18","notes":[]},{"id":"ISS-028","t":"Inspection questions mostly written from knowledge; not every citation verified against the source","d":"Inspection questions mostly written from knowledge; not every citation verified against the source","type":"Content","area":"Content","prio":"Medium","st":"Open","found":"1.13.1","fixed":"","date":"2026-11-18","notes":[]},{"id":"ISS-029","t":"ISO 13485 content paraphrased; only clause numbers checked against the MDSAP companion document","d":"ISO 13485 content paraphrased; only clause numbers checked against the MDSAP companion document","type":"Limitation","area":"Content","prio":"Low","st":"Accepted","found":"1.13.1","fixed":"","date":"2026-11-18","notes":[]},{"id":"ISS-030","t":"Device type profiles added in 1.11.0 written from knowledge; standards not checked online","d":"Device type profiles added in 1.11.0 written from knowledge; standards not checked online","type":"Content","area":"Risk management","prio":"Medium","st":"Open","found":"1.13.1","fixed":"","date":"2026-11-18","notes":[]}];
+const ISS_ST=["Open","In progress","Fixed","Closed","Accepted"], ISS_TY=["Bug","Improvement","Content","Verification","Test","Limitation","Question"], ISS_PR=["High","Medium","Low"];
+const ISS_AREAS=["General","Welcome and main page","Navigation","Explore and chapters","QMS map","Regulatory Timeline","Search and glossary","Training mode","Selected Dilemmas","Inspection mode","Daily QA Work forms","Change Impact Assessment","Statistics","Risk management","Export (PDF/Word)","Quick Survey","Hidden menu and V&V","Content","Test harness"];
+function issLoad(){ let a=null; try{ a=JSON.parse(localStorage.getItem(ISS_KEY)||"null"); }catch(e){} if(!Array.isArray(a)){ a=ISS_SEED.map(x=>JSON.parse(JSON.stringify(x))); issSave(a); } else { const ids=new Set(a.map(x=>x.id)); let add=false; ISS_SEED.forEach(x=>{ if(!ids.has(x.id)){ a.push(JSON.parse(JSON.stringify(x))); add=true; } }); if(add) issSave(a); } return a; }
+function issSave(a){ try{ localStorage.setItem(ISS_KEY,JSON.stringify(a)); return true; }catch(e){ return false; } }
+function issToday(){ return new Date().toISOString().slice(0,10); }
+function issNextId(a){ return "ISS-"+String(1+Math.max(0,...a.map(x=>+String(x.id).replace(/\D/g,"")||0))).padStart(3,"0"); }
+function issueLog(host){
+  let rows=issLoad(); const F={st:"Active",type:"",q:""};
+  const msg=el("p",{class:"vvSt",role:"status","aria-live":"polite"}), bar=el("div",{class:"issBar"}), list=el("div",{class:"issList"});
+  const sel=(opts,val,on,lab)=>{ const s=el("select",{class:"rIn issSel","aria-label":lab}); opts.forEach(o=>{ const [v,l]=Array.isArray(o)?o:[o,o]; const op=el("option",{value:v},l); if(v===val) op.selected=true; s.append(op); }); s.addEventListener("change",()=>on(s.value)); return s; };
+  const save=()=>{ if(!issSave(rows)) msg.textContent="Could not save on this device."; };
+  const form=()=>{ const v={t:"",d:"",type:"Bug",area:"General",prio:"Medium"}; const box=el("div",{class:"issForm"});
+    const t=el("input",{class:"rIn",type:"text",placeholder:"Short title",maxlength:"140","aria-label":"Issue title"}); t.addEventListener("input",()=>v.t=t.value);
+    const d=el("textarea",{class:"svyTa",rows:"3",placeholder:"What happened, where, steps to reproduce, expected result","aria-label":"Issue description"}); d.addEventListener("input",()=>v.d=d.value);
+    box.append(t,d, el("div",{class:"issRow3"}, sel(ISS_TY,v.type,x=>v.type=x,"Type"), sel(ISS_AREAS,v.area,x=>v.area=x,"Screen or area"), sel(ISS_PR,v.prio,x=>v.prio=x,"Priority")),
+      el("div",{class:"svyBar"}, el("button",{class:"cta",type:"button",onclick:()=>{ if(!v.t.trim()){ msg.textContent="Give the issue a short title."; t.focus(); return; } const it={id:issNextId(rows),t:v.t.trim(),d:v.d.trim(),type:v.type,area:v.area,prio:v.prio,st:"Open",found:APPVER,fixed:"",date:issToday(),notes:[]}; rows.unshift(it); save(); msg.textContent=it.id+" logged."; box.remove(); paint(); }},"Log issue"), el("button",{class:"reset",type:"button",onclick:()=>box.remove()},"Cancel")));
+    return box; };
+  const exportCsv=()=>{ const q=x=>'"'+String(x??"").replace(/"/g,'""')+'"'; const head=["ID","Title","Description","Type","Area","Priority","Status","Found in","Fixed in","Logged","Notes"];
+    const csv="﻿"+[head.map(q).join(","),...rows.map(r=>[r.id,r.t,r.d,r.type,r.area,r.prio,r.st,r.found,r.fixed,r.date,(r.notes||[]).map(n=>n.d+": "+n.t).join(" | ")].map(q).join(","))].join("\r\n");
+    saveFile("Issue_log_"+issToday()+".csv",new Blob([csv],{type:"text/csv"}),msg); };
+  const exportJson=()=>saveFile("Issue_log_backup_"+issToday()+".json",new Blob([JSON.stringify(rows,null,1)],{type:"application/json"}),msg);
+  const imp=el("input",{type:"file",accept:".json,application/json",hidden:"","aria-label":"Import issue log backup"}); imp.addEventListener("change",async()=>{ const f=imp.files[0]; if(!f) return; try{ const a=JSON.parse(await f.text()); if(!Array.isArray(a)) throw 0; const m=new Map(rows.map(x=>[x.id,x])); a.forEach(x=>{ if(x&&x.id&&x.t) m.set(x.id,x); }); rows=[...m.values()]; save(); msg.textContent="Backup imported: "+a.length+" issues."; paint(); }catch(e){ msg.textContent="That file is not an issue log backup."; } imp.value=""; });
+  const paint=()=>{ bar.innerHTML=""; list.innerHTML="";
+    const cnt=k=>rows.filter(r=>r.st===k).length;
+    bar.append(el("div",{class:"issStats"}, ...ISS_ST.map(k=>el("span",{class:"issPill s-"+k.replace(/\s/g,"")},k+" "+cnt(k)))));
+    const fq=el("input",{class:"rIn",type:"search",placeholder:"Search issues",value:F.q,"aria-label":"Search issues"}); fq.addEventListener("input",()=>{ F.q=fq.value; draw(); });
+    bar.append(el("div",{class:"issRow3"}, sel([["Active","Open and in progress"],["All","All statuses"],...ISS_ST.map(x=>[x,x])],F.st,x=>{ F.st=x; draw(); },"Filter by status"), sel([["","All types"],...ISS_TY.map(x=>[x,x])],F.type,x=>{ F.type=x; draw(); },"Filter by type"), fq));
+    draw(); };
+  const draw=()=>{ list.innerHTML=""; const q=F.q.trim().toLowerCase();
+    const show=rows.filter(r=>(F.st==="All"||(F.st==="Active"?["Open","In progress"].includes(r.st):r.st===F.st))&&(!F.type||r.type===F.type)&&(!q||(r.id+" "+r.t+" "+r.d+" "+r.area).toLowerCase().includes(q)))
+      .sort((a,b)=>(ISS_ST.indexOf(a.st)-ISS_ST.indexOf(b.st))||(ISS_PR.indexOf(a.prio)-ISS_PR.indexOf(b.prio))||String(b.id).localeCompare(String(a.id)));
+    if(!show.length) list.append(el("p",{class:"vvSt"},"No issues match."));
+    show.forEach(r=>{ const det=el("details",{class:"issItem p-"+r.prio}); const sum=el("summary",{}, el("b",{},r.id), el("span",{class:"issT"},r.t), el("span",{class:"issPill s-"+r.st.replace(/\s/g,"")},r.st));
+      const nt=el("textarea",{class:"svyTa",rows:"2",placeholder:"Add a follow-up note","aria-label":"Follow-up note for "+r.id});
+      const fx=el("input",{class:"rIn",type:"text",value:r.fixed||"",placeholder:"e.g. "+APPVER,"aria-label":"Fixed in version"}); fx.addEventListener("change",()=>{ r.fixed=fx.value.trim(); save(); });
+      det.append(sum, el("div",{class:"issBody"},
+        r.d&&r.d!==r.t?el("p",{},r.d):"",
+        el("dl",{class:"issDl"}, el("dt",{},"Type"), el("dd",{},r.type), el("dt",{},"Area"), el("dd",{},r.area), el("dt",{},"Priority"), el("dd",{},r.prio), el("dt",{},"Found in"), el("dd",{},"Ver. "+r.found+" · logged "+r.date)),
+        el("div",{class:"issRow3"}, sel(ISS_ST,r.st,x=>{ r.st=x; if(x==="Fixed"&&!r.fixed){ r.fixed=APPVER; fx.value=APPVER; } r.notes=r.notes||[]; r.notes.push({d:issToday(),t:"Status set to "+x}); save(); paint(); },"Status"), sel(ISS_PR,r.prio,x=>{ r.prio=x; save(); },"Priority"), el("label",{class:"issFx"}, el("span",{},"Fixed in"), fx)),
+        (r.notes||[]).length?el("ul",{class:"issNotes"}, ...r.notes.map(n=>el("li",{}, el("b",{},n.d+" "), n.t))):"",
+        nt, el("div",{class:"svyBar"}, el("button",{class:"tab",type:"button",onclick:()=>{ const v=nt.value.trim(); if(!v) return; r.notes=r.notes||[]; r.notes.push({d:issToday(),t:v}); save(); paint(); }},"Add note"),
+          el("button",{class:"linkBtn del",type:"button",onclick:()=>{ if(!confirm("Delete "+r.id+"?")) return; rows=rows.filter(x=>x!==r); save(); paint(); }},"Delete"))));
+      list.append(det); }); };
+  host.append(el("h3",{},"Issue log"), el("p",{class:"vvSt"},"Bugs, open items and follow-up notes, stored on this device. Export a backup to keep a copy or move it to another device."),
+    el("div",{class:"svyBar issTools"}, el("button",{class:"cta",type:"button",onclick:e=>{ const f=form(); e.currentTarget.parentElement.after(f); f.querySelector("input").focus(); }},"+ New issue"), el("button",{class:"tab",type:"button",onclick:exportCsv},"Export (Excel CSV)"), el("button",{class:"tab",type:"button",onclick:exportJson},"Backup (.json)"), el("button",{class:"tab",type:"button",onclick:()=>imp.click()},"Import backup"), imp),
+    msg, bar, list);
   paint();
 }
+/* screen flow map viewer (hidden menu): vv/SFM.svg built by vvgen/sfm.py, flows highlighted on request */
+let SFM_LIST=[], SFM_INFO={};
+async function openSFM(st){ st.textContent="Loading the screen flow map…";
+  let svg=""; try{ const r=await fetch("vv/SFM.svg",{cache:"no-store"}); if(!r.ok) throw 0; svg=await r.text(); if(!/<svg/.test(svg)) throw 0; }catch(e){ st.textContent="Couldn’t load the screen flow map. Check the connection and try again."; return; }
+  st.textContent=""; const wrap=el("div",{class:"sfmWrap"}); wrap.innerHTML=svg.replace(/^[\s\S]*?(<svg)/,"$1"); const s=wrap.querySelector("svg"); try{ SFM_LIST=JSON.parse(s.querySelector("#sfmFlows").textContent); SFM_INFO=Object.fromEntries(SFM_LIST.map(x=>[x[0],x[0]+" "+x[2]+": "+x[3]])); }catch(e){ SFM_LIST=[]; } s.removeAttribute("width"); s.removeAttribute("height"); s.setAttribute("role","img"); s.setAttribute("aria-label","Screen flow map");
+  const chips=el("div",{class:"sfmChips",role:"group","aria-label":"Highlight a flow"}); let cur="";
+  const pick=id=>{ cur=cur===id?"":id; wrap.classList.toggle("hl",!!cur); s.querySelectorAll(".on").forEach(x=>x.classList.remove("on")); if(cur) s.querySelectorAll(".f"+cur.replace("-","")).forEach(x=>x.classList.add("on")); chips.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.f===cur))); info.textContent=cur?SFM_INFO[cur]:"Choose a flow to highlight its path."; };
+  const info=el("p",{class:"vvSt sfmInfo",role:"status"},"Choose a flow to highlight its path.");
+  SFM_LIST.forEach(([id,kind,t])=>chips.append(el("button",{type:"button",class:"sfmChip"+(kind==="Alternative"?" alt":""),"data-f":id,"aria-pressed":"false",onclick:()=>pick(id)}, el("b",{},id)," "+t)));
+  const zoom=el("button",{class:"tab",type:"button",onclick:()=>{ wrap.classList.toggle("fit"); zoom.textContent=wrap.classList.contains("fit")?"Actual size":"Fit to screen"; }},"Fit to screen");
+  modal("Screen flow map", el("div",{class:"sfmBox"}, el("p",{class:"src"},"All validated screens by area, the links between them, and the happy and alternative flows with their test cases (QAH-SFM-001)."), el("div",{class:"svyBar"},zoom), chips, info, wrap)); wrap.classList.add("fit"); zoom.textContent="Actual size"; }
 /* ---------- hidden V&V records menu (opened from the shield logo) ---------- */
-const VVDOCS=[["QAH-URS-001","User Requirements Specification","URS","docx"],["QAH-SRS-001","Software Requirements Specification","SRS","docx"],["QAH-SDD-001","Software Design Description","SDD","docx"],["QAH-STP-001","Software Test Plan","STP","docx"],["QAH-STR-001","Software Test Report","STR","docx"],["QAH-RTM-001","Traceability Matrix and Sources","RTM","xlsx"]];
+const VVDOCS=[["QAH-URS-001","User Requirements Specification","URS","docx"],["QAH-SRS-001","Software Requirements Specification","SRS","docx"],["QAH-SDD-001","Software Design Description","SDD","docx"],["QAH-STP-001","Software Test Plan","STP","docx"],["QAH-STR-001","Software Test Report","STR","docx"],["QAH-RTM-001","Traceability Matrix and Sources","RTM","xlsx"],["QAH-SFM-001","Screen Flow Map","SFM","docx"]];
 async function vvGet(code,ext,id,st){
   st.textContent="Preparing "+id+"…";
   const MT={pdf:"application/pdf",docx:"application/vnd.openxmlformats-officedocument.wordprocessingml.document",xlsx:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"};
@@ -2764,8 +2789,9 @@ function openVV(){
       el("div",{class:"vvBtns"}, el("button",{class:"tab",type:"button",onclick:()=>vvGet(code,ext,id,st)},ext==="xlsx"?"Excel":"Word"), el("button",{class:"tab",type:"button",onclick:()=>vvGet(code,"pdf",id,st)},"PDF"))));
   });
   const adm=el("div",{class:"svyAdm"});
+  list.append(el("div",{class:"vvRow"}, el("div",{}, el("b",{},"Screen flow map (interactive)"), el("small",{},"Screens, links, happy and alternative flows")), el("div",{class:"vvBtns"}, el("button",{class:"tab",type:"button",onclick:()=>openSFM(st)},"View"))));
   modal("Software V&V records", el("div",{class:"vvBox"}, el("p",{},"Read-only validation records for "+VERLINE+". Approach: risk-based software assurance for a training tool."), list, st, adm));
-  svyInbox(adm);
+  issueLog(adm);
 }
 (function(){ const sv=document.querySelector(".brand2 svg"); if(!sv) return; sv.addEventListener("click",e=>{ e.preventDefault(); e.stopPropagation(); openVV(); }); })();
 function heroTop(show){
