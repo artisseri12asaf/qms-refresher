@@ -2094,20 +2094,42 @@ function buildXlsx(sheets){
   const sty=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="2"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="2"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
   return zipStore([["[Content_Types].xml",ct],["_rels/.rels",rels],["xl/workbook.xml",wb],["xl/_rels/workbook.xml.rels",wbr],["xl/styles.xml",sty],...sheets.map((s,i)=>["xl/worksheets/sheet"+(i+1)+".xml",sheetXml(s.rows,s.widths)])]);
 }
-function pdfTxt(s){ const SUP="⁻⁰¹²³⁴⁵⁶⁷⁸⁹"; return String(s).replace(/[⁻⁰¹²³⁴⁵⁶⁷⁸⁹]+/g,m=>"^"+[...m].map(c=>{ const i=SUP.indexOf(c); return i===0?"-":String(i-1); }).join("")).replace(/≤/g,"<=").replace(/≥/g,">=").replace(/[–—]/g,"-").replace(/[’‘]/g,"'").replace(/[“”]/g,'"').replace(/·/g,"-").replace(/²/g,"^2").replace(/σ/g,"s").replace(/x̄/g,"mean").replace(/R̄/g,"R-bar").replace(/→/g,"->").replace(/±/g,"+/-").replace(/×/g,"x").replace(/[^\x20-\x7E]/g,"").replace(/\\/g,"\\\\").replace(/\(/g,"\\(").replace(/\)/g,"\\)"); }
+const PDF_CP={"€":128,"‚":130,"„":132,"…":133,"‘":145,"’":146,"“":147,"”":148,"•":149,"–":150,"—":151,"™":153,"Œ":140,"œ":156,"Š":138,"š":154,"Ž":142,"ž":158,"Ÿ":159};
+function pdfTxt(s){ const SUP="⁻⁰¹²³⁴⁵⁶⁷⁸⁹"; return String(s).replace(/[⁻⁰¹²³⁴⁵⁶⁷⁸⁹]+/g,m=>"^"+[...m].map(c=>{ const i=SUP.indexOf(c); return i===0?"-":String(i-1); }).join("")).replace(/≤/g,"<=").replace(/≥/g,">=").replace(/≠/g,"!=").replace(/≈/g,"~").replace(/σ/g,"s").replace(/x̄/g,"mean").replace(/R̄/g,"R-bar").replace(/→/g,"->").replace(/←/g,"<-").replace(/↔/g,"<->").replace(/[   ]/g," ").replace(/[‐‑‒]/g,"-").replace(/./gu,c=>PDF_CP[c]?String.fromCharCode(PDF_CP[c]):c).replace(/[^\x20-\x7E\x80-\xFF]/g,"").replace(/\\/g,"\\\\").replace(/\(/g,"\\(").replace(/\)/g,"\\)"); }
+/* Helvetica / Helvetica-Bold advance widths (per 1000 em) for ASCII 32-126; other characters use typical widths */
+const PDF_WR="278,278,355,556,556,889,667,191,333,333,389,584,278,333,278,278,556,556,556,556,556,556,556,556,556,556,278,278,584,584,584,556,1015,667,667,722,722,667,611,778,722,278,500,667,556,833,722,778,667,778,722,667,611,722,667,944,667,667,611,278,278,278,469,556,333,556,556,500,556,556,278,556,556,222,222,500,222,833,556,556,556,556,333,500,278,556,500,722,500,500,500,334,260,334,584".split(",").map(Number);
+const PDF_WB="278,333,474,556,556,889,722,238,333,333,389,584,278,333,278,278,556,556,556,556,556,556,556,556,556,556,333,333,584,584,584,611,975,722,722,722,722,667,611,778,722,278,556,722,611,833,722,778,667,778,722,667,611,722,667,944,667,667,611,333,278,333,584,556,333,556,611,556,611,556,333,611,611,278,278,556,278,889,611,611,611,611,389,556,333,611,556,778,556,556,500,389,280,389,584".split(",").map(Number);
+const PDF_WX={"–":556,"—":1000,"‘":222,"’":222,"“":333,"”":333,"•":350,"°":400,"±":584,"×":584,"·":278,"…":1000,"µ":556,"²":333,"³":333,"é":556,"è":556,"ü":556,"ö":556,"ä":556,"ß":611};
+function pdfW(str,size,bold){ const T=bold?PDF_WB:PDF_WR; let w=0; for(const ch of String(str)){ const c=ch.charCodeAt(0); w+=(c>=32&&c<=126)?T[c-32]:(PDF_WX[ch]||556); } return w*size/1000; }
+function pdfWrap(str,width,size,bold){ const out=[]; String(str??"").split(/\n/).forEach(par=>{ const words=par.split(/\s+/).filter(Boolean); let line="";
+  const push=w=>{ // break a word that is wider than the column, preferring / and - as break points
+    while(pdfW(w,size,bold)>width){ let cut=1; while(cut<w.length&&pdfW(w.slice(0,cut+1),size,bold)<=width) cut++; const soft=Math.max(w.lastIndexOf("/",cut-1),w.lastIndexOf("-",cut-1)); if(soft>0&&soft>=cut*0.5) cut=soft+1; out.push(w.slice(0,cut)); w=w.slice(cut); } return w; };
+  words.forEach(t=>{ const tryL=line?line+" "+t:t; if(pdfW(tryL,size,bold)<=width) line=tryL; else { if(line) out.push(line); line=push(t); } });
+  if(line) out.push(line); else if(!words.length) out.push(""); }); return out.length?out:[""]; }
+/* column layout sized to the content: every column at least as wide as its longest word (when it fits), spare space shared by need */
+function pdfAutoCols(head,rows,total,size){ const n=Math.max(head?head.length:0,...rows.map(r=>r.length)); const pad=12; const all=[...(head?[head]:[]),...rows];
+  const longest=i=>Math.max(...all.map((r,ri)=>String(r[i]??"").split(/\s+/).reduce((m,w)=>Math.max(m,pdfW(w,size,head&&ri===0)),0)));
+  const natural=i=>Math.max(...all.map((r,ri)=>pdfW(String(r[i]??""),size,head&&ri===0)));
+  let mn=[...Array(n)].map((_,i)=>Math.min(Math.max(longest(i)+pad,26),total*0.45)), nat=[...Array(n)].map((_,i)=>Math.max(mn[i],Math.min(natural(i)+pad,total*0.6)));
+  let sum=mn.reduce((a,b)=>a+b,0); let w;
+  if(sum>=total) w=mn.map(x=>x*total/sum);
+  else { const extra=total-sum, need=nat.map((x,i)=>x-mn[i]), nsum=need.reduce((a,b)=>a+b,0); w=mn.map((x,i)=>x+(nsum>0?extra*need[i]/nsum:extra/n)); const nt=nat.reduce((a,b)=>a+b,0); if(nt<total) w=nat.map(x=>x*total/nt); }
+  const cols=[]; let x=0; w.forEach(v=>{ cols.push([Math.round(x),0,Math.floor(v)]); x+=v; }); return cols; }
 function buildPdf(doc){
   // doc: {title, subtitle, sections:[{h, rows:[[k,v]]}], decision:{text,ok}, hist:{bins,lo,w,mean,sd,n,LSL,USL}|null, data:[numbers]}
   const pages=[]; let ops=[]; let y=800; const L=50, R=545;
   const newPage=()=>{ if(ops.length) pages.push(ops.join("\n")); ops=[]; y=800; };
   const text=(x,yy,s,size,bold,col)=>{ ops.push(`${col||"0.12 0.16 0.2"} rg BT /${bold?"F2":"F1"} ${size} Tf ${x} ${yy} Td (${pdfTxt(s)}) Tj ET`); };
   const need=h=>{ if(y-h<50) newPage(); };
-  const wrap=(s,max)=>{ const w=String(s).split(/\s+/); const out=[]; let line=""; w.forEach(t=>{ if(line.trim()&&(line+" "+t).trim().length>max){ out.push(line.trim()); line=t; } else line+=" "+t; }); if(line.trim()) out.push(line.trim()); return out; };
-  const pdfTable=T=>{ const row=(r,b)=>{ const cells=r.map((c,i)=>T.cols[i]?wrap(String(c??""),T.cols[i][1]):[]); const nl=Math.max(1,...cells.map(c=>c.length)); need(12*nl+8); cells.forEach((ls,i)=>ls.forEach((ln,j)=>text(L+6+T.cols[i][0],y-j*12,ln,9,b,b?"0.25 0.3 0.35":null))); y-=12*nl; ops.push(`0.86 0.89 0.91 RG 0.5 w ${L} ${y+6} m ${R} ${y+6} l S`); y-=6; }; if(T.head) row(T.head,true); T.rows.forEach(r=>row(r,false)); y-=4; };
-  text(L,y,doc.title,16,true,"0.05 0.42 0.37"); y-=20; text(L,y,doc.subtitle,9.5,false,"0.4 0.45 0.5"); y-=10;
+  const wrap=(s,max,size,bold)=>pdfWrap(s,max*(size||9.5)*0.5,size||9.5,bold);
+  const pdfTable=T=>{ const fs=T.size||9, lh=Math.round(fs*1.33), TW=R-L-6; const cols=T.auto?pdfAutoCols(T.head,T.rows,TW,fs):T.cols;
+    const cw=i=>cols[i][2]?cols[i][2]-8:((i+1<cols.length?cols[i+1][0]:TW)-cols[i][0]-7);
+    const row=(r,b)=>{ const cells=r.map((c,i)=>cols[i]?pdfWrap(String(c??""),cw(i),fs,b):[]); const nl=Math.max(1,...cells.map(c=>c.length)); if(y-(lh*nl+8)<50){ newPage(); if(T.head&&!b){ row(T.head,true); } } cells.forEach((ls,i)=>ls.forEach((ln,j)=>text(L+6+cols[i][0],y-j*lh,ln,fs,b,b?"0.25 0.3 0.35":null))); y-=lh*nl; ops.push(`0.86 0.89 0.91 RG 0.5 w ${L} ${y+6} m ${R} ${y+6} l S`); y-=6; }; if(T.head){ const fr=T.rows[0]?Math.max(1,...T.rows[0].map((c,i)=>cols[i]?pdfWrap(String(c??""),cw(i),fs,false).length:1)):1; need(lh*(fr+2)+16); row(T.head,true); } T.rows.forEach(r=>row(r,false)); y-=4; };
+  pdfWrap(doc.title,R-L,16,true).forEach((ln,i)=>{ if(i) y-=19; text(L,y,ln,16,true,"0.05 0.42 0.37"); }); y-=20; pdfWrap(doc.subtitle,R-L,9.5,false).forEach((ln,i)=>{ if(i) y-=12; text(L,y,ln,9.5,false,"0.4 0.45 0.5"); }); y-=10;
   ops.push(`0.8 0.84 0.86 RG 0.8 w ${L} ${y} m ${R} ${y} l S`); y-=22;
   if(doc.decision){ need(40); ops.push(`${doc.decision.ok?"0.88 0.95 0.91":"0.98 0.9 0.89"} rg ${L} ${y-12} ${R-L} 26 re f`); text(L+10,y-3,doc.decision.text,12,true,doc.decision.ok?"0.1 0.45 0.25":"0.6 0.18 0.15"); y-=36; }
-  doc.sections.forEach(sec=>{ need(40); text(L,y,sec.h,11.5,true); y-=16;
-    sec.rows.forEach(r=>{ if(r&&r.table){ pdfTable(r.table); return; } if(r.length===1){ const pl=wrap(r[0],96); need(13*pl.length+4); pl.forEach((ln,i)=>text(L+6,y-i*13,ln,9.5,false)); y-=13*pl.length+3; return; } const [k,v]=r; const lines=wrap(v,62); const kl=wrap(k,32); const nl=Math.max(lines.length,kl.length); need(13*nl+4); kl.forEach((ln,i)=>text(L+6,y-i*13,ln,9.5,false,"0.35 0.4 0.45")); lines.forEach((ln,i)=>text(L+190,y-i*13,ln,9.5,false)); y-=13*nl+3; }); y-=8; });
+  doc.sections.forEach(sec=>{ need(sec.rows&&sec.rows[0]&&sec.rows[0].table?110:58); text(L,y,sec.h,11.5,true); y-=16;
+    sec.rows.forEach(r=>{ if(r&&r.table){ pdfTable(r.table); return; } if(r&&r.lbl){ const pl=pdfWrap(r.lbl,R-L-6,9.5,true); need(13*pl.length+16); pl.forEach((ln,i)=>text(L+6,y-i*13,ln,9.5,true,"0.25 0.3 0.35")); y-=13*pl.length+2; return; } if(r.length===1){ const pl=pdfWrap(r[0],R-L-6,9.5,false); need(13*pl.length+4); pl.forEach((ln,i)=>text(L+6,y-i*13,ln,9.5,false)); y-=13*pl.length+3; return; } const [k,v]=r; const lines=pdfWrap(v,R-L-196,9.5,false); const kl=pdfWrap(k,176,9.5,false); const nl=Math.max(lines.length,kl.length); need(13*nl+4); kl.forEach((ln,i)=>text(L+6,y-i*13,ln,9.5,false,"0.35 0.4 0.45")); lines.forEach((ln,i)=>text(L+190,y-i*13,ln,9.5,false)); y-=13*nl+3; }); y-=8; });
   const imgs=(doc.images||[]).filter(im=>im&&im.d&&/^data:image\/jpeg;base64,/.test(im.d));
   if(imgs.length){ need(40); text(L,y,doc.imagesTitle||"Images",11.5,true); y-=16;
     imgs.forEach((im,k)=>{ const sc=Math.min(200/im.w,150/im.h); const w=im.w*sc, hh=im.h*sc; const cap=[].concat(...(im.cap||[]).map(c=>wrap(c,50))); need(Math.max(hh,cap.length*13)+16);
@@ -2177,11 +2199,11 @@ const TOOLS=[["sampling","Sample size tool (ISO 2859-1:2026)","Lot acceptance pl
  ["qa-rep","Report Template","Report of an executed protocol: results against criteria, deviations and conclusion.","agree",true],
  ["qa-iq","Installation Qualification (IQ)","Equipment identification, installation checks, utilities, documents and calibration.","gauge",true],
  ["qa-oq","Operational Qualification (OQ)","Functional and alarm tests, and challenge runs at the process limits to set the operating window.","chart",true],
- ["qa-pq","Performance Qualification (PQ)","Routine production runs with statistical sampling and capability to show the process is consistent.","fdapre",true],["qa-tmv","Test Method Validation (TMV)","Gage R&R, bias and attribute agreement to show a test method is fit for use.","caliper",true],
+ ["qa-pq","Performance Qualification (PQ)","Routine production runs with statistical sampling and capability to show the process is consistent.","fdapre",true],["qa-tmv","Test Method Validation (TMV)","Gage R&R, bias and attribute agreement to show a test method is fit for use.","caliper",true],["qa-cmp","Complaint Intake and Investigation","Record, assess for reporting, investigate and close a complaint.","survey",true],["qa-rpt","Reportability Assessment (FDA MDR and EU Vigilance)","Decide and time FDA MDR and EU serious incident reports.","fdapre",true],["qa-hhe","Health Hazard Evaluation (HHE)","Health risk of a product problem to decide on field action.","risk",true],["qa-fsca","Recall / FSCA Assessment","Plan, notify and close a correction, removal or FSCA.","swap",true],["qa-pmsp","Post-Market Surveillance (PMS) Plan","Data sources, indicators, thresholds and PMCF for a device.","chart",true],["qa-psur","PSUR / PMS Report","Period results, trends, benefit-risk and actions.","agree",true],["qa-trend","Complaint and NC Trend Report","Rates, control limits, signals and actions.","gauge",true],["qa-ddp","Design and Development Plan","Stages, reviews, V&V, transfer and team.","dates",true],["qa-dir","Design Input Requirements","Verifiable requirements with sources and criteria.","list",true],["qa-drv","Design Review Minutes","Participants, findings, decision and actions.","eye",true],["qa-trace","Design Traceability Matrix","Inputs to outputs, risk controls, V&V evidence.","map",true],["qa-dtc","Design Transfer Checklist","Readiness of production, service and labeling.","factory",true],["qa-dhf","Design History File (DHF) Index","Index of design records with status.","tmpl",true],["qa-mr","Management Review Record","ISO 13485 5.6 inputs, outputs and actions.","audit",true],["qa-qo","Quality Objectives and KPI Tracker","Measurable objectives, targets and results.","gauge",true],["qa-qm","Quality Manual Template","Scope, exclusions, policy, process map and procedures.","iso",true],
  ["qa-nps","Non-Product / Non-GxP Software Assessment","GxP relevance, risk classification and risk-based assurance of business software.","search",true],
  ["qa-npsl","Non-Product Software List","Inventory of business software with GxP status, risk, assessment, validation status and review dates.","list",true],
  ["grr","Gauge R&R / Kappa test","A guide to choose between variable Gauge R&R and attribute agreement (Kappa), sample definitions with defect notes and photos, analysis, and the test protocol and report.","gauge",true]];
-const TOOLGROUPS={daily:["Daily QA Work","Tools for daily QA work","Ready-to-use QA forms and templates: change control, nonconformance and CAPA, suppliers and CMOs, audits, documents, validation, software and training. Each has a filled sample and exports to Word and PDF.",["#Change control","impact","#Nonconformance and CAPA","qa-ncr","qa-mrb","qa-dev","qa-capa","#Suppliers and CMOs","sq-quest","sq-eval","sq-scar","sq-scn","sq-asl","sq-fai","sq-sqa","sq-cmo","#Audits and quality planning","qa-iap","qa-iac","qa-qp","#Documents","qa-sop","qa-wi","qa-pol","#Inspection and validation","qa-vis","qa-prot","qa-rep","qa-iq","qa-oq","qa-pq","qa-tmv","qa-mvp","qa-mvpr","#Non-Product software","qa-nps","qa-npsl","#Training","qa-trn","qa-gtr"],[["Coming soon","More tools and ready-to-use QMS templates for daily QA work.","tmpl"]]],
+const TOOLGROUPS={daily:["Daily QA Work","Tools for daily QA work","Ready-to-use QA forms and templates: change control, nonconformance and CAPA, suppliers and CMOs, audits, documents, validation, software and training. Each has a filled sample and exports to Word and PDF.",["#Management responsibility","qa-mr","qa-qo","qa-qm","#Design controls","qa-ddp","qa-dir","qa-drv","qa-trace","qa-dtc","qa-dhf","#Change control","impact","#Nonconformance and CAPA","qa-ncr","qa-mrb","qa-dev","qa-capa","#Complaints and vigilance","qa-cmp","qa-rpt","qa-hhe","qa-fsca","#Post-Market surveillance","qa-pmsp","qa-psur","qa-trend","#Suppliers and CMOs","sq-quest","sq-eval","sq-scar","sq-scn","sq-asl","sq-fai","sq-sqa","sq-cmo","#Audits and quality planning","qa-iap","qa-iac","qa-qp","#Documents","qa-sop","qa-wi","qa-pol","#Inspection and validation","qa-vis","qa-prot","qa-rep","qa-iq","qa-oq","qa-pq","qa-tmv","qa-mvp","qa-mvpr","#Non-Product software","qa-nps","qa-npsl","#Training","qa-trn","qa-gtr"],[["Coming soon","More tools and ready-to-use QMS templates for daily QA work.","tmpl"]]],
   stats:["Statistics","Statistics","Sampling plans, measurement system analysis and attribute agreement.",["sampling","msa","grr"],[]]};
 /* ---- 1.8.1 title case for form headings, and Daily QA Work sub-tabs ---- */
 const TC_SMALL=new Set("a an and as at but by for from in into nor of on or per the to vs via with".split(" "));
@@ -2191,7 +2213,7 @@ function tcBlocks(B){ B.forEach(b=>{ if(b.h1) b.h1=tc(b.h1); if(b.h2) b.h2=tc(b.
 let DAILY_TAB=null; try{ DAILY_TAB=localStorage.getItem("qah-daily-tab"); }catch(e){}
 function dailyGroups(G){ const out=[]; let cur=null; G[3].forEach(id=>{ if(id[0]==="#"){ cur={h:id.slice(1),ids:[]}; out.push(cur); } else { if(!cur){ cur={h:"Tools",ids:[]}; out.push(cur); } cur.ids.push(id); } }); return out; }
 function dailySetTab(id){ const g=dailyGroups(TOOLGROUPS.daily).find(x=>x.ids.includes(id)); if(g){ DAILY_TAB=g.h; try{ localStorage.setItem("qah-daily-tab",g.h); }catch(e){} } }
-const TOOL_SHORT={impact:"SME and regulatory impact of a change, Word and PDF.","qa-ncr":"Contain, investigate and disposition a nonconformity.","qa-mrb":"Disposition of nonconforming material.","qa-dev":"Pre-approved departure or waiver, with risk.","qa-capa":"Root cause, actions and effectiveness check.",
+const TOOL_SHORT={"qa-cmp":"Record, assess for reporting, investigate and close a complaint.","qa-rpt":"Decide and time FDA MDR and EU serious incident reports.","qa-hhe":"Health risk of a product problem to decide on field action.","qa-fsca":"Plan, notify and close a correction, removal or FSCA.","qa-pmsp":"Data sources, indicators, thresholds and PMCF for a device.","qa-psur":"Period results, trends, benefit-risk and actions.","qa-trend":"Rates, control limits, signals and actions.","qa-ddp":"Stages, reviews, V&V, transfer and team.","qa-dir":"Verifiable requirements with sources and criteria.","qa-drv":"Participants, findings, decision and actions.","qa-trace":"Inputs to outputs, risk controls, V&V evidence.","qa-dtc":"Readiness of production, service and labeling.","qa-dhf":"Index of design records with status.","qa-mr":"ISO 13485 5.6 inputs, outputs and actions.","qa-qo":"Measurable objectives, targets and results.","qa-qm":"Scope, exclusions, policy, process map and procedures.",impact:"SME and regulatory impact of a change, Word and PDF.","qa-ncr":"Contain, investigate and disposition a nonconformity.","qa-mrb":"Disposition of nonconforming material.","qa-dev":"Pre-approved departure or waiver, with risk.","qa-capa":"Root cause, actions and effectiveness check.",
  "sq-quest":"Baseline data from prospective suppliers.","sq-eval":"Risk-based supplier qualification and approval.","sq-scar":"Corrective action for supplier nonconformities.","sq-scn":"Evaluate supplier-initiated changes.","sq-asl":"Controlled list of approved suppliers.","sq-fai":"First article check of a subcontracted item.","sq-sqa":"Short quality agreement for lower-risk suppliers.","sq-cmo":"Full quality agreement for contract manufacturers.",
  "qa-iap":"Risk-based annual audit programme.","qa-iac":"ISO 13485 clause 4–8 audit questions.","qa-qp":"Quality activities, roles and controls by phase.",
  "qa-sop":"Standard operating procedure layout.","qa-wi":"Step-by-step task instruction.","qa-pol":"Policy statement and commitments.",
@@ -2572,7 +2594,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="1.12.1", APPDATE="18-NOV-2026";
+const APPVER="1.13.0", APPDATE="18-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Asaf Ben Zion. All rights reserved.";
 const LEGAL=[["Copyright", "No part of this handbook’s original content may be copied or redistributed without written permission. Cited regulations, standards and guidance, and their links, remain the property of their official publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, data selection and design, developed with AI tools, and has been verified against requirements set by the author and against the official sources."], ["Sources", "Sources are limited to official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases. EU: EUR-Lex and European Commission pages, including MDCG guidance."], ["Important", "This application is intended for training only. Results from its tools require human review, verification and approval. Always check the linked source before citing anything in an audit response."]];
@@ -4794,10 +4816,10 @@ function buildDocx(blocks,title){
   return new Blob([z],{type:"application/vnd.openxmlformats-officedocument.wordprocessingml.document"});
 }
 /* PDF column layouts (x offset in points from the left margin, wrap width in characters) */
-const IA_PDFCOLS={q:[[0,6],[34,40],[266,6],[304,34]],d:[[0,6],[34,38],[258,38]],r:[[0,20],[124,20],[248,21],[372,21]],a:[[0,7],[40,48],[320,30]],s:[[0,20],[124,20],[248,11],[318,14],[408,14]]};
+const IA_PDFCOLS={q:[[0,6],[38,40],[258,6],[306,34]],d:[[0,6],[34,38],[258,38]],r:[[0,20],[124,20],[248,21],[372,21]],a:[[0,7],[40,48],[320,30]],s:[[0,20],[124,20],[248,11],[318,14],[408,14]]};
 function iaPdf(blocks,title,sub){ const secs=[]; let cur=null; blocks.forEach(b=>{ if(b.h1) return; if(b.h2||b.h3){ cur={h:b.h2||b.h3,rows:[]}; secs.push(cur); return; } if(!cur){ cur={h:"",rows:[]}; secs.push(cur); }
-    if(b.p) cur.rows.push([b.p]);
-    if(b.table){ if(b.pdfCols||(b.pdf&&IA_PDFCOLS[b.pdf])) cur.rows.push({table:{cols:b.pdfCols||IA_PDFCOLS[b.pdf],head:b.head?b.table[0]:null,rows:b.head?b.table.slice(1):b.table}}); else (b.head?b.table.slice(1):b.table).forEach(r=>cur.rows.push([r[0],r.slice(1).join(" | ")])); } });
+    if(b.p&&!b.pdfSkip){ if(b.lbl) cur.rows.push({lbl:b.p}); else cur.rows.push([b.p]); }
+    if(b.table){ if(b.pdfAuto) cur.rows.push({table:{auto:true,size:(b.table[0]||[]).length>=7?8:9,head:b.head?b.table[0]:null,rows:b.head?b.table.slice(1):b.table}}); else if(b.pdfCols||(b.pdf&&IA_PDFCOLS[b.pdf])) cur.rows.push({table:{cols:b.pdfCols||IA_PDFCOLS[b.pdf],head:b.head?b.table[0]:null,rows:b.head?b.table.slice(1):b.table}}); else (b.head?b.table.slice(1):b.table).forEach(r=>cur.rows.push([r[0],r.slice(1).join(" | ")])); } });
   return buildPdf({title,subtitle:sub,footer:title,sections:secs.filter(s=>s.rows.length||s.h),decision:null,hist:null,data:[]}); }
 function iaOut(p,a,touch){
   const C=iaClass(a); const missRa=raMissing(a);
@@ -5420,6 +5442,269 @@ Object.assign(SQF,{
  sample:{title:"Non-Product Software List – Demo City site",rev:"9",eff:"2026-11-10",owner:"Quality Assurance",
   list:[{id:"NPS-001",nm:"eQMS (documents, CAPA, complaints) 2026.2",use:"QMS processes and records",gxp:"GxP",rk:"High",ref:"NPS-A-001",st:"Validated",own:"QA",nx:"2027-03"},{id:"NPS-004",nm:"ERP 11.3 – inventory and lot tracking",use:"Material status, lot traceability",gxp:"GxP",rk:"High",ref:"NPS-A-004",st:"Validated",own:"Operations",nx:"2027-06"},{id:"NPS-007",nm:"Label design and print software 8.1",use:"Label templates and printing",gxp:"GxP",rk:"High",ref:"NPS-A-007",st:"Validated",own:"Production",nx:"2027-02"},{id:"NPS-009",nm:"Statistical software 22",use:"Validation and capability statistics",gxp:"GxP",rk:"Medium",ref:"NPS-A-009",st:"Validated",own:"Engineering",nx:"2027-09"},{id:"NPS-012",nm:"CalTrack Cloud 5.2",use:"Calibration and maintenance management",gxp:"GxP",rk:"Medium",ref:"NPS-A-012",st:"Validated",own:"Engineering",nx:"2027-10"},{id:"NPS-015",nm:"Training matrix spreadsheet v4",use:"Training due dates (records kept in eQMS)",gxp:"GxP",rk:"Low",ref:"NPS-A-015",st:"In progress",own:"HR / QA",nx:"2026-12"},{id:"NPS-020",nm:"E-mail and office suite",use:"Communication; no QMS records kept",gxp:"Non-GxP",rk:"N/A",ref:"NPS-A-020 (rationale)",st:"Not required",own:"IT",nx:"2028-01"},{id:"NPS-021",nm:"Payroll system",use:"HR payroll",gxp:"Non-GxP",rk:"N/A",ref:"NPS-A-021 (rationale)",st:"Not required",own:"HR",nx:"2028-01"}]}}
 });
+Object.assign(SQF,{
+"qa-cmp":{code:"CMP",doc:"FRM-PMS-001",short:"complaint record",file:"Complaint_Record",t:"Complaint Intake and Investigation",titleKey:"title",
+ sub:"Receive, document and investigate a complaint: event details, device and patient information, reportability decision, investigation, conclusion and trend link.",
+ intro:"Any written, electronic or oral communication that alleges deficiencies in identity, quality, durability, reliability, usability, safety or performance of a device after release is a complaint (ISO 13485 3.4). Record it promptly, decide on reporting first, then investigate unless a documented justification is given.",
+ refs:"ISO 13485:2016 8.2.2, 8.2.3, 8.5.2; 21 CFR 820 (QMSR, including 820.35 complaint records); 21 CFR 803; EU MDR Art. 87 and 88",sampleName:"occlusion alarm complaint",sampleDate:"04 May 2026, 14:20",
+ secs:[
+  {h:"1. Intake",f:[["title","text","Complaint number and short title"],["recv","date","Date received"],["aware","date","Date the company became aware"],["chan","sel","Received through",["Phone","E-mail","Sales or field representative","Distributor","Service","Social media / literature","Regulatory authority","Other"]],["rep","text","Reporter (role and contact)"],["ctry","text","Country of event"]]},
+  {h:"2. Event and device",f:[["prod","text","Device, model and software version"],["lot","text","Lot / serial / UDI-DI"],["desc","area","Event description (what happened, when, during which use step)"],["pt","sel","Patient or user outcome",["No injury","Injury, no medical intervention","Injury needing medical intervention","Serious injury","Death","Unknown"]],["avail","yna","Is the device or a sample available for evaluation?"],["use","yna","Was the device used according to the IFU?"]]},
+  {h:"3. Reportability (first decision)",f:[["r1","yna","Could the event be an FDA MDR reportable event (death, serious injury or malfunction that could cause one)?","see the reportability assessment FRM-PMS-002"],["r2","yna","Could it be an EU serious incident (MDR Art. 2(65))?"],["rref","text","Reportability assessment number"]]},
+  {h:"4. Investigation",f:[["inv","yna","Is an investigation needed?","state the justification if not"],["meth","area","Investigation performed (returned device, DHR review, risk file, similar complaints)"],["rc","area","Findings and probable cause"],["risk","yna","Does the event confirm a known hazard within the estimated risk?","reference the risk file line"]]},
+  {h:"5. Conclusion and actions",f:[["conc","area","Conclusion"],["capa","text","CAPA / NCR / change links"],["trend","text","Trend category"],["resp","text","Response to the complainant (date and summary)"],["close","date","Closure date"]]},
+  {h:"6. Approval",f:[QA_SIGN(["Complaint handler","Quality Assurance"])]}],
+ sample:{title:"CMP-2026-0412 – late occlusion alarm",recv:"2026-05-04",aware:"2026-05-04",chan:"Phone",rep:"Diabetes nurse, clinic in Demo City (contact on file)",ctry:"Germany",prod:"Insulin pump IP-300, firmware 3.1",lot:"SN IP3-260117; UDI-DI on file",desc:"Patient on a basal rate of 0.1 U/h noticed a high glucose reading in the morning. The pump showed an occlusion alarm about 4 hours after the infusion set kinked overnight.",pt:"Injury, no medical intervention",avail:{a:"Y",c:"Pump and infusion set returned on 2026-05-11."},use:{a:"Y",c:"Settings and set change interval within the IFU."},
+  r1:{a:"Y",c:"Malfunction that could contribute to serious injury if it recurs: assessed in RPT-2026-031."},r2:{a:"N",c:"No serious deterioration in health; included in the trend data (Art. 88)."},rref:"RPT-2026-031",
+  inv:{a:"Y",c:"Returned device and trend review."},meth:"Pump log read out; bench test at 0.1 U/h with a kinked line; DHR review of SN IP3-260117; search of similar complaints since Jan 2026 (14 found).",rc:"Alarm after 3.6 h at 0.1 U/h, within the 4 h specification. The fixed-pressure algorithm is slow at very low flow. No manufacturing defect.",risk:{a:"N",c:"Occurrence above the estimate for hazard HZ-12 (under-delivery): risk file update requested."},
+  conc:"Device met its specification; design limitation at very low basal rates confirmed. Escalated to CAPA.",capa:"CAPA-2026-019; trend report TR-IP-2026-Q2",trend:"Occlusion alarm latency",resp:"2026-05-20: findings explained to the nurse; replacement pump sent.",close:"2026-05-22",
+  sign:QA_SIGNED([["Complaint handler","M. Roth"],["Quality Assurance","D. Levi"]],"2026-05-22")}},
+
+"qa-rpt":{code:"RPT",doc:"FRM-PMS-002",short:"reportability assessment",file:"Reportability_Assessment",t:"Reportability Assessment (FDA MDR and EU Vigilance)",titleKey:"ref",
+ sub:"Decide and document whether an event must be reported to FDA (21 CFR 803) or as an EU serious incident (MDR Art. 87), with the reporting clock.",
+ intro:"Decide quickly and document the reasoning. FDA: 30 calendar days from awareness; 5 work days when remedial action is needed to prevent an unreasonable risk of substantial harm or when FDA asks. EU serious incident: immediately, and no later than 15 days after awareness; 10 days for death or an unanticipated serious deterioration in health; 2 days for a serious public health threat. Non-serious incidents feed trend reporting (Art. 88).",
+ refs:"21 CFR 803.3, 803.50, 803.53; EU MDR Art. 2(64)–(66), Art. 87, Art. 88; MDCG 2023-3",sampleName:"occlusion alarm event",sampleDate:"06 May 2026, 10:00",
+ secs:[
+  {h:"1. Event",f:[["ref","text","Assessment number"],["cmp","text","Complaint number"],["aware","date","Awareness date (day 0)"],["sum","area","Event summary"]]},
+  {h:"2. FDA medical device reporting (21 CFR 803)",f:[["f1","yna","Did the device cause or contribute to a death?"],["f2","yna","Did it cause or contribute to a serious injury?"],["f3","yna","Did it malfunction, and would a recurrence be likely to cause or contribute to a death or serious injury?"],["f4","yna","Is remedial action needed to prevent an unreasonable risk of substantial harm (5-day report)?"],["fdec","sel","FDA decision",["Not reportable","30-day report","5-day report"]],["fdue","text","Report due date and eMDR number"]]},
+  {h:"3. EU vigilance (MDR Art. 87)",f:[["e1","yna","Is it an incident (malfunction, deterioration, inadequate information, use error or side effect)?"],["e2","yna","Did it lead, or might it have led, to death, serious deterioration in health or a serious public health threat?"],["e3","yna","Is a causal relationship with the device established or reasonably possible?"],["edec","sel","EU decision",["Not reportable: include in trend data","Serious incident: 15 days","Serious incident: 10 days (death or unanticipated serious deterioration)","Serious public health threat: 2 days"]],["edue","text","Report due date and MIR reference"]]},
+  {h:"4. Other markets and rationale",f:[["oth","text","Other markets assessed"],["why","area","Rationale and references (guidance, similar decisions)"]]},
+  {h:"5. Approval",f:[QA_SIGN(["Regulatory Affairs","Quality Assurance"])]}],
+ sample:{ref:"RPT-2026-031",cmp:"CMP-2026-0412",aware:"2026-05-04",sum:"Late occlusion alarm (about 4 h) at 0.1 U/h basal rate; high glucose, no medical intervention. 14 similar complaints since January 2026.",
+  f1:{a:"N",c:"No death."},f2:{a:"N",c:"No serious injury in this event."},f3:{a:"Y",c:"A recurrence in a sensitive patient could contribute to serious injury (diabetic ketoacidosis)."},f4:{a:"N",c:"Device meets its specification; risk addressed through CAPA and user communication, not an urgent remedial action."},fdec:"30-day report",fdue:"Due 2026-06-03; eMDR submitted 2026-05-28",
+  e1:{a:"Y",c:"Performance limitation at very low flow."},e2:{a:"N",c:"No serious deterioration and none judged likely in this case."},e3:{a:"Y",c:"Causal link with the alarm algorithm established."},edec:"Not reportable: include in trend data",edue:"Included in trend report TR-IP-2026-Q2",
+  oth:"Canada and Australia reviewed: not reportable",why:"FDA: reportable malfunction because a recurrence could contribute to serious injury (803.3 definition of malfunction and 803.50). EU: no serious incident; the increase in frequency is handled under Art. 88 trend reporting.",
+  sign:QA_SIGNED([["Regulatory Affairs","Noa RA"],["Quality Assurance","D. Levi"]],"2026-05-06")}},
+
+"qa-hhe":{code:"HHE",doc:"FRM-PMS-003",short:"health hazard evaluation",file:"Health_Hazard_Evaluation",t:"Health Hazard Evaluation (HHE)",titleKey:"ref",
+ sub:"Evaluate the health risk of a product problem to decide on field action: affected population, hazard, severity, probability, risk to patients and users, and recommendation.",
+ intro:"Use the HHE when a problem may need a correction, removal or FSCA. Base it on the risk file and real data, involve a clinical expert, and consider vulnerable patients. FDA uses a similar evaluation to classify recalls (21 CFR 7.41).",
+ refs:"21 CFR 7.41 (health hazard evaluation), 21 CFR 806; ISO 14971:2019 10; EU MDR Art. 89",sampleName:"IP-300 low-flow occlusion alarm",sampleDate:"20 Jun 2026, 11:00",
+ secs:[
+  {h:"1. Problem",f:[["ref","text","HHE number"],["prob","area","Problem description"],["prod","text","Products, versions and lots affected"],["qty","text","Units distributed and in use"],["src","text","Source records (complaints, CAPA, test reports)"]]},
+  {h:"2. Hazard and harm",f:[["hz","text","Hazard and hazardous situation"],["harm","area","Possible harm (worst credible and most likely)"],["pop","text","Patients most at risk"],["sev","sel","Severity of the worst credible harm",["Negligible","Minor","Serious","Critical","Catastrophic"]],["prob2","area","Probability estimate and data used"],["risk","text","Risk file reference and whether the risk stays acceptable"]]},
+  {h:"3. Detection and mitigation",f:[["d1","yna","Can the user detect the problem before harm?"],["d2","yna","Do existing labeling or controls reduce the risk?"],["d3","yna","Did any death or serious injury occur?"]]},
+  {h:"4. Conclusion",f:[["level","sel","Health risk",["Reasonable probability of serious adverse health consequences or death (US Class I)","May cause temporary or medically reversible effects; serious harm remote (US Class II)","Not likely to cause adverse health consequences (US Class III)","No field action needed"]],["rec","area","Recommendation"],["clin","text","Clinical expert"]]},
+  {h:"5. Approval",f:[QA_SIGN(["Medical / clinical expert","Regulatory Affairs","Quality Assurance"])]}],
+ sample:{ref:"HHE-2026-004",prob:"Occlusion alarm may take up to 3.6 h at basal rates of 0.1 U/h (specification 4 h). Users on very low basal rates may miss insulin for several hours before the alarm.",prod:"IP-300 pumps with firmware 3.0 and 3.1 (all serial numbers)",qty:"About 41,000 distributed; 38,500 in use",src:"CMP-2026-0412 and 13 similar; CAPA-2026-019; bench report BR-2026-077",
+  hz:"Under-delivery of insulin after an undetected line occlusion",harm:"Worst credible: diabetic ketoacidosis needing hospital treatment. Most likely: hyperglycaemia corrected by the user.",pop:"Children and insulin-sensitive adults on basal rates ≤ 0.2 U/h (about 9% of users)",sev:"Serious",prob2:"14 complaints in 5 months for about 3,500 low-rate users; no hospital treatment reported. Probability of serious harm judged remote with glucose monitoring.",risk:"RMR-IP300 HZ-12: residual risk still acceptable with added user information and the firmware fix.",
+  d1:{a:"Y",c:"Continuous or routine glucose checks show rising glucose."},d2:{a:"Y",c:"IFU tells users to check glucose after set changes and at night."},d3:{a:"N",c:"None reported."},
+  level:"May cause temporary or medically reversible effects; serious harm remote (US Class II)",rec:"Field safety notice to users and clinics with interim advice; firmware 3.2 update for all pumps; correction reported to FDA under 806 and FSCA notified in the EU (Art. 89).",clin:"Dr. A. Stein, endocrinology consultant",
+  sign:QA_SIGNED([["Medical / clinical expert","Dr. A. Stein"],["Regulatory Affairs","Noa RA"],["Quality Assurance","D. Levi"]],"2026-06-20")}},
+
+"qa-fsca":{code:"FSCA",doc:"FRM-PMS-004",short:"field action assessment",file:"Field_Action_Assessment",t:"Recall / Field Safety Corrective Action (FSCA) Assessment",titleKey:"ref",
+ sub:"Plan and record a correction, removal or FSCA: decision, scope, regulatory notifications, field safety notice, effectiveness checks and closure.",
+ intro:"FDA: report a correction or removal made to reduce a health risk, or to fix a violation that may present a risk, within 10 working days of starting it (21 CFR 806), unless already reported under another regulation. EU: notify the competent authorities before the FSCA starts, except in urgent cases, and send a field safety notice (MDR Art. 89).",
+ refs:"21 CFR 806.10; 21 CFR 7 (recalls); EU MDR Art. 89; MDCG 2023-3; ISO 13485:2016 8.3.3",sampleName:"IP-300 firmware update",sampleDate:"24 Jun 2026, 09:00",
+ secs:[
+  {h:"1. Decision",f:[["ref","text","Field action number"],["hhe","text","HHE and CAPA references"],["type","sel","Type of action",["Correction (in the field)","Removal (return of product)","Advisory notice only","Software update"]],["why","area","Reason for the action"]]},
+  {h:"2. Scope",f:[["prod","text","Products, versions, lots and serial numbers"],["mkts","text","Countries and consignees"],["qty","text","Quantity affected"]]},
+  {h:"3. Regulatory notifications",f:[["n1","yna","Is an FDA 806 report needed?","10 working days from start"],["n2","yna","Are EU competent authorities notified before the FSCA?"],["n3","yna","Is the notified body informed?"],["notes","tbl","Notifications",[["a","Authority"],["d","Date"],["ref","Reference"]],[]]]},
+  {h:"4. Execution",f:[["fsn","area","Field safety notice: key messages"],["start","date","Start date"],["plan","area","Distribution and reconciliation method"]]},
+  {h:"5. Effectiveness and closure",f:[["eff","text","Effectiveness check (level and method)"],["res","area","Result"],["cl","yna","Can the action be closed?"]]},
+  {h:"6. Approval",f:[QA_SIGN(["Regulatory Affairs","Quality Assurance","Management"])]}],
+ sample:{ref:"FA-2026-002",hhe:"HHE-2026-004; CAPA-2026-019",type:"Software update",why:"Occlusion alarm can be slow at very low basal rates; firmware 3.2 (pressure-trend algorithm) reduces the delay to under 1 h.",
+  prod:"IP-300 pumps, firmware 3.0 and 3.1, all serial numbers",mkts:"USA, EU (12 countries), Canada; clinics and direct users",qty:"38,500 pumps in use",
+  n1:{a:"Y",c:"Report sent 2026-07-01 (start 2026-06-24)."},n2:{a:"Y",c:"Lead competent authority notified 2026-06-22 with the draft FSN."},n3:{a:"Y",c:"Notified body informed 2026-06-22."},
+  notes:[{a:"FDA (806 report)",d:"2026-07-01",ref:"Z-2026-0418"},{a:"Lead EU competent authority",d:"2026-06-22",ref:"FSCA-2026-IP300"},{a:"Health Canada",d:"2026-06-25",ref:"on file"}],
+  fsn:"What can happen, who is most at risk, interim advice (check glucose after set changes and overnight), how to update to firmware 3.2 through the app, and the contact line.",start:"2026-06-24",plan:"App push notice and e-mail to all registered users; letters to clinics; update status read from the cloud service; non-responders contacted by phone after 30 days.",
+  eff:"Level A: 100% of consignees; update rate from cloud data",res:"By 2026-10-31: 97.8% of pumps updated; remaining users reached by phone; no new latency complaints on firmware 3.2.",cl:{a:"Y",c:"Closure report sent to authorities 2026-11-10."},
+  sign:QA_SIGNED([["Regulatory Affairs","Noa RA"],["Quality Assurance","D. Levi"],["Management","J. Hart, General Manager"]],"2026-11-10")}},
+
+"qa-pmsp":{code:"PMSP",doc:"FRM-PMS-005",short:"PMS plan",file:"PMS_Plan",t:"Post-Market Surveillance (PMS) Plan",titleKey:"prod",
+ sub:"Plan how post-market data are collected and analysed for a device: data sources, indicators and thresholds, methods, PMCF, responsibilities and reporting.",
+ intro:"Every device needs a PMS system proportionate to its risk class (MDR Art. 83). The plan follows MDR Annex III section 1.1: sources of data, methods to assess it, indicators and thresholds for benefit-risk, trend reporting, communication, and links to CAPA, risk management and the clinical evaluation.",
+ refs:"EU MDR Art. 83, 84, 86, 88, Annex III, Annex XIV Part B; ISO 13485:2016 8.2.1; ISO/TR 20416:2020",sampleName:"IP-300 insulin pump",sampleDate:"15 Jan 2026, 10:00",
+ secs:[
+  {h:"1. Device",f:[["prod","text","Device and models"],["cls","text","Classification (EU and US)"],["docno","text","Plan number and revision"],["rep","sel","PMS report type",["PSUR (Class IIa: at least every 2 years)","PSUR (Class IIb and III: at least annually)","PMS report (Class I: update when necessary)"]]]},
+  {h:"2. Data sources",f:[["src","tbl","Sources",[["s","Source"],["t","Type",["Proactive","Reactive"]],["f","Frequency"],["o","Owner"]],[]]]},
+  {h:"3. Indicators and thresholds",f:[["ind","tbl","Indicators",[["i","Indicator"],["b","Baseline"],["th","Threshold / signal"],["a","Action if exceeded"]],[]],["trendM","text","Trend method (statistics used for Art. 88)"]]},
+  {h:"4. PMCF",f:[["pmcf","yna","Is PMCF needed?","plan number, or the justification if not"],["pmcfAct","area","PMCF activities"]]},
+  {h:"5. Outputs and links",f:[["links","area","Links to risk management, clinical evaluation, CAPA and design"],["comm","text","Communication to authorities, notified body and users"],["resp","text","Responsibilities"]]},
+  {h:"6. Approval",f:[QA_SIGN(["PMS manager","Regulatory Affairs","Quality Assurance"])]}],
+ sample:{prod:"Insulin pump IP-300 (all firmware versions) with infusion sets IS-6 and IS-9",cls:"EU Class IIb (Annex VIII Rule 12); US Class II",docno:"PMSP-IP300 rev 3",rep:"PSUR (Class IIb and III: at least annually)",
+  src:[{s:"Complaints and service records",t:"Reactive",f:"Continuous; monthly review",o:"Complaint handling"},{s:"Vigilance and authority databases (MAUDE, EU notices) for similar devices",t:"Proactive",f:"Quarterly",o:"PMS manager"},{s:"Pump logs from the cloud service (alarms, occlusions)",t:"Proactive",f:"Monthly",o:"Data science"},{s:"Literature and state of the art",t:"Proactive",f:"Twice a year",o:"Clinical affairs"},{s:"User survey and clinic feedback",t:"Proactive",f:"Yearly",o:"Marketing / clinical"}],
+  ind:[{i:"Complaints per 1,000 pumps per month",b:"2.1",th:"> 3.0 for 2 months, or statistically significant rise",a:"Investigation and CAPA review"},{i:"Occlusion alarm latency > 2 h (log data)",b:"0.4%",th:"> 1%",a:"Engineering review; consider FSCA"},{i:"Serious incidents",b:"0 per year",th:"Any",a:"Vigilance report, HHE"}],
+  trendM:"Monthly rates with control limits (u-chart); significant increase in frequency or severity reported under Art. 88",
+  pmcf:{a:"Y",c:"PMCF plan PMCF-IP300 rev 2."},pmcfAct:"Registry study of 300 users on low basal rates (12 months); review of cloud log data on alarm performance.",
+  links:"PMS results update the risk file RMR-IP300, the clinical evaluation report CER-IP300 and the summary of safety and clinical performance where applicable; signals open CAPA or design changes.",comm:"PSUR to the notified body yearly (Class IIb); trend reports and serious incidents to competent authorities; FSNs to users",resp:"PMS manager owns the plan; complaint handling, RA, clinical affairs and data science supply data",
+  sign:QA_SIGNED([["PMS manager","S. Amar"],["Regulatory Affairs","Noa RA"],["Quality Assurance","D. Levi"]],"2026-01-15")}},
+
+"qa-psur":{code:"PSUR",doc:"FRM-PMS-006",short:"PSUR / PMS report",file:"PSUR",t:"Periodic Safety Update Report (PSUR) / PMS Report",titleKey:"prod",
+ sub:"Summarise PMS results for a period: sales and population, complaints and incidents, trends, FSCAs, PMCF and literature, benefit-risk conclusion and actions.",
+ intro:"Class IIa devices need a PSUR at least every two years, Class IIb and III at least annually, and Class III and implantable devices submit it to the notified body through EUDAMED (MDR Art. 86). Class I devices need a PMS report, updated when necessary (Art. 85).",
+ refs:"EU MDR Art. 85, 86, Annex III; MDCG 2022-21 (PSUR guidance); ISO 13485:2016 8.4",sampleName:"IP-300 PSUR 2026",sampleDate:"10 Nov 2026, 10:00",
+ secs:[
+  {h:"1. Scope",f:[["prod","text","Device and models"],["per","text","Reporting period"],["docno","text","Report number and revision"],["sales","text","Units sold and estimated users"]]},
+  {h:"2. Results",f:[["res","tbl","PMS data",[["d","Data"],["v","Result in period"],["p","Previous period"],["c","Comment"]],[]]]},
+  {h:"3. Analysis",f:[["trend","area","Trends and signals"],["fsca","text","FSCAs in the period"],["pmcf","area","PMCF and literature findings"]]},
+  {h:"4. Conclusions",f:[["br","sel","Benefit-risk",["Unchanged and favourable","Favourable after actions","Adversely changed: see actions"]],["concl","area","Conclusions"],["acts","tbl","Actions",[["a","Action"],["o","Owner"],["d","Due"]],[]]]},
+  {h:"5. Approval",f:[QA_SIGN(["PMS manager","Clinical affairs","Quality Assurance"])]}],
+ sample:{prod:"Insulin pump IP-300 with infusion sets IS-6 and IS-9",per:"1 Oct 2025 – 30 Sep 2026",docno:"PSUR-IP300-2026 rev 1",sales:"12,400 pumps sold in the period; about 41,000 in use",
+  res:[{d:"Complaints (rate per 1,000 pumps per month)",v:"2.4",p:"2.0",c:"Rise from occlusion alarm complaints in Q2; back to 1.9 after firmware 3.2"},{d:"Serious incidents",v:"0",p:"1",c:"Previous period: battery event, closed"},{d:"Trend reports (Art. 88)",v:"1",p:"0",c:"Occlusion alarm latency, TR-IP-2026-Q2"},{d:"Field actions",v:"1",p:"0",c:"FA-2026-002 firmware update"}],
+  trend:"Occlusion alarm latency complaints rose in Q2 2026 (u-chart signal). Root cause found in CAPA-2026-019; firmware 3.2 released; rate below baseline since September.",fsca:"FA-2026-002 (software update, 97.8% completed)",pmcf:"Registry interim (180 users): no ketoacidosis events; literature review found no new hazards for this device type.",
+  br:"Favourable after actions",concl:"The benefit-risk remains favourable. The FSCA and firmware change address the only signal. Risk file and clinical evaluation updated.",
+  acts:[{a:"Final CAPA effectiveness check",o:"Quality Assurance",d:"2027-05-31"},{a:"Complete PMCF registry 12-month analysis",o:"Clinical affairs",d:"2027-03-31"}],
+  sign:QA_SIGNED([["PMS manager","S. Amar"],["Clinical affairs","Dr. A. Stein"],["Quality Assurance","D. Levi"]],"2026-11-10")}},
+
+"qa-trend":{code:"TR",doc:"FRM-PMS-007",short:"trend report",file:"Trend_Report",t:"Complaint and Nonconformance Trend Report",titleKey:"ref",
+ sub:"Analyse complaint and nonconformance data for a period: rates by category, control limits, signals, conclusions and actions.",
+ intro:"Analyse data to show whether the QMS and products work as intended and to find problems early (ISO 13485 8.4). Use rates, not counts, and pre-set signal rules. A statistically significant increase in frequency or severity of non-serious incidents is reported under MDR Art. 88.",
+ refs:"ISO 13485:2016 8.2.1, 8.4, 8.5.2; EU MDR Art. 88; ISO/TR 10017 (statistical techniques)",sampleName:"IP-300 Q2 2026",sampleDate:"10 Jul 2026, 09:00",
+ secs:[
+  {h:"1. Scope",f:[["ref","text","Report number"],["per","text","Period"],["prod","text","Products"],["meth","text","Method and signal rules"]]},
+  {h:"2. Data",f:[["cat","tbl","By category",[["c","Category"],["n","Count"],["r","Rate"],["l","Upper limit"],["s","Signal",["No","Yes"]]],[]]]},
+  {h:"3. Analysis and actions",f:[["an","area","Analysis"],["a1","yna","Is a CAPA needed?"],["a2","yna","Is a trend report to authorities needed (MDR Art. 88)?"],["acts","area","Actions"]]},
+  {h:"4. Approval",f:[QA_SIGN(["Quality engineer","Quality Assurance"])]}],
+ sample:{ref:"TR-IP-2026-Q2",per:"1 Apr – 30 Jun 2026",prod:"Insulin pump IP-300",meth:"Monthly complaint rate per 1,000 pumps; u-chart limits from the 12 months before; signal = 1 point above the upper limit or 3 rising months",
+  cat:[{c:"Occlusion alarm latency",n:"14",r:"0.12",l:"0.05",s:"Yes"},{c:"Battery life",n:"9",r:"0.08",l:"0.11",s:"No"},{c:"Display or button",n:"6",r:"0.05",l:"0.09",s:"No"},{c:"Infusion set leak",n:"11",r:"0.10",l:"0.14",s:"No"}],
+  an:"Occlusion alarm latency is above the upper limit in May and June. All 14 events at basal rates ≤ 0.2 U/h; no serious incident.",a1:{a:"Y",c:"CAPA-2026-019."},a2:{a:"Y",c:"Trend report submitted to the lead competent authority 2026-07-14."},acts:"Firmware 3.2 development, interim user advice, HHE-2026-004.",
+  sign:QA_SIGNED([["Quality engineer","L. Amar"],["Quality Assurance","D. Levi"]],"2026-07-10")}},
+
+"qa-ddp":{code:"DDP",doc:"FRM-DES-001",short:"design and development plan",file:"Design_Development_Plan",t:"Design and Development Plan",titleKey:"proj",
+ sub:"Plan a design project: scope, stages and deliverables, reviews, verification, validation and transfer, responsibilities, interfaces and risk management.",
+ intro:"Plan and document design and development, keep the plan up to date, and include stages, reviews, verification, validation, transfer, responsibilities, traceability and resources (ISO 13485 7.3.2). The plan is part of the design and development file.",
+ refs:"ISO 13485:2016 7.3.2, 7.3.10; 21 CFR 820 (QMSR); ISO 14971:2019 4.4; IEC 62304 (software)",sampleName:"IP-300 firmware 3.2",sampleDate:"01 Jul 2026, 10:00",
+ secs:[
+  {h:"1. Project",f:[["proj","text","Project name and number"],["docno","text","Plan number and revision"],["scope","area","Scope and purpose"],["cls","text","Device classification and software safety class"]]},
+  {h:"2. Stages and deliverables",f:[["stg","tbl","Stages",[["s","Stage"],["d","Deliverables"],["r","Review / gate"],["t","Target date"]],[]]]},
+  {h:"3. Team and interfaces",f:[["team","tbl","Team",[["f","Function"],["n","Name"],["r","Responsibility"]],[]],["intf","text","Interfaces (suppliers, other projects, regulatory)"]]},
+  {h:"4. Verification, validation and transfer",f:[["ver","area","Verification strategy"],["val","area","Validation strategy (including usability and clinical)"],["tr","text","Transfer approach"]]},
+  {h:"5. Risk and regulatory",f:[["rm","text","Risk management plan reference"],["reg","text","Regulatory strategy"]]},
+  {h:"6. Approval",f:[QA_SIGN(["Project leader","R&D","Quality Assurance","Regulatory Affairs"])]}],
+ sample:{proj:"IP-300 firmware 3.2 (pressure-trend occlusion algorithm), DP-2026-07",docno:"DDP-2026-07 rev 2",scope:"Replace the fixed-pressure occlusion detection with a pressure-trend algorithm (OCC-2) so the alarm comes within 1 h at all basal rates, without more false alarms. Origin: CAPA-2026-019.",cls:"EU IIb, US Class II; IEC 62304 software safety class C",
+  stg:[{s:"1. Inputs",d:"Design input requirements DIR-2026-07, updated risk analysis",r:"DR-1 input review",t:"2026-07-15"},{s:"2. Design",d:"Algorithm design, code, unit tests",r:"DR-2 design review",t:"2026-08-20"},{s:"3. Verification",d:"Bench verification at 0.1–2 U/h, regression suite",r:"DR-3 verification review",t:"2026-09-20"},{s:"4. Validation and transfer",d:"Usability check of alarm messages, release package, update process",r:"DR-4 release review",t:"2026-10-10"}],
+  team:[{f:"Project leader",n:"K. Ross",r:"Plan, schedule, reviews"},{f:"Software",n:"T. Lin",r:"Algorithm and code"},{f:"V&V",n:"P. Grant",r:"Verification protocols and reports"},{f:"Quality Assurance",n:"D. Levi",r:"Design control compliance"},{f:"Regulatory Affairs",n:"Noa RA",r:"Regulatory assessment and submissions"}],
+  intf:"Cloud app team (update delivery); infusion set supplier (line compliance data)",ver:"Requirement-based bench tests with kinked lines at 0.1, 0.2, 0.5, 1 and 2 U/h on 6 pumps; false-alarm test of 2,000 pump-hours; full IEC 62304 regression.",val:"Formative review of changed alarm text with 8 users; summative not needed (no new critical task), justified in the usability file.",tr:"Release through the existing validated over-the-air update process; service and complaint staff trained",
+  rm:"RMP-IP300 rev 5; hazard HZ-12 updated",reg:"US: letter to file under the software change guidance; EU: non-substantial change, notified body informed",
+  sign:QA_SIGNED([["Project leader","K. Ross"],["R&D","T. Lin"],["Quality Assurance","D. Levi"],["Regulatory Affairs","Noa RA"]],"2026-07-01")}},
+
+"qa-dir":{code:"DIR",doc:"FRM-DES-002",short:"design inputs",file:"Design_Input_Requirements",t:"Design Input Requirements",titleKey:"proj",
+ sub:"Record design inputs: functional, performance, usability and safety requirements, regulatory requirements, risk-control outputs, with acceptance criteria and sources.",
+ intro:"Inputs must include functional, performance, usability and safety requirements, applicable regulatory requirements and standards, outputs of risk management, information from previous similar designs, and other needs. They must be complete, unambiguous, verifiable and not in conflict (ISO 13485 7.3.3).",
+ refs:"ISO 13485:2016 7.3.3; ISO 14971:2019 7.1; IEC 62366-1; FDA design control guidance (1997)",sampleName:"IP-300 firmware 3.2",sampleDate:"14 Jul 2026, 10:00",
+ secs:[
+  {h:"1. Project",f:[["proj","text","Project"],["docno","text","Document number and revision"],["src","text","Sources (user needs, CAPA, standards, risk analysis)"]]},
+  {h:"2. Requirements",f:[["req","tbl","Requirements",[["id","ID"],["r","Requirement"],["t","Type",["Functional","Performance","Usability","Safety / risk control","Regulatory","Interface"]],["ac","Acceptance criteria"],["s","Source"]],[]]]},
+  {h:"3. Review of inputs",f:[["i1","yna","Are all requirements unambiguous and verifiable?"],["i2","yna","Are conflicts resolved?"],["i3","yna","Are risk-control measures included as requirements?"]]},
+  {h:"4. Approval",f:[QA_SIGN(["Systems engineering","Quality Assurance"])]}],
+ sample:{proj:"IP-300 firmware 3.2, DP-2026-07",docno:"DIR-2026-07 rev 1",src:"CAPA-2026-019, HHE-2026-004, IEC 60601-2-24, IEC 62304, risk file RMR-IP300",
+  req:[{id:"DI-01",r:"Occlusion alarm within 60 min at any basal rate from 0.05 to 2 U/h",t:"Performance",ac:"Max latency ≤ 60 min in 30 tests per rate",s:"CAPA-2026-019"},{id:"DI-02",r:"False occlusion alarms not higher than firmware 3.1",t:"Performance",ac:"≤ 1 per 1,000 pump-hours",s:"Complaint data"},{id:"DI-03",r:"Alarm text tells the user to check the line and glucose",t:"Usability",ac:"8 of 8 users act correctly in formative test",s:"IEC 62366-1"},{id:"DI-04",r:"Under-delivery hazard HZ-12 controlled by detection",t:"Safety / risk control",ac:"Residual risk acceptable per RMR",s:"ISO 14971"},{id:"DI-05",r:"Software life cycle to class C",t:"Regulatory",ac:"IEC 62304 deliverables complete",s:"IEC 62304"}],
+  i1:{a:"Y",c:"Reviewed in DR-1."},i2:{a:"Y",c:"DI-01 versus DI-02 trade-off resolved by the trend algorithm."},i3:{a:"Y",c:"DI-04 traced to HZ-12."},
+  sign:QA_SIGNED([["Systems engineering","K. Ross"],["Quality Assurance","D. Levi"]],"2026-07-14")}},
+
+"qa-drv":{code:"DR",doc:"FRM-DES-003",short:"design review minutes",file:"Design_Review",t:"Design Review Minutes",titleKey:"ref",
+ sub:"Record a formal design review: stage, participants including an independent reviewer, documents reviewed, findings, decisions and actions.",
+ intro:"Hold systematic reviews at planned stages to evaluate whether the design meets requirements and to find problems. Include representatives of the functions concerned and other specialists, and keep records of results and actions (ISO 13485 7.3.5). Include at least one person without direct responsibility for the stage.",
+ refs:"ISO 13485:2016 7.3.5; 21 CFR 820 (QMSR); FDA design control guidance (1997)",sampleName:"IP-300 firmware 3.2 DR-3",sampleDate:"22 Sep 2026, 14:00",
+ secs:[
+  {h:"1. Review",f:[["ref","text","Review number and stage"],["proj","text","Project"],["date","date","Date"],["docs","area","Documents reviewed"]]},
+  {h:"2. Participants",f:[["att","tbl","Participants",[["n","Name"],["f","Function"],["i","Independent reviewer",["No","Yes"]]],[]]]},
+  {h:"3. Findings and actions",f:[["find","tbl","Findings",[["f","Finding"],["a","Action"],["o","Owner"],["d","Due"]],[]]]},
+  {h:"4. Decision",f:[["dec","sel","Decision",["Proceed to next stage","Proceed with conditions","Repeat the review"]],["why","area","Basis for the decision"]]},
+  {h:"5. Approval",f:[QA_SIGN(["Project leader","Independent reviewer","Quality Assurance"])]}],
+ sample:{ref:"DR-3 verification review",proj:"IP-300 firmware 3.2, DP-2026-07",date:"2026-09-22",docs:"Verification report VR-2026-07 rev 1; trace matrix TM-2026-07; risk analysis update; anomaly list",
+  att:[{n:"K. Ross",f:"Project leader",i:"No"},{n:"T. Lin",f:"Software",i:"No"},{n:"P. Grant",f:"V&V",i:"No"},{n:"M. Ortiz",f:"Senior engineer, other product line",i:"Yes"},{n:"D. Levi",f:"Quality Assurance",i:"No"}],
+  find:[{f:"Latency at 0.05 U/h is 52 min, close to the 60 min limit",a:"Add 20 more runs at 0.05 U/h to confirm margin",o:"P. Grant",d:"2026-09-29"},{f:"One open minor anomaly in the alarm log display",a:"Fix in 3.2 or justify deferral",o:"T. Lin",d:"2026-09-30"}],
+  dec:"Proceed with conditions",why:"All requirements verified; conditions are the extra 0.05 U/h runs and the anomaly decision before DR-4.",
+  sign:QA_SIGNED([["Project leader","K. Ross"],["Independent reviewer","M. Ortiz"],["Quality Assurance","D. Levi"]],"2026-09-22")}},
+
+"qa-trace":{code:"TM",doc:"FRM-DES-004",short:"traceability matrix",file:"Traceability_Matrix",t:"Design Traceability Matrix",titleKey:"proj",
+ sub:"Trace each user need and design input to the design output, the risk control, the verification and the validation evidence.",
+ intro:"Traceability shows that every input has an output, every output is verified, every risk control is implemented and verified, and validation covers user needs (ISO 13485 7.3.2 e, 7.3.6, 7.3.7). Gaps must be closed before design transfer.",
+ refs:"ISO 13485:2016 7.3.2, 7.3.6, 7.3.7; ISO 14971:2019 7.2; IEC 62304 5.1.1",sampleName:"IP-300 firmware 3.2",sampleDate:"28 Sep 2026, 10:00",
+ secs:[
+  {h:"1. Project",f:[["proj","text","Project"],["docno","text","Matrix number and revision"]]},
+  {h:"2. Traceability",f:[["tm","tbl","Trace",[["i","Input ID"],["o","Design output"],["r","Risk control"],["v","Verification"],["va","Validation"],["s","Status",["Closed","Open"]]],[]]]},
+  {h:"3. Review",f:[["g1","yna","Does every input trace to a verified output?"],["g2","yna","Is every risk control verified for implementation and effectiveness?"],["gaps","area","Gaps and how they are closed"]]},
+  {h:"4. Approval",f:[QA_SIGN(["Systems engineering","Quality Assurance"])]}],
+ sample:{proj:"IP-300 firmware 3.2, DP-2026-07",docno:"TM-2026-07 rev 2",
+  tm:[{i:"DI-01",o:"SRS-OCC-10 to 14; OCC-2 module",r:"HZ-12 detection",v:"VR-2026-07 test 4.1–4.5",va:"Field data after release",s:"Closed"},{i:"DI-02",o:"SRS-OCC-15",r:"—",v:"VR-2026-07 test 4.6 (2,000 pump-hours)",va:"—",s:"Closed"},{i:"DI-03",o:"UI-ALM-07 alarm text",r:"HZ-12 information for safety",v:"Text review",va:"Formative test FT-2026-11",s:"Closed"},{i:"DI-04",o:"RMR-IP300 rev 6",r:"HZ-12",v:"VR-2026-07 summary",va:"—",s:"Closed"},{i:"DI-05",o:"Software development file SDF-3.2",r:"—",v:"IEC 62304 checklist",va:"—",s:"Closed"}],
+  g1:{a:"Y",c:"All five inputs traced."},g2:{a:"Y",c:"HZ-12 controls verified."},gaps:"None open after DR-3 actions.",
+  sign:QA_SIGNED([["Systems engineering","K. Ross"],["Quality Assurance","D. Levi"]],"2026-09-28")}},
+
+"qa-dtc":{code:"DTC",doc:"FRM-DES-005",short:"design transfer checklist",file:"Design_Transfer_Checklist",t:"Design Transfer Checklist",titleKey:"proj",
+ sub:"Confirm the design is correctly translated into production and service: specifications, processes, validations, suppliers, training, labeling and release.",
+ intro:"Before release, verify that design outputs are suitable for manufacturing and that production can make, test and support the product consistently (ISO 13485 7.3.8). Record the results and conclusions.",
+ refs:"ISO 13485:2016 7.3.8, 7.5.6, 4.2.3; 21 CFR 820 (QMSR)",sampleName:"IP-300 firmware 3.2",sampleDate:"08 Oct 2026, 10:00",
+ secs:[
+  {h:"1. Project",f:[["proj","text","Project"],["rel","text","Release identifier"]]},
+  {h:"2. Checklist",f:[["c1","yna","Are released specifications, drawings and software in the medical device file?"],["c2","yna","Are production and test processes validated, including test method validation?"],["c3","yna","Are supplier and purchasing documents updated?"],["c4","yna","Are labeling, IFU and UDI updated and approved?"],["c5","yna","Are production, service and complaint staff trained?"],["c6","yna","Are service, spare parts and update procedures ready?"],["c7","yna","Is the risk management file complete for release?"],["c8","yna","Are regulatory approvals or notifications in place for each market?"]]},
+  {h:"3. Conclusion",f:[["conc","area","Conclusion"],["open","text","Open items with owner and date"]]},
+  {h:"4. Approval",f:[QA_SIGN(["Project leader","Operations","Quality Assurance"])]}],
+ sample:{proj:"IP-300 firmware 3.2, DP-2026-07",rel:"Firmware 3.2.0 build 418",
+  c1:{a:"Y",c:"MDF-IP300 updated; software release record SRR-3.2."},c2:{a:"Y",c:"End-of-line test unchanged; update process validated (OTA-VAL-02)."},c3:{a:"NA",c:"No purchased item changed."},c4:{a:"Y",c:"IFU rev K (alarm text); UDI-DI unchanged per the UDI change assessment."},c5:{a:"Y",c:"TRN-2026-240 to 252."},c6:{a:"Y",c:"Over-the-air and clinic update instructions released."},c7:{a:"Y",c:"RMR-IP300 rev 6 approved."},c8:{a:"Y",c:"US letter to file; EU notified body informed 2026-09-30."},
+  conc:"Design transfer complete; firmware 3.2 may be released.",open:"None",
+  sign:QA_SIGNED([["Project leader","K. Ross"],["Operations","E. Brandt"],["Quality Assurance","D. Levi"]],"2026-10-08")}},
+
+"qa-dhf":{code:"DHF",doc:"FRM-DES-006",short:"design history file index",file:"DHF_Index",t:"Design History File (DHF) Index",titleKey:"proj",
+ sub:"Index the design and development file: plans, inputs, outputs, reviews, verification, validation, transfer, changes and risk management, with document numbers and status.",
+ intro:"Keep a design and development file for each device type or family, with or referencing the records that show conformity to design requirements and the records of design changes (ISO 13485 7.3.10).",
+ refs:"ISO 13485:2016 7.3.10, 4.2.5; 21 CFR 820 (QMSR)",sampleName:"IP-300 firmware 3.2",sampleDate:"12 Oct 2026, 10:00",
+ secs:[
+  {h:"1. File",f:[["proj","text","Device / project"],["docno","text","Index number and revision"],["loc","text","Storage location (eQMS)"]]},
+  {h:"2. Contents",f:[["idx","tbl","Records",[["e","Element"],["d","Document"],["r","Rev."],["s","Status",["Approved","Draft","Not applicable"]]],[]]]},
+  {h:"3. Review",f:[["r1","yna","Is every required element present or justified as not applicable?"]]},
+  {h:"4. Approval",f:[QA_SIGN(["Project leader","Quality Assurance"])]}],
+ sample:{proj:"IP-300 firmware 3.2, DP-2026-07",docno:"DHF-IP300-32 rev 1",loc:"eQMS: Design / IP-300 / DP-2026-07",
+  idx:[{e:"Design and development plan",d:"DDP-2026-07",r:"2",s:"Approved"},{e:"Design inputs",d:"DIR-2026-07",r:"1",s:"Approved"},{e:"Design outputs (SRS, design, code)",d:"SRS-IP300 rev L; SDF-3.2",r:"L",s:"Approved"},{e:"Design reviews",d:"DR-1 to DR-4 minutes",r:"—",s:"Approved"},{e:"Verification",d:"VR-2026-07",r:"2",s:"Approved"},{e:"Validation (usability)",d:"FT-2026-11",r:"1",s:"Approved"},{e:"Traceability",d:"TM-2026-07",r:"2",s:"Approved"},{e:"Risk management",d:"RMR-IP300",r:"6",s:"Approved"},{e:"Design transfer",d:"DTC-2026-07",r:"1",s:"Approved"},{e:"Clinical evaluation update",d:"Not needed: performance improvement only, justified in CER-IP300 addendum",r:"—",s:"Not applicable"}],
+  r1:{a:"Y",c:"Complete at release."},
+  sign:QA_SIGNED([["Project leader","K. Ross"],["Quality Assurance","D. Levi"]],"2026-10-12")}},
+
+"qa-mr":{code:"MR",doc:"FRM-MGT-001",short:"management review record",file:"Management_Review",t:"Management Review Record",titleKey:"ref",
+ sub:"Record the management review: all required inputs, assessment of the QMS, decisions on improvement, product changes, regulatory changes and resources.",
+ intro:"Top management reviews the QMS at planned intervals for suitability, adequacy and effectiveness. Inputs and outputs are defined in ISO 13485 5.6.2 and 5.6.3; records of the review are kept.",
+ refs:"ISO 13485:2016 5.6.1–5.6.3; 21 CFR 820 (QMSR; management review records may be inspected by FDA)",sampleName:"2026 annual review",sampleDate:"12 Nov 2026, 09:00",
+ secs:[
+  {h:"1. Meeting",f:[["ref","text","Review number"],["date","date","Date"],["att","text","Attendees (top management)"],["per","text","Period covered"]]},
+  {h:"2. Inputs (ISO 13485 5.6.2)",f:[["in","tbl","Inputs",[["i","Input"],["s","Summary"],["t","Trend",["Improving","Stable","Worse"]]],[]]]},
+  {h:"3. Outputs (ISO 13485 5.6.3)",f:[["o1","area","Improvements needed to keep the QMS and its processes suitable, adequate and effective"],["o2","area","Product improvements related to customer requirements"],["o3","area","Changes needed for new or revised regulatory requirements"],["o4","area","Resource needs"]]},
+  {h:"4. Actions",f:[["acts","tbl","Actions",[["a","Action"],["o","Owner"],["d","Due"]],[]],["concl","sel","QMS conclusion",["Suitable, adequate and effective","Effective with improvements needed","Not effective: escalation needed"]]]},
+  {h:"5. Approval",f:[QA_SIGN(["General Manager","Quality Assurance"])]}],
+ sample:{ref:"MR-2026-02",date:"2026-11-12",att:"General Manager, heads of Quality, RA, R&D, Operations, Supply Chain, Clinical",per:"Nov 2025 – Oct 2026",
+  in:[{i:"Feedback",s:"Customer survey 4.3/5; clinic feedback on alarm behaviour",t:"Stable"},{i:"Complaint handling",s:"Rate 2.4 per 1,000 pumps/month; Q2 signal closed by firmware 3.2",t:"Improving"},{i:"Reporting to regulatory authorities",s:"3 eMDRs, 1 EU trend report, 1 FSCA, all on time",t:"Stable"},{i:"Audits",s:"Internal programme 100% done; NB surveillance: 2 minor NCs",t:"Stable"},{i:"Monitoring and measurement of processes",s:"Process KPIs met except supplier on-time delivery (91%)",t:"Worse"},{i:"Monitoring and measurement of product",s:"First-pass yield 98.6%",t:"Stable"},{i:"Corrective and preventive action",s:"27 opened, 25 closed; median 74 days",t:"Improving"},{i:"Follow-up actions from previous reviews",s:"6 of 7 closed; 1 extended (eQMS upgrade)",t:"Stable"},{i:"Changes that could affect the QMS",s:"QMSR in force since Feb 2026; new site lease",t:"Stable"},{i:"Recommendations for improvement",s:"Automate PMS log analysis",t:"Stable"},{i:"New or revised regulatory requirements",s:"QMSR; EUDAMED modules; EU harmonised standards update",t:"Stable"}],
+  o1:"Automate trend analysis of cloud pump data; strengthen supplier delivery monitoring.",o2:"Firmware 3.2 rollout complete; evaluate faster alarm for set disconnection.",o3:"Close remaining QMSR gap items (record terminology); prepare for EUDAMED mandatory modules.",o4:"One additional PMS data analyst; eQMS upgrade budget approved.",
+  acts:[{a:"Hire PMS data analyst",o:"General Manager",d:"2027-02-28"},{a:"Supplier delivery improvement plan with top 5 suppliers",o:"Supply Chain",d:"2027-03-31"},{a:"EUDAMED readiness project",o:"Regulatory Affairs",d:"2027-06-30"}],
+  concl:"Effective with improvements needed",
+  sign:QA_SIGNED([["General Manager","J. Hart"],["Quality Assurance","D. Levi"]],"2026-11-12")}},
+
+"qa-qo":{code:"QO",doc:"FRM-MGT-002",short:"quality objectives tracker",file:"Quality_Objectives",t:"Quality Objectives and KPI Tracker",titleKey:"year",
+ sub:"Set measurable quality objectives consistent with the quality policy, with owners, targets and results through the year.",
+ intro:"Top management sets quality objectives at relevant functions and levels, including those needed to meet product and regulatory requirements. Objectives are measurable and consistent with the quality policy (ISO 13485 5.4.1).",
+ refs:"ISO 13485:2016 5.3, 5.4.1, 8.4",sampleName:"2026 objectives",sampleDate:"31 Oct 2026, 10:00",
+ secs:[
+  {h:"1. Scope",f:[["year","text","Year"],["pol","text","Quality policy reference"],["docno","text","Tracker number and revision"]]},
+  {h:"2. Objectives",f:[["obj","tbl","Objectives",[["o","Objective"],["k","KPI"],["t","Target"],["r","Result to date"],["s","Status",["On track","At risk","Missed","Met"]],["w","Owner"]],[]]]},
+  {h:"3. Review",f:[["rev","area","Comments and actions"]]},
+  {h:"4. Approval",f:[QA_SIGN(["Quality Assurance","General Manager"])]}],
+ sample:{year:"2026",pol:"QP-001 rev 4",docno:"QO-2026 rev 2",
+  obj:[{o:"Reduce complaint rate",k:"Complaints per 1,000 pumps per month",t:"≤ 2.2",r:"2.4 (1.9 since Sep)",s:"At risk",w:"Quality"},{o:"Timely regulatory reporting",k:"Reports submitted on time",t:"100%",r:"100%",s:"On track",w:"RA"},{o:"CAPA timeliness",k:"Median days to close",t:"≤ 90",r:"74",s:"Met",w:"Quality"},{o:"Supplier delivery",k:"On-time delivery",t:"≥ 95%",r:"91%",s:"At risk",w:"Supply Chain"},{o:"Training compliance",k:"Training done before task",t:"≥ 98%",r:"99.1%",s:"Met",w:"HR / QA"}],
+  rev:"Complaint and supplier objectives at risk: actions agreed in MR-2026-02.",
+  sign:QA_SIGNED([["Quality Assurance","D. Levi"],["General Manager","J. Hart"]],"2026-10-31")}},
+
+"qa-qm":{code:"QM",doc:"FRM-MGT-003",short:"quality manual",file:"Quality_Manual",t:"Quality Manual Template",titleKey:"title",
+ sub:"The top-level QMS document: scope and exclusions with justification, the quality policy, process interactions, roles, and references to the procedures.",
+ intro:"The quality manual includes the scope of the QMS with details and justification for any exclusion or non-application, the documented procedures or references to them, and a description of the interaction between QMS processes. It outlines the documentation structure (ISO 13485 4.2.2).",
+ refs:"ISO 13485:2016 4.1, 4.2.1, 4.2.2, 5.3; 21 CFR 820 (QMSR)",sampleName:"infusion device manufacturer",sampleDate:"02 Mar 2026, 10:00",
+ secs:[
+  {h:"1. Document control",f:[...QA_DOCHEAD]},
+  {h:"2. Organisation and scope",f:[["org","area","Company and sites"],["scope","area","Scope of the QMS (products, activities, sites)"],["roles","text","Regulatory roles (manufacturer, importer, distributor, specification developer)"]]},
+  {h:"3. Exclusions and non-application",f:[["excl","tbl","Clauses",[["c","Clause"],["s","Status",["Excluded","Not applicable"]],["j","Justification"]],[]]]},
+  {h:"4. Quality policy and objectives",f:[["pol","area","Quality policy (summary)"],["obj","text","Quality objectives reference"]]},
+  {h:"5. Processes and documentation",f:[["proc","area","Process interaction (summary of the process map)"],["docs","tbl","Procedures",[["a","QMS area"],["d","Procedure"]],[]],["out","text","Outsourced processes and their control"]]},
+  {h:"6. Revision history",f:[QA_REVHIST]},
+  {h:"7. Approval",f:[QA_SIGN(["Quality Assurance","General Manager"])]}],
+ sample:{title:"Quality Manual",docno:"QM-001",rev:"7",eff:"2026-03-02",owner:"Quality Assurance",chg:"Updated for the QMSR (21 CFR 820, in force 2 Feb 2026); FDA references now point to ISO 13485 by reference.",
+  org:"Demo Infusion Systems Ltd., head office and manufacturing site in Demo City; service centre in Demo Town.",scope:"Design, manufacture, distribution and servicing of insulin infusion pumps, infusion sets and the companion app (software as part of the device).",roles:"Legal manufacturer for the EU and US; own importer for the UK through a subsidiary",
+  excl:[{c:"7.5.3 Installation activities",s:"Not applicable",j:"Pumps need no installation by the company or its agents; set-up by the user is covered by the IFU and training."},{c:"7.5.9.2 Implantable devices traceability",s:"Not applicable",j:"No implantable devices."}],
+  pol:"We provide safe and effective infusion systems, meet customer and regulatory requirements, and keep our QMS effective through measured improvement.",obj:"QO-2026 (yearly)",
+  proc:"Management processes (5, 6, 8.4, 8.5) direct and resource the core flow: design (7.3) → purchasing (7.4) → production and service (7.5) → release → feedback, complaints, PMS and vigilance (8.2), which feed CAPA (8.5) and design changes. Process map PM-001.",
+  docs:[{a:"Document and record control",d:"QP-01, QP-02"},{a:"Management review",d:"QP-05"},{a:"Design and development",d:"QP-10"},{a:"Risk management",d:"QP-11"},{a:"Purchasing and supplier control",d:"QP-20"},{a:"Production and process validation",d:"QP-30, QP-31"},{a:"Complaints, vigilance and PMS",d:"QP-40, QP-41, QP-42"},{a:"CAPA",d:"QP-50"},{a:"Internal audit",d:"QP-55"}],
+  out:"Sterilization (contract sterilizer), PCB assembly (CMO), calibration (accredited lab): controlled through quality agreements and supplier monitoring",
+  revh:[{r:"6",d:"2025-04-10",c:"New service centre added to scope",a:"D. Levi"},{r:"7",d:"2026-03-02",c:"QMSR alignment",a:"D. Levi"}],
+  sign:QA_SIGNED([["Quality Assurance","D. Levi"],["General Manager","J. Hart"]],"2026-03-02")}}
+});
+
 
 /* ===================== 1.7.0 Supplier and CMO quality forms (generic form engine) ===================== */
 /* Field kinds: [k,"text"|"area"|"date",label,placeholder] · [k,"sel",label,options] · [k,"yna",question,hint]
@@ -5471,21 +5756,22 @@ function renderSqForm(fid){
   touch();
   const ttl=tc(F.short)+" "+cur.id;
   const blocks=sqDoc(F,cur);
-  toolExport(p,Object.assign(cur,{_save:()=>{ cur.updated=nowTs(); sqSave(); }}),cur.id+"_"+F.file,[["Export Word (.docx)","docx",()=>buildDocx(sqDoc(F,cur),ttl)],["Export PDF","pdf",()=>iaPdf(sqDoc(F,cur),ttl,"Medical Device QA Handbook - "+F.doc+" - opened on "+cur.created)]],"Word and PDF files follow the sections above. Fields left empty print as a blank line to fill in by hand.");
+  toolExport(p,Object.assign(cur,{_save:()=>{ cur.updated=nowTs(); sqSave(); }}),cur.id+"_"+F.file,[["Export Word (.docx)","docx",()=>buildDocx(sqDoc(F,cur),ttl)],["Export PDF","pdf",()=>iaPdf(sqDoc(F,cur),tc(F.t.replace(/\s+Template$/,""))+" – "+cur.id,F.doc+" · Record "+cur.id+" · Opened on "+cur.created+" · Medical Device QA Handbook")]],"Word and PDF files follow the sections above. Fields left empty print as a blank line to fill in by hand.");
   const prev=el("div",{class:"card iaPrev"}); blocks.forEach(b=>{ if(b.h1) prev.append(el("h3",{class:"secTitle"},b.h1)); else if(b.h2) prev.append(el("h4",{},b.h2)); else if(b.h3) prev.append(el("b",{class:"iaH3"},b.h3)); else if(b.p) prev.append(el("p",{},b.p)); else if(b.table){ const tb=el("table",{class:"map rmTbl"}); b.table.forEach((r,i)=>tb.append(el("tr",{}, ...r.map((cc,j)=>el((b.head&&i===0)||(!b.head&&j===0)?"th":"td",{},String(cc)))))); prev.append(el("div",{class:"tblWrap"},tb)); } });
   p.append(prev); tcDom(m);
 }
 function sqCols(n,first){ const W=478, f=first&&n>2?first:W/n, rest=n>1?(W-f)/(n-1):W; const cols=[]; let x=0; for(let i=0;i<n;i++){ const w=i===0?f:rest; cols.push([Math.round(x),Math.max(4,Math.floor(w/5.5))]); x+=w; } return cols; }
+function sqDocxW(tb){ const cols=pdfAutoCols(tb[0],tb.slice(1),483,(tb[0]||[]).length>=7?8:9); return cols.map(c=>Math.max(500,Math.round(c[2]*9600/483))); }
 function sqDoc(F,r){
   const v=r.v, B=[], blank="________________";
-  B.push({h1:F.t},{p:F.doc+" · Record "+r.id+" · Opened on "+r.created});
+  B.push({h1:F.t},{p:F.doc+" · Record "+r.id+" · Opened on "+r.created,pdfSkip:true});
   F.secs.forEach(S=>{ B.push({h2:S.h}); if(S.d) B.push({p:S.d}); let kv=[], qs=[], qn=0; const sn=sqSecNo(S);
     const flush=()=>{ if(kv.length){ B.push({table:kv}); kv=[]; } if(qs.length){ B.push({table:[["#","Question","Answer","Comment / evidence"],...qs],head:true,w:[900,4300,800,3600],pdf:"q"}); qs=[]; } };
     S.f.forEach(x=>{ const [k,t,l]=x;
       if(t==="note"){ flush(); B.push({p:l}); return; }
       if(t==="clause"){ flush(); B.push({h3:l},{p:x[3]}); return; }
       if(t==="yna"){ if(kv.length){ B.push({table:kv}); kv=[]; } qn++; const a=v[k]||{}; qs.push([(sn?sn+".":"")+qn,l,SQ_ANS[a.a]||blank,a.c||(a.a?"-":"")]); return; }
-      if(t==="tbl"){ flush(); const cols=x[3], rows=(v[k]||[]).length?v[k]:[{}]; const n=cols.length; B.push({p:l,lbl:true},{table:[cols.map(c=>c[1]),...rows.map(rr=>cols.map(([ck])=>String(rr[ck]??"").trim()||" "))],head:true,w:Array(n).fill(Math.floor(9600/n)),pdfCols:sqCols(n)}); return; }
+      if(t==="tbl"){ flush(); const cols=x[3], rows=(v[k]||[]).length?v[k]:[{}]; const n=cols.length; const tb=[cols.map(c=>c[1]),...rows.map(rr=>cols.map(([ck])=>String(rr[ck]??"").trim()||" "))]; const hh=String(S.h).replace(/^[\d.]+\s*/,"").toLowerCase(), ll=String(l).toLowerCase(); const cap=!(hh===ll||hh.startsWith(ll)||ll.startsWith(hh)); if(cap) B.push({p:l,lbl:true}); B.push({table:tb,head:true,w:sqDocxW(tb),pdfAuto:true}); return; }
       if(qs.length){ B.push({table:[["#","Question","Answer","Comment / evidence"],...qs],head:true,w:[900,4300,800,3600],pdf:"q"}); qs=[]; }
       kv.push([l,String(v[k]??"").trim()||blank]); });
     flush(); });
