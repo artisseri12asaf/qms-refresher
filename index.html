@@ -1274,13 +1274,13 @@ footer#siteFoot .legalBody p.imp{font-size:14px; color:var(--ink)}
 .dItem.tour + .dItem, .dItem[aria-current=true].tour{}
 .dLay .toolGrid .toolCard{transition:transform .25s, box-shadow .25s}
 .lensOn{transform:scale(1.02); box-shadow:0 0 0 3px color-mix(in srgb,var(--qms) 45%,transparent), var(--shadow) !important; position:relative; z-index:2}
-.qaLens{position:fixed; left:0; top:0; width:130px; height:130px; z-index:300; pointer-events:none; transition:transform .48s cubic-bezier(.45,.05,.25,1), opacity .3s; filter:drop-shadow(0 6px 14px rgba(0,0,0,.3))}
+.qaLens{position:fixed; left:0; top:0; width:100px; height:100px; z-index:300; pointer-events:none; transition:transform 1s cubic-bezier(.45,.05,.25,1), opacity .35s; filter:drop-shadow(0 6px 14px rgba(0,0,0,.3))}
 .qaLens.out{opacity:0}
 .qaLensGlass{position:absolute; left:7px; top:7px; width:82px; height:82px; border-radius:50%; overflow:hidden; background:var(--card); box-shadow:inset 0 0 12px rgba(0,0,0,.18)}
 .qaLensGlass > *{transform-origin:0 0; opacity:0; transition:opacity .12s}
 .qaLensGlass.show > *{opacity:1}
-.qaLensGlass{width:88px; height:88px; left:8px; top:8px}
-.qaLensArt{position:absolute; left:-1px; top:-1px; width:130px; height:130px}
+.qaLensGlass{width:68px; height:68px; left:6px; top:6px}
+.qaLensArt{position:absolute; left:-1px; top:-1px; width:100px; height:100px}
 .qaLensArt svg{width:100%; height:100%}
 @media (prefers-reduced-motion:reduce){ .qaLens{display:none} .dItem.tour{transition:none} }
 .sqHead{padding:10px 16px !important; gap:2px !important}
@@ -1294,6 +1294,27 @@ footer#siteFoot .legalBody p.imp{font-size:14px; color:var(--ink)}
 .sqRecs .wsHead .cta{padding:7px 14px; font-size:14px; min-height:36px}
 .sqRecs .iaSamples, .sqRecs > p.src{margin:2px 0}
 .sqStat p{margin:0}
+/* 2.2.0 P1 x P2 scales and matrix */
+.p12Wrap{margin:10px 0; display:grid; grid-template-columns:minmax(0,1fr) 236px; gap:16px; align-items:start; background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:12px}
+.p12In{display:grid; gap:10px; min-width:0}
+.p12Head{font-size:14px}
+.p12F select{max-width:320px}
+.p12Lab{display:flex; align-items:center; justify-content:space-between; gap:8px}
+.p12Btn{font:700 12px var(--body); border:1px solid var(--qms); color:var(--qms); background:var(--card); border-radius:99px; padding:3px 10px; cursor:pointer; white-space:nowrap}
+.p12Info{margin-top:6px}
+.p12Tbl{border-collapse:collapse; width:100%; font-size:13px; background:var(--card)}
+.p12Tbl th,.p12Tbl td{border:1px solid var(--line); padding:4px 7px; text-align:left}
+.p12Tbl th{background:var(--qms-soft); color:var(--qms)}
+.p12Out{font-weight:600; color:var(--ink) !important}
+.p12Mx{width:236px; min-width:0}
+.p12T{display:block; font-size:13px; margin-bottom:6px}
+.p12Grid{display:grid; grid-template-columns:54px repeat(5,32px); gap:3px; font:700 12.5px var(--body)}
+.p12Corner{font-size:9.5px; color:var(--muted); align-self:center; line-height:1.1}
+.p12H{display:grid; place-items:center; color:var(--muted); height:28px}
+.p12C{display:grid; place-items:center; height:28px; border-radius:6px; color:#1f2a37}
+.p12C.l1{background:#d8efe2} .p12C.l2{background:#e8f2cf} .p12C.l3{background:#fbeec4} .p12C.l4{background:#f8d7b8} .p12C.l5{background:#f2b9b2}
+.p12C.on{outline:3px solid var(--ink); outline-offset:-1px; transform:scale(1.12); box-shadow:0 2px 6px rgba(0,0,0,.25)}
+@media (max-width:640px){ .p12Wrap{grid-template-columns:1fr} .p12Mx{justify-self:center} }
 /* compact form cards on wide screens */
 @media (min-width:761px){
  .dLay .toolGrid{gap:10px; grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
@@ -2307,36 +2328,49 @@ function renderTools(which){ DAILY_SHOWN=null;
 /* 2.1.0 guided highlights: area cycle on Daily QA Work and a moving magnifying lens (stops on any user action; off with reduced motion) */
 let TOUR=null;
 function tourStop(user){ if(!TOUR) return; const t=TOUR; TOUR=null; t.timers.forEach(clearTimeout); t.off.forEach(f=>f()); if(t.lens) t.lens.remove(); document.querySelectorAll(".lensOn").forEach(x=>x.classList.remove("lensOn")); document.querySelectorAll(".dItem.tour").forEach(x=>x.classList.remove("tour"));
-  if(user&&DAILY_SHOWN&&DAILY_SHOWN!==DAILY_TAB&&document.querySelector(".dLay")){ DAILY_TAB=DAILY_SHOWN; try{ localStorage.setItem("qah-daily-tab",DAILY_TAB); }catch(e){} const gs=dailyGroups(TOOLGROUPS.daily); document.querySelectorAll(".dLay .dSide .dItem").forEach((b,i)=>b.setAttribute("aria-current",String(gs[i]&&gs[i].h===DAILY_TAB))); return; }
+  if(user&&t.commit&&t.shown!=null&&t.shown!==t.home){ t.commit(t.shown); return; }
   if(t.end) t.end(); }
 function tourStart(end){ tourStop(); const t={timers:[],off:[],end}; TOUR=t; const stop=e=>{ if(e&&e.type==="keydown"&&e.key==="Tab") return; tourStop(true); };
   setTimeout(()=>{ if(TOUR!==t) return; ["pointerdown","wheel","touchstart","keydown"].forEach(ev=>{ window.addEventListener(ev,stop,{passive:true,capture:true}); t.off.push(()=>window.removeEventListener(ev,stop,{capture:true})); }); },60);
   return t; }
-function tourOk(){ try{ return !matchMedia("(prefers-reduced-motion: reduce)").matches; }catch(e){ return true; } }
+function tourOk(){ try{ if(navigator.webdriver&&!window.__allowTour) return false; return !matchMedia("(prefers-reduced-motion: reduce)").matches; }catch(e){ return true; } }
 const LENS_SVG='<svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="48" cy="48" r="41" fill="none" stroke="#1f2a37" stroke-width="7"/><circle cx="48" cy="48" r="41" fill="none" stroke="#c9d3dc" stroke-width="2.5"/><path d="M78 78 L108 108" stroke="#1f2a37" stroke-width="13" stroke-linecap="round"/><path d="M78 78 L108 108" stroke="#7a4f2a" stroke-width="7" stroke-linecap="round"/><path d="M27 32 A26 26 0 0 1 46 21" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".8"/></svg>';
 function lensTour(targets,total,t){ t=t||tourStart(); if(!tourOk()) return; targets=targets.filter(x=>x&&x.offsetParent); if(!targets.length) return;
-  const R=52, G=44, lens=el("div",{class:"qaLens","aria-hidden":"true"}); const glass=el("div",{class:"qaLensGlass"}); const art=el("div",{class:"qaLensArt"}); art.innerHTML=LENS_SVG; lens.append(glass,art); document.body.append(lens); t.lens=lens;
-  const per=Math.max(600,(total||3000)/targets.length);
+  const R=40, G=34, lens=el("div",{class:"qaLens","aria-hidden":"true"}); const glass=el("div",{class:"qaLensGlass"}); const art=el("div",{class:"qaLensArt"}); art.innerHTML=LENS_SVG; lens.append(glass,art); document.body.append(lens); t.lens=lens;
+  const per=Math.max(1200,(total||5000)/targets.length);
   const goTo=(el0,i)=>{ if(TOUR!==t) return; const r=el0.getBoundingClientRect(); if(r.top<0||r.bottom>innerHeight) el0.scrollIntoView({block:"center",behavior:"smooth"});
     const r2=el0.getBoundingClientRect(); const hd=el0.matches("h2,h3,b")?el0:el0.querySelector("b,h2,h3"); const hr=hd?hd.getBoundingClientRect():r2;
     const cx=Math.min(hr.left+Math.min(hr.width/2,90),r2.right-20), cy=hr.top+Math.min(hr.height,40)/2;
     lens.style.transform="translate("+(cx-R)+"px,"+(cy-R)+"px)";
     glass.querySelectorAll(":scope > *").forEach(x=>x.remove()); const c=el0.cloneNode(true); c.removeAttribute("id"); c.querySelectorAll("[id]").forEach(x=>x.removeAttribute("id"));
-    const Z=1.7; c.style.cssText="position:absolute;margin:0;left:0;top:0;width:"+r2.width+"px;height:"+r2.height+"px;transform-origin:0 0;transform:translate("+(G-(cx-r2.left)*Z)+"px,"+(G-(cy-r2.top)*Z)+"px) scale("+Z+");pointer-events:none;box-sizing:border-box";
+    const Z=1.6; c.style.cssText="position:absolute;margin:0;left:0;top:0;width:"+r2.width+"px;height:"+r2.height+"px;transform-origin:0 0;transform:translate("+(G-(cx-r2.left)*Z)+"px,"+(G-(cy-r2.top)*Z)+"px) scale("+Z+");pointer-events:none;box-sizing:border-box";
     let wrap=c; let a=el0.parentElement; for(let k=0;k<4&&a&&a.id!=="main"&&a!==document.body;k++){ const d=document.createElement(a.tagName==="NAV"?"nav":"div"); d.className=a.className; d.style.cssText="display:block;margin:0;padding:0;border:0;background:none;box-shadow:none;position:static;width:auto;height:auto;max-height:none;overflow:visible;animation:none"; d.append(wrap); wrap=d; a=a.parentElement; }
-    glass.classList.remove("show"); glass.append(wrap); t.timers.push(setTimeout(()=>glass.classList.add("show"),470)); el0.classList.add("lensOn"); t.timers.push(setTimeout(()=>el0.classList.remove("lensOn"),per)); };
+    glass.classList.remove("show"); glass.append(wrap); t.timers.push(setTimeout(()=>glass.classList.add("show"),1000)); el0.classList.add("lensOn"); t.timers.push(setTimeout(()=>el0.classList.remove("lensOn"),per)); };
   lens.style.transform="translate("+(innerWidth/2-R)+"px,"+(innerHeight+40)+"px)";
   targets.forEach((x,i)=>t.timers.push(setTimeout(()=>goTo(x,i),80+i*per)));
-  t.timers.push(setTimeout(()=>{ if(TOUR===t){ lens.classList.add("out"); t.timers.push(setTimeout(()=>{ if(TOUR===t) tourStop(); },450)); } },80+targets.length*per));
+  t.timers.push(setTimeout(()=>{ if(TOUR===t){ lens.classList.add("out"); t.timers.push(setTimeout(()=>{ if(TOUR!==t) return; if(lens.classList.contains("keep")){ lens.remove(); if(t.lens===lens) t.lens=null; document.querySelectorAll(".lensOn").forEach(x=>x.classList.remove("lensOn")); } else tourStop(); },450)); } },80+targets.length*per));
 }
-function dailyIntro(){ if(!tourOk()||!DAILY_SHOW) return; const groups=dailyGroups(TOOLGROUPS.daily); const home=(DAILY_TAB&&groups.find(x=>x.h===DAILY_TAB))?DAILY_TAB:groups[0].h;
-  const t=tourStart(()=>{ if(DAILY_SHOW) DAILY_SHOW(home); document.querySelectorAll(".dItem.tour").forEach(x=>x.classList.remove("tour")); });
-  const lay=document.querySelector(".dLay"); if(lay){ lay.classList.add("touring"); t.off.push(()=>lay.classList.remove("touring")); const r=lay.getBoundingClientRect(); if(r.top>innerHeight*0.45) window.scrollBy({top:r.top-Math.max(80,(document.getElementById("navRow2")&&getComputedStyle(document.getElementById("navRow2")).position==="sticky"?document.getElementById("navRow2").offsetHeight+12:80)),behavior:"smooth"}); }
-  const order=groups.map(x=>x.h); order.forEach((k,i)=>t.timers.push(setTimeout(()=>{ if(TOUR===t) DAILY_SHOW(k); },i*500)));
-  t.timers.push(setTimeout(()=>{ if(TOUR!==t) return; DAILY_SHOW(home); const side=[...document.querySelectorAll(".dLay .dSide .dItem")].find(b=>b.getAttribute("aria-current")==="true"&&b.offsetParent)||document.querySelector(".dPick");
-    const cards=[...document.querySelectorAll(".dLay .toolGrid .toolCard")].slice(0,2); t.end=null; lensTour([side,...cards],3000,t); },order.length*500)); }
-function statsIntro(page){ if(!tourOk()) return; if(page==="stats"){ const c=[...document.querySelectorAll("#main .toolCard")].find(x=>/Sample Size/i.test(x.innerText)); lensTour([c],1600); }
-  else if(page==="sampling"){ const h=document.querySelector("#main .chHead h2"), b=[...document.querySelectorAll("#main .sampBox .choiceBtn")]; if(b.length) lensTour([h,...b],3000); } }
+/* side-menu tour: each area is shown for 2 s; on the third area the cycle pauses while the lens moves from the area to its content (about 5 s); then the cycle continues and ends on the remembered area */
+function sideTour(c){ if(!tourOk()) return; const keys=c.keys; if(keys.length<2) return; const home=keys.includes(c.home)?c.home:keys[0];
+  const t=tourStart(()=>c.restore(home)); t.home=home; t.commit=k=>c.commit(k);
+  const mark=k=>{ t.shown=k; c.show(k); const i=keys.indexOf(k); const it=[...document.querySelectorAll(".dSide .dItem")]; it.forEach((b,j)=>b.classList.toggle("tour",j===i)); };
+  const lay=document.querySelector(".dLay"); if(lay){ lay.classList.add("touring"); t.off.push(()=>{ const l=document.querySelector(".dLay"); if(l) l.classList.remove("touring"); }); const r=lay.getBoundingClientRect(); const nb=document.getElementById("navRow2"); const off=nb&&getComputedStyle(nb).position==="sticky"?nb.offsetHeight+12:80; if(r.top>innerHeight*0.45) window.scrollBy({top:r.top-off,behavior:"smooth"}); }
+  const STEP=2000, LENS=5800, L3=Math.min(2,keys.length-1); let at=0;
+  keys.forEach((k,i)=>{ const when=i*STEP+(i>L3?LENS:0); t.timers.push(setTimeout(()=>{ if(TOUR!==t) return; mark(k); document.querySelector(".dLay")&&document.querySelector(".dLay").classList.add("touring");
+      if(i===L3){ t.timers.push(setTimeout(()=>{ if(TOUR!==t) return; const item=[...document.querySelectorAll(".dSide .dItem")].find(x=>x.offsetParent&&x.classList.contains("tour"))||document.querySelector(".dPick"); const tg=[item,...c.content().slice(0,2)];
+        lensTour(tg,5100,t); t.lens&&t.lens.classList.add("keep"); },500)); } },when)); at=when; });
+  t.timers.push(setTimeout(()=>{ if(TOUR!==t) return; if(t.lens){ t.lens.remove(); t.lens=null; } c.restore(home); t.shown=home; tourStop(); },at+STEP)); }
+function dailyIntro(){ if(!DAILY_SHOW) return; const groups=dailyGroups(TOOLGROUPS.daily);
+  sideTour({keys:groups.map(x=>x.h), home:DAILY_TAB, show:k=>DAILY_SHOW(k), content:()=>[...document.querySelectorAll(".dLay .toolGrid .toolCard")],
+    restore:k=>{ if(DAILY_SHOW&&location.hash==="#daily") DAILY_SHOW(k); document.querySelectorAll(".dItem.tour").forEach(x=>x.classList.remove("tour")); },
+    commit:k=>{ DAILY_TAB=k; try{ localStorage.setItem("qah-daily-tab",k); }catch(e){} const gs=dailyGroups(TOOLGROUPS.daily); document.querySelectorAll(".dLay .dSide .dItem").forEach((b,i)=>b.setAttribute("aria-current",String(gs[i]&&gs[i].h===k))); } }); }
+function keepScroll(f){ const y=scrollY; f(); scrollTo(0,y); }
+function riskIntro(){ const home=rm.tab; sideTour({keys:RM_TABS.map(x=>x[0]), home, show:k=>keepScroll(()=>{ rm.tab=k; renderRisk(); }), content:()=>[...document.querySelectorAll(".rmLay .panel .card h3.secTitle, .rmLay .panel .card > h3")].filter(x=>x.offsetParent),
+    restore:k=>{ rm.tab=k; if(location.hash==="#risk") keepScroll(renderRisk); }, commit:k=>{ rm.tab=k; rm._save(); keepScroll(renderRisk); } }); }
+function rmtIntro(){ const home=RMT_GROUPS.some(x=>x[0]===RMT_TAB)?RMT_TAB:RMT_GROUPS[0][0]; sideTour({keys:RMT_GROUPS.map(x=>x[0]), home, show:k=>keepScroll(()=>{ RMT_TAB=k; renderRmTools(); }), content:()=>[...document.querySelectorAll(".dLay .toolGrid .toolCard")],
+    restore:k=>{ RMT_TAB=k; if(location.hash==="#rmtools") keepScroll(renderRmTools); }, commit:k=>{ RMT_TAB=k; try{ localStorage.setItem("qah-rmt-tab",k); }catch(e){} keepScroll(renderRmTools); } }); }
+function statsIntro(page){ if(!tourOk()) return; if(page==="stats"){ const c=[...document.querySelectorAll("#main .toolCard")].find(x=>/Sample Size/i.test(x.innerText)); lensTour([c],2600); }
+  else if(page==="sampling"){ const h=document.querySelector("#main .chHead h2"), b=[...document.querySelectorAll("#main .sampBox .choiceBtn")]; if(b.length) lensTour([h,...b],5000); } }
 window.addEventListener("hashchange",()=>tourStop());
 function dailyStick(){ const n=document.getElementById("navRow2"); const h=(n&&getComputedStyle(n).position==="sticky")?n.offsetHeight:0; document.documentElement.style.setProperty("--stickH",h+"px"); }
 window.addEventListener("resize",()=>{ if(document.querySelector(".dLay")) dailyStick(); });
@@ -2698,7 +2732,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="2.1.0", APPDATE="19-NOV-2026";
+const APPVER="2.2.0", APPDATE="19-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Asaf Ben Zion. All rights reserved.";
 const LEGAL=[["Copyright", "No part of this handbook’s original content may be copied or redistributed without written permission. Cited regulations, standards and guidance, and their links, remain the property of their official publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, data selection and design, developed with AI tools, and has been verified against requirements set by the author and against the official sources."], ["Sources", "Sources are limited to official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases. EU: EUR-Lex and European Commission pages, including MDCG guidance."], ["Important", "This application is intended for training only. Results from its tools require human review, verification and approval. Always check the linked source before citing anything in an audit response."]];
@@ -4284,6 +4318,20 @@ function wsExample(type){ const d=DEVT[rm.dev], e=d.ex;
    sfmea:{who:"Result calculation / control logic",fm:"Wrong output shown without warning",cause:"Logic or data error",eff:"Wrong information or wrong therapy delivered",hs:e.hs,harm:e.harm},
    urra:{who:"Critical step of use",fm:"Step omitted or done wrongly",cause:"Perception: indicator not noticed",eff:e.hs,harm:e.harm}};
   return wsBlank(type,E[type]); }
+/* 2.2.0 P1 x P2 scales (1 to 5) and matrix. Example scales in the style of ISO/TR 24971 5.5 (semi-quantitative, decade steps); the manufacturer defines and justifies its own in the risk management plan. */
+const P12_DEF={1:[["Frequent","≥ 10⁻³","1 in 1,000 or more"],["Probable","10⁻⁴ to < 10⁻³","1 in 10,000 to 1 in 1,000"],["Occasional","10⁻⁵ to < 10⁻⁴","1 in 100,000 to 1 in 10,000"],["Remote","10⁻⁶ to < 10⁻⁵","1 in 1,000,000 to 1 in 100,000"],["Improbable","< 10⁻⁶","less than 1 in 1,000,000"]],
+ 2:[["Very likely","0.1 to 1","1 in 10 or more"],["Likely","0.01 to < 0.1","1 in 100 to 1 in 10"],["Possible","10⁻³ to < 0.01","1 in 1,000 to 1 in 100"],["Unlikely","10⁻⁴ to < 10⁻³","1 in 10,000 to 1 in 1,000"],["Very unlikely","< 10⁻⁴","less than 1 in 10,000"]]};
+const P12_REP=[5e-7,5e-6,5e-5,5e-4,5e-3];
+function p12Txt(n,v){ const L=p12Level(v,n); return L?L+" "+P12_DEF[n][5-L][0]:"-"; }
+function p12Level(v,n){ v=String(v??"").trim(); if(/^[1-5]$/.test(v)) return v; const x=parseFloat(v); if(!(x>0)) return ""; const t=n===1?[1e-6,1e-5,1e-4,1e-3]:[1e-4,1e-3,1e-2,0.1]; return String(1+t.filter(z=>x>=z).length); }
+function p12P(a,b){ const A=parseInt(a); if(!(A>=1)) return 0; const B=parseInt(b)||5; return Math.max(1,A+B-5); }
+function p12Table(n){ const t=el("table",{class:"p12Tbl"}, el("tr",{}, el("th",{},"Level"), el("th",{},"Term"), el("th",{},"Probability"), el("th",{},"About"))); P12_DEF[n].forEach((d,i)=>t.append(el("tr",{}, el("td",{},String(5-i)), el("td",{},d[0]), el("td",{},d[1]), el("td",{},d[2]))));
+  return el("div",{}, t, el("p",{class:"src"},n===1?"P1: probability that the hazardous situation occurs (for example per use or per device-year; state the unit in the plan).":"P2: probability that the hazardous situation leads to harm. If unknown, leave it empty: P2 is then taken as 1 (conservative).", " Example scale in the style of ISO/TR 24971 5.5; define your own in the risk management plan.")); }
+function p12Matrix(box,a,b){ box.innerHTML=""; const A=parseInt(a)||0, B=parseInt(b)||(A?5:0);
+  const g=el("div",{class:"p12Grid",role:"img","aria-label":"P1 by P2 matrix giving the probability level P"});
+  g.append(el("div",{class:"p12Corner"},"P1 ↓  P2 →"), ...[1,2,3,4,5].map(j=>el("div",{class:"p12H"},String(j))));
+  [5,4,3,2,1].forEach(i=>{ g.append(el("div",{class:"p12H"},String(i))); [1,2,3,4,5].forEach(j=>{ const L=p12P(i,j); const on=i===A&&j===B; g.append(el("div",{class:"p12C l"+L+(on?" on":""),title:"P1 "+i+" × P2 "+j+" → P "+L}, String(L))); }); });
+  box.append(el("b",{class:"p12T"},"P = P1 × P2"), g, el("small",{class:"src"},"Cell = P level (1 Improbable … 5 Frequent). Each step down in P2 lowers P by one level.")); }
 function probFromP(P){ if(!(P>0)) return ""; const lv5=P<1e-6?1:P<1e-5?2:P<1e-4?3:P<1e-3?4:5; if(rm.probN===5) return String(lv5); if(rm.probN===4) return String([1,2,2,3,4][lv5-1]); return String([1,1,2,3,3][lv5-1]); }
 function rmWorksheet(p,type){
   const W=WS[type]; const rows=wsRowsFor(type); const isU=!!W.crit; const nodes=sysNodes(); const sraRows=type==="sra"?[]:wsRowsFor("sra");
@@ -4310,8 +4358,12 @@ function rmWorksheet(p,type){
       const sSel=selectEl(sevOpts,r.s,v=>{ r.s=v; if(isU){ r.crit=parseInt(v)>=critMin(); const cb=card.querySelector(".chk input"); if(cb) cb.checked=r.crit; } rm._save(); upd(); },{"aria-label":"Severity"});
       const pSel=selectEl(probOpts,r.p,v=>{ r.p=v; rm._save(); upd(); },{"aria-label":"Probability before control"});
       const riskRow=el("div",{class:"wsRisk"});
-      if(W.p1p2){ const pOut=el("small",{class:"src"}); const calc=()=>{ const a=numOrNull(r.p1), b=numOrNull(r.p2v); const P=a!==null?a*(b===null?1:b):null; pOut.textContent=P===null?"Enter P1 (and P2) to suggest the level":"P = "+fmt(P)+(b===null?" (P2 taken as 1)":""); if(P!==null){ r.p=probFromP(P); pSel.value=r.p; upd(); } };
-        riskRow.append(field("P1 (situation occurs)",r.p1,v=>{ r.p1=v; rm._save(); calc(); },{placeholder:"e.g. 1e-4"}), field("P2 (leads to harm)",r.p2v,v=>{ r.p2v=v; rm._save(); calc(); },{placeholder:"e.g. 0.1"})); calc(); riskRow.append(el("div",{class:"rField wide"},pOut)); }
+      if(W.p1p2){ r.p1=p12Level(r.p1,1); r.p2v=p12Level(r.p2v,2); const pOut=el("small",{class:"src p12Out"}); const mx=el("div",{class:"p12Mx"});
+        const calc=()=>{ const L=p12P(r.p1,r.p2v); if(L){ const v=probFromP(P12_REP[L-1]); r.p=v; pSel.value=v; upd(); pOut.textContent="P1 "+r.p1+" × P2 "+(r.p2v||"5 (taken as certain)")+" → P level "+v+" ("+((rm.prob[parseInt(v)-1]||[""])[0])+")"; } else pOut.textContent="Choose P1 (and P2) to suggest the probability P."; p12Matrix(mx,r.p1,r.p2v); };
+        const pick=(n,key)=>{ const sel=selectEl([["","—"],...P12_DEF[n].map((d,i)=>[String(5-i),(5-i)+" · "+d[0]])],r[key]||"",v=>{ r[key]=v; rm._save(); calc(); },{"aria-label":n===1?"P1 level":"P2 level"});
+          const info=el("div",{class:"p12Info",hidden:""}, p12Table(n)); const btn=el("button",{type:"button",class:"p12Btn","aria-expanded":"false","aria-label":"Show the P"+n+" scale",onclick:()=>{ info.hidden=!info.hidden; btn.setAttribute("aria-expanded",String(!info.hidden)); btn.textContent=info.hidden?"ⓘ Scale":"✕ Hide"; }},"ⓘ Scale");
+          return el("div",{class:"rField p12F"}, el("span",{class:"p12Lab"}, el("span",{}, n===1?"P1 · probability the hazardous situation occurs":"P2 · probability it leads to harm"), btn), sel, info); };
+        card.append(el("div",{class:"p12Wrap"}, el("div",{class:"p12In"}, el("b",{class:"p12Head"},"Probability of harm: estimate P1 and P2 (levels 1 to 5)"), pick(1,"p1"), pick(2,"p2v"), pOut), mx)); calc(); }
       riskRow.append(el("label",{class:"rField"}, el("span",{},"Severity"), sSel), el("label",{class:"rField"}, el("span",{},W.pLab||"P before"), pSel), el("div",{class:"rField"}, el("span",{},W.noAfter?"Preliminary risk":"Risk before"), before));
       card.append(riskRow);
       card.append(el("div",{class:"rInputs grid2"}, t(W.ctlLab||"Risk control measure","ctl",true), el("label",{class:"rField"}, el("span",{},"Control type"), selectEl(["Design","Protective","Information / training"],r.ct||"Design",v=>{ r.ct=v; rm._save(); })), t(W.verLab||"Verification of implementation and effectiveness","ver")));
@@ -4481,8 +4533,8 @@ function wsBuild(type,rows,ttl){
   const lvT=(s,pp)=>{ const v=riskLevel(parseInt(s),parseInt(pp)); return v===null?"":ACC[v][0]; };
   const det=id=>allRows().filter(x=>x.r.sra===id).map(x=>x.r.id).join(", ");
   const h=["ID","System element","SRA row",...W.f.map(f=>f[1]),...(W.p1p2?["P1","P2"]:[]),"Severity",W.pLab||"P before",W.noAfter?"Preliminary risk":"Risk before",W.ctlLab||"Risk control","Control type",W.verLab||"Verification",...(W.noAfter?[]:["P after","Residual risk"]),...(isU?["Critical task"]:[]),...(type==="sra"?["Detailed in"]:[])].map(v=>({v,b:true}));
-  const xr=[h,...rows.map(r=>[r.id,r.node?nodeLabel(r.node):"",r.sra||"",...W.f.map(f=>r[f[0]]),...(W.p1p2?[r.p1,r.p2v]:[]),lab(rm.sev,r.s),lab(rm.prob,r.p),lvT(r.s,r.p),r.ctl,r.ct,r.ver,...(W.noAfter?[]:[lab(rm.prob,r.p2),lvT(r.s,r.p2)]),...(isU?[r.crit?"Yes":"No"]:[]),...(type==="sra"?[det(r.id)]:[])])];
-  const secs=rows.map(r=>({h:r.id+" "+(r.who||""),rows:[...(r.node?[["System element",nodeLabel(r.node)]]:[]),...(r.sra?[["SRA row",r.sra]]:[]),...W.f.slice(1).map(f=>[f[1],r[f[0]]||"-"]),...(W.p1p2?[["P1 / P2",(r.p1||"-")+" / "+(r.p2v||"-")]]:[]),["Severity / P",(lab(rm.sev,r.s)||"-")+" / "+(lab(rm.prob,r.p)||"-")+" -> "+(lvT(r.s,r.p)||"-")],[(W.ctlLab||"Risk control")+" ("+(r.ct||"")+")",r.ctl||"-"],[W.verLab||"Verification",r.ver||"-"],...(W.noAfter?[]:[["P after / residual",(lab(rm.prob,r.p2)||"-")+" -> "+(lvT(r.s,r.p2)||"-")]]),...(isU?[["Critical task",r.crit?"Yes":"No"]]:[]),...(type==="sra"?[["Detailed in",det(r.id)||"-"]]:[])]}));
+  const xr=[h,...rows.map(r=>[r.id,r.node?nodeLabel(r.node):"",r.sra||"",...W.f.map(f=>r[f[0]]),...(W.p1p2?[p12Txt(1,r.p1),p12Txt(2,r.p2v)]:[]),lab(rm.sev,r.s),lab(rm.prob,r.p),lvT(r.s,r.p),r.ctl,r.ct,r.ver,...(W.noAfter?[]:[lab(rm.prob,r.p2),lvT(r.s,r.p2)]),...(isU?[r.crit?"Yes":"No"]:[]),...(type==="sra"?[det(r.id)]:[])])];
+  const secs=rows.map(r=>({h:r.id+" "+(r.who||""),rows:[...(r.node?[["System element",nodeLabel(r.node)]]:[]),...(r.sra?[["SRA row",r.sra]]:[]),...W.f.slice(1).map(f=>[f[1],r[f[0]]||"-"]),...(W.p1p2?[["P1 / P2",p12Txt(1,r.p1)+" / "+p12Txt(2,r.p2v)]]:[]),["Severity / P",(lab(rm.sev,r.s)||"-")+" / "+(lab(rm.prob,r.p)||"-")+" -> "+(lvT(r.s,r.p)||"-")],[(W.ctlLab||"Risk control")+" ("+(r.ct||"")+")",r.ctl||"-"],[W.verLab||"Verification",r.ver||"-"],...(W.noAfter?[]:[["P after / residual",(lab(rm.prob,r.p2)||"-")+" -> "+(lvT(r.s,r.p2)||"-")]]),...(isU?[["Critical task",r.crit?"Yes":"No"]]:[]),...(type==="sra"?[["Detailed in",det(r.id)||"-"]]:[])]}));
   const scale={h:"Scales",rows:[["Severity",rm.sev.map((s,i)=>(i+1)+" "+s[0]).join(", ")],["Probability",rm.prob.map((s,i)=>(i+1)+" "+s[0]).join(", ")]]};
   return {xlsx:()=>buildXlsx(mkDoc("Risk management",ttl,[scale],null,[{name:W.l.slice(0,28),rows:xr,widths:[9,20,9,...W.f.map(()=>24),14,14,18,30,16,26,14,18,10]}]).sheets),pdf:()=>buildPdf(mkDoc("Risk management",ttl,[scale,...secs],null).pdf)};
 }
@@ -5893,7 +5945,7 @@ function route(){
   const id=(location.hash||"").slice(1)||"home";
   { const sec=["random","dilemmas","audit"].includes(id)?"practice":["tools","daily","stats","sampling","msa","grr","rmtools","impact","risk"].includes(id)||SQF[id]?"tools":"learn"; document.documentElement.dataset.sec=sec; }
   if(SQF[id]){ closeModal(); renderNav(id); renderSqForm(id); totals(); try{ if(navPinned()) pinScroll(); else window.scrollTo({top:0}); }catch(e){} return; }
-  if(["daily","stats","sampling"].includes(id)&&LAST_ROUTE!==id) setTimeout(()=>{ if((location.hash||"").slice(1)!==id) return; if(id==="daily") dailyIntro(); else statsIntro(id); },450);
+  if(["daily","stats","sampling","risk","rmtools"].includes(id)&&LAST_ROUTE!==id) setTimeout(()=>{ if((location.hash||"").slice(1)!==id) return; if(id==="daily") dailyIntro(); else if(id==="risk") riskIntro(); else if(id==="rmtools") rmtIntro(); else statsIntro(id); },450);
   LAST_ROUTE=id;
   if(["home","explore","dilemmas","map","sampling","tools","daily","stats","dates","audit","risk","msa","grr","rmtools","impact"].includes(id)){ closeModal(); renderNav(id); ({home:()=>renderHome(false),explore:()=>renderHome(true),dilemmas:renderDilemmas,map:renderMap,sampling:renderSampling,tools:()=>renderTools("daily"),daily:()=>renderTools("daily"),stats:()=>renderTools("stats"),risk:renderRisk,msa:renderMsa,grr:renderGrr,rmtools:renderRmTools,impact:renderImpact,dates:renderDates,audit:renderAudit})[id](); totals(); try{ if(navPinned()) pinScroll(); else window.scrollTo({top:0}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
   if(id==="random"){ closeModal(); renderNav("random"); renderRandom(); totals(); try{ if(navPinned()) pinScroll(); else window.scrollTo({top:document.getElementById("dnav").offsetTop}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
