@@ -1377,6 +1377,14 @@ footer#siteFoot .legalBody p.imp{font-size:14px; color:var(--ink)}
 @media (max-width:560px){ .heroC .hLogo img{height:32px} }
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .heroC .hLogo{background:#e9eef3; box-shadow:0 1px 3px rgba(0,0,0,.35)} }
 :root[data-theme="dark"] .heroC .hLogo{background:#e9eef3; box-shadow:0 1px 3px rgba(0,0,0,.35)}
+/* 2.5.3 Qraft logo at the top right of the Welcome screen, beside its title */
+.launchBox .mhead{align-items:center}
+.launchBox .mhead h2{flex:1}
+.launchBox .wLogo{flex:none; display:inline-flex; border-radius:10px; padding:2px 4px; cursor:pointer; margin-left:8px}
+.launchBox .wLogo img{display:block; height:40px; width:auto}
+@media (max-width:560px){ .launchBox .mhead{flex-wrap:wrap; justify-content:flex-end; row-gap:6px} .launchBox .mhead h2{order:2; flex:1 1 100%} .launchBox .wLogo img{height:32px} }
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .launchBox .wLogo{background:#e9eef3; box-shadow:0 1px 3px rgba(0,0,0,.35)} }
+:root[data-theme="dark"] .launchBox .wLogo{background:#e9eef3; box-shadow:0 1px 3px rgba(0,0,0,.35)}
 /* compact form cards on wide screens */
 @media (min-width:761px){
  .dLay .toolGrid{gap:10px; grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
@@ -1758,6 +1766,7 @@ function showLaunch(){
     el("p",{class:"welcomeCopy"}, el("span",{},VERLINE), el("span",{},COPYLINE)));
   modal("Welcome to the Quality Handbook, a guide to Medical Device Requirements",body);
   const mb=document.querySelector("#ovl .mbox"); if(mb) mb.classList.add("launchBox");
+  { const hd=document.querySelector("#ovl .launchBox .mhead"), x=hd&&hd.querySelector(".mclose"); if(hd){ const lg=heroLogo(); lg.classList.add("wLogo"); hd.insertBefore(lg,x); } }
 }
 function enterApp(btn){
   const reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -2810,7 +2819,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="2.5.2", APPDATE="20-NOV-2026";
+const APPVER="2.5.3", APPDATE="20-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Asaf Ben Zion. All rights reserved.";
 const LEGAL=[["Copyright", "No part of this handbook’s original content may be copied or redistributed without written permission. Cited regulations, standards and guidance, and their links, remain the property of their official publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, data selection and design, developed with AI tools, and has been verified against requirements set by the author and against the official sources."], ["Sources", "Sources are limited to official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases. EU: EUR-Lex and European Commission pages, including MDCG guidance."], ["Important", "This application is intended for training only. Results from its tools require human review, verification and approval. Always check the linked source before citing anything in an audit response."]];
