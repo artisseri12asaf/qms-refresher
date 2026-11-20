@@ -1407,6 +1407,20 @@ header.top{padding-top:var(--topPad,0px)}
 .vvPinSt{min-height:1.4em; color:#b3261e; font-weight:600}
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .vvPinSt{color:#ff9b91} }
 :root[data-theme="dark"] .vvPinSt{color:#ff9b91}
+/* 2.8.0 trailer button and player */
+.trlBtn{display:flex; align-items:center; gap:12px; margin:0 auto 12px; padding:9px 18px 9px 10px; border-radius:999px; border:1px solid rgba(80,170,210,.45); cursor:pointer; font:inherit; color:#fff; text-align:left;
+  background:linear-gradient(135deg,#0d2c3d 0%,#174a63 55%,#1f6c8a 100%); box-shadow:0 6px 18px rgba(13,44,61,.28), inset 0 1px 0 rgba(255,255,255,.18)}
+.trlBtn:hover{filter:brightness(1.08)} .trlBtn:focus-visible{outline:3px solid #6fd6ea; outline-offset:2px}
+.trlBtn b{display:block; font-size:15.5px; letter-spacing:.01em} .trlBtn small{display:block; font-size:12px; color:#a9e3f0; font-weight:600}
+.trlPlay{position:relative; flex:none; width:38px; height:38px; border-radius:50%; background:#6fd6ea; box-shadow:0 0 0 4px rgba(111,214,234,.25)}
+.trlPlay::after{content:""; position:absolute; left:15px; top:11px; border-style:solid; border-width:8px 0 8px 13px; border-color:transparent transparent transparent #0d2c3d}
+@media (prefers-reduced-motion: no-preference){ .trlPlay{animation:trlPulse 2.2s ease-in-out infinite} }
+@keyframes trlPulse{0%,100%{box-shadow:0 0 0 4px rgba(111,214,234,.25)} 50%{box-shadow:0 0 0 9px rgba(111,214,234,.08)}}
+.trlOv{position:fixed; inset:0; z-index:400; background:rgba(4,10,16,.88); display:grid; place-items:center; padding:12px}
+.trlBox{position:relative; height:min(92vh,92dvh,1200px); aspect-ratio:9/16; max-width:96vw}
+.trlBox video{display:block; width:100%; height:100%; object-fit:contain; background:#000; border-radius:14px; box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.trlX{position:absolute; top:-6px; right:-6px; z-index:2; width:44px; height:44px; border-radius:50%; border:0; cursor:pointer; font-size:26px; line-height:1; color:#0d2c3d; background:#e9eef3; box-shadow:0 2px 8px rgba(0,0,0,.4)}
+.trlSt{position:absolute; left:0; right:0; bottom:-34px; margin:0; text-align:center; color:#cfe6ee; font-size:14px}
 /* compact form cards on wide screens */
 @media (min-width:761px){
  .dLay .toolGrid{gap:10px; grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
@@ -1757,6 +1771,21 @@ function choiceGrid(){
   CHOICES.forEach(([t,s,target,k])=>g.append(el("button",{class:"choiceBtn "+k,type:"button",onclick:()=>go(target)}, el("b",{},t), el("span",{},s))));
   return g;
 }
+/* 2.8.0 trailer: button on the Welcome screen; plays trailer.mp4 (published next to index.html) in an in-app player */
+function trailerBtn(){ const b=el("button",{class:"trlBtn",type:"button","aria-label":"Watch the Qraft trailer (50 seconds)"},
+    el("span",{class:"trlPlay","aria-hidden":"true"}), el("span",{}, el("b",{},"Watch the trailer"), el("small",{},"Qraft · 50 seconds")));
+  b.addEventListener("click",openTrailer); return b; }
+function openTrailer(){ if(document.getElementById("trlOv")) return;
+  const v=el("video",{src:"trailer.mp4",controls:"",playsinline:"",preload:"auto","aria-label":"Qraft trailer"});
+  const st=el("p",{class:"trlSt",role:"status"});
+  const close=()=>{ try{ v.pause(); }catch(e){} ov.remove(); document.removeEventListener("keydown",esc,true); };
+  const esc=e=>{ if(e.key==="Escape"){ e.stopPropagation(); close(); } };
+  const ov=el("div",{id:"trlOv",class:"trlOv",role:"dialog","aria-modal":"true","aria-label":"Qraft trailer",onclick:e=>{ if(e.target===ov) close(); }},
+    el("div",{class:"trlBox"}, el("button",{class:"trlX",type:"button","aria-label":"Close the trailer",onclick:close},"×"), v, st));
+  v.addEventListener("error",()=>{ st.textContent="The trailer could not be loaded here. Please try again online."; });
+  v.addEventListener("ended",()=>{ st.textContent="Thanks for watching."; });
+  document.body.append(ov); document.addEventListener("keydown",esc,true);
+  const pr=v.play(); if(pr&&pr.catch) pr.catch(()=>{}); setTimeout(()=>v.focus(),50); }
 function showLaunch(){
   let on=true; try{ on=localStorage.getItem(LKEY)!=="off"; }catch(e){}
   const body=el("div",{class:"launch"});
@@ -1777,6 +1806,7 @@ function showLaunch(){
   };
   const side=(t,sub,k,items)=>{ const b=el("button",{class:"lSide "+k,type:"button","aria-haspopup":"dialog","aria-expanded":"false"}, el("b",{},t), el("span",{},sub)); b.addEventListener("click",()=>pick(t,items,b)); return b; };
   const C=Object.fromEntries(CHOICES.map(c=>[c[2],c]));
+  body.append(trailerBtn());
   body.append(el("p",{class:"lede"},"What would you like to do?"), explorePanel(false),
     el("div",{class:"lRow"},
       side("Practice mode","Training, dilemmas, inspection","lPrac",[C.random,C.dilemmas,C.audit]),
@@ -2841,7 +2871,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="2.7.0", APPDATE="20-NOV-2026";
+const APPVER="2.8.0", APPDATE="20-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Asaf Ben Zion. All rights reserved.";
 const LEGAL=[["Copyright", "No part of this handbook’s original content may be copied or redistributed without written permission. Cited regulations, standards and guidance, and their links, remain the property of their official publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, data selection and design, developed with AI tools, and has been verified against requirements set by the author and against the official sources."], ["Sources", "Sources are limited to official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases. EU: EUR-Lex and European Commission pages, including MDCG guidance."], ["Important", "This application is intended for training only. Results from its tools require human review, verification and approval. Always check the linked source before citing anything in an audit response."]];
