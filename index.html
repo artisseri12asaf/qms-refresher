@@ -1369,6 +1369,14 @@ footer#siteFoot .legalBody p.imp{font-size:14px; color:var(--ink)}
 @media (max-width:560px){ .brand2 .qLogo img{height:34px} .brand2 b{font-size:16.5px} .brand2 small{font-size:11px} }
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .brand2 .qLogo{background:#e9eef3; box-shadow:0 1px 3px rgba(0,0,0,.35)} }
 :root[data-theme="dark"] .brand2 .qLogo{background:#e9eef3; box-shadow:0 1px 3px rgba(0,0,0,.35)}
+/* 2.5.2 home: no header bar; Qraft logo at the top right of the hero card (also opens the hidden menu) */
+:root[data-home="true"] header.top .appbar{display:none}
+.heroC .hHead{display:flex; align-items:flex-start; justify-content:space-between; gap:12px}
+.heroC .hLogo{flex:none; display:inline-flex; border-radius:10px; padding:2px 4px; cursor:pointer}
+.heroC .hLogo img{display:block; height:40px; width:auto}
+@media (max-width:560px){ .heroC .hLogo img{height:32px} }
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .heroC .hLogo{background:#e9eef3; box-shadow:0 1px 3px rgba(0,0,0,.35)} }
+:root[data-theme="dark"] .heroC .hLogo{background:#e9eef3; box-shadow:0 1px 3px rgba(0,0,0,.35)}
 /* compact form cards on wide screens */
 @media (min-width:761px){
  .dLay .toolGrid{gap:10px; grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
@@ -2802,7 +2810,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="2.5.1", APPDATE="20-NOV-2026";
+const APPVER="2.5.2", APPDATE="20-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Asaf Ben Zion. All rights reserved.";
 const LEGAL=[["Copyright", "No part of this handbook’s original content may be copied or redistributed without written permission. Cited regulations, standards and guidance, and their links, remain the property of their official publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, data selection and design, developed with AI tools, and has been verified against requirements set by the author and against the official sources."], ["Sources", "Sources are limited to official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases. EU: EUR-Lex and European Commission pages, including MDCG guidance."], ["Important", "This application is intended for training only. Results from its tools require human review, verification and approval. Always check the linked source before citing anything in an audit response."]];
@@ -2979,6 +2987,9 @@ function openVV(){
   issueLog(adm);
 }
 (function(){ const sv=document.querySelector(".brand2 .qLogo"); if(!sv) return; sv.addEventListener("click",e=>{ e.preventDefault(); e.stopPropagation(); openVV(); }); })();
+function heroLogo(){ const src=(document.querySelector(".brand2 .qLogo img.qA")||{}).src||"";
+  const s=el("span",{class:"hLogo",title:"Qraft"}, el("img",{src,alt:"Qraft",width:"118",height:"42"}));
+  s.addEventListener("click",e=>{ e.preventDefault(); e.stopPropagation(); openVV(); }); return s; }
 function heroTop(show){
   const h=document.getElementById("heroTop"); if(!h) return;
   h.hidden=!show; if(!show||h.dataset.built) return; h.dataset.built="1";
@@ -2991,7 +3002,7 @@ function heroTop(show){
     stats.append(el("div",{class:"hStat s-"+k,style:"--d:"+(i*140)+"ms"}, b, el("small",{},l), el("i",{class:"hBar"})));
   });
   h.append(el("div",{class:"hTxt"},
-    el("h2",{class:"heroTitle"},"Quality Handbook and Training Guide"),
+    el("div",{class:"hHead"}, el("h2",{class:"heroTitle"},"Quality Handbook and Training Guide"), heroLogo()),
     el("p",{class:"heroTag"},"The Hitchhiker’s QA Guide assistant to the Medical Devices Universe"),
     el("p",{class:"hDesc"},"A working handbook for QA professionals on Class II and III devices: requirements, real-world dilemmas and practice questions."), el("p",{class:"hVer"},VERLINE)), el("div",{class:"hRight"}, stats, svyButton()));
   const reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
