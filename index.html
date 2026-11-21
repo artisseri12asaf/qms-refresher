@@ -310,7 +310,7 @@ mark{background:#ffe58a; color:inherit; border-radius:3px; padding:0 1px}
 .quickNav .partBtn.mapBtn{border-color:#2f4aa0}
 .partBtn.sampBtn[aria-pressed="true"]{background:#0d7568; color:#fff}
 .partBtn.mapBtn[aria-pressed="true"]{background:#2f4aa0; color:#fff}
-.choiceBtn.mapc{border-left-color:#2f4aa0} .choiceBtn.samp{border-left-color:#0d7568}
+.choiceBtn.mapc{border-left-color:#2f4aa0} .choiceBtn.samp{border-left-color:#0d7568} .choiceBtn.projc{border-left-color:#1f5f8b}
 .chHead.mapHead{background:linear-gradient(135deg,#23336f,#2f4aa0 55%,#3f6fb3)}
 .chHead.sampHead{background:linear-gradient(135deg,#0a5a50,#0d7568 55%,#2a8f7e)}
 .legend2{display:flex; flex-wrap:wrap; gap:8px 16px; font-size:14.5px}
@@ -1445,6 +1445,13 @@ header.top{padding-top:var(--topPad,0px)}
 .launch .exploreBtn span{min-width:0}
 .launch .qtBtn{width:158px; height:158px; font-size:17.5px}
 @media (max-width:640px){ .launch .lRow .qtBtn{width:128px; height:128px; font-size:15px} }
+/* 2.10.0 Projects */
+.prjBtns{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px}
+.prjBig{display:flex; align-items:center; gap:12px; text-align:left; padding:16px 18px; border-radius:14px; font:inherit; cursor:pointer; min-height:72px}
+.prjBig .ico{width:30px; height:30px; flex:none; fill:none; stroke:currentColor; stroke-width:1.8}
+.prjBig b{display:block; font-size:17px} .prjBig small{display:block; font-size:13px; opacity:.85; font-weight:500}
+.prjAlt{background:var(--card); color:var(--ink); border:1.5px solid var(--qms)}
+.prjForm .rField, .prjForm label{margin-bottom:8px}
 /* compact form cards on wide screens */
 @media (min-width:761px){
  .dLay .toolGrid{gap:10px; grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
@@ -1611,7 +1618,7 @@ function renderNav(active){
   const grp=(lab,keys)=>el("div",{class:"navGroup","data-g":lab}, el("span",{class:"navLab"},lab), el("div",{class:"navRowG c"+keys.length}, ...keys.map(k=>navBtn(NK[k]))));
   if(!window.NAVSEARCH) window.NAVSEARCH=searchWidget();
   { const ni=NAVSEARCH.querySelector("input"), nb=NAVSEARCH.querySelector(".qres"); if(ni && document.activeElement!==ni){ ni.value=""; nb.innerHTML=""; nb.classList.remove("open"); } }
-  r2.append(grp("Explore",["iso","qmsr","mdr","map","dates","fdapre"]), el("div",{class:"navGroup navSearchG","data-g":"Search"}, el("span",{class:"navLab"},"Search"), el("div",{class:"navSearchRow"}, NAVSEARCH, el("button",{class:"glossBtn",type:"button",title:"Glossary and abbreviations","aria-label":"Open the glossary and abbreviations",onclick:openGlossary}, ico("gloss"), el("span",{},"Glossary")))), grp("Practice",["random","dilemmas","audit"]), grp("Tools",["daily","stats","risk"]));
+  r2.append(grp("Explore",["iso","qmsr","mdr","map","dates","fdapre"]), el("div",{class:"navGroup navSearchG","data-g":"Search"}, el("span",{class:"navLab"},"Search"), el("div",{class:"navSearchRow"}, NAVSEARCH, el("button",{class:"glossBtn",type:"button",title:"Glossary and abbreviations","aria-label":"Open the glossary and abbreviations",onclick:openGlossary}, ico("gloss"), el("span",{},"Glossary")))), grp("Practice",["random","dilemmas","audit"]), grp("Tools",["daily","stats","risk","projects"]));
   phoneBar(active);
   heroTop(true); document.documentElement.dataset.home=String(active==="home"||active==="explore");
   requestAnimationFrame(()=>{ document.documentElement.style.setProperty("--hdrH",(navPinned()?r2.offsetHeight:0)+"px"); topBar(); });
@@ -1787,7 +1794,8 @@ const CHOICES=[
  ["Regulatory Timeline","Key dates and transitions","dates","datesc"],
  ["Daily QA Work","Change impact assessment","daily","samp"],
  ["Statistical Tools","Sample size, MSA, Gauge R&R","stats","samp"],
- ["Risk management","ISO 14971 analysis and worksheets","risk","riskc"]
+ ["Risk management","ISO 14971 analysis and worksheets","risk","riskc"],
+ ["Projects","Create and open your projects","projects","projc"]
 ];
 function go(target){ closeModal(); if(target==="random"){ rnd.unanswered=true; rnd.cur=null; } if(location.hash==="#"+target) route(); else location.hash=target; }
 function choiceGrid(){
@@ -1835,7 +1843,7 @@ function showLaunch(){
     el("div",{class:"lRow"},
       side("Practice mode","Training, dilemmas, inspection","lPrac",[C.random,C.dilemmas,C.audit]),
       el("div",{class:"lMid"}, qt),
-      side("Useful tools","Daily QA work, statistics, risk","lTool",[C.daily,C.stats,C.risk])));
+      side("Useful tools","Daily QA work, statistics, risk, projects","lTool",[C.daily,C.stats,C.risk,C.projects])));
   const cb=el("input",{type:"checkbox",id:"launchPref"}); cb.checked=on;
   cb.addEventListener("change",()=>{ try{ localStorage.setItem(LKEY, cb.checked?"on":"off"); }catch(e){} });
   body.append(el("div",{class:"mact"}, el("label",{class:"unl"}, cb, " Show this menu when the app opens")),
@@ -2852,6 +2860,7 @@ function renderGlossary(c,panel){
 }
 /* ---------- icons ---------- */
 const ICONS={
+ folder:'<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M12 11v5M9.5 13.5h5"/>',
  home:'<path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/>',
  explore:'<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>',
  train:'<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/><path d="M22 9v6"/>',
@@ -2881,7 +2890,7 @@ const ICONS={
  audit:'<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v3h6V3M8.5 12l2.5 2.5 4.5-5"/>'
 };
 function ico(k){ const s=document.createElementNS("http://www.w3.org/2000/svg","svg"); s.setAttribute("viewBox","0 0 24 24"); s.setAttribute("aria-hidden","true"); s.setAttribute("class","ico"); s.innerHTML=ICONS[k]; return s; }
-const NAV=[["home","Home","home"],["iso","ISO 13485:2016","iso"],["qmsr","FDA QMSR","qmsr"],["mdr","EU MDR 2017/745","mdr"],["fdapre","FDA Premarket & Postmarket","fdapre"],["explore","Explore","explore"],["random","Training mode","train"],["dilemmas","Selected Dilemmas","dil"],["map","QMS map","map"],["risk","Risk management","risk"],["dates","Regulatory Timeline","dates"],["tools","Useful tools","samp"],["daily","Daily QA Work","change"],["stats","Statistical Tools","chart"],["audit","Inspection mode","audit"]];
+const NAV=[["home","Home","home"],["iso","ISO 13485:2016","iso"],["qmsr","FDA QMSR","qmsr"],["mdr","EU MDR 2017/745","mdr"],["fdapre","FDA Premarket & Postmarket","fdapre"],["explore","Explore","explore"],["random","Training mode","train"],["dilemmas","Selected Dilemmas","dil"],["map","QMS map","map"],["risk","Risk management","risk"],["dates","Regulatory Timeline","dates"],["tools","Useful tools","samp"],["daily","Daily QA Work","change"],["stats","Statistical Tools","chart"],["audit","Inspection mode","audit"],["projects","Projects","folder"]];
 
 /* ---------- search widget (one component, used inside Explore) ---------- */
 function searchWidget(){
@@ -2928,7 +2937,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="2.9.1", APPDATE="20-NOV-2026";
+const APPVER="2.10.0", APPDATE="21-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Asaf Ben Zion. All rights reserved.";
 const LEGAL=[["Copyright", "No part of this handbook’s original content may be copied or redistributed without written permission. Cited regulations, standards and guidance, and their links, remain the property of their official publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, data selection and design, developed with AI tools, and has been verified against requirements set by the author and against the official sources."], ["Sources", "Sources are limited to official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases. EU: EUR-Lex and European Commission pages, including MDCG guidance."], ["Important", "This application is intended for training only. Results from its tools require human review, verification and approval. Always check the linked source before citing anything in an audit response."]];
@@ -6336,6 +6345,35 @@ function openSamples(list){ let k=0; const tabs=el("div",{class:"chipRow smpTabs
   if(list.length>1) list.forEach((x,j)=>tabs.append(el("button",{class:"chipBtn",type:"button",onclick:()=>{ k=j; show(); }},x.name.length>48?x.name.slice(0,46)+"…":x.name)));
   modal(list.length>1?"Samples":"Sample", el("div",{class:"smpView"}, list.length>1?tabs:"", st, pages));
   const mb=document.querySelector("#ovl .mbox"); if(mb) mb.classList.add("smpBox"); show(); }
+/* 2.10.0 Projects (first step): create a project and open the project list; kept on this device. More features will follow. */
+const PRJ=lsGet("qah-projects-v1",{list:[],cur:null});
+const prjSave=()=>lsSet("qah-projects-v1",PRJ);
+let PRJ_VIEW="home";
+function prjNew(v){ const p=Object.assign({id:docNo("PRJ"),name:"",device:"",cls:"Class II",market:"US and EU",owner:"",phase:"Concept",created:nowTs(),updated:nowTs()},v||{}); PRJ.list.unshift(p); PRJ.cur=p.id; prjSave(); return p; }
+function renderProjects(){ const m=document.getElementById("main"); m.innerHTML="";
+  m.append(toolHead("Projects","Group the work for one device project in one place. Start with a new project or open your project list; more project features will follow.",["#tools","Useful tools"]));
+  const bar=el("div",{class:"card prjHome"}, el("div",{class:"prjBtns"},
+    el("button",{class:"cta prjBig",type:"button",onclick:()=>{ PRJ_VIEW="new"; renderProjects(); }}, ico("folder"), el("span",{}, el("b",{},"Add a new project"), el("small",{},"Name, device, class, market and phase"))),
+    el("button",{class:"prjBig prjAlt",type:"button",onclick:()=>{ PRJ_VIEW="list"; renderProjects(); }}, ico("list"), el("span",{}, el("b",{},"Open project list"), el("small",{},PRJ.list.length+(PRJ.list.length===1?" project":" projects"))))));
+  m.append(bar);
+  if(PRJ_VIEW==="new"){ const v={name:"",device:"",cls:"Class II",market:"US and EU",owner:"",phase:"Concept"}; const st=el("p",{class:"src",role:"status"});
+    const f=el("div",{class:"card prjForm"}, el("h3",{class:"secTitle"},"New project"),
+      txtField("Project name",v.name,x=>v.name=x,"e.g. Infusion pump IP-400"), txtField("Device",v.device,x=>v.device=x,"Device name and type"),
+      el("label",{class:"rField"}, el("span",{},"Device class"), selectEl([["Class II","Class II (US) / IIa-IIb (EU)"],["Class III","Class III"]],v.cls,x=>v.cls=x)),
+      el("label",{class:"rField"}, el("span",{},"Market"), selectEl([["US and EU","US and EU"],["US","US"],["EU","EU"],["Other","Other"]],v.market,x=>v.market=x)),
+      txtField("Project owner",v.owner,x=>v.owner=x,""),
+      el("label",{class:"rField"}, el("span",{},"Phase"), selectEl(["Concept","Feasibility","Design and development","Verification and validation","Design transfer","Post-market"].map(x=>[x,x]),v.phase,x=>v.phase=x)),
+      el("div",{class:"mact"}, el("button",{class:"cta",type:"button",onclick:()=>{ if(!v.name.trim()){ st.textContent="Enter a project name."; return; } const p=prjNew(v); PRJ_VIEW="list"; renderProjects(); flash("Project "+p.id+" created"); }},"Create project"),
+        el("button",{class:"linkBtn",type:"button",onclick:()=>{ PRJ_VIEW="home"; renderProjects(); }},"Cancel")), st);
+    m.append(f); }
+  if(PRJ_VIEW==="list"){ const c=el("div",{class:"card"}, el("h3",{class:"secTitle"},"Project list"));
+    if(!PRJ.list.length) c.append(el("p",{class:"src"},"No projects yet. Use Add a new project to start one."));
+    PRJ.list.forEach(p=>c.append(el("div",{class:"iaRow prjRow"+(PRJ.cur===p.id?" on":"")},
+      el("button",{class:"linkBtn",type:"button",onclick:()=>{ PRJ.cur=p.id; prjSave(); renderProjects(); }}, el("span",{class:"idTag"},p.id)," "+p.name),
+      el("span",{class:"src"},[p.device,p.cls,p.market,p.phase].filter(Boolean).join(" · ")+" · created "+p.created),
+      el("button",{class:"linkBtn del",type:"button",onclick:()=>modalConfirm("Delete "+p.id+"?","Delete this project? This cannot be undone.","Delete",()=>{ PRJ.list=PRJ.list.filter(x=>x!==p); if(PRJ.cur===p.id) PRJ.cur=null; prjSave(); renderProjects(); })},"Delete"))));
+    m.append(c); }
+  tcDom(m); }
 function renderSqForm(fid){
   const F=SQF[fid]; const m=document.getElementById("main"); m.innerHTML=""; dailySetTab(fid);
   { const th=toolHead(tc(F.t),F.sub,["#daily","Daily QA Work"]); th.classList.add("sqHead"); m.append(th); }
@@ -6407,11 +6445,11 @@ function pinScroll(){ const a=document.getElementById("navAnchor"); const y=a?a.
 let LAST_ROUTE=null;
 function route(){
   const id=(location.hash||"").slice(1)||"home";
-  { const sec=["random","dilemmas","audit"].includes(id)?"practice":["tools","daily","stats","sampling","msa","grr","rmtools","impact","risk","cvss"].includes(id)||SQF[id]?"tools":"learn"; document.documentElement.dataset.sec=sec; document.documentElement.dataset.mod=(sec==="practice"||CH.some(c=>c.id===id))?"train":""; }
+  { const sec=["random","dilemmas","audit"].includes(id)?"practice":["tools","daily","stats","sampling","msa","grr","rmtools","impact","risk","cvss","projects"].includes(id)||SQF[id]?"tools":"learn"; document.documentElement.dataset.sec=sec; document.documentElement.dataset.mod=(sec==="practice"||CH.some(c=>c.id===id))?"train":""; }
   if(SQF[id]){ closeModal(); renderNav(id); renderSqForm(id); totals(); try{ if(navPinned()) pinScroll(); else window.scrollTo({top:0}); }catch(e){} return; }
   if(["daily","stats","sampling","risk","rmtools"].includes(id)&&LAST_ROUTE!==id) setTimeout(()=>{ if((location.hash||"").slice(1)!==id) return; if(id==="daily") dailyIntro(); else if(id==="risk") riskIntro(); else if(id==="rmtools") rmtIntro(); else statsIntro(id); },450);
   LAST_ROUTE=id;
-  if(["home","explore","dilemmas","map","sampling","tools","daily","stats","dates","audit","risk","msa","grr","rmtools","impact","cvss"].includes(id)){ closeModal(); renderNav(id); ({home:()=>renderHome(false),explore:()=>renderHome(true),dilemmas:renderDilemmas,map:renderMap,sampling:renderSampling,tools:()=>renderTools("daily"),daily:()=>renderTools("daily"),stats:()=>renderTools("stats"),risk:renderRisk,msa:renderMsa,grr:renderGrr,rmtools:renderRmTools,impact:renderImpact,cvss:renderCvss,dates:renderDates,audit:renderAudit})[id](); totals(); try{ if(navPinned()) pinScroll(); else window.scrollTo({top:0}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
+  if(["home","explore","dilemmas","map","sampling","tools","daily","stats","dates","audit","risk","msa","grr","rmtools","impact","cvss","projects"].includes(id)){ closeModal(); renderNav(id); ({home:()=>renderHome(false),explore:()=>renderHome(true),dilemmas:renderDilemmas,map:renderMap,sampling:renderSampling,tools:()=>renderTools("daily"),daily:()=>renderTools("daily"),stats:()=>renderTools("stats"),risk:renderRisk,msa:renderMsa,grr:renderGrr,rmtools:renderRmTools,impact:renderImpact,cvss:renderCvss,projects:renderProjects,dates:renderDates,audit:renderAudit})[id](); totals(); try{ if(navPinned()) pinScroll(); else window.scrollTo({top:0}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
   if(id==="random"){ closeModal(); renderNav("random"); renderRandom(); totals(); try{ if(navPinned()) pinScroll(); else window.scrollTo({top:document.getElementById("dnav").offsetTop}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
   const valid=CH.some(c=>c.id===id)?id:CH[0].id;
   currentTab=pendingTab||""; pendingTab=null;
