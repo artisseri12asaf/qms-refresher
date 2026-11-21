@@ -1470,6 +1470,34 @@ header.top{padding-top:var(--topPad,0px)}
 .lensPop li.in{opacity:.78; transform:none} .lensPop li.lpGreen{color:#3fae6a; font-weight:700} .lensPop li.lpGreen.in{opacity:1}
 @media (prefers-reduced-motion:reduce){ .lensPop{display:none} }
 .prjLink{max-width:320px} .qdRow{flex-wrap:wrap; gap:8px}
+/* 2.15.0 risk areas, compact worksheet list, row editor */
+.devSel{margin:0 0 10px; display:grid; gap:4px} .devSel select{width:100%}
+.devMini{display:none; margin:0 0 8px} .rmSideLink{display:block; margin-top:12px; text-align:center; font-size:13.5px; text-decoration:none}
+.rmMiniLink{display:none}
+@media (max-width:999px){ .devMini.rmw{display:block} .rmMiniLink{display:block; margin:0 0 8px} }
+@media (max-width:760px){ .devMini.rmtw{display:block} }
+.rmBg{margin-top:12px} .rmBg > summary{cursor:pointer; font-weight:700; color:#1f5f8b}
+.rkBar{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:8px 0}
+.wsTop{display:flex; align-items:baseline; justify-content:space-between; gap:10px}
+.wsLine{display:grid; grid-template-columns:86px minmax(0,1fr) auto auto; gap:10px; align-items:center; padding:8px 4px; border-top:1px solid var(--line)}
+.wsLine.wsLH{font-size:12px; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:.04em; border-top:0; padding-bottom:2px}
+.wsLT{min-width:0} .wsLT b{display:block; font-size:14.5px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap} .wsLT small{display:block; color:var(--muted); font-size:12.5px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.wsLR{display:flex; align-items:center; gap:4px} .wsArr{color:var(--muted)} .wsLA{display:flex; gap:6px; align-items:center}
+.wsEdit{padding:5px 12px}
+.wsChip{display:inline-block; font-size:12px; font-weight:800; border-radius:999px; padding:3px 10px; background:var(--soft,#eef1f4); color:var(--muted); white-space:nowrap}
+.wsChip.c0{background:#3a9a62; color:#fff} .wsChip.c1{background:#d9a441; color:#3b2a00} .wsChip.c2{background:#c0503f; color:#fff}
+.rmLay .wkGrid:has(.wsCard){grid-template-columns:minmax(0,1fr) !important} .rmLay .wkGrid:has(.wsCard) > .wkSide{order:1 !important; position:static}
+@media (max-width:640px){ .wsLine{grid-template-columns:70px minmax(0,1fr); } .wsLR,.wsLA{grid-column:2} .wsLine.wsLH{display:none} }
+.rkCard{border:0; padding:0; box-shadow:none; background:none}
+.rkCard [data-part]{display:none}
+.rkCard[data-step="ident"] [data-part="ident"], .rkCard[data-step="conseq"] [data-part="conseq"], .rkCard[data-step="est"] [data-part="est"], .rkCard[data-step="ctl"] [data-part="ctl"], .rkCard[data-step="res"] [data-part="res"]{display:grid}
+.rkCard .wsRisk[data-part]{display:none} .rkCard[data-step="est"] .wsRisk[data-part="est"], .rkCard[data-step="res"] .wsRisk[data-part="res"]{display:flex}
+.rkCard .p12Wrap[data-part]{display:none} .rkCard[data-step="est"] .p12Wrap[data-part="est"]{display:grid}
+.rkCard .chain[data-part]{display:none} .rkCard[data-step="conseq"] .chain[data-part="conseq"]{display:flex}
+.chlPick{grid-column:1/-1} .chlNote{grid-column:1/-1; margin:0}
+.smpDev{max-width:360px; margin-bottom:8px}
+.wkOv > .wkFoot{max-width:none; width:auto; margin:0}
+.devSel > span{font:700 11px var(--body); letter-spacing:.08em; text-transform:uppercase; color:var(--muted)} .devSel select.rIn{width:100%; min-width:0; max-width:100%; box-sizing:border-box}
 /* compact form cards on wide screens */
 @media (min-width:761px){
  .dLay .toolGrid{gap:10px; grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
@@ -2645,7 +2673,7 @@ function dailyIntro(){ if(!DAILY_SHOW) return; const groups=dailyGroups(TOOLGROU
     restore:k=>{ if(DAILY_SHOW&&location.hash==="#daily") DAILY_SHOW(k); document.querySelectorAll(".dItem.tour").forEach(x=>x.classList.remove("tour")); },
     commit:k=>{ DAILY_TAB=k; try{ localStorage.setItem("qah-daily-tab",k); }catch(e){} const gs=dailyGroups(TOOLGROUPS.daily); document.querySelectorAll(".dLay .dSide .dItem").forEach((b,i)=>b.setAttribute("aria-current",String(gs[i]&&gs[i].h===k))); } }); }
 function keepScroll(f){ const y=scrollY; f(); scrollTo(0,y); }
-function riskIntro(){ const home=rm.tab; sideTour({keys:RM_TABS.map(x=>x[0]), home, show:k=>keepScroll(()=>{ rm.tab=k; renderRisk(); }), content:()=>[...document.querySelectorAll(".rmLay .panel .card h3.secTitle, .rmLay .panel .card > h3")].filter(x=>x.offsetParent),
+function riskIntro(){ if(location.hash!=="#risk") return; const home=RM_KN.includes(rm.tab)?rm.tab:"over"; sideTour({keys:RM_KN, home, show:k=>keepScroll(()=>{ rm.tab=k; renderRisk(); }), content:()=>[...document.querySelectorAll(".rmLay .panel .card h3.secTitle, .rmLay .panel .card > h3")].filter(x=>x.offsetParent),
     restore:k=>{ rm.tab=k; if(location.hash==="#risk") keepScroll(renderRisk); }, commit:k=>{ rm.tab=k; rm._save(); keepScroll(renderRisk); } }); }
 function rmtIntro(){ const home=RMT_GROUPS.some(x=>x[0]===RMT_TAB)?RMT_TAB:RMT_GROUPS[0][0]; sideTour({keys:RMT_GROUPS.map(x=>x[0]), home, show:k=>keepScroll(()=>{ RMT_TAB=k; renderRmTools(); }), content:()=>[...document.querySelectorAll(".dLay .toolGrid .toolCard")],
     restore:k=>{ RMT_TAB=k; if(location.hash==="#rmtools") keepScroll(renderRmTools); }, commit:k=>{ RMT_TAB=k; try{ localStorage.setItem("qah-rmt-tab",k); }catch(e){} keepScroll(renderRmTools); } }); }
@@ -2655,7 +2683,7 @@ function statsIntro(page){ if(!tourOk()) return; if(page==="stats"){ const cs=[.
       const pop=el("div",{class:"lensPop","aria-hidden":"true"}, el("b",{},"Sample size tool"), el("ul",{}, ...["Plan lot acceptance or DV sampling","Type of value","Lot size and AQL / probability and confidence levels","Enter results / raw data","Download Statistical Analysis Report"].map((s,i,a)=>el("li",{class:i===a.length-1?"lpGreen":""},s))));
       pop.style.left=Math.max(8,Math.min(innerWidth-300,x0))+"px"; pop.style.top=Math.max(8,Math.min(innerHeight-220,y0))+"px"; document.body.append(pop); t.off.push(()=>pop.remove());
       requestAnimationFrame(()=>pop.classList.add("in")); [...pop.querySelectorAll("li")].forEach((li,i)=>t.timers.push(setTimeout(()=>li.classList.add("in"),450+i*450)));
-      t.timers.push(setTimeout(()=>{ pop.classList.remove("in"); pop.classList.add("out"); },450+5*450+2600)); t.timers.push(setTimeout(()=>{ if(TOUR===t) tourStop(); },450+5*450+3200)); },80+1500*tg.length+300)); }
+      t.timers.push(setTimeout(()=>{ pop.classList.remove("in"); pop.classList.add("out"); },450+5*450+7600)); t.timers.push(setTimeout(()=>{ if(TOUR===t) tourStop(); },450+5*450+8200)); },80+1500*tg.length+300)); }
   else if(page==="sampling"){ const h=document.querySelector("#main .chHead h2"), b=[...document.querySelectorAll("#main .sampBox .choiceBtn")]; if(b.length) lensTour([h,...b],5000); } }
 window.addEventListener("hashchange",()=>tourStop());
 function dailyStick(){ const n=document.getElementById("navRow2"); const h=(n&&getComputedStyle(n).position==="sticky")?n.offsetHeight:0; document.documentElement.style.setProperty("--stickH",(h+topH())+"px"); }
@@ -3019,7 +3047,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="2.14.0", APPDATE="21-NOV-2026";
+const APPVER="2.15.0", APPDATE="21-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Asaf Ben Zion. All rights reserved.";
 const LEGAL=[["Copyright", "No part of this handbook’s original content may be copied or redistributed without written permission. Cited regulations, standards and guidance, and their links, remain the property of their official publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, data selection and design, developed with AI tools, and has been verified against requirements set by the author and against the official sources."], ["Sources", "Sources are limited to official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases. EU: EUR-Lex and European Commission pages, including MDCG guidance."], ["Important", "This application is intended for training only. Results from its tools require human review, verification and approval. Always check the linked source before citing anything in an audit response."]];
@@ -4426,16 +4454,31 @@ function rmScales(){ if(!rm.sev||rm.sev.length!==rm.sevN) rm.sev=pickN(SEV_DEF,r
   if(!rm.cells||rm.cells.length!==rm.probN||rm.cells[0].length!==rm.sevN){ rm.cells=[...Array(rm.probN)].map((_,p)=>[...Array(rm.sevN)].map((_,s)=>{ const x=(p/(rm.probN-1))+(s/(rm.sevN-1)); return x<0.75?0:x<1.3?1:2; })); } }
 const ACC=[["Acceptable","acc0"],["Reduce as far as possible; review benefit-risk","acc1"],["Not acceptable","acc2"]];
 function riskLevel(s,p){ rmScales(); if(!(s>=1&&p>=1)) return null; const c=rm.cells[p-1]&&rm.cells[p-1][s-1]; return c===undefined?null:c; }
+/* 2.15.0 Risk management = knowledge and set-up (Process, Glossary, Acceptability, Drafts); Risk Management Tools = the work (#rmtool) */
+const RM_KN=["over","gloss","acc","drafts"], RM_TL=["pha","ana","fmea","fta","urra"];
+const RM_TOOL_NAV=["Clinical Hazards List","PHA","Risk analysis","System diagram & System Risk Analysis","dFMEA","pFMEA","uFMEA","sFMEA","FTA","URRA","CVSS v4.0 Calculator"];
+function rmToolCur(){ return RM_TOOLS.find(([n,,o])=>!o.href&&o.tab===rm.tab&&(o.wsType===undefined||o.wsType===rm.wsType)&&(o.anaSub===undefined||rm.tab!=="ana"||true))?.[0]||"PHA"; }
+function devSel(after){ return el("label",{class:"rField devSel"}, el("span",{},"Device type"), selectEl(Object.entries(DEVT).map(([k,v])=>[k,v.l]),rm.dev,v=>{ rm.dev=v; rm._save(); (after||renderRisk)(); },{"aria-label":"Device type"})); }
 function renderRisk(){
   rmScales(); const m=document.getElementById("main"); m.innerHTML="";
-  m.append(el("section",{class:"chHead riskHead"}, el("div",{class:"eyebrow"},"Risk management"), el("h2",{},"Risk management for medical devices"), el("p",{},"ISO 14971:2019 process, ISO/TR 24971:2020 guidance and IEC 62366-1 use-related risk. Choose your device type to tailor hazards, questions, analyses and examples. Worksheets are saved in this browser and export to Excel or PDF.")));
-  const dv=el("div",{class:"card devCard"}, el("label",{class:"rField"}, el("span",{},"Device type"), selectEl(Object.entries(DEVT).map(([k,v])=>[k,v.l]),rm.dev,v=>{ rm.dev=v; rm._save(); renderRisk(); },{"aria-label":"Device type"})), el("p",{class:"src"},DEVT[rm.dev].d));
-  dv.append(el("a",{class:"cta rmToolsLink",href:"#rmtools"},"Risk Management Tools: create a worksheet →"));
-  m.append(dv);
-  const nav=areaNav({label:"Topic",items:RM_TABS.map(([k,l])=>({k,l})),cur:rm.tab,onPick:k=>{ rm.tab=k; rm._save(); renderRisk(); }});
-  nav.pick.classList.add("rmPick"); m.append(nav.pick);
+  const isTool=location.hash==="#rmtool";
+  if(!isTool&&!RM_KN.includes(rm.tab)){ if(RM_TL.includes(rm.tab)) rm.tlTab=rm.tab; rm.tab=RM_KN.includes(rm.kTab)?rm.kTab:"over"; rm._save(); }
+  if(isTool&&!RM_TL.includes(rm.tab)){ if(RM_KN.includes(rm.tab)) rm.kTab=rm.tab; rm.tab=RM_TL.includes(rm.tlTab)?rm.tlTab:"pha"; rm._save(); }
+  let nav;
+  if(isTool){ const cur=rmToolCur();
+    m.append(el("section",{class:"chHead riskHead"}, el("div",{class:"eyebrow"}, el("a",{href:"#rmtools",class:"backLnk"},"‹ Risk Management Tools")), el("h2",{},cur==="Risk analysis"?"Risk analysis (hazard analysis)":cur), el("p",{},short2((RM_TOOLS.find(t=>t[0]===cur)||[,""])[1]+". Device type: "+DEVT[rm.dev].l+"."))));
+    nav=areaNav({label:"Tool",items:RM_TOOL_NAV.map(k=>({k,l:k})),cur,onPick:k=>{ const o=(RM_TOOLS.find(t=>t[0]===k)||[,,{}])[2]; if(o.href){ location.hash=o.href; return; } Object.assign(rm,o); rm._save(); renderRisk(); }}); }
+  else { m.append(el("section",{class:"chHead riskHead"}, el("div",{class:"eyebrow"},"Risk management"), el("h2",{},"Risk management for medical devices"), el("p",{},"ISO 14971:2019 process, ISO/TR 24971:2020 guidance and IEC 62366-1 use-related risk. Learn the process here and set your scales; create worksheets in Risk Management Tools.")));
+    nav=areaNav({label:"Topic",items:RM_TABS.filter(([k])=>RM_KN.includes(k)).map(([k,l])=>({k,l})),cur:rm.tab,onPick:k=>{ rm.tab=k; rm._save(); renderRisk(); }}); }
+  nav.side.prepend(devSel()); nav.side.append(isTool?el("a",{class:"linkBtn rmSideLink",href:"#risk"},"‹ Risk management: process, glossary, acceptability"):el("a",{class:"cta rmSideLink",href:"#rmtools"},"Risk Management Tools: create a worksheet →"));
+  nav.pick.classList.add("rmPick"); m.append(el("div",{class:"devMini rmw"}, devSel()), nav.pick, isTool?"":el("a",{class:"cta rmSideLink rmMiniLink",href:"#rmtools"},"Risk Management Tools →"));
   const p=el("div",{class:"panel"}); m.append(el("div",{class:"dLay rmLay"}, nav.side, p));
-  ({over:rmOver,gloss:rmGloss,pha:rmPha,ana:rmAna,acc:rmAcc,fmea:rmFmea,fta:rmFta,urra:rmUrra,drafts:rmDrafts})[rm.tab](p);
+  if(isTool){ const tmp=el("div",{}); ({pha:rmPha,ana:rmAna,fmea:rmFmea,fta:rmFta,urra:rmUrra})[rm.tab](tmp);
+    const work=[...tmp.children].filter(x=>x.classList.contains("wkGrid")||x.querySelector(".wkGrid"));
+    if(work.length&&wkOk()){ const bg=el("details",{class:"card rmBg"}, el("summary",{},"Background and method"));
+      [...tmp.children].forEach(x=>{ if(work.includes(x)||x.classList.contains("subTabs")) p.append(x); else bg.append(x); }); p.append(bg); }
+    else [...tmp.children].forEach(x=>p.append(x)); }
+  else ({over:rmOver,gloss:rmGloss,acc:rmAcc,drafts:rmDrafts})[rm.tab](p);
   p.append(el("p",{class:"src"},"Content is a paraphrased summary for training. It does not replace the standards: ISO 14971:2019 (with EN ISO 14971:2019+A11:2021 for the EU), ISO/TR 24971:2020 and IEC 62366-1:2015+A1:2020. Use your licensed copies for exact requirements."));
 }
 /* ---- process overview ---- */
@@ -4589,7 +4632,7 @@ function rmPha(p){
     el("div",{class:"twoCol"}, el("div",{}, el("b",{},"Inputs"), el("ul",{}, el("li",{},"Intended use, user, patient and environment"), el("li",{},"Safety characteristics (Annex A questions)"), el("li",{},"Hazard categories (ISO 14971 Annex C)"), el("li",{},"Known problems of similar devices: complaints, recalls, MAUDE, literature"))),
       el("div",{}, el("b",{},"Outputs"), el("ul",{}, el("li",{},"Hazard list with preliminary risk ranking"), el("li",{},"Safety-related design inputs and requirements"), el("li",{},"Plan of follow-up analyses: DFMEA, PFMEA, URRA, FTA"), el("li",{},"Input to the risk management plan")))),
     el("p",{class:"src"},"Keep the estimate qualitative and conservative. Refine every PHA row later in the hazard analysis and the xFMEAs, and record the follow-up ID in the row so nothing is lost.")));
-  p.append(el("div",{class:"mact"}, el("button",{class:"cta alt",type:"button",onclick:()=>{ const rows=wsRowsFor("pha"); d.hz.forEach(h=>{ const [a,b]=h.split(":"); rows.push(wsBlank("pha",{who:b?a.trim()+": "+b.trim():a})); }); rm._save(); renderRisk(); }},"Add the typical hazards for "+d.l)));
+  if(!wkOk()) p.append(el("div",{class:"mact"}, el("button",{class:"cta alt",type:"button",onclick:()=>{ const rows=wsRowsFor("pha"); d.hz.forEach(h=>{ const [a,b]=h.split(":"); rows.push(wsBlank("pha",{who:b?a.trim()+": "+b.trim():a})); }); rm._save(); renderRisk(); }},"Add the typical hazards for "+d.l)));
   rmWorksheet(p,"pha");
 }
 /* ---- acceptability ---- */
@@ -4667,43 +4710,56 @@ function p12Matrix(box,a,b){ box.innerHTML=""; const A=parseInt(a)||0, B=parseIn
   box.append(el("b",{class:"p12T"},"P = P1 × P2"), g, el("small",{class:"src"},"Cell = P level (1 Improbable … 5 Frequent). Each step down in P2 lowers P by one level.")); }
 function probFromP(P){ if(!(P>0)) return ""; const lv5=P<1e-6?1:P<1e-5?2:P<1e-4?3:P<1e-3?4:5; if(rm.probN===5) return String(lv5); if(rm.probN===4) return String([1,2,2,3,4][lv5-1]); return String([1,1,2,3,3][lv5-1]); }
 function rmWorksheet(p,type){
-  { const Gr=GUIDE.risk[type]; if(Gr){ const gm=el("div",{class:"wkMain"}); p.append(el("div",{class:"wkGrid"}, gm, el("div",{class:"wkSide"}, guideAside(Gr[0],Gr[1],Gr[2],WS[type]?WS[type].l:"")))); p=gm; } }
-  const W=WS[type]; const rows=wsRowsFor(type); const isU=!!W.crit; const nodes=sysNodes(); const sraRows=type==="sra"?[]:wsRowsFor("sra");
+  { const Gr=GUIDE.risk[type]; if(Gr){ const gm=el("div",{class:"wkMain"}); const ga=guideAside(Gr[0],Gr[1],Gr[2],WS[type]?WS[type].l:""); if(WS[type]&&WS[type].tips) ga.append(el("div",{class:"wkGB"}, el("b",{},"Good practice"), el("ul",{}, ...WS[type].tips.slice(0,3).map(x=>el("li",{},x))))); p.append(el("div",{class:"wkGrid"}, gm, el("div",{class:"wkSide"}, ga))); p=gm; } }
+  const classic=!wkOk(); const W=WS[type]; const rows=wsRowsFor(type); const isU=!!W.crit; const nodes=sysNodes(); const sraRows=type==="sra"?[]:wsRowsFor("sra");
   const sevOpts=[["","S"],...rm.sev.map((s,i)=>[i+1,(i+1)+" "+s[0]])], probOpts=[["","P"],...rm.prob.map((s,i)=>[i+1,(i+1)+" "+s[0]])];
   const critMin=()=>rm.sevN>=4?3:2;
   const wrap=el("div",{class:"wsList"});
   const lvlChip=(s,pp)=>{ const v=riskLevel(parseInt(s),parseInt(pp)); return v===null?el("span",{class:"lvl"},"—"):el("span",{class:"lvl "+ACC[v][1]},ACC[v][0]); };
   const draw=()=>{ rm._save(); wrap.innerHTML="";
-    if(!rows.length) wrap.append(el("p",{class:"src"},"No rows yet. Add a row, or load an example for "+DEVT[rm.dev].l+"."));
-    rows.forEach((r,i)=>{ const card=el("div",{class:"wsRow"}); const ttl=el("span",{},r.who||"");
+    if(!rows.length) wrap.append(el("p",{class:"src"},"No rows yet. Click “+ New row” to start the step-by-step editor, or open the Sample to see a completed worksheet for "+DEVT[rm.dev].l+"."));
+    const rowCard=(r,i)=>{ const card=el("div",{class:"wsRow"}); const ttl=el("span",{},r.who||"");
       const head=el("div",{class:"wsHead"}, el("b",{}, el("span",{class:"idTag"},r.id)," ",ttl), el("div",{class:"rowActs"}, el("button",{class:"linkBtn",type:"button",onclick:()=>{ rm._save(); saveToDrafts(type,{rows:[r]},()=>renderRisk()); }},"💾 Save to drafts"), el("button",{class:"linkBtn del",type:"button",onclick:()=>{ if(type==="sra") allRows().forEach(x=>{ if(x.r.sra===r.id) x.r.sra=""; }); rows.splice(i,1); draw(); }},"Delete")));
       const t=(lab,k,area)=>txtField(lab,r[k],v=>{ r[k]=v; rm._save(); if(k==="who") ttl.textContent=v; if(type==="ha") drawChain(); },"",area);
       const before=el("span",{}), after=el("span",{}); const upd=()=>{ before.replaceChildren(lvlChip(r.s,r.p)); after.replaceChildren(lvlChip(r.s,r.p2)); };
-      card.append(head);
+      head.dataset.part="head"; card.append(head);
       // traceability
       const tr=el("div",{class:"traceRow"});
       if(nodes.length) tr.append(el("label",{class:"rField"}, el("span",{},"System element"), selectEl([["","— not linked —"],...nodes.map(n=>[n.id,n.id+" "+n.name])],r.node,v=>{ r.node=v; rm._save(); },{"aria-label":"System element"})));
       if(sraRows.length) tr.append(el("label",{class:"rField"}, el("span",{},"System Risk Analysis row"), selectEl([["","— not linked —"],...sraRows.map(s=>[s.id,s.id+" "+(s.who||"").slice(0,40)])],r.sra,v=>{ r.sra=v; rm._save(); },{"aria-label":"System Risk Analysis row"})));
       if(type==="sra"){ const det=allRows().filter(x=>x.r.sra===r.id).map(x=>x.r.id); tr.append(el("div",{class:"rField"}, el("span",{},"Detailed in"), el("b",{class:"detIn"},det.length?det.join(", "):"no lower-level rows linked yet"))); }
-      if(tr.childNodes.length) card.append(tr);
+      tr.dataset.part="ident"; if(tr.childNodes.length) card.append(tr);
       let drawChain=()=>{};
-      if(type==="ha"){ const ch=el("div",{class:"chain"}); card.append(ch); drawChain=()=>{ ch.replaceChildren(...[["Hazard",r.who],["Sequence of events",r.fm],["Hazardous situation",r.hs],["Harm",r.harm]].map(([l,v],k)=>el("div",{class:"chainBox c"+k}, el("small",{},l), el("b",{},v||"—")))); }; drawChain(); }
-      card.append(el("div",{class:"rInputs grid2"}, ...W.f.map(([k,l,a])=>t(l,k,a))));
+      if(type==="ha"){ const ch=el("div",{class:"chain","data-part":"conseq"}); card.append(ch); drawChain=()=>{ ch.replaceChildren(...[["Hazard",r.who],["Sequence of events",r.fm],["Hazardous situation",r.hs],["Harm",r.harm]].map(([l,v],k)=>el("div",{class:"chainBox c"+k}, el("small",{},l), el("b",{},v||"—")))); }; drawChain(); }
+      const CQ=["eff","hs","harm"]; card.append(el("div",{class:"rInputs grid2","data-part":"ident"}, ...W.f.filter(f=>!CQ.includes(f[0])).map(([k,l,a])=>t(l,k,a))));
+      card.append(el("div",{class:"rInputs grid2","data-part":"conseq"}, ...W.f.filter(f=>CQ.includes(f[0])).map(([k,l,a])=>t(l,k,a)), chlPick(r,type,()=>{ if(window.__rkShow) window.__rkShow(); else draw(); })));
       const sSel=selectEl(sevOpts,r.s,v=>{ r.s=v; if(isU){ r.crit=parseInt(v)>=critMin(); const cb=card.querySelector(".chk input"); if(cb) cb.checked=r.crit; } rm._save(); upd(); },{"aria-label":"Severity"});
       const pSel=selectEl(probOpts,r.p,v=>{ r.p=v; rm._save(); upd(); },{"aria-label":"Probability before control"});
-      const riskRow=el("div",{class:"wsRisk"});
+      const riskRow=el("div",{class:"wsRisk","data-part":"est"});
       if(W.p1p2){ r.p1=p12Level(r.p1,1); r.p2v=p12Level(r.p2v,2); const pOut=el("small",{class:"src p12Out"}); const mx=el("div",{class:"p12Mx"});
         const calc=()=>{ const L=p12P(r.p1,r.p2v); if(L){ const v=probFromP(P12_REP[L-1]); r.p=v; pSel.value=v; upd(); pOut.textContent="P1 "+r.p1+" × P2 "+(r.p2v||"5 (taken as certain)")+" → P level "+v+" ("+((rm.prob[parseInt(v)-1]||[""])[0])+")"; } else pOut.textContent="Choose P1 (and P2) to suggest the probability P."; p12Matrix(mx,r.p1,r.p2v); };
         const pick=(n,key)=>{ const sel=selectEl([["","—"],...P12_DEF[n].map((d,i)=>[String(5-i),(5-i)+" · "+d[0]])],r[key]||"",v=>{ r[key]=v; rm._save(); calc(); },{"aria-label":n===1?"P1 level":"P2 level"});
           const info=el("div",{class:"p12Info",hidden:""}, p12Table(n)); const btn=el("button",{type:"button",class:"p12Btn","aria-expanded":"false","aria-label":"Show the P"+n+" scale",onclick:()=>{ info.hidden=!info.hidden; btn.setAttribute("aria-expanded",String(!info.hidden)); btn.textContent=info.hidden?"ⓘ Scale":"✕ Hide"; }},"ⓘ Scale");
           return el("div",{class:"rField p12F"}, el("span",{class:"p12Lab"}, el("span",{}, n===1?"P1 · probability the hazardous situation occurs":"P2 · probability it leads to harm"), btn), sel, info); };
-        card.append(el("div",{class:"p12Wrap"}, el("div",{class:"p12In"}, el("b",{class:"p12Head"},"Probability of harm: estimate P1 and P2 (levels 1 to 5)"), pick(1,"p1"), pick(2,"p2v"), pOut), mx)); calc(); }
+        card.append(el("div",{class:"p12Wrap","data-part":"est"}, el("div",{class:"p12In"}, el("b",{class:"p12Head"},"Probability of harm: estimate P1 and P2 (levels 1 to 5)"), pick(1,"p1"), pick(2,"p2v"), pOut), mx)); calc(); }
       riskRow.append(el("label",{class:"rField"}, el("span",{},"Severity"), sSel), el("label",{class:"rField"}, el("span",{},W.pLab||"P before"), pSel), el("div",{class:"rField"}, el("span",{},W.noAfter?"Preliminary risk":"Risk before"), before));
       card.append(riskRow);
-      card.append(el("div",{class:"rInputs grid2"}, t(W.ctlLab||"Risk control measure","ctl",true), el("label",{class:"rField"}, el("span",{},"Control type"), selectEl(["Design","Protective","Information / training"],r.ct||"Design",v=>{ r.ct=v; rm._save(); })), t(W.verLab||"Verification of implementation and effectiveness","ver")));
-      if(!W.noAfter) card.append(el("div",{class:"wsRisk"}, el("label",{class:"rField"}, el("span",{},"P after"), selectEl(probOpts,r.p2,v=>{ r.p2=v; rm._save(); upd(); },{"aria-label":"Probability after control"})), el("div",{class:"rField"}, el("span",{},"Residual risk"), after),
+      card.append(el("div",{class:"rInputs grid2","data-part":"ctl"}, t(W.ctlLab||"Risk control measure","ctl",true), el("label",{class:"rField"}, el("span",{},"Control type"), selectEl(["Design","Protective","Information / training"],r.ct||"Design",v=>{ r.ct=v; rm._save(); })), t(W.verLab||"Verification of implementation and effectiveness","ver")));
+      if(!W.noAfter) card.append(el("div",{class:"wsRisk","data-part":"res"}, el("label",{class:"rField"}, el("span",{},"P after"), selectEl(probOpts,r.p2,v=>{ r.p2=v; rm._save(); upd(); },{"aria-label":"Probability after control"})), el("div",{class:"rField"}, el("span",{},"Residual risk"), after),
         isU?el("label",{class:"chk"}, (()=>{ const c=el("input",{type:"checkbox"}); c.checked=!!r.crit; c.addEventListener("change",()=>{ r.crit=c.checked; rm._save(); }); return c; })(), " Critical task"):""));
-      upd(); wrap.append(card); }); };
+      upd(); return card; };
+    window.__rkCard=rowCard;
+    const SHORT=["Acceptable","Reduce","Not acceptable"]; const lineChip=(s,pp)=>{ const v=riskLevel(parseInt(s),parseInt(pp)); return v===null?el("span",{class:"wsChip"},"—"):el("span",{class:"wsChip c"+v,title:ACC[v][0]},SHORT[v]||ACC[v][0]); };
+    const rowLine=(r,i)=>el("div",{class:"wsLine"}, el("span",{class:"idTag"},r.id), el("span",{class:"wsLT"}, el("b",{},r.who||r.fm||"New row"), el("small",{},r.harm?"Harm: "+r.harm:"Harm not set")), el("span",{class:"wsLR"}, lineChip(r.s,r.p), W.noAfter?"":el("span",{class:"wsArr"},"→"), W.noAfter?"":lineChip(r.s,r.p2)),
+      el("span",{class:"wsLA"}, el("button",{class:"smpBtn wsEdit",type:"button",onclick:()=>openRiskWork(type,i,draw)},"Edit"), el("button",{class:"linkBtn del",type:"button","aria-label":"Delete "+r.id,onclick:()=>modalConfirm("Delete "+r.id+"?","Delete this row? This cannot be undone.","Delete",()=>{ if(type==="sra") allRows().forEach(x=>{ if(x.r.sra===r.id) x.r.sra=""; }); rows.splice(i,1); draw(); })},"Delete")));
+    if(!classic&&rows.length) wrap.append(el("div",{class:"wsLine wsLH"}, el("span",{},"ID"), el("span",{},"Item and harm"), el("span",{},W.noAfter?"Preliminary risk":"Risk before → residual"), el("span",{})));
+    rows.forEach((r,i)=>wrap.append(classic?rowCard(r,i):rowLine(r,i))); };
+  const bar=el("div",{class:"rkBar"}, el("button",{class:"cta",type:"button",onclick:()=>{ rows.push(wsBlank(type)); draw(); openRiskWork(type,rows.length-1,draw); }},"+ New row"), smpBtn(()=>riskSamples(type),1,riskSmpOpts(type)),
+    type==="pha"?el("button",{class:"smpBtn",type:"button",onclick:()=>{ DEVT[rm.dev].hz.forEach(x=>{ const [a,b]=x.split(":"); rows.push(wsBlank("pha",{who:b?a.trim()+": "+b.trim():a})); }); draw(); flash(DEVT[rm.dev].hz.length+" typical hazards added"); }},"+ Typical hazards: "+DEVT[rm.dev].l):"",
+    el("button",{class:"smpBtn",type:"button",onclick:()=>{ if(!rows.length){ flash("Add a row first."); return; } saveToDrafts(type,{rows},()=>renderRisk()); }},"Save to drafts"),
+    el("button",{class:"linkBtn",type:"button",onclick:()=>saveFile(safeName(W.l.replace(/\s+/g,"-"),"xlsx"),wsBuild(type,rows,W.l+" - "+DEVT[rm.dev].l).xlsx(),null)},"Export Excel"),
+    el("button",{class:"linkBtn",type:"button",onclick:()=>saveFile(safeName(W.l.replace(/\s+/g,"-"),"pdf"),wsBuild(type,rows,W.l+" - "+DEVT[rm.dev].l).pdf(),null)},"Export PDF"));
+  if(!classic){ window.__wsAdd=()=>{ rows.push(wsExample(type)); draw(); }; p.append(el("div",{class:"card wsCard"}, el("div",{class:"wsTop"}, el("h3",{class:"secTitle"},W.l+" worksheet"), el("small",{class:"src"},rows.length+(rows.length===1?" row":" rows")+" · IDs "+W.pre+"-001…")), draftBanner(type,()=>{ rm.ws[type]=[]; }), bar, wrap)); draw(); return; }
   p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},W.l+" worksheet"), el("p",{class:"src"},W.d+" Rows get an ID ("+W.pre+"-001…) for traceability. Severity and probability use your matrix from the Acceptability tab."+(isU?" A task is flagged critical automatically when severity is “"+rm.sev[critMin()-1][0]+"” or higher; you can change the flag.":"")+(nodes.length||sraRows.length?"":" Build a system diagram (xFMEA → System Risk Analysis) to link rows to system elements; it is optional.")),
     draftBanner(type,()=>{ rm.ws[type]=[]; }), el("div",{class:"mact"}, el("button",{class:"cta",type:"button",onclick:()=>{ rows.push(wsBlank(type)); draw(); }},"+ Add row"), (window.__wsAdd=()=>{ rows.push(wsExample(type)); draw(); }, smpBtn(()=>riskSamples(type))), el("button",{class:"cta save",type:"button",onclick:()=>{ if(!rows.length){ flash("Add a row first."); return; } saveToDrafts(type,{rows},()=>renderRisk()); }},"💾 Save all rows to drafts")), wrap));
   draw();
@@ -4881,12 +4937,10 @@ function renderCvss(){ const m=document.getElementById("main"); m.innerHTML="";
 function renderRmTools(){
   const m=document.getElementById("main"); m.innerHTML="";
   m.append(toolHead("Risk Management Tools","Choose what you want to create. Every worksheet gives each row an ID and can trace it to the system diagram and the System Risk Analysis."));
-  const dv=el("div",{class:"card devCard"}, el("label",{class:"rField"}, el("span",{},"Device type"), selectEl(Object.entries(DEVT).map(([k,v])=>[k,v.l]),rm.dev,v=>{ rm.dev=v; rm._save(); },{"aria-label":"Device type"})));
-  m.append(dv);
   const g=el("div",{class:"choiceGrid toolGrid"});
   const cur=RMT_GROUPS.some(x=>x[0]===RMT_TAB)?RMT_TAB:RMT_GROUPS[0][0], grp=RMT_GROUPS.find(x=>x[0]===cur);
-  const nav=areaNav({label:"Tool group",unit:"tools",items:RMT_GROUPS.map(([k,ts])=>({k,l:k,n:ts.length})),cur,onPick:k=>{ RMT_TAB=k; try{ localStorage.setItem("qah-rmt-tab",k); }catch(e){} renderRmTools(); }});
-  RM_TOOLS.filter(x=>grp[1].includes(x[0])).forEach(([t,s,o])=>g.append(el("button",{class:"choiceBtn riskc toolCard",type:"button",onclick:()=>{ if(o.href){ location.hash=o.href; return; } Object.assign(rm,o); rm._save(); location.hash="risk"; }}, el("span",{class:"toolIco"},ico(RMT_ICO[t]||"risk")), el("b",{},t), el("span",{},s))));
+  const nav=areaNav({label:"Tool group",unit:"tools",items:RMT_GROUPS.map(([k,ts])=>({k,l:k,n:ts.length})),cur,onPick:k=>{ RMT_TAB=k; try{ localStorage.setItem("qah-rmt-tab",k); }catch(e){} renderRmTools(); }}); nav.side.prepend(devSel(renderRmTools)); m.append(el("div",{class:"devMini rmtw"}, devSel(renderRmTools)));
+  RM_TOOLS.filter(x=>grp[1].includes(x[0])).forEach(([t,s,o])=>g.append(el("button",{class:"choiceBtn riskc toolCard",type:"button",onclick:()=>{ if(o.href){ location.hash=o.href; return; } Object.assign(rm,o); rm._save(); location.hash=RM_TL.includes(o.tab)?"rmtool":"risk"; }}, el("span",{class:"toolIco"},ico(RMT_ICO[t]||"risk")), el("b",{},t), el("span",{},s))));
   m.append(nav.pick, el("div",{class:"dLay"}, nav.side, g));
 }
 /* ---- FTA and other techniques ---- */
@@ -4996,7 +5050,7 @@ function riskSampleRows(type){ const W=WS[type], devs=[...new Set([rm.dev,"cardi
   const rows=devs.map((k,i)=>{ rm.dev=k; let r; try{ r=wsExample(type); } finally { rm.dev=keep; rm.seq=JSON.parse(seq); } const c=RS_CTL[type]||RS_CTL.ha;
     return Object.assign(r,{id:(W.pre||"R")+"-S0"+(i+1),s:cl(rm.sevN||5)(sv[i]),p:cl(rm.probN||5)(pv[i]),p1:W.p1p2?"3":"",p2v:W.p1p2?"4":"",ctl:c[0],ct:["Design","Protective","Information"][i],ver:c[1],p2:cl(rm.probN||5)(pa[i]),crit:i===0,node:"",sra:""}); });
   return rows; }
-function riskSamples(type){ const W=WS[type]; return [{name:W.l+" sample ("+DEVT[rm.dev].l+" and two other device types)", doc:()=>buildPdf(Object.assign(wsBuild(type,riskSampleRows(type),W.l+" – sample").doc(),{ref:W.pre+"-SAMPLE"}),{raw:true})}]; }
+function riskSamples(type){ const W=WS[type]; return [{name:W.l+" sample for "+DEVT[rm.dev].l, doc:()=>buildPdf(Object.assign(wsBuild(type,riskSampleRows(type),W.l+" – sample").doc(),{ref:W.pre+"-SAMPLE"}),{raw:true})}]; }
 function matrixSecs(){ return [{h:"Severity scale",rows:rm.sev.map((s,i)=>[(i+1)+". "+s[0],s[1]])},{h:"Probability scale",rows:rm.prob.map((s,i)=>[(i+1)+". "+s[0],s[1]])},{h:"Matrix (probability rows, high to low)",rows:[...Array(rm.probN)].map((_,k)=>{ const pi=rm.probN-1-k; return [rm.prob[pi][0],rm.cells[pi].map((v,si)=>rm.sev[si][0]+": "+["A","R","N"][v]).join(" | ")]; })},{h:"Key",rows:ACC.map((a,i)=>[["A","R","N"][i],a[0]])}]; }
 function matrixRows(){ const rows=[[{v:"P \\ S",b:true},...rm.sev.map((s,i)=>({v:(i+1)+". "+s[0],b:true}))]]; for(let pi=rm.probN-1;pi>=0;pi--) rows.push([{v:(pi+1)+". "+rm.prob[pi][0]+" ("+rm.prob[pi][1]+")",b:true},...rm.cells[pi].map(v=>ACC[v][0])]); return rows; }
 function matrixBuild(ttl){ return {xlsx:()=>buildXlsx(mkDoc("Risk management",ttl,matrixSecs(),null,[{name:"Matrix",rows:matrixRows(),widths:[34,...rm.sev.map(()=>22)]}]).sheets),pdf:()=>buildPdf(Object.assign(mkDoc("Risk management",ttl,matrixSecs(),null).pdf,{code:"RAM"}))}; }
@@ -5016,7 +5070,7 @@ function openDraft(d){
   const go=()=>{ rm.active=rm.active||{}; if(WS[d.type]){ rm.ws[d.type]=clone(d.rows); }
     else if(d.type==="fta") rm.fta=clone(d.data); else if(d.type==="sys") rm.sys=clone(d.data); else { Object.assign(rm,clone(d.data)); }
     if(d.scales&&d.type!=="matrix") Object.assign(rm,clone(d.scales));
-    rm.active[d.type]=d.id; Object.assign(rm,DOC_NAV[d.type]); rm._save(); renderRisk(); window.scrollTo({top:0}); flash("Opened "+d.id+" for editing"); };
+    rm.active[d.type]=d.id; Object.assign(rm,DOC_NAV[d.type]); rm._save(); { const w=RM_TL.includes(rm.tab)?"#rmtool":"#risk"; if(location.hash!==w) history.replaceState(null,"",w); } renderRisk(); window.scrollTo({top:0}); flash("Opened "+d.id+" for editing"); };
   const working=WS[d.type]?(rm.ws[d.type]||[]).length:0; const act=rm.active&&rm.active[d.type];
   if(WS[d.type]&&working&&act!==d.id) modalConfirm("Open "+d.id+"?","The "+DOC_L(d.type)+" working area has "+working+" rows"+(act?" from "+act:" that are not linked to a draft")+". Opening "+d.id+" replaces them. Save them to drafts first if you need them.","Open "+d.id,go);
   else go();
@@ -6412,7 +6466,7 @@ function sqFilled(x,v){ const val=v[x[0]]; if(x[1]==="yna") return !!(val&&val.a
 function sqProgress(F,r){ const fs=sqFields(F); const done=fs.filter(x=>sqFilled(x,r.v)).length; return [done,fs.length]; }
 function sqSecNo(S){ const m=/^(\d+)\./.exec(S.h); return m?m[1]:""; }
 /* 2.9.0 Samples: completed examples shown only as images of their PDF pages (read-only) */
-function smpBtn(get,n){ n=n||1; return el("button",{class:"smpBtn",type:"button","aria-label":n>1?"Open the "+n+" completed samples":"Open the completed sample",onclick:()=>openSamples(get())}, el("span",{class:"smpIco","aria-hidden":"true"}), n>1?"Samples ("+n+")":"Sample"); }
+function smpBtn(get,n,opts){ n=n||1; return el("button",{class:"smpBtn",type:"button","aria-label":n>1?"Open the "+n+" completed samples":"Open the completed sample",onclick:()=>openSamples(get(),opts)}, el("span",{class:"smpIco","aria-hidden":"true"}), n>1?"Samples ("+n+")":"Sample"); }
 function smpRef(code,k){ return code+"-"+String(k||1).padStart(4,"0")+"-"+String(new Date().getFullYear()).slice(-2)+" (sample)"; }
 function sqSamples(fid){ const F=SQF[fid], code=DOC_CODE[fid]||"FOR", r={id:smpRef(code),form:fid,created:F.sampleDate||"",v:JSON.parse(JSON.stringify(F.sample||{}))};
   return [{name:F.sampleName||tc(F.short), doc:()=>iaPdf(sqDoc(F,r),tc(F.t.replace(/\s+Template$/,"")),"Sample · Opened on "+r.created+" · Medical Device QA Handbook",{code,ref:r.id,opt:{raw:true}})}]; }
@@ -6447,12 +6501,12 @@ function pdfPaint(cv,stream,imgs,s,PH){ PH=PH||842; const g=cv.getContext("2d");
       default: break; } } }
 async function pdfImages(raw,scale){ const imgs={}; await Promise.all(raw.imgs.map(o=>new Promise(res=>{ const im=new Image(); im.onload=()=>{ imgs[o.name]=im; res(); }; im.onerror=res; im.src=o.d; })));
   return raw.pages.map((p,k)=>{ const cv=document.createElement("canvas"); cv.width=Math.round((raw.w||595)*scale); cv.height=Math.round((raw.h||842)*scale); pdfPaint(cv,p,imgs,scale,raw.h||842); return cv; }); }
-function openSamples(list){ let k=0; const tabs=el("div",{class:"chipRow smpTabs"}), pages=el("div",{class:"smpPages"}), st=el("p",{class:"src",role:"status"});
+function openSamples(list,opts){ let k=0; const tabs=el("div",{class:"chipRow smpTabs"}), pages=el("div",{class:"smpPages"}), st=el("p",{class:"src",role:"status"});
   const show=async()=>{ [...tabs.children].forEach((b,j)=>b.setAttribute("aria-pressed",String(j===k))); pages.innerHTML=""; st.textContent="Preparing the sample…";
     const cvs=await pdfImages(list[k].doc(),2); cvs.forEach((cv,j)=>{ const img=el("img",{src:cv.toDataURL("image/png"),alt:list[k].name+", page "+(j+1)+" of "+cvs.length}); pages.append(el("figure",{class:"smpPage"}, img, el("figcaption",{},"Page "+(j+1)+" of "+cvs.length))); });
     st.textContent=list[k].name+" · "+cvs.length+(cvs.length>1?" pages":" page")+" · sample shown as PDF pages (read-only)"; };
   if(list.length>1) list.forEach((x,j)=>tabs.append(el("button",{class:"chipBtn",type:"button",onclick:()=>{ k=j; show(); }},x.name.length>48?x.name.slice(0,46)+"…":x.name)));
-  modal(list.length>1?"Samples":"Sample", el("div",{class:"smpView"}, list.length>1?tabs:"", st, pages));
+  modal(list.length>1?"Samples":"Sample", el("div",{class:"smpView"}, opts&&opts.top?opts.top():"", list.length>1?tabs:"", st, pages));
   const mb=document.querySelector("#ovl .mbox"); if(mb) mb.classList.add("smpBox"); show(); }
 /* 2.10.0 Projects (first step): create a project and open the project list; kept on this device. More features will follow. */
 const PRJ=lsGet("qah-projects-v1",{list:[],cur:null});
@@ -6739,6 +6793,36 @@ function renderQaDrafts(){ const m=document.getElementById("main"); m.innerHTML=
   list.forEach(r=>c.append(el("div",{class:"iaRow qdRow"}, el("button",{class:"linkBtn",type:"button",onclick:()=>{ if(r.k==="sq"){ SQ_STORE.cur[r.form]=r.id; sqSave(); location.hash=r.form; } else { IA_STORE.cur=r.id; iaSave(); location.hash="impact"; } }}, el("span",{class:"idTag"},r.id)," "+r.t+" · "+r.title),
     el("span",{class:"src"},(r.prog?r.prog[0]+" of "+r.prog[1]+" fields · ":"")+"saved "+r.upd), prjSel(r.o.prj,v=>{ r.o.prj=v||undefined; if(r.k==="sq") sqSave(); else iaSave(); renderQaDrafts(); }))));
   m.append(c); tcDom(m); }
+/* 2.15.0 step-by-step editor for one worksheet row; Clinical Hazards List pick-list; device type in the sample viewer */
+const RK_STEPS=[["ident","Identify","Name the item, function, process step or task, and describe what goes wrong (failure mode or hazard) and why (cause).","System diagram, design documents, process flow, task analysis.","Link the row to a system element or System Risk Analysis row when they exist."],
+ ["conseq","Consequence","Describe the effect, the hazardous situation and the harm. Pick the harm from the Clinical Hazards List so severity and P2 stay the same in every analysis.","Clinical Hazards List (CH-xxx), clinical evaluation, complaint and vigilance data.","The CH ID in the harm links this row to the clinical input."],
+ ["est","Estimate","Choose the severity of the harm and the probability before controls; in the hazard analysis estimate P1 and P2 and let the app suggest P.","Acceptability tab (your scales and matrix), test and field data.","The risk level comes from your acceptability matrix."],
+ ["ctl","Control","Choose controls in the order of ISO 14971 7.1: inherent safety by design, protective measures, information for safety. Say how implementation and effectiveness are verified.","Design requirements, verification plans, IFU.","Each control should trace to a requirement and a verification record."],
+ ["res","Residual risk","Estimate the probability after controls and read the residual risk; flag critical tasks for the usability evaluation.","Verification results.","Residual risk that is not acceptable needs more control or a benefit-risk analysis (ISO 14971 7.4)."],
+ ["rev","Review","Check the row and finish. You can come back and edit it at any time.","",""]];
+function chlHarms(){ const out=[]; SQ_STORE.list.filter(r=>r.form==="qa-chl").forEach(rec=>(rec.v.hz||[]).forEach(x=>{ if(!x.e2&&!x.e1) return; const e=String(x.e2&&x.e2!=="(no level 2 term)"?x.e2:x.e1||"").replace(/^E\d+\s*/,""), f=String(x.f2&&x.f2!=="(no level 2 term)"?x.f2:x.f1||"").replace(/^F\d+\s*/,"");
+  out.push({k:rec.id+"|"+x.id,id:x.id,rec:rec.id,label:x.id+" · "+e+(f?" → "+f:""),hs:x.hs||"",sev:parseInt(x.sev)||0,p2:parseInt(x.p2)||0}); })); return out; }
+function chlPick(r,type,after){ const H=chlHarms(); if(!H.length) return el("p",{class:"src chlNote"},"Tip: build a Clinical Hazards List (Risk Management Tools › Clinical Hazards List) to pick harms with their severity and P2 here.");
+  return el("label",{class:"rField chlPick"}, el("span",{},"Pick the harm from the Clinical Hazards List"), selectEl([["","— choose a harm —"],...H.map(x=>[x.k,x.label+" ("+x.rec+")"])],"",v=>{ const x=H.find(z=>z.k===v); if(!x) return; r.harm=x.label; if(!r.hs) r.hs=x.hs; if(x.sev) r.s=String(Math.min(rm.sevN||5,x.sev)); if(WS[type]&&WS[type].p1p2&&x.p2) r.p2v=String(x.p2); rm._save(); after&&after(); })); }
+function openRiskWork(type,i,redraw){ const W=WS[type], rows=wsRowsFor(type), r=rows[i]; if(!r) return; const steps=RK_STEPS.filter(s=>!(W.noAfter&&s[0]==="res")); let k=0;
+  document.getElementById("rkWork")?.remove();
+  const nav=el("nav",{class:"wkSteps","aria-label":"Steps"}), main=el("div",{class:"wkMain"}), side=el("div",{class:"wkSide"});
+  const back=el("button",{class:"linkBtn wkBack",type:"button"},"‹ Back"), next=el("button",{class:"cta wkNext",type:"button"},"Next ›");
+  const close=()=>{ window.__rkShow=null; ov.remove(); document.documentElement.classList.remove("wkOpen"); document.removeEventListener("keydown",esc,true); rm._save(); if(redraw) redraw(); };
+  const esc=e=>{ if(e.key==="Escape"&&!document.getElementById("ovl")){ e.stopPropagation(); close(); } };
+  const show=()=>{ const S=steps[k]; nav.innerHTML=""; steps.forEach((s,j)=>nav.append(el("button",{class:"wkStep"+(j===k?" on":j<k?" done":""),type:"button","aria-current":j===k?"step":"false",onclick:()=>{ k=j; show(); }}, el("i",{},String(j+1)), el("span",{},s[1]))));
+    main.innerHTML=""; const card=window.__rkCard?window.__rkCard(r,i):el("div",{}); card.classList.add("rkCard"); card.dataset.step=S[0];
+    if(S[0]==="rev"){ const b=wsBuild(type,[r],"").doc(); const T=b.sections[1].rows[0].table; const tb=el("table",{class:"map rmTbl bsTbl"}); T.head.forEach((hh,j)=>tb.append(el("tr",{}, el("th",{},hh), el("td",{},T.rows[0]?T.rows[0][j]:"")))); main.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},r.id+" · review"), tb)); }
+    else main.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},S[1]), card));
+    side.innerHTML=""; const Gr=GUIDE.risk[type]||[]; side.append(guideAside(S[2],S[3]||(k===0?Gr[1]:""),S[4]||(k===0?Gr[2]:""),W.l+" · "+S[1]));
+    back.disabled=k===0; next.textContent=k===steps.length-1?"Finish":"Next ›"; tcDom(main); };
+  window.__rkShow=show;
+  back.onclick=()=>{ if(k>0){ k--; show(); } }; next.onclick=()=>{ if(k<steps.length-1){ k++; show(); } else close(); };
+  const ov=el("div",{id:"rkWork",class:"wkOv",role:"dialog","aria-modal":"true","aria-label":W.l+" "+r.id},
+    el("header",{class:"wkHead"}, el("div",{class:"wkTitle"}, el("small",{},W.l+" · "+DEVT[rm.dev].l), el("b",{},r.id+(r.who?" · "+r.who.slice(0,60):""))), el("button",{class:"wkX",type:"button","aria-label":"Close the editor",onclick:close},"×")),
+    nav, el("div",{class:"wkBody"}, main, side), el("footer",{class:"wkFoot"}, back, next));
+  document.body.append(ov); document.documentElement.classList.add("wkOpen"); document.addEventListener("keydown",esc,true); show(); }
+function riskSmpOpts(type){ return {top:()=>el("label",{class:"rField smpDev"}, el("span",{},"Sample for device type"), selectEl(Object.entries(DEVT).map(([k,v])=>[k,v.l]),rm.dev,v=>{ rm.dev=v; rm._save(); closeModal(); openSamples(riskSamples(type),riskSmpOpts(type)); if(location.hash==="#rmtool"||location.hash==="#risk") renderRisk(); }))}; }
 function renderSqForm(fid){
   const F=SQF[fid]; const m=document.getElementById("main"); m.innerHTML=""; dailySetTab(fid);
   { const th=toolHead(tc(F.t),F.sub,["#daily","Daily QA Work"]); th.classList.add("sqHead"); m.append(th); }
@@ -6795,11 +6879,11 @@ function pinScroll(){ const a=document.getElementById("navAnchor"); const y=a?a.
 let LAST_ROUTE=null;
 function route(){
   const id=(location.hash||"").slice(1)||"home";
-  { const sec=["random","dilemmas","audit"].includes(id)?"practice":["tools","daily","stats","sampling","bstats","msa","grr","rmtools","impact","risk","cvss","projects","qadrafts"].includes(id)||SQF[id]?"tools":"learn"; document.documentElement.dataset.sec=sec; document.documentElement.dataset.mod=(sec==="practice"||CH.some(c=>c.id===id))?"train":""; }
+  { const sec=["random","dilemmas","audit"].includes(id)?"practice":["tools","daily","stats","sampling","bstats","msa","grr","rmtools","rmtool","impact","risk","cvss","projects","qadrafts"].includes(id)||SQF[id]?"tools":"learn"; document.documentElement.dataset.sec=sec; document.documentElement.dataset.mod=(sec==="practice"||CH.some(c=>c.id===id))?"train":""; }
   if(SQF[id]){ closeModal(); renderNav(id); renderSqForm(id); totals(); try{ if(navPinned()) pinScroll(); else window.scrollTo({top:0}); }catch(e){} return; }
   if(["daily","stats","sampling","risk","rmtools","bstats"].includes(id)&&LAST_ROUTE!==id) setTimeout(()=>{ if((location.hash||"").slice(1)!==id) return; if(id==="daily") dailyIntro(); else if(id==="risk") riskIntro(); else if(id==="rmtools") rmtIntro(); else if(id==="bstats") bstatsIntro(); else statsIntro(id); },450);
   LAST_ROUTE=id;
-  if(["home","explore","dilemmas","map","sampling","bstats","tools","daily","stats","dates","audit","risk","msa","grr","rmtools","impact","cvss","projects","qadrafts"].includes(id)){ closeModal(); renderNav(id); ({home:()=>renderHome(false),explore:()=>renderHome(true),dilemmas:renderDilemmas,map:renderMap,sampling:renderSampling,tools:()=>renderTools("daily"),daily:()=>renderTools("daily"),stats:()=>renderTools("stats"),risk:renderRisk,msa:renderMsa,grr:renderGrr,rmtools:renderRmTools,impact:renderImpact,cvss:renderCvss,projects:renderProjects,bstats:renderBstats,qadrafts:renderQaDrafts,dates:renderDates,audit:renderAudit})[id](); totals(); try{ if(navPinned()) pinScroll(); else window.scrollTo({top:0}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
+  if(["home","explore","dilemmas","map","sampling","bstats","tools","daily","stats","dates","audit","risk","rmtool","msa","grr","rmtools","impact","cvss","projects","qadrafts"].includes(id)){ closeModal(); renderNav(id); ({home:()=>renderHome(false),explore:()=>renderHome(true),dilemmas:renderDilemmas,map:renderMap,sampling:renderSampling,tools:()=>renderTools("daily"),daily:()=>renderTools("daily"),stats:()=>renderTools("stats"),risk:renderRisk,rmtool:renderRisk,msa:renderMsa,grr:renderGrr,rmtools:renderRmTools,impact:renderImpact,cvss:renderCvss,projects:renderProjects,bstats:renderBstats,qadrafts:renderQaDrafts,dates:renderDates,audit:renderAudit})[id](); totals(); try{ if(navPinned()) pinScroll(); else window.scrollTo({top:0}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
   if(id==="random"){ closeModal(); renderNav("random"); renderRandom(); totals(); try{ if(navPinned()) pinScroll(); else window.scrollTo({top:document.getElementById("dnav").offsetTop}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
   const valid=CH.some(c=>c.id===id)?id:CH[0].id;
   currentTab=pendingTab||""; pendingTab=null;
