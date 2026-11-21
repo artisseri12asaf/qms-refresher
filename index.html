@@ -1594,6 +1594,107 @@ select{max-width:100%}
  .wkSteps{padding:6px 12px} .wkBody{padding:10px 12px; gap:10px} .wkFoot{padding:8px 12px}
  .wkStep{font-size:12.5px; padding:4px 9px 4px 4px}
 }
+
+/* ===== 2.18.0 compact, calm layout: less scrolling on every screen ===== */
+body{font-size:17px; line-height:1.5}
+@media (max-width:640px){ body{font-size:16.5px} }
+/* the welcome block stays on the home page only */
+html:not([data-home="true"]) #heroTop{display:none !important}
+/* one slim menu line replaces the 4-row menu once it scrolls away (wide screens) */
+@media (min-width:901px) and (min-height:620px){
+  html nav#navRow2.mainNav{position:relative !important; top:auto !important}
+  html:not([data-home="true"]) main#main{min-height:calc(100vh - 120px)}
+}
+#navMini{display:none}
+@media (min-width:901px) and (min-height:620px){
+  html.navMiniOn #navMini{display:flex; position:fixed; left:var(--miniL,50%); top:var(--topH,0px); z-index:46; width:var(--miniW,940px); gap:4px; align-items:center; padding:5px 6px; background:color-mix(in srgb,var(--card) 95%,transparent); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border:1px solid var(--line); border-top:0; border-radius:0 0 14px 14px; box-shadow:0 6px 18px rgba(20,40,60,.10); animation:miniIn .18s ease-out}
+  #navMini button{display:inline-flex; align-items:center; gap:5px; font:inherit; font-size:13px; flex:1 1 auto; justify-content:center; font-weight:600; color:var(--ink); background:transparent; border:1px solid transparent; border-radius:9px; padding:5px 10px; min-height:34px; cursor:pointer; white-space:nowrap}
+  #navMini button:hover{background:var(--paper); border-color:var(--line)}
+  #navMini button[aria-current="true"]{background:var(--ac-soft,#e8f3f1); color:var(--ac,#2e7d74); border-color:var(--ac,#2e7d74)}
+  #navMini .ico{width:18px; height:18px; flex:0 0 18px; fill:none; stroke:currentColor; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; color:var(--ac,#2e7d74)}
+  #navMini .mMenu .ico{color:#3b88b5}
+  #navMini .mBtn.n-home{--ac:#2e7d74;--ac-soft:#e8f3f1}#navMini .mBtn.n-explore{--ac:#3b88b5;--ac-soft:#e8f2f9}#navMini .mBtn.n-train{--ac:#b98a35;--ac-soft:#f7f0e2}#navMini .mBtn.n-dil{--ac:#b0544b;--ac-soft:#f8ebe9}#navMini .mBtn.n-map{--ac:#4b5b9a;--ac-soft:#eceef8}#navMini .mBtn.n-dates{--ac:#6b5a9a;--ac-soft:#f0edf7}#navMini .mBtn.n-samp{--ac:#2f6f86;--ac-soft:#e6f1f5}#navMini .mBtn.n-audit{--ac:#7a4f2a;--ac-soft:#f5ece3}#navMini .mBtn.n-risk{--ac:#a0522d;--ac-soft:#f7ece5}#navMini .mBtn.n-change{--ac:#2e7d74;--ac-soft:#e8f3f1}#navMini .mBtn.n-chart{--ac:#2f6f86;--ac-soft:#e6f1f5}
+  #navMini .mSep{width:1px; align-self:stretch; background:var(--line); margin:4px 4px}
+  #navMini .mMenu{border-color:var(--line); background:var(--paper)}
+  #navMini .mGrow{flex:1}
+}
+@keyframes miniIn{from{opacity:0; transform:translateY(-6px)} to{opacity:1; transform:none}}
+@media (min-width:901px) and (min-height:620px){
+  html .tabs{top:var(--hdrH,0px) !important}
+  html .stickyCtl, html .audBar{top:var(--hdrH,0px) !important}
+}
+/* page heads */
+.chHead{padding:12px 18px !important}
+.chHead h2{font-size:23px !important; line-height:1.25 !important; margin:2px 0 4px !important}
+.chHead p{font-size:15px !important; line-height:1.5 !important; margin:0 !important}
+.chHead .eyebrow{font-size:11px !important; margin-bottom:2px}
+/* chapter chooser */
+.dnav{padding-top:6px !important; padding-bottom:6px !important; margin-bottom:10px !important}
+.chTab{font-size:14px !important; padding:6px 11px !important; line-height:1.3 !important; border-radius:10px !important; max-width:230px}
+.chTab .n{font-size:12px !important}
+/* section tabs: one slim row of pills with the count inside */
+.tabs{display:flex !important; flex-wrap:nowrap !important; gap:6px !important; overflow-x:auto; padding:6px 0 !important; margin:8px 0 10px !important; scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs .tab{flex:1 0 auto; display:inline-flex !important; align-items:center; justify-content:center; gap:7px; font-size:14.5px !important; padding:7px 14px !important; border-radius:999px !important; white-space:nowrap; min-height:38px; box-shadow:none !important}
+.tabs .tab .cnt{display:inline-block !important; margin:0 !important; font-size:12px !important; font-weight:700; padding:1px 7px; border-radius:999px; background:color-mix(in srgb,var(--ink) 8%,transparent); opacity:1 !important}
+.tabs .tab[aria-selected="true"] .cnt{background:rgba(255,255,255,.22)}
+/* level filter */
+.lvBtn{padding:4px 10px !important; min-height:30px}
+/* questions and dilemmas */
+.card.q h3, .card .qText, .dil h3, .card.dil h3{font-size:18px !important; line-height:1.38 !important; margin:6px 0 10px !important}
+.opts{gap:6px !important}
+.opt{font-size:15.5px !important; padding:9px 14px !important; line-height:1.4 !important; border-radius:9px !important}
+.card{padding:12px 16px}
+.cPager button{padding:6px 14px !important}
+/* debates */
+.card.debate h3{font-size:19px !important; margin:2px 0 8px !important}
+.side{font-size:15.5px !important; padding:9px 12px !important}
+.decide, .exmp{font-size:14.5px !important; padding:8px 12px !important}
+.anchor, .take{font-size:15px !important}
+.card.kp p{font-size:16px !important; line-height:1.55 !important}
+/* risk process steps */
+.rmStep{padding:7px 12px !important}
+.rmStep > summary{font-size:15.5px !important}
+.secTitle{font-size:16px !important}
+.card ul li{margin-bottom:2px}
+@media (max-width:640px){
+  .chHead{padding:10px 14px !important}
+  .chHead h2{font-size:19.5px !important}
+  .chHead p{font-size:14px !important}
+  .tabs .tab{font-size:13.5px !important; padding:6px 11px !important; min-height:36px}
+  .card.q h3, .card .qText, .dil h3, .card.dil h3{font-size:16.5px !important}
+  .opt{font-size:15px !important; padding:9px 12px !important}
+  .card.debate h3{font-size:17px !important}
+  .sides{gap:8px !important}
+}
+/* practice heads: progress ring sits beside the title, level and part filters stay on one line */
+@media (max-width:640px){
+  .chHead.withRing{grid-template-columns:minmax(0,1fr) 70px !important; grid-template-rows:auto !important; grid-auto-rows:auto !important; align-items:start; column-gap:10px; min-height:0 !important}
+  .chHead.withRing .hTxt{grid-column:1 !important; grid-row:1 !important}
+  .chHead.withRing .mRing{grid-column:2 !important; grid-row:1 !important; align-self:start}
+  .chHead.withRing .hTxt p{font-size:13.5px !important}
+  .chHead.withRing .mRing{flex-direction:column !important; align-items:center !important; gap:2px !important; width:70px !important; margin:0 !important; padding:0 !important; border:0 !important}
+  .chHead.withRing .mRingSvg, .chHead.withRing .mRingSvg svg{width:58px !important; height:58px !important}
+  .chHead.withRing .mRingLvl{font-size:11px !important; width:70px !important; max-width:70px; height:auto !important; min-height:0 !important; text-align:center; line-height:1.2; white-space:normal; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical}
+  .chHead.withRing .mRingLine{display:none !important}
+  .chHead.withRing .mRing > *{flex:0 0 auto !important; grid-column:auto !important}
+  .chHead.withRing .mRingReset{width:auto !important; font-size:11.5px !important}
+  .lvBar{flex-wrap:nowrap !important; overflow-x:auto; scrollbar-width:none; padding-bottom:2px}
+  .lvBar::-webkit-scrollbar{display:none}
+  .lvBtn{flex:0 0 auto}
+  .randCtl{flex-wrap:wrap !important; gap:6px !important; row-gap:4px !important}
+  .randCtl .tab{padding:6px 10px !important; font-size:13.5px !important}
+  .randCtl .unl{flex:0 0 auto; font-size:13.5px !important; min-height:36px !important; white-space:nowrap}
+  .randCtl .unl input{width:18px !important; height:18px !important}
+  .pager .next{padding:10px 14px !important}
+}
+/* tool cards: icon beside the title on phones */
+@media (max-width:640px){
+  #main .choiceGrid .toolCard:not(.dLay .toolCard){display:grid !important; grid-template-columns:34px minmax(0,1fr); column-gap:10px; row-gap:2px; align-items:start; padding:10px 12px !important; min-height:0 !important}
+  #main .choiceGrid .toolCard:not(.dLay .toolCard) .toolIco{grid-row:1 / span 2; margin:0 !important}
+  #main .choiceGrid .toolCard:not(.dLay .toolCard) > b{font-size:15px !important; margin:0 !important}
+  #main .choiceGrid .toolCard:not(.dLay .toolCard) > span:not(.toolIco){font-size:13px !important; line-height:1.4}
+}
 </style>
 </head>
 <body>
@@ -1734,7 +1835,7 @@ function renderNav(active){
   r2.append(grp("Explore",["iso","qmsr","mdr","map","dates","fdapre"]), el("div",{class:"navGroup navSearchG","data-g":"Search"}, el("span",{class:"navLab"},"Search"), el("div",{class:"navSearchRow"}, NAVSEARCH, el("button",{class:"glossBtn",type:"button",title:"Glossary and abbreviations","aria-label":"Open the glossary and abbreviations",onclick:openGlossary}, ico("gloss"), el("span",{},"Glossary")))), grp("Practice",["random","dilemmas","audit"]), grp("Tools",["daily","stats","risk","projects"]));
   phoneBar(active);
   heroTop(true); document.documentElement.dataset.home=String(active==="home"||active==="explore");
-  requestAnimationFrame(()=>{ document.documentElement.style.setProperty("--hdrH",(navPinned()?r2.offsetHeight:0)+"px"); topBar(); });
+  requestAnimationFrame(()=>{ navMiniBuild(); topBar(); });
   const isCh=CH.some(x=>x.id===active); document.getElementById("dnav").style.display=isCh?"":"none";
   const ct=document.getElementById("chTabs"); ct.innerHTML=""; ct.style.display="";
   CH.filter(x=>x.part===c.part).forEach(x=>{
@@ -3091,7 +3192,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="2.17.0", APPDATE="21-NOV-2026";
+const APPVER="2.18.0", APPDATE="21-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Asaf Ben Zion. All rights reserved.";
 const LEGAL=[["Copyright", "No part of this handbook’s original content may be copied or redistributed without written permission. Cited regulations, standards and guidance, and their links, remain the property of their official publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, data selection and design, developed with AI tools, and has been verified against requirements set by the author and against the official sources."], ["Sources", "Sources are limited to official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases. EU: EUR-Lex and European Commission pages, including MDCG guidance."], ["Important", "This application is intended for training only. Results from its tools require human review, verification and approval. Always check the linked source before citing anything in an audit response."]];
@@ -3792,7 +3893,7 @@ function renderAudit(){
 }
 /* 2.16.0 after an answer, show the investigator just below the fixed app bar, the frozen menu and the question bar */
 function audFocus(){ const q=document.querySelector(".audQ")||document.querySelector(".audBar"); if(!q) return; let off=0;
-  [document.querySelector(".appbar"),document.getElementById("navRow2")].forEach(x=>{ if(!x||!x.offsetHeight) return; const cs=getComputedStyle(x); if(cs.position==="fixed") off=Math.max(off,x.getBoundingClientRect().bottom); else if(cs.position==="sticky") off=Math.max(off,(parseFloat(cs.top)||0)+x.offsetHeight); });
+  [document.querySelector(".appbar"),document.getElementById("navMini")].forEach(x=>{ if(!x||!x.offsetHeight) return; const cs=getComputedStyle(x); if(cs.position==="fixed") off=Math.max(off,x.getBoundingClientRect().bottom); else if(cs.position==="sticky") off=Math.max(off,(parseFloat(cs.top)||0)+x.offsetHeight); });
   const bar=document.querySelector(".audBar"); if(bar&&bar!==q) off+=bar.offsetHeight;
   window.scrollTo({top:Math.max(0,q.getBoundingClientRect().top+window.scrollY-off-12)}); }
 function renderAuditOpening(m){
@@ -6923,12 +7024,21 @@ function topBar(){ const R=document.documentElement, a=document.querySelector("h
   if(home){ const hero=document.getElementById("heroTop"); const lg=hero&&hero.querySelector(".hLogo"); const ref=(lg&&lg.offsetParent)?lg:hero; on=!!ref&&ref.getBoundingClientRect().bottom<0; }
   R.classList.toggle("topOn",on); const H=a.offsetHeight;
   R.style.setProperty("--topPad",(home?0:H)+"px"); R.style.setProperty("--topH",(on?H:0)+"px");
-  const r2=document.getElementById("navRow2"); R.style.setProperty("--hdrH",((r2&&navPinned())?r2.offsetHeight:0)+(on?H:0)+"px");
+  navMiniState(); R.style.setProperty("--hdrH",(navMiniH())+(on?H:0)+"px");
   if(typeof dailyStick==="function") dailyStick(); }
-window.addEventListener("scroll",()=>{ if(document.documentElement.dataset.home==="true") topBar(); },{passive:true});
+window.addEventListener("scroll",()=>{ topBar(); },{passive:true});
 window.addEventListener("resize",()=>topBar());
-function navPinned(){ return getComputedStyle(document.getElementById("navRow2")).position==="sticky"; }
-function pinScroll(){ const a=document.getElementById("navAnchor"); const y=a?a.getBoundingClientRect().top+window.scrollY:0; if(window.scrollY>y) window.scrollTo({top:y}); }
+/* 2.18.0 the full menu scrolls with the page; a slim one-line menu (#navMini) takes its place at the top */
+const WIDE=()=>matchMedia("(min-width:901px) and (min-height:620px)").matches;
+function navPinned(){ return WIDE(); }
+function navMiniH(){ const b=document.getElementById("navMini"); return document.documentElement.classList.contains("navMiniOn")&&b?b.offsetHeight:0; }
+function navMiniState(){ const R=document.documentElement, n=document.getElementById("navRow2"); if(!n) return; const nr=n.getBoundingClientRect(); if(nr.width){ R.style.setProperty("--miniW",Math.round(nr.width)+"px"); R.style.setProperty("--miniL",Math.round(nr.left)+"px"); } const on=WIDE()&&n.offsetHeight>0&&n.getBoundingClientRect().bottom<topH()+50; if(R.classList.contains("navMiniOn")!==on) R.classList.toggle("navMiniOn",on); }
+function navMiniBuild(){ const n=document.getElementById("navRow2"); if(!n) return; let b=document.getElementById("navMini"); if(!b){ b=document.createElement("nav"); b.id="navMini"; b.setAttribute("aria-label","Quick menu"); document.body.append(b); } b.innerHTML="";
+  const up=focusSearch=>{ const a=document.getElementById("navAnchor"); const y=a?a.getBoundingClientRect().top+window.scrollY:0; window.scrollTo({top:Math.max(0,y-topH()-8),behavior:"smooth"}); if(focusSearch) setTimeout(()=>{ const i=n.querySelector(".searchBox input"); if(i) i.focus({preventScroll:true}); },350); };
+  b.append(el("button",{class:"mMenu",type:"button","aria-label":"Show the full menu (Explore, Search, Glossary)",onclick:()=>up(false)}, ico("explore"), el("span",{},"Explore")), el("button",{class:"mMenu",type:"button","aria-label":"Search",onclick:()=>up(true)}, ico("search"), el("span",{},"Search")), el("span",{class:"mSep"}));
+  ["Practice","Tools"].forEach((g,gi)=>{ n.querySelectorAll('.navGroup[data-g="'+g+'"] .navBtn').forEach(x=>{ const c=el("button",{type:"button",class:x.className.replace("navBtn","mBtn"),"aria-current":x.getAttribute("aria-current")||"false",title:x.innerText.trim(),onclick:()=>x.click()}); c.innerHTML=x.innerHTML; const sp=c.querySelector("span"); const SH={"Training mode":"Training","Selected Dilemmas":"Dilemmas","Inspection mode":"Inspection","Daily QA Work":"Daily QA","Statistical Tools":"Statistics","Risk management":"Risk"}; if(sp&&SH[sp.textContent.trim()]) sp.textContent=SH[sp.textContent.trim()]; b.append(c); }); if(gi===0) b.append(el("span",{class:"mSep"})); });
+  navMiniState(); }
+function pinScroll(){ const n=document.getElementById("navRow2"); if(!n||!WIDE()) return; const go=()=>{ const y=n.getBoundingClientRect().bottom+window.scrollY-topH()-44; window.scrollTo({top:Math.max(0,y)}); topBar(); }; go(); requestAnimationFrame(()=>{ go(); setTimeout(go,60); }); }
 let LAST_ROUTE=null;
 function route(){
   const id=(location.hash||"").slice(1)||"home";
@@ -6947,7 +7057,7 @@ function route(){
 
 window.addEventListener("hashchange",route);
 route();
-window.addEventListener("resize",()=>{ const r=document.getElementById("navRow2"); document.documentElement.style.setProperty("--hdrH",(navPinned()?r.offsetHeight:0)+topH()+"px"); });
+window.addEventListener("resize",()=>{ topBar(); });
 (function(){ let on=true; try{ on=localStorage.getItem(LKEY)!=="off"; }catch(e){} if(on) showLaunch(); })();
 if("serviceWorker" in navigator){ let reloaded=false; const hadCtl=!!navigator.serviceWorker.controller;
   navigator.serviceWorker.addEventListener("controllerchange",()=>{ if(hadCtl&&!reloaded){ reloaded=true; location.reload(); } });
