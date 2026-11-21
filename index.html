@@ -1276,13 +1276,13 @@ footer#siteFoot .legalBody p.imp{font-size:14px; color:var(--ink)}
 .dItem.tour + .dItem, .dItem[aria-current=true].tour{}
 .dLay .toolGrid .toolCard{transition:transform .25s, box-shadow .25s}
 .lensOn{transform:scale(1.02); box-shadow:0 0 0 3px color-mix(in srgb,var(--qms) 45%,transparent), var(--shadow) !important; position:relative; z-index:2}
-.qaLens{position:fixed; left:0; top:0; width:100px; height:100px; z-index:300; pointer-events:none; transition:transform 1s cubic-bezier(.45,.05,.25,1), opacity .35s; filter:drop-shadow(0 6px 14px rgba(0,0,0,.3))}
+.qaLens{position:fixed; left:0; top:0; width:72px; height:72px; z-index:300; pointer-events:none; transition:transform 1s cubic-bezier(.45,.05,.25,1), opacity .35s; filter:drop-shadow(0 6px 14px rgba(0,0,0,.3))}
 .qaLens.out{opacity:0}
 .qaLensGlass{position:absolute; left:7px; top:7px; width:82px; height:82px; border-radius:50%; overflow:hidden; background:var(--card); box-shadow:inset 0 0 12px rgba(0,0,0,.18)}
 .qaLensGlass > *{transform-origin:0 0; opacity:0; transition:opacity .12s}
 .qaLensGlass.show > *{opacity:1}
-.qaLensGlass{width:68px; height:68px; left:6px; top:6px}
-.qaLensArt{position:absolute; left:-1px; top:-1px; width:100px; height:100px}
+.qaLensGlass{width:49px; height:49px; left:4px; top:4px}
+.qaLensArt{position:absolute; left:-1px; top:-1px; width:72px; height:72px}
 .qaLensArt svg{width:100%; height:100%}
 @media (prefers-reduced-motion:reduce){ .qaLens{display:none} .dItem.tour{transition:none} }
 .sqHead{padding:10px 16px !important; gap:2px !important}
@@ -1454,6 +1454,14 @@ header.top{padding-top:var(--topPad,0px)}
 .prjForm .rField, .prjForm label{margin-bottom:8px}
 /* 2.11.0 IMDRF dropdowns */
 .imdrfSel select{font-size:14px; max-width:100%}
+/* 2.13.0 basic statistical calculators and recommended tag */
+.aqlBtn.rec{position:relative; padding-bottom:18px}
+.aqlBtn .recTag{position:absolute; left:0; right:0; bottom:3px; font-size:9.5px; font-weight:700; letter-spacing:.03em; text-transform:uppercase; color:#1f7a4a}
+.aqlBtn.on .recTag{color:inherit; opacity:.9}
+.bsTbl th{text-align:left; font-weight:600; width:46%} .bsTbl td{font-variant-numeric:tabular-nums}
+.bsOut .verdict{margin:8px 0}
+.bsPlotWrap{max-width:420px; color:var(--muted)} .bsPlot{width:100%; height:auto}
+.bsCard .rField{margin-bottom:6px}
 /* compact form cards on wide screens */
 @media (min-width:761px){
  .dLay .toolGrid{gap:10px; grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
@@ -2290,8 +2298,9 @@ function renderCR(box,back){
   box.append(el("div",{class:"eyebrow"},"What kind of results will the test give?"), tt);
   box.append(el("p",{},"Find the smallest number of samples that demonstrates a reliability R with confidence C for a pass/fail test, allowing c failures. Based on the binomial distribution: the smallest n where P(failures ≤ c | n, 1 − R) ≤ 1 − C."));
   const grid=el("div",{class:"crGrid"}); const left=el("div",{class:"crRow"});
-  const opt=(lab,vals,key)=>{ const w=el("div",{}, el("div",{class:"eyebrow"},lab)); const g=el("div",{class:"aqlGrid"}); vals.forEach(v=>g.append(el("button",{class:"aqlBtn"+(ss[key]===v?" on":""),type:"button",onclick:()=>{ ss[key]=v; ss.cr.done=false; ss.cr.n=""; renderSampling(); }},(v*100)+"%"))); w.append(g); return w; };
-  left.append(opt("Confidence C",[0.90,0.95,0.99],"C"), opt("Reliability R",[0.90,0.95,0.99,0.999],"R"));
+  const opt=(lab,vals,key)=>{ const w=el("div",{}, el("div",{class:"eyebrow"},lab)); const g=el("div",{class:"aqlGrid"}); vals.forEach(v=>g.append(el("button",{class:"aqlBtn"+(ss[key]===v?" on":"")+(v===0.95?" rec":""),type:"button",onclick:()=>{ ss[key]=v; ss.cr.done=false; ss.cr.n=""; renderSampling(); }},(Math.round(v*1000)/10)+"%",v===0.95?el("small",{class:"recTag"},"Recommended"):""))); w.append(g); return w; };
+  left.append(opt("Confidence C",[0.80,0.85,0.90,0.95,0.99],"C"), opt("Reliability R",[0.80,0.85,0.90,0.95,0.99,0.999],"R"));
+  left.append(el("p",{class:"src"},"ISO standards do not fix confidence or reliability levels: choose them by risk and justify them in your statistical-methods procedure. 80% and 85% are usually kept for low-severity characteristics; 95% is the common default."));
   const big=el("div",{class:"bigStats"});
   [0,1,2].forEach(c=>{ const n=crN(ss.C,ss.R,c); const v=el("b",{},"0"); big.append(el("div",{class:"bs "+(c?"":"n")}, el("span",{},c===0?"Zero failures allowed":c+" failure"+(c>1?"s":"")+" allowed"), v)); setTimeout(()=>countUp(v,n),50); });
   left.append(big);
@@ -2444,7 +2453,7 @@ const TPL_EFF={CHL:"21/11/2026"}; /* prefix -> DD/MM/YYYY of the release in whic
 function tplNo(code){ const eff=TPL_EFF[code]||DOC_REL; return {no:code+"-0000-"+eff.slice(-2),eff}; }
 function docNo(code){ const S=lsGet("qah-docno-v1",{}); const yy=String(new Date().getFullYear()).slice(-2), k=code+"-"+yy; S[k]=(S[k]||0)+1; lsSet("qah-docno-v1",S); return code+"-"+String(S[k]).padStart(4,"0")+"-"+yy; }
 function docCodeOf(doc){ if(doc.code) return doc.code; const t=[doc.title,doc.subtitle,doc.footer].join(" ");
-  const R=[[/Gauge R&R|GRR/i,"GRR"],[/Kappa|attribute agreement/i,"AAN"],[/CVSS/i,"CVS"],[/impact assessment/i,"CIA"],[/MSA|Type 1|bias and linearity|stability|resolution/i,"MSA"],[/\bPHA\b|preliminary hazard/i,"PHA"],[/dFMEA/i,"DFM"],[/pFMEA/i,"PFM"],[/uFMEA/i,"UFM"],[/sFMEA/i,"SFM"],[/URRA/i,"URA"],[/fault tree|\bFTA\b/i,"FTA"],[/system risk/i,"SRA"],[/acceptab|risk matrix/i,"RAM"],[/Risk management|hazard analysis|risk analysis/i,"RIS"],[/sampl|AQL|lot acceptance|2859|verification|capabil/i,"SMP"]];
+  const R=[[/Basic statistics/i,"STC"],[/Gauge R&R|GRR/i,"GRR"],[/Kappa|attribute agreement/i,"AAN"],[/CVSS/i,"CVS"],[/impact assessment/i,"CIA"],[/MSA|Type 1|bias and linearity|stability|resolution/i,"MSA"],[/\bPHA\b|preliminary hazard/i,"PHA"],[/dFMEA/i,"DFM"],[/pFMEA/i,"PFM"],[/uFMEA/i,"UFM"],[/sFMEA/i,"SFM"],[/URRA/i,"URA"],[/fault tree|\bFTA\b/i,"FTA"],[/system risk/i,"SRA"],[/acceptab|risk matrix/i,"RAM"],[/Risk management|hazard analysis|risk analysis/i,"RIS"],[/sampl|AQL|lot acceptance|2859|verification|capabil/i,"SMP"]];
   for(const [re,c] of R) if(re.test(t)) return c; return "QRF"; }
 function buildPdf(doc,opt){
   // doc: {title, subtitle, sections:[{h, rows:[[k,v]]}], decision:{text,ok}, hist:{bins,lo,w,mean,sd,n,LSL,USL}|null, data:[numbers]}
@@ -2519,6 +2528,7 @@ async function saveFile(name,blob,statusEl){
 }
 /* ---------- Useful tools page ---------- */
 const TOOLS=[["sampling","Sample size tool (ISO 2859-1:2026)","Lot acceptance plans with switching rules, and design-verification sample sizes from confidence and reliability. Enter your results, see the statistics and export a report.","samp",true],
+ ["bstats","Basic Statistical Calculators","Standard deviation, Cp/Cpk, p-value, normality, t-tests, binomial test, ANOVA, regression and factor analysis, each with a short tutorial.","chart",true],
  ["msa","Measurement System Analysis (MSA)","Resolution, Type 1 gauge study (Cg, Cgk), bias and linearity, and stability charts, with Excel and PDF export.","chart",true],
  ["rmtools","Risk Management Tools","Create a PHA, risk analysis, risk acceptability matrix, FTA, system risk analysis, dFMEA, pFMEA, uFMEA, sFMEA or URRA, with IDs and traceability.","risk",true],
  ["impact","Change Impact Assessment","Generator for change impact assessments: SME impact with risk-file links, then FDA and EU MDR regulatory assessment, with Word and PDF output.","change",true],
@@ -2554,7 +2564,7 @@ const TOOLS=[["sampling","Sample size tool (ISO 2859-1:2026)","Lot acceptance pl
  ["qa-npsl","Non-Product Software List","Inventory of business software with GxP status, risk, assessment, validation status and review dates.","list",true],
  ["grr","Gauge R&R / Kappa test","A guide to choose between variable Gauge R&R and attribute agreement (Kappa), sample definitions with defect notes and photos, analysis, and the test protocol and report.","gauge",true]];
 const TOOLGROUPS={daily:["Daily QA Work","Tools for daily QA work","Ready-to-use QA forms and templates: change control, nonconformance and CAPA, suppliers and CMOs, audits, documents, validation, software and training. Each has a filled sample and exports to Word and PDF.",["#Management responsibility","qa-mr","qa-qo","qa-qm","#Design controls","qa-ddp","qa-dir","qa-drv","qa-trace","qa-dtc","qa-dhf","qa-chl","#Change control","impact","#Nonconformance and CAPA","qa-ncr","qa-mrb","qa-dev","qa-capa","#Complaints and vigilance","qa-cmp","qa-rpt","qa-hhe","qa-fsca","#Post-Market surveillance","qa-pmsp","qa-psur","qa-trend","#Suppliers and CMOs","sq-quest","sq-eval","sq-scar","sq-scn","sq-asl","sq-fai","sq-sqa","sq-cmo","#Audits and quality planning","qa-iap","qa-iac","qa-qp","#Documents","qa-sop","qa-wi","qa-pol","#Inspection and validation","qa-vis","qa-prot","qa-rep","qa-iq","qa-oq","qa-pq","qa-tmv","qa-mvp","qa-mvpr","#Non-Product software","qa-nps","qa-npsl","#Training","qa-trn","qa-gtr"],[["Coming soon","More tools and ready-to-use QMS templates for daily QA work.","tmpl"]]],
-  stats:["Statistical Tools","Statistical Tools","Sampling plans, measurement system analysis and attribute agreement.",["sampling","msa","grr"],[]]};
+  stats:["Statistical Tools","Statistical Tools","Sampling plans, basic statistical calculators, measurement system analysis and attribute agreement.",["sampling","bstats","msa","grr"],[]]};
 /* ---- 1.8.1 title case for form headings, and Daily QA Work sub-tabs ---- */
 const TC_SMALL=new Set("a an and as at but by for from in into nor of on or per the to vs via with".split(" "));
 function tc(str){ return String(str).replace(/[A-Za-z][A-Za-z'’.]*/g,(w,off,all)=>{ const pre=all.slice(0,off); if(/[A-Z]/.test(w)||/-$/.test(pre)||/^(e\.g|i\.e|etc)\b/.test(w)) return w; const first=!/[A-Za-z]/.test(pre)||/[:–—(\/]\s*$/.test(pre); if(!first&&TC_SMALL.has(w.toLowerCase())) return w; return w.charAt(0).toUpperCase()+w.slice(1); }); }
@@ -2598,7 +2608,7 @@ function tourStart(end){ tourStop(); const t={timers:[],off:[],end}; TOUR=t; con
 function tourOk(){ try{ if(navigator.webdriver&&!window.__allowTour) return false; return !matchMedia("(prefers-reduced-motion: reduce)").matches; }catch(e){ return true; } }
 const LENS_SVG='<svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="48" cy="48" r="41" fill="none" stroke="#1f2a37" stroke-width="7"/><circle cx="48" cy="48" r="41" fill="none" stroke="#c9d3dc" stroke-width="2.5"/><path d="M78 78 L108 108" stroke="#1f2a37" stroke-width="13" stroke-linecap="round"/><path d="M78 78 L108 108" stroke="#7a4f2a" stroke-width="7" stroke-linecap="round"/><path d="M27 32 A26 26 0 0 1 46 21" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".8"/></svg>';
 function lensTour(targets,total,t){ t=t||tourStart(); if(!tourOk()) return; targets=targets.filter(x=>x&&x.offsetParent); if(!targets.length) return;
-  const R=40, G=34, lens=el("div",{class:"qaLens","aria-hidden":"true"}); const glass=el("div",{class:"qaLensGlass"}); const art=el("div",{class:"qaLensArt"}); art.innerHTML=LENS_SVG; lens.append(glass,art); document.body.append(lens); t.lens=lens;
+  const R=29, G=24.5, lens=el("div",{class:"qaLens","aria-hidden":"true"}); const glass=el("div",{class:"qaLensGlass"}); const art=el("div",{class:"qaLensArt"}); art.innerHTML=LENS_SVG; lens.append(glass,art); document.body.append(lens); t.lens=lens;
   const per=Math.max(1200,(total||5000)/targets.length);
   const goTo=(el0,i)=>{ if(TOUR!==t) return; const r=el0.getBoundingClientRect(); if(r.top<0||r.bottom>innerHeight) el0.scrollIntoView({block:"center",behavior:"smooth"});
     const r2=el0.getBoundingClientRect(); const hd=el0.matches("h2,h3,b")?el0:el0.querySelector("b,h2,h3"); const hr=hd?hd.getBoundingClientRect():r2;
@@ -2613,7 +2623,7 @@ function lensTour(targets,total,t){ t=t||tourStart(); if(!tourOk()) return; targ
   t.timers.push(setTimeout(()=>{ if(TOUR===t){ lens.classList.add("out"); t.timers.push(setTimeout(()=>{ if(TOUR!==t) return; if(lens.classList.contains("keep")){ lens.remove(); if(t.lens===lens) t.lens=null; document.querySelectorAll(".lensOn").forEach(x=>x.classList.remove("lensOn")); } else tourStop(); },450)); } },80+targets.length*per));
 }
 /* side-menu tour: each area is shown for 2 s; on the third area the cycle pauses while the lens moves from the area to its content (about 5 s); then the cycle continues and ends on the remembered area */
-function sideTour(c){ if(!tourOk()) return; const keys=c.keys; if(keys.length<2) return; const home=keys.includes(c.home)?c.home:keys[0];
+function sideTour(c){ if(!tourOk()) return; const keys=c.keys; if(keys.length<2) return; { const sk="qah-tour-"+(location.hash||"#home"); try{ if(sessionStorage.getItem(sk)&&!window.__tourEvery) return; sessionStorage.setItem(sk,"1"); }catch(e){} } const home=keys.includes(c.home)?c.home:keys[0];
   const t=tourStart(()=>c.restore(home)); t.home=home; t.commit=k=>c.commit(k);
   const mark=k=>{ t.shown=k; c.show(k); const i=keys.indexOf(k); const it=[...document.querySelectorAll(".dSide .dItem")]; it.forEach((b,j)=>b.classList.toggle("tour",j===i)); };
   const lay=document.querySelector(".dLay"); if(lay){ lay.classList.add("touring"); t.off.push(()=>{ const l=document.querySelector(".dLay"); if(l) l.classList.remove("touring"); }); const r=lay.getBoundingClientRect(); const nb=document.getElementById("navRow2"); const off=nb&&getComputedStyle(nb).position==="sticky"?nb.offsetHeight+12:80; if(r.top>innerHeight*0.45) window.scrollBy({top:r.top-off,behavior:"smooth"}); }
@@ -2995,7 +3005,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="2.12.0", APPDATE="21-NOV-2026";
+const APPVER="2.13.0", APPDATE="21-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Asaf Ben Zion. All rights reserved.";
 const LEGAL=[["Copyright", "No part of this handbook’s original content may be copied or redistributed without written permission. Cited regulations, standards and guidance, and their links, remain the property of their official publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, data selection and design, developed with AI tools, and has been verified against requirements set by the author and against the official sources."], ["Sources", "Sources are limited to official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases. EU: EUR-Lex and European Commission pages, including MDCG guidance."], ["Important", "This application is intended for training only. Results from its tools require human review, verification and approval. Always check the linked source before citing anything in an audit response."]];
@@ -6504,6 +6514,190 @@ function sqSecCard(F,S,v,touch){ const c=el("div",{class:"card"}, el("h3",{class
           box.append(el("button",{class:"linkBtn",type:"button",onclick:()=>{ const r={}; cols.forEach(([ck])=>r[ck]=""); rows.push(r); touch(); draw(); }},"+ Add row")); };
         draw(); c.append(box); return; } });
     return c; }
+/* 2.13.0 Basic Statistical Calculators: standard deviation, Cp/Cpk, p-value, normality, t-tests, binomial test, ANOVA, regression,
+   factor analysis; each with a short tutorial. Methods are standard textbook statistics, written for this app. */
+const BS=lsGet("qah-bstats-v1",{cur:"sd",alpha:"0.05",in:{}});
+const bsSave=()=>lsSet("qah-bstats-v1",BS);
+function stErfc(x){ const z=Math.abs(x), t=1/(1+0.5*z); const r=t*Math.exp(-z*z-1.26551223+t*(1.00002368+t*(0.37409196+t*(0.09678418+t*(-0.18628806+t*(0.27886807+t*(-1.13520398+t*(1.48851587+t*(-0.82215223+t*0.17087277))))))))); return x>=0?r:2-r; }
+function stPhi(z){ return 0.5*stErfc(-z/Math.SQRT2); }
+function stPhiInv(p){ let x=normInv(p); for(let i=0;i<2;i++){ const e=stPhi(x)-p, d=Math.exp(-x*x/2)/Math.sqrt(2*Math.PI); if(d>0) x-=e/d; } return x; }
+function stTcdf(t,df){ if(!Number.isFinite(t)) return t>0?1:0; const p2=ibeta(df/(df+t*t),df/2,0.5); return t>0?1-p2/2:p2/2; }
+function stTinv(p,df){ let lo=-1e4,hi=1e4; for(let i=0;i<200;i++){ const m=(lo+hi)/2; if(stTcdf(m,df)<p) lo=m; else hi=m; } return (lo+hi)/2; }
+function stGammaP(a,x){ if(x<=0) return 0; const gl=lnGam(a); if(x<a+1){ let ap=a,sum=1/a,del=sum; for(let n=1;n<500;n++){ ap+=1; del*=x/ap; sum+=del; if(Math.abs(del)<Math.abs(sum)*1e-14) break; } return sum*Math.exp(-x+a*Math.log(x)-gl); }
+  let b=x+1-a,c=1/1e-300,d=1/b,h=d; for(let i=1;i<500;i++){ const an=-i*(i-a); b+=2; d=an*d+b; if(Math.abs(d)<1e-300) d=1e-300; c=b+an/c; if(Math.abs(c)<1e-300) c=1e-300; d=1/d; const del=d*c; h*=del; if(Math.abs(del-1)<1e-14) break; } return 1-Math.exp(-x+a*Math.log(x)-gl)*h; }
+function stChi2cdf(x,k){ return stGammaP(k/2,x/2); }
+function stChi2inv(p,k){ let lo=0,hi=Math.max(10,k*10+100); for(let i=0;i<200;i++){ const m=(lo+hi)/2; if(stChi2cdf(m,k)<p) lo=m; else hi=m; } return (lo+hi)/2; }
+function stMean(a){ return a.reduce((s,v)=>s+v,0)/a.length; }
+function stVar(a){ const m=stMean(a); return a.reduce((s,v)=>s+(v-m)*(v-m),0)/(a.length-1); }
+function stMedian(a){ const s=[...a].sort((x,y)=>x-y), n=s.length; return n%2?s[(n-1)/2]:(s[n/2-1]+s[n/2])/2; }
+function stF(v,d){ if(!Number.isFinite(v)) return "—"; const a=Math.abs(v); d=d===undefined?(a>=1000?1:a>=100?2:a>=1?3:4):d; return a!==0&&(a<1e-4||a>=1e7)?v.toExponential(3):v.toFixed(d); }
+function stP(p){ return !Number.isFinite(p)?"—":p<0.0001?"< 0.0001":p.toFixed(4); }
+function pEq(p){ return p<0.0001?"p < 0.0001":"p = "+stP(p); }
+function stAlpha(){ const a=parseFloat(BS.alpha); return a>0&&a<0.5?a:0.05; }
+function stTail(p2,stat,alt,cdf){ if(alt==="less") return cdf; if(alt==="greater") return 1-cdf; return p2; }
+/* Shapiro-Wilk W and p-value (Royston 1995 approximation) */
+function stShapiro(x){ const n=x.length; if(n<3||n>5000) return null; const s=[...x].sort((a,b)=>a-b); const m=[]; for(let i=1;i<=n;i++) m.push(stPhiInv((i-0.375)/(n+0.25)));
+  const mm=m.reduce((a,v)=>a+v*v,0), u=1/Math.sqrt(n); const a=new Array(n).fill(0);
+  if(n===3){ a[0]=-Math.SQRT1_2; a[2]=Math.SQRT1_2; } else { const cn=m[n-1]/Math.sqrt(mm), an=cn+0.221157*u-0.147981*u**2-2.071190*u**3+4.434685*u**4-2.706056*u**5;
+    if(n>5){ const cn1=m[n-2]/Math.sqrt(mm), an1=cn1+0.042981*u-0.293762*u**2-1.752461*u**3+5.682633*u**4-3.582633*u**5; const phi=(mm-2*m[n-1]**2-2*m[n-2]**2)/(1-2*an**2-2*an1**2);
+      for(let i=2;i<n-2;i++) a[i]=m[i]/Math.sqrt(phi); a[n-1]=an; a[n-2]=an1; a[0]=-an; a[1]=-an1; }
+    else { const phi=(mm-2*m[n-1]**2)/(1-2*an**2); for(let i=1;i<n-1;i++) a[i]=m[i]/Math.sqrt(phi); a[n-1]=an; a[0]=-an; } }
+  const mean=stMean(s), ss=s.reduce((t,v)=>t+(v-mean)**2,0); if(ss<=0) return null; const W=Math.min(1,(a.reduce((t,v,i)=>t+v*s[i],0))**2/ss);
+  let p; if(n===3){ p=Math.max(0,Math.min(1,6/Math.PI*(Math.asin(Math.sqrt(W))-Math.asin(Math.sqrt(0.75))))); }
+  else if(n<=11){ const g=0.459*n-2.273, w=-Math.log(g-Math.log(1-W)), mu=0.5440-0.39978*n+0.025054*n*n-0.0006714*n**3, sg=Math.exp(1.3822-0.77857*n+0.062767*n*n-0.0020322*n**3); p=1-stPhi((w-mu)/sg); }
+  else { const w=Math.log(1-W), ln=Math.log(n), mu=-1.5861-0.31082*ln-0.083751*ln*ln+0.0038915*ln**3, sg=Math.exp(-0.4803-0.082676*ln+0.0030302*ln*ln); p=1-stPhi((w-mu)/sg); }
+  return {W,p}; }
+/* Anderson-Darling A2, adjusted A*, p-value (D'Agostino and Stephens 1986, mean and SD estimated) */
+function stAD(x){ const n=x.length; if(n<8) return null; const s=[...x].sort((a,b)=>a-b), m=stMean(s), sd=Math.sqrt(stVar(s)); if(!(sd>0)) return null;
+  const z=s.map(v=>Math.min(1-1e-15,Math.max(1e-15,stPhi((v-m)/sd)))); let S=0; for(let i=0;i<n;i++) S+=(2*i+1)*(Math.log(z[i])+Math.log(1-z[n-1-i]));
+  const A=-n-S/n, As=A*(1+0.75/n+2.25/(n*n)); let p;
+  if(As>=0.6) p=Math.exp(1.2937-5.709*As+0.0186*As*As); else if(As>=0.34) p=Math.exp(0.9177-4.279*As-1.38*As*As); else if(As>=0.2) p=1-Math.exp(-8.318+42.796*As-59.938*As*As); else p=1-Math.exp(-13.436+101.14*As-223.73*As*As);
+  return {A,As,p:Math.max(0,Math.min(1,p))}; }
+/* small linear algebra */
+function stInv(A){ const n=A.length, M=A.map((r,i)=>[...r,...Array.from({length:n},(_,j)=>i===j?1:0)]);
+  for(let c=0;c<n;c++){ let piv=c; for(let r=c+1;r<n;r++) if(Math.abs(M[r][c])>Math.abs(M[piv][c])) piv=r; if(Math.abs(M[piv][c])<1e-12) return null; [M[c],M[piv]]=[M[piv],M[c]]; const d=M[c][c]; for(let j=0;j<2*n;j++) M[c][j]/=d;
+    for(let r=0;r<n;r++) if(r!==c){ const f=M[r][c]; if(f) for(let j=0;j<2*n;j++) M[r][j]-=f*M[c][j]; } } return M.map(r=>r.slice(n)); }
+function stDet(A){ const n=A.length, M=A.map(r=>[...r]); let d=1; for(let c=0;c<n;c++){ let piv=c; for(let r=c+1;r<n;r++) if(Math.abs(M[r][c])>Math.abs(M[piv][c])) piv=r; if(Math.abs(M[piv][c])<1e-300) return 0; if(piv!==c){ [M[c],M[piv]]=[M[piv],M[c]]; d=-d; } d*=M[c][c]; for(let r=c+1;r<n;r++){ const f=M[r][c]/M[c][c]; for(let j=c;j<n;j++) M[r][j]-=f*M[c][j]; } } return d; }
+function stJacobi(S){ const n=S.length, A=S.map(r=>[...r]), V=A.map((r,i)=>r.map((_,j)=>i===j?1:0));
+  for(let sweep=0;sweep<100;sweep++){ let off=0; for(let i=0;i<n;i++) for(let j=i+1;j<n;j++) off+=A[i][j]*A[i][j]; if(off<1e-20) break;
+    for(let p=0;p<n;p++) for(let q=p+1;q<n;q++){ if(Math.abs(A[p][q])<1e-15) continue; const th=(A[q][q]-A[p][p])/(2*A[p][q]); const t=Math.sign(th||1)/(Math.abs(th)+Math.sqrt(th*th+1)); const c=1/Math.sqrt(t*t+1), s=t*c;
+      for(let k=0;k<n;k++){ const akp=A[k][p], akq=A[k][q]; A[k][p]=c*akp-s*akq; A[k][q]=s*akp+c*akq; } for(let k=0;k<n;k++){ const apk=A[p][k], aqk=A[q][k]; A[p][k]=c*apk-s*aqk; A[q][k]=s*apk+c*aqk; }
+      for(let k=0;k<n;k++){ const vkp=V[k][p], vkq=V[k][q]; V[k][p]=c*vkp-s*vkq; V[k][q]=s*vkp+c*vkq; } } }
+  const ord=A.map((r,i)=>[r[i],i]).sort((a,b)=>b[0]-a[0]); return {vals:ord.map(o=>o[0]), vecs:ord.map(o=>V.map(r=>r[o[1]]))}; }
+function stVarimax(L,iters){ const p=L.length, k=L[0].length; if(k<2) return L.map(r=>[...r]); const h=L.map(r=>Math.sqrt(r.reduce((s,v)=>s+v*v,0))||1); let Ln=L.map((r,i)=>r.map(v=>v/h[i]));
+  for(let it=0;it<(iters||100);it++){ let moved=0; for(let a=0;a<k;a++) for(let b=a+1;b<k;b++){ let A=0,B=0,C=0,D=0; for(let i=0;i<p;i++){ const x=Ln[i][a], y=Ln[i][b], u=x*x-y*y, v=2*x*y; A+=u; B+=v; C+=u*u-v*v; D+=2*u*v; }
+      const num=D-2*A*B/p, den=C-(A*A-B*B)/p, phi=Math.atan2(num,den)/4; if(Math.abs(phi)<1e-10) continue; moved=1; const c=Math.cos(phi), s=Math.sin(phi); for(let i=0;i<p;i++){ const x=Ln[i][a], y=Ln[i][b]; Ln[i][a]=c*x+s*y; Ln[i][b]=-s*x+c*y; } } if(!moved) break; }
+  return Ln.map((r,i)=>r.map(v=>v*h[i])); }
+function stParseTable(s){ const rows=String(s||"").trim().split(/\n+/).map(r=>r.trim()).filter(Boolean).map(r=>r.split(/[\t,;]+|\s{2,}|\s+/).map(x=>x.trim()).filter(Boolean)); if(!rows.length) return {head:[],data:[]};
+  let head=null; if(rows[0].some(x=>!Number.isFinite(Number(x)))){ head=rows.shift(); } const data=rows.map(r=>r.map(Number)).filter(r=>r.every(Number.isFinite)); const k=data.length?Math.max(...data.map(r=>r.length)):0;
+  return {head:head||Array.from({length:k},(_,i)=>"V"+(i+1)), data:data.filter(r=>r.length===k)}; }
+/* calculators */
+const BS_CALC=[
+ {id:"sd", t:"Standard Deviation", s:"Mean, standard deviation, confidence intervals",
+  tut:[["What it does","Describes the centre and spread of one set of measurements: mean, median, sample standard deviation (n − 1), range and the confidence intervals of the mean and of the standard deviation."],["When to use","First look at any measured data: incoming inspection, process data, test results before a capability or hypothesis test."],["Assumptions","The intervals assume independent values from a roughly normal population; check with the normality test."],["How to read it","The sample SD estimates process spread; the interval shows how precise that estimate is. Small samples give wide intervals."]],
+  ex:{x:"10.02 9.98 10.05 10.01 9.97 10.03 10.00 9.99 10.04 10.02 9.96 10.01 10.03 9.98 10.00"},
+  fields:[["x","area","Data (numbers separated by spaces, commas or new lines)"]],
+  run(v,al){ const x=parseNums(v.x); if(x.length<2) return {err:"Enter at least 2 values."}; const n=x.length, m=stMean(x), s=Math.sqrt(stVar(x)), sp=s*Math.sqrt((n-1)/n), se=s/Math.sqrt(n), tq=stTinv(1-al/2,n-1);
+   const lo=Math.sqrt((n-1)*s*s/stChi2inv(1-al/2,n-1)), hi=Math.sqrt((n-1)*s*s/stChi2inv(al/2,n-1));
+   return {rows:[["n",n],["Mean",stF(m)],["Median",stF(stMedian(x))],["Standard deviation (sample, n − 1)",stF(s)],["Standard deviation (population, n)",stF(sp)],["Variance (sample)",stF(s*s)],["Minimum / maximum",stF(Math.min(...x))+" / "+stF(Math.max(...x))],["Range",stF(Math.max(...x)-Math.min(...x))],["Standard error of the mean",stF(se)],["Coefficient of variation",m?stF(100*s/Math.abs(m),2)+"%":"—"],
+     [(100*(1-al)).toFixed(0)+"% CI of the mean",stF(m-tq*se)+" to "+stF(m+tq*se)],[(100*(1-al)).toFixed(0)+"% CI of the SD",stF(lo)+" to "+stF(hi)]], say:"Mean "+stF(m)+", SD "+stF(s)+" (n = "+n+")."}; }},
+ {id:"cpk", t:"Cp and Cpk", s:"Process capability against specification limits",
+  tut:[["What it does","Compares the process spread and centring with the specification: Cp (potential, spread only) and Cpk (actual, includes centring); Pp and Ppk use the overall SD."],["When to use","Process validation (PQ), supplier qualification, ongoing process monitoring of a stable process."],["Assumptions","The process is stable (in control) and the data are roughly normal. Within SD here uses the average moving range (MR-bar / 1.128) of the values in time order."],["How to read it","Cpk ≥ 1.33 is a common target, ≥ 1.67 for critical characteristics; the lower confidence bound should also meet your requirement. ppm is the expected fraction outside the limits under normality."]],
+  ex:{x:"10.02 9.98 10.05 10.01 9.97 10.03 10.00 9.99 10.04 10.02 9.96 10.01 10.03 9.98 10.00 10.02 9.99 10.01 10.04 9.97",lsl:"9.85",usl:"10.15"},
+  fields:[["x","area","Data in production order"],["lsl","text","Lower specification limit (LSL)"],["usl","text","Upper specification limit (USL)"]],
+  run(v,al){ const x=parseNums(v.x), L=parseFloat(v.lsl), U=parseFloat(v.usl); if(x.length<5) return {err:"Enter at least 5 values."}; if(!Number.isFinite(L)&&!Number.isFinite(U)) return {err:"Enter at least one specification limit."};
+   const n=x.length, m=stMean(x), so=Math.sqrt(stVar(x)); let mr=0; for(let i=1;i<n;i++) mr+=Math.abs(x[i]-x[i-1]); const sw=mr/(n-1)/1.128;
+   const cap=sd=>{ const cu=Number.isFinite(U)?(U-m)/(3*sd):Infinity, cl=Number.isFinite(L)?(m-L)/(3*sd):Infinity; return {cp:Number.isFinite(U)&&Number.isFinite(L)?(U-L)/(6*sd):NaN,cpk:Math.min(cu,cl),cu,cl}; };
+   const w=cap(sw), o=cap(so), z=stPhiInv(1-al), lb=w.cpk-z*Math.sqrt(1/(9*n)+w.cpk*w.cpk/(2*(n-1)));
+   const ppm=(Number.isFinite(U)?1-stPhi((U-m)/sw):0)+(Number.isFinite(L)?stPhi((L-m)/sw):0);
+   const verdict=w.cpk>=1.33?"capable (Cpk ≥ 1.33)":w.cpk>=1?"marginal (1.00 ≤ Cpk < 1.33)":"not capable (Cpk < 1.00)";
+   return {rows:[["n / mean",n+" / "+stF(m)],["SD within (MR-bar / 1.128)",stF(sw)],["SD overall",stF(so)],["Cp",stF(w.cp,2)],["Cpk (Cpl / Cpu)",stF(w.cpk,2)+" ("+stF(w.cl,2)+" / "+stF(w.cu,2)+")"],[(100*(1-al)).toFixed(0)+"% lower bound of Cpk",stF(lb,2)],["Pp / Ppk",stF(o.cp,2)+" / "+stF(o.cpk,2)],["Expected out of specification",stF(ppm*1e6,1)+" ppm"]],
+     say:"Cpk "+stF(w.cpk,2)+": the process is "+verdict+"."}; }},
+ {id:"pval", t:"P-Value", s:"p-value from a z, t, chi-square or F statistic",
+  tut:[["What it does","Converts a test statistic into a p-value: the probability of a result at least this extreme if the null hypothesis is true."],["When to use","When you have a statistic from a report or another tool and need its p-value or want to check one."],["Assumptions","The statistic follows the chosen distribution under the null hypothesis, with the right degrees of freedom."],["How to read it","p < alpha: reject the null hypothesis. A p-value is not the probability that the null is true, and says nothing about the size of the effect."]],
+  ex:{dist:"t",stat:"2.31",df1:"14",df2:"",alt:"two"},
+  fields:[["dist","sel","Distribution",[["z","z (standard normal)"],["t","t"],["chi2","Chi-square"],["F","F"]]],["stat","text","Test statistic"],["df1","text","Degrees of freedom (t, chi-square; F numerator)"],["df2","text","F denominator degrees of freedom"],["alt","sel","Alternative",[["two","Two-sided"],["less","Left tail (less)"],["greater","Right tail (greater)"]]]],
+  run(v,al){ const x=parseFloat(v.stat), d1=parseFloat(v.df1), d2=parseFloat(v.df2), D=v.dist||"z", alt=v.alt||"two"; if(!Number.isFinite(x)) return {err:"Enter the statistic."};
+   let cdf; if(D==="z") cdf=stPhi(x); else if(D==="t"){ if(!(d1>0)) return {err:"Enter the degrees of freedom."}; cdf=stTcdf(x,d1); } else if(D==="chi2"){ if(!(d1>0)) return {err:"Enter the degrees of freedom."}; if(x<0) return {err:"Chi-square must be ≥ 0."}; cdf=stChi2cdf(x,d1); } else { if(!(d1>0&&d2>0)) return {err:"Enter both degrees of freedom."}; if(x<0) return {err:"F must be ≥ 0."}; cdf=1-fPval(x,d1,d2); }
+   const p=alt==="less"?cdf:alt==="greater"?1-cdf:Math.min(1,2*Math.min(cdf,1-cdf));
+   return {rows:[["Distribution",D==="chi2"?"Chi-square":D],["Statistic",stF(x)],["Alternative",alt==="two"?"Two-sided":alt==="less"?"Left tail":"Right tail"],["p-value",stP(p)]],p,say:pEq(p)+(p<al?" (below alpha ":" (not below alpha ")+al+")"+": "+(p<al?"reject":"do not reject")+" the null hypothesis."}; }},
+ {id:"norm", t:"Test of Normality", s:"Anderson-Darling and Shapiro-Wilk",
+  tut:[["What it does","Tests whether the data could come from a normal distribution: Anderson-Darling (sensitive in the tails) and Shapiro-Wilk (powerful for small samples)."],["When to use","Before capability indices, normal tolerance intervals, t-tests on small samples and variables sampling plans."],["Assumptions","Independent values; at least 8 values for Anderson-Darling and 3 for Shapiro-Wilk. Ties from coarse gauge resolution can make the test reject."],["How to read it","p ≥ alpha: no evidence against normality (it is not proof of normality). p < alpha: the data are not normal; consider a transformation, a non-normal model or a non-parametric method."]],
+  ex:{x:"4.12 4.08 4.15 4.11 4.09 4.13 4.10 4.07 4.14 4.12 4.11 4.10 4.16 4.09 4.12 4.13 4.08 4.11 4.10 4.12"},
+  fields:[["x","area","Data"]],
+  run(v,al){ const x=parseNums(v.x); if(x.length<3) return {err:"Enter at least 3 values."}; const sw=stShapiro(x), ad=stAD(x); const rows=[["n",x.length],["Mean / SD",stF(stMean(x))+" / "+stF(Math.sqrt(stVar(x)))]];
+   if(ad) rows.push(["Anderson-Darling A² (adjusted A*)",stF(ad.A,4)+" ("+stF(ad.As,4)+")"],["Anderson-Darling p-value",stP(ad.p)]); else rows.push(["Anderson-Darling","needs at least 8 values"]);
+   if(sw) rows.push(["Shapiro-Wilk W",stF(sw.W,4)],["Shapiro-Wilk p-value",stP(sw.p)]);
+   const p=ad?ad.p:sw?sw.p:NaN; return {rows,p,plot:{type:"qq",x},say:Number.isFinite(p)?(p<al?pEq(p)+" (below alpha "+al+"): the data do not look normal.":pEq(p)+" (not below alpha "+al+"): no evidence against normality."):""}; }},
+ {id:"ttest", t:"T-Test", s:"One-sample, independent or paired t-test",
+  tut:[["What it does","Compares means: one sample against a target value, two independent groups, or paired measurements (before and after, two methods on the same parts)."],["When to use","Design verification against a requirement, comparing two suppliers, lots or methods, checking a process change."],["Assumptions","Independent observations (pairs for the paired test), roughly normal data or differences, or larger samples. Welch's test (default) does not assume equal variances."],["How to read it","p < alpha: the means differ (or differ from the target). Look at the confidence interval of the difference to judge whether the size of the difference matters in practice."]],
+  ex:{mode:"ind",a:"10.2 10.4 10.1 10.5 10.3 10.2 10.6 10.4 10.3 10.5",b:"10.0 10.1 9.9 10.2 10.0 10.1 9.8 10.0 10.2 9.9",mu:"10",eq:"welch",alt:"two"},
+  fields:[["mode","sel","Test",[["one","One-sample t-test"],["ind","Independent samples t-test"],["pair","Paired t-test"]]],["a","area","Sample A (or the only sample)"],["b","area","Sample B (independent or paired; same order as A for pairs)"],["mu","text","Target mean μ0 (one-sample)"],["eq","sel","Variances (independent test)",[["welch","Not assumed equal (Welch)"],["pooled","Assumed equal (pooled)"]]],["alt","sel","Alternative",[["two","Two-sided (≠)"],["less","Less (A < B or < μ0)"],["greater","Greater (A > B or > μ0)"]]]],
+  run(v,al){ const a=parseNums(v.a), b=parseNums(v.b), mode=v.mode||"one", alt=v.alt||"two"; let t,df,diff,se,lab;
+   if(mode==="one"){ const mu=parseFloat(v.mu); if(a.length<2||!Number.isFinite(mu)) return {err:"Enter sample A (≥ 2 values) and the target μ0."}; diff=stMean(a)-mu; se=Math.sqrt(stVar(a)/a.length); df=a.length-1; lab="Mean − μ0"; }
+   else if(mode==="pair"){ if(a.length<2||a.length!==b.length) return {err:"Paired samples need the same number of values (≥ 2)."}; const d=a.map((x,i)=>x-b[i]); diff=stMean(d); se=Math.sqrt(stVar(d)/d.length); df=d.length-1; lab="Mean difference (A − B)"; }
+   else { if(a.length<2||b.length<2) return {err:"Enter at least 2 values in each sample."}; const va=stVar(a), vb=stVar(b), na=a.length, nb=b.length; diff=stMean(a)-stMean(b);
+     if(v.eq==="pooled"){ const sp=((na-1)*va+(nb-1)*vb)/(na+nb-2); se=Math.sqrt(sp*(1/na+1/nb)); df=na+nb-2; } else { se=Math.sqrt(va/na+vb/nb); df=(va/na+vb/nb)**2/((va/na)**2/(na-1)+(vb/nb)**2/(nb-1)); } lab="Difference of means (A − B)"; }
+   if(!(se>0)) return {err:"The data have no spread; the t statistic is undefined."}; t=diff/se; const cdf=stTcdf(t,df), p=alt==="less"?cdf:alt==="greater"?1-cdf:2*Math.min(cdf,1-cdf), q=stTinv(1-al/2,df);
+   const rows=[["Test",mode==="one"?"One-sample":mode==="pair"?"Paired":(v.eq==="pooled"?"Independent, pooled variance":"Independent, Welch")],["n",mode==="one"?a.length:a.length+" / "+b.length],[lab,stF(diff)],["Standard error",stF(se)],["t",stF(t,4)],["Degrees of freedom",stF(df,2)],["p-value ("+(alt==="two"?"two-sided":alt)+")",stP(p)],[(100*(1-al)).toFixed(0)+"% CI",stF(diff-q*se)+" to "+stF(diff+q*se)]];
+   return {rows,p,say:pEq(p)+(p<al?" (below alpha ":" (not below alpha ")+al+")"+": "+(p<al?"the difference is statistically significant.":"no significant difference shown.")}; }},
+ {id:"binom", t:"Binomial Test", s:"Exact test of a proportion",
+  tut:[["What it does","Tests whether an observed proportion (k successes or failures in n trials) differs from a reference proportion p0, with the exact binomial distribution and a Clopper-Pearson confidence interval."],["When to use","Pass/fail results: defect rate against a claim, success rate in a usability or reliability test, complaint rate against a threshold."],["Assumptions","Independent trials with the same probability of success."],["How to read it","p < alpha: the true proportion differs from p0 in the chosen direction. The confidence interval gives the range of proportions consistent with the data."]],
+  ex:{k:"3",n:"120",p0:"0.01",alt:"greater"},
+  fields:[["k","text","Number of events (k)"],["n","text","Number of trials (n)"],["p0","text","Reference proportion p0 (0 to 1)"],["alt","sel","Alternative",[["two","Two-sided (≠ p0)"],["less","Less than p0"],["greater","Greater than p0"]]]],
+  run(v,al){ const k=parseInt(v.k), n=parseInt(v.n), p0=parseFloat(v.p0), alt=v.alt||"two"; if(!(n>0&&k>=0&&k<=n&&p0>0&&p0<1)) return {err:"Enter 0 ≤ k ≤ n and 0 < p0 < 1."};
+   const lpmf=i=>lnGam(n+1)-lnGam(i+1)-lnGam(n-i+1)+i*Math.log(p0)+(n-i)*Math.log(1-p0), pm=i=>Math.exp(lpmf(i)); let p;
+   if(alt==="less"){ p=0; for(let i=0;i<=k;i++) p+=pm(i); } else if(alt==="greater"){ p=0; for(let i=k;i<=n;i++) p+=pm(i); } else { const d=pm(k)*(1+1e-7); p=0; for(let i=0;i<=n;i++){ const q=pm(i); if(q<=d) p+=q; } }
+   p=Math.min(1,p); const ci=cpInt(k,n,1-al);
+   return {rows:[["Observed proportion k / n",k+" / "+n+" = "+stF(k/n,4)],["Reference p0",p0],["Alternative",alt==="two"?"Two-sided":alt==="less"?"Less":"Greater"],["Exact p-value",stP(p)],[(100*(1-al)).toFixed(0)+"% CI (Clopper-Pearson)",stF(ci[0],4)+" to "+stF(ci[1],4)]],p,say:pEq(p)+(p<al?" (below alpha ":" (not below alpha ")+al+")"+": "+(p<al?"the proportion differs from p0.":"no evidence that the proportion differs from p0.")}; }},
+ {id:"anova", t:"ANOVA", s:"One-way analysis of variance",
+  tut:[["What it does","Tests whether the means of three or more groups are equal (for example lots, machines, operators or suppliers) by comparing the variation between groups with the variation within groups."],["When to use","Comparing several lots or settings in process validation (OQ), or several suppliers or test sites."],["Assumptions","Independent observations, roughly normal data within each group and similar variances. With very unequal variances use a Welch-type test or a non-parametric test."],["How to read it","p < alpha: at least one group mean differs; it does not say which. Look at the group means and run pairwise comparisons with a correction if needed. Eta squared shows the share of variation explained by the groups."]],
+  ex:{g1:"20.1 20.4 19.9 20.2 20.3",g2:"20.6 20.8 20.5 20.9 20.7",g3:"20.0 20.2 20.1 19.8 20.1",g4:"",g5:"",g6:""},
+  fields:[["g1","area","Group 1"],["g2","area","Group 2"],["g3","area","Group 3"],["g4","area","Group 4 (optional)"],["g5","area","Group 5 (optional)"],["g6","area","Group 6 (optional)"]],
+  run(v,al){ const G=["g1","g2","g3","g4","g5","g6"].map(k=>parseNums(v[k])).filter(g=>g.length); if(G.length<2||G.some(g=>g.length<2)) return {err:"Enter at least 2 groups with 2 or more values each."};
+   const all=G.flat(), N=all.length, k=G.length, gm=stMean(all); let ssb=0, ssw=0; G.forEach(g=>{ const m=stMean(g); ssb+=g.length*(m-gm)**2; g.forEach(x=>ssw+=(x-m)**2); });
+   const dfb=k-1, dfw=N-k, msb=ssb/dfb, msw=ssw/dfw, F=msb/msw, p=fPval(F,dfb,dfw);
+   const rows=[["Groups / total n",k+" / "+N],...G.map((g,i)=>["Group "+(i+1)+" mean (SD), n",stF(stMean(g))+" ("+stF(Math.sqrt(stVar(g)))+"), "+g.length]),["Between groups: SS, df, MS",stF(ssb)+", "+dfb+", "+stF(msb)],["Within groups: SS, df, MS",stF(ssw)+", "+dfw+", "+stF(msw)],["F",stF(F,4)],["p-value",stP(p)],["Eta squared",stF(ssb/(ssb+ssw),3)]];
+   return {rows,p,say:"F("+dfb+", "+dfw+") = "+stF(F,3)+", "+pEq(p)+": "+(p<al?"at least one group mean differs.":"no significant difference between the group means.")}; }},
+ {id:"reg", t:"Regression", s:"Linear regression with up to three predictors",
+  tut:[["What it does","Fits a straight-line (least squares) model of Y on one to three X variables: coefficients, their standard errors and p-values, R² and the overall F-test."],["When to use","Linearity of a measurement system, stability or shelf-life trends, relation between a process setting and a quality characteristic."],["Assumptions","Linear relation, independent residuals with constant spread, roughly normal residuals; predictors not strongly correlated with each other."],["How to read it","A coefficient with p < alpha is different from zero. R² is the share of the variation in Y explained by the model. Always look at the residuals; a high R² does not prove cause and effect."]],
+  ex:{y:"2.1 3.9 6.2 7.8 10.1 12.2 13.8 16.1 18.0 19.9",x1:"1 2 3 4 5 6 7 8 9 10",x2:"",x3:""},
+  fields:[["y","area","Y (response)"],["x1","area","X1"],["x2","area","X2 (optional)"],["x3","area","X3 (optional)"]],
+  run(v,al){ const y=parseNums(v.y); const Xs=["x1","x2","x3"].map(k=>parseNums(v[k])).filter(c=>c.length); if(!Xs.length) return {err:"Enter Y and at least X1."}; if(Xs.some(c=>c.length!==y.length)) return {err:"Y and every X need the same number of values."};
+   const n=y.length, p=Xs.length+1; if(n<=p+0) return {err:"Need more observations than coefficients."}; const X=y.map((_,i)=>[1,...Xs.map(c=>c[i])]);
+   const XtX=Array.from({length:p},(_,a)=>Array.from({length:p},(_,b)=>X.reduce((s,r)=>s+r[a]*r[b],0))), Xty=Array.from({length:p},(_,a)=>X.reduce((s,r,i)=>s+r[a]*y[i],0)); const Inv=stInv(XtX); if(!Inv) return {err:"The predictors are collinear; remove one."};
+   const beta=Inv.map(r=>r.reduce((s,v2,j)=>s+v2*Xty[j],0)), fit=X.map(r=>r.reduce((s,v2,j)=>s+v2*beta[j],0)), res=y.map((v2,i)=>v2-fit[i]); const ym=stMean(y), sse=res.reduce((s,e)=>s+e*e,0), sst=y.reduce((s,v2)=>s+(v2-ym)**2,0), dfe=n-p, mse=sse/dfe;
+   const R2=1-sse/sst, R2a=1-(1-R2)*(n-1)/dfe, F=((sst-sse)/(p-1))/mse, pF=fPval(F,p-1,dfe), q=stTinv(1-al/2,dfe);
+   const rows=[["n",n]]; beta.forEach((b,j)=>{ const se=Math.sqrt(mse*Inv[j][j]), t=b/se, pv=2*(1-stTcdf(Math.abs(t),dfe)); rows.push([(j?"X"+j:"Intercept")+": coefficient (SE)",stF(b)+" ("+stF(se)+"), t = "+stF(t,3)+", "+pEq(pv)+", CI "+stF(b-q*se)+" to "+stF(b+q*se)]); });
+   rows.push(["R² / adjusted R²",stF(R2,4)+" / "+stF(R2a,4)],["Residual SD",stF(Math.sqrt(mse))],["F ("+(p-1)+", "+dfe+")",stF(F,3)+", "+pEq(pF)]);
+   return {rows,p:pF,plot:Xs.length===1?{type:"xy",x:Xs[0],y,b:beta}:null,say:"Y = "+beta.map((b,j)=>(j?(b<0?" − ":" + ")+stF(Math.abs(b))+"·X"+j:stF(b))).join("")+"; R² = "+stF(R2,3)+", model "+pEq(pF)+"."}; }},
+ {id:"fa", t:"Factor Analysis", s:"Exploratory factor analysis (principal components, varimax)",
+  tut:[["What it does","Finds a few underlying factors that explain the correlations between many variables. Extraction by principal components on the correlation matrix, factors with eigenvalue above 1 (or your number), varimax rotation."],["When to use","Survey or audit questionnaires (for example supplier or training effectiveness surveys), many correlated test parameters, reducing variables before further analysis."],["Assumptions","Rows are observations and columns are variables; at least 3 variables and clearly more rows than variables; linear relations. KMO above 0.6 and a significant Bartlett test suggest the data are suitable."],["How to read it","Loadings above about 0.5 show which variables belong to a factor; communality is the share of a variable's variance explained by the factors; the variance table shows how much each factor explains."]],
+  ex:{m:"Q1\tQ2\tQ3\tQ4\tQ5\tQ6\n3\t3\t4\t3\t3\t2\n4\t3\t4\t4\t4\t4\n4\t3\t3\t3\t3\t3\n1\t2\t1\t3\t3\t3\n4\t4\t4\t2\t2\t2\n5\t3\t4\t3\t3\t3\n3\t3\t2\t3\t3\t4\n4\t4\t3\t2\t3\t3\n3\t4\t3\t4\t4\t4\n3\t3\t3\t4\t4\t3\n3\t3\t3\t1\t1\t1\n4\t3\t4\t1\t1\t1\n2\t3\t1\t2\t3\t2\n2\t2\t3\t2\t3\t3",nf:""},
+  fields:[["m","area","Data table: one row per observation, columns separated by tabs, commas or spaces; first row may hold the names"],["nf","text","Number of factors (empty = eigenvalue above 1)"]],
+  run(v,al){ const T=stParseTable(v.m), D=T.data, p=T.head.length, n=D.length; if(p<3||n<p+2) return {err:"Need at least 3 variables and more rows than variables + 1."};
+   const cols=T.head.map((_,j)=>D.map(r=>r[j])), mu=cols.map(stMean), sd=cols.map(c=>Math.sqrt(stVar(c))); if(sd.some(s=>!(s>0))) return {err:"A variable has no variation."};
+   const R=cols.map((a,i)=>cols.map((b,j)=>a.reduce((s,x,k)=>s+(x-mu[i])*(b[k]-mu[j]),0)/((n-1)*sd[i]*sd[j])));
+   const E=stJacobi(R); let k=parseInt(v.nf); if(!(k>=1&&k<=p)) k=Math.max(1,E.vals.filter(x=>x>1).length);
+   let L=T.head.map((_,i)=>E.vecs.slice(0,k).map((vec,f)=>vec[i]*Math.sqrt(Math.max(0,E.vals[f])))); L=stVarimax(L);
+   const ss=Array.from({length:k},(_,f)=>L.reduce((s,r)=>s+r[f]*r[f],0)); const order=ss.map((s,f)=>[s,f]).sort((a,b)=>b[0]-a[0]).map(x=>x[1]); L=L.map(r=>order.map(f=>r[f])); order.forEach((f,i)=>{ if(L.reduce((s,r)=>s+r[i],0)<0) L.forEach(r=>r[i]=-r[i]); });
+   const Ri=stInv(R), det=stDet(R); let kmo=NaN; if(Ri){ let r2=0,a2=0; for(let i=0;i<p;i++) for(let j=0;j<p;j++) if(i!==j){ r2+=R[i][j]**2; a2+=(-Ri[i][j]/Math.sqrt(Ri[i][i]*Ri[j][j]))**2; } kmo=r2/(r2+a2); }
+   const chi=-(n-1-(2*p+5)/6)*Math.log(Math.max(det,1e-300)), dfb=p*(p-1)/2, pb=1-stChi2cdf(chi,dfb);
+   const rows=[["Observations / variables",n+" / "+p],["KMO measure of sampling adequacy",stF(kmo,3)],["Bartlett test of sphericity","χ² = "+stF(chi,2)+", df = "+dfb+", "+pEq(pb)],["Eigenvalues",E.vals.map(x=>stF(x,3)).join(", ")],["Factors kept",k+" (rotation: varimax)"],...order.map((f,i)=>["Factor "+(i+1)+" explains",stF(100*L.reduce((s,r)=>s+r[i]*r[i],0)/p,1)+"% of the variance"])];
+   const tab=[["Variable",...order.map((_,i)=>"F"+(i+1)),"Communality"],...T.head.map((h,i)=>[h,...L[i].map(x=>stF(x,3)),stF(L[i].reduce((s,x)=>s+x*x,0),3)])];
+   return {rows,table:tab,p:pb,say:k+" factor(s) explain "+stF(100*L.flat().reduce((s,x)=>s+x*x,0)/p,1)+"% of the total variance. KMO "+stF(kmo,2)+(kmo>=0.6?" (adequate).":" (low: interpret with care).")}; }}
+];
+function bsPlot(pl){ const W=320,H=200,P=30; const s=(v,a,b,o,len)=>o+(v-a)/(b-a||1)*len; let pts=[], line="", xs, ys, ttl="";
+  if(pl.type==="qq"){ const x=[...pl.x].sort((a,b)=>a-b), n=x.length; xs=x.map((_,i)=>stPhiInv((i+1-0.375)/(n+0.25))); ys=x; ttl="Normal probability plot";
+    const m=stMean(x), sd=Math.sqrt(stVar(x)); const a=Math.min(...xs), b=Math.max(...xs); line=[[a,m+sd*a],[b,m+sd*b]]; }
+  else { xs=pl.x; ys=pl.y; ttl="Data and fitted line"; const a=Math.min(...xs), b=Math.max(...xs); line=[[a,pl.b[0]+pl.b[1]*a],[b,pl.b[0]+pl.b[1]*b]]; }
+  const x0=Math.min(...xs,line[0][0]), x1=Math.max(...xs,line[1][0]), y0=Math.min(...ys,line[0][1],line[1][1]), y1=Math.max(...ys,line[0][1],line[1][1]);
+  const X=v=>s(v,x0,x1,P,W-P-10), Y=v=>H-s(v,y0,y1,P-10,H-P-10);
+  return '<svg viewBox="0 0 '+W+' '+H+'" class="bsPlot" role="img" aria-label="'+ttl+'"><text x="'+(W/2)+'" y="14" text-anchor="middle" font-size="11" fill="currentColor">'+ttl+'</text><line x1="'+P+'" y1="'+(H-P+10)+'" x2="'+(W-10)+'" y2="'+(H-P+10)+'" stroke="currentColor" stroke-opacity=".4"/><line x1="'+P+'" y1="20" x2="'+P+'" y2="'+(H-P+10)+'" stroke="currentColor" stroke-opacity=".4"/>'
+   +'<line x1="'+X(line[0][0]).toFixed(1)+'" y1="'+Y(line[0][1]).toFixed(1)+'" x2="'+X(line[1][0]).toFixed(1)+'" y2="'+Y(line[1][1]).toFixed(1)+'" stroke="#c0392b" stroke-width="1.5"/>'
+   +xs.map((v,i)=>'<circle cx="'+X(v).toFixed(1)+'" cy="'+Y(ys[i]).toFixed(1)+'" r="3" fill="#1f5f8b" fill-opacity=".8"/>').join("")+'</svg>'; }
+function renderBstats(){ const m=document.getElementById("main"); m.innerHTML="";
+  m.append(toolHead("Basic Statistical Calculators","Everyday statistics for QA work, each with a short tutorial. Paste your data, read the result and export a PDF.",["#stats","Statistical Tools"]));
+  const cur=BS_CALC.find(c=>c.id===BS.cur)||BS_CALC[0];
+  const nav=areaNav({label:"Calculator",unit:"",items:BS_CALC.map(c=>({k:c.id,l:c.t,n:null})),cur:cur.id,onPick:k=>{ BS.cur=k; bsSave(); renderBstats(); }});
+  const v=BS.in[cur.id]=BS.in[cur.id]||{}; const card=el("div",{class:"card bsCard"}, el("h3",{class:"secTitle"},cur.t), el("p",{class:"src"},cur.s));
+  const out=el("div",{class:"bsOut",role:"status"});
+  const run=()=>{ bsSave(); out.innerHTML=""; const r=cur.run(v,stAlpha()); if(!r||r.err){ out.append(el("p",{class:"warn"},r&&r.err||"Enter the data.")); return null; }
+    if(r.say) out.append(el("p",{class:"verdict"+(r.p!==undefined&&r.p<stAlpha()?"":" ok")},r.say));
+    const tb=el("table",{class:"map rmTbl bsTbl"}); r.rows.forEach(([k,x])=>tb.append(el("tr",{}, el("th",{},k), el("td",{},String(x))))); out.append(tb);
+    if(r.table){ const t2=el("table",{class:"map rmTbl bsTbl"}); r.table.forEach((row,i)=>t2.append(el("tr",{}, ...row.map(c=>el(i?"td":"th",{},String(c)))))); out.append(el("div",{class:"tblWrap"},t2)); }
+    if(r.plot){ const d=el("div",{class:"bsPlotWrap"}); d.innerHTML=bsPlot(r.plot); out.append(d); }
+    out.append(el("div",{class:"mact"}, el("button",{class:"smpBtn",type:"button",onclick:async()=>{ const secs=[{h:"Input",rows:cur.fields.map(f=>[f[2].replace(/\s*\(.*$/,""),String(v[f[0]]??"").replace(/\s+/g," ").slice(0,600)||"-"])},{h:"Results",rows:r.rows.map(([a,b])=>[a,String(b)])}];
+      if(r.table) secs.push({h:"Loadings",rows:[{table:{auto:true,size:8.5,head:r.table[0],rows:r.table.slice(1)}}]}); const d=mkDoc("Basic statistics",cur.t,secs,r.say?{text:r.say,ok:!(r.p<stAlpha())}:null).pdf; d.code="STC"; await saveFile(safeName("Statistics_"+cur.t.replace(/\W+/g,"_"),"pdf"),buildPdf(d),null); }},"Export PDF"))); return r; };
+  cur.fields.forEach(([k,typ,lab,opts])=>{ if(typ==="sel"){ if(v[k]===undefined) v[k]=opts[0][0]; card.append(el("label",{class:"rField"}, el("span",{},lab), selectEl(opts,v[k],x=>{ v[k]=x; run(); }))); } else card.append(txtField(lab,v[k]||"",x=>{ v[k]=x; run(); },"",typ==="area")); });
+  card.append(el("label",{class:"rField"}, el("span",{},"Significance level alpha"), selectEl([["0.10","0.10"],["0.05","0.05 (common)"],["0.01","0.01"]],String(BS.alpha),x=>{ BS.alpha=x; run(); })));
+  card.append(el("div",{class:"mact"}, el("button",{class:"cta",type:"button",onclick:()=>{ BS.in[cur.id]=JSON.parse(JSON.stringify(cur.ex)); bsSave(); renderBstats(); }},"Load example"), el("button",{class:"linkBtn",type:"button",onclick:()=>{ BS.in[cur.id]={}; bsSave(); renderBstats(); }},"Clear")));
+  card.append(out);
+  const tut=el("details",{class:"wkGuide bsTut"}, el("summary",{}, el("span",{class:"wkGI","aria-hidden":"true"},"i"),"Tutorial · "+cur.t)); if(innerWidth>=900) tut.open=true; cur.tut.forEach(([a,b])=>tut.append(el("div",{class:"wkGB"}, el("b",{},a), el("p",{},b))));
+  m.append(nav.pick, el("div",{class:"dLay"}, nav.side, el("div",{class:"wkGrid"}, card, el("div",{class:"wkSide"}, tut))));
+  if(Object.keys(v).some(k=>String(v[k]||"").trim()&&!cur.fields.find(f=>f[0]===k&&f[1]==="sel"))) run(); tcDom(m); }
+function bstatsIntro(){ sideTour({keys:BS_CALC.map(c=>c.id), home:BS.cur, show:k=>keepScroll(()=>{ BS.cur=k; renderBstats(); }), content:()=>[...document.querySelectorAll(".bsCard h3.secTitle, .bsTut summary")].filter(x=>x.offsetParent),
+  restore:k=>{ BS.cur=k; if(location.hash==="#bstats") keepScroll(renderBstats); }, commit:k=>{ BS.cur=k; bsSave(); keepScroll(renderBstats); } }); }
 function renderSqForm(fid){
   const F=SQF[fid]; const m=document.getElementById("main"); m.innerHTML=""; dailySetTab(fid);
   { const th=toolHead(tc(F.t),F.sub,["#daily","Daily QA Work"]); th.classList.add("sqHead"); m.append(th); }
@@ -6560,11 +6754,11 @@ function pinScroll(){ const a=document.getElementById("navAnchor"); const y=a?a.
 let LAST_ROUTE=null;
 function route(){
   const id=(location.hash||"").slice(1)||"home";
-  { const sec=["random","dilemmas","audit"].includes(id)?"practice":["tools","daily","stats","sampling","msa","grr","rmtools","impact","risk","cvss","projects"].includes(id)||SQF[id]?"tools":"learn"; document.documentElement.dataset.sec=sec; document.documentElement.dataset.mod=(sec==="practice"||CH.some(c=>c.id===id))?"train":""; }
+  { const sec=["random","dilemmas","audit"].includes(id)?"practice":["tools","daily","stats","sampling","bstats","msa","grr","rmtools","impact","risk","cvss","projects"].includes(id)||SQF[id]?"tools":"learn"; document.documentElement.dataset.sec=sec; document.documentElement.dataset.mod=(sec==="practice"||CH.some(c=>c.id===id))?"train":""; }
   if(SQF[id]){ closeModal(); renderNav(id); renderSqForm(id); totals(); try{ if(navPinned()) pinScroll(); else window.scrollTo({top:0}); }catch(e){} return; }
-  if(["daily","stats","sampling","risk","rmtools"].includes(id)&&LAST_ROUTE!==id) setTimeout(()=>{ if((location.hash||"").slice(1)!==id) return; if(id==="daily") dailyIntro(); else if(id==="risk") riskIntro(); else if(id==="rmtools") rmtIntro(); else statsIntro(id); },450);
+  if(["daily","stats","sampling","risk","rmtools","bstats"].includes(id)&&LAST_ROUTE!==id) setTimeout(()=>{ if((location.hash||"").slice(1)!==id) return; if(id==="daily") dailyIntro(); else if(id==="risk") riskIntro(); else if(id==="rmtools") rmtIntro(); else if(id==="bstats") bstatsIntro(); else statsIntro(id); },450);
   LAST_ROUTE=id;
-  if(["home","explore","dilemmas","map","sampling","tools","daily","stats","dates","audit","risk","msa","grr","rmtools","impact","cvss","projects"].includes(id)){ closeModal(); renderNav(id); ({home:()=>renderHome(false),explore:()=>renderHome(true),dilemmas:renderDilemmas,map:renderMap,sampling:renderSampling,tools:()=>renderTools("daily"),daily:()=>renderTools("daily"),stats:()=>renderTools("stats"),risk:renderRisk,msa:renderMsa,grr:renderGrr,rmtools:renderRmTools,impact:renderImpact,cvss:renderCvss,projects:renderProjects,dates:renderDates,audit:renderAudit})[id](); totals(); try{ if(navPinned()) pinScroll(); else window.scrollTo({top:0}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
+  if(["home","explore","dilemmas","map","sampling","bstats","tools","daily","stats","dates","audit","risk","msa","grr","rmtools","impact","cvss","projects"].includes(id)){ closeModal(); renderNav(id); ({home:()=>renderHome(false),explore:()=>renderHome(true),dilemmas:renderDilemmas,map:renderMap,sampling:renderSampling,tools:()=>renderTools("daily"),daily:()=>renderTools("daily"),stats:()=>renderTools("stats"),risk:renderRisk,msa:renderMsa,grr:renderGrr,rmtools:renderRmTools,impact:renderImpact,cvss:renderCvss,projects:renderProjects,bstats:renderBstats,dates:renderDates,audit:renderAudit})[id](); totals(); try{ if(navPinned()) pinScroll(); else window.scrollTo({top:0}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
   if(id==="random"){ closeModal(); renderNav("random"); renderRandom(); totals(); try{ if(navPinned()) pinScroll(); else window.scrollTo({top:document.getElementById("dnav").offsetTop}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
   const valid=CH.some(c=>c.id===id)?id:CH[0].id;
   currentTab=pendingTab||""; pendingTab=null;
