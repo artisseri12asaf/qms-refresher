@@ -1462,6 +1462,14 @@ header.top{padding-top:var(--topPad,0px)}
 .bsOut .verdict{margin:8px 0}
 .bsPlotWrap{max-width:420px; color:var(--muted)} .bsPlot{width:100%; height:auto}
 .bsCard .rField{margin-bottom:6px}
+/* 2.14.0 lens pop-up on Statistical Tools; drafts and project link */
+.lensPop{position:fixed; z-index:310; width:280px; padding:12px 14px; border-radius:14px; background:color-mix(in srgb,var(--card) 96%,transparent); border:1px solid var(--line); box-shadow:0 14px 34px rgba(0,0,0,.22); transform-origin:0 0; transform:scale(.2); opacity:0; transition:transform .45s cubic-bezier(.2,.8,.2,1), opacity .35s; pointer-events:none}
+.lensPop.in{transform:scale(1); opacity:1} .lensPop.out{transform:scale(.9); opacity:0}
+.lensPop b{display:block; font-size:13px; color:#1f5f8b; margin-bottom:4px}
+.lensPop ul{margin:0; padding-left:18px} .lensPop li{font-size:13px; color:var(--muted); opacity:0; transform:translateY(6px); transition:opacity .35s, transform .35s; line-height:1.5}
+.lensPop li.in{opacity:.78; transform:none} .lensPop li.lpGreen{color:#3fae6a; font-weight:700} .lensPop li.lpGreen.in{opacity:1}
+@media (prefers-reduced-motion:reduce){ .lensPop{display:none} }
+.prjLink{max-width:320px} .qdRow{flex-wrap:wrap; gap:8px}
 /* compact form cards on wide screens */
 @media (min-width:761px){
  .dLay .toolGrid{gap:10px; grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
@@ -2449,7 +2457,7 @@ const DOC_COPY="\u00a9 No part of this handbook\u2019s original content may be c
 const DOC_SLOGAN=["Crafting Quality","Engineering Excellence"];
 const DOC_CODE={"sq-quest": "SQQ", "sq-eval": "SEV", "sq-scar": "SCR", "sq-scn": "SCN", "sq-asl": "ASL", "sq-fai": "FAI", "sq-sqa": "SQA", "sq-cmo": "CMO", "qa-capa": "CAP", "qa-mrb": "MRB", "qa-dev": "DEV", "qa-ncr": "NCR", "qa-iap": "AUP", "qa-iac": "AUC", "qa-qp": "PLN", "qa-vis": "INS", "qa-trn": "TRN", "qa-gtr": "TRG", "qa-mvp": "MVP", "qa-mvpr": "MVR", "qa-sop": "SOP", "qa-wi": "WIS", "qa-pol": "POL", "qa-prot": "PRO", "qa-rep": "REP", "qa-iq": "IQP", "qa-oq": "OQP", "qa-pq": "PQP", "qa-tmv": "TMV", "qa-nps": "NPS", "qa-npsl": "NPL", "qa-cmp": "CMP", "qa-rpt": "RPT", "qa-hhe": "HHE", "qa-fsca": "FSC", "qa-pmsp": "PMS", "qa-psur": "PSR", "qa-trend": "TRD", "qa-ddp": "DDP", "qa-dir": "DIR", "qa-drv": "DRV", "qa-trace": "TRM", "qa-dtc": "DTC", "qa-dhf": "DHF", "qa-mr": "MRV", "qa-chl": "CHL", "qa-qo": "KPI", "qa-qm": "QMN"};
 const RISK_CODE={pha:"PHA",ha:"RIS",sra:"SRA",dfmea:"DFM",pfmea:"PFM",ufmea:"UFM",sfmea:"SFM",urra:"URA",fta:"FTA",matrix:"RAM",sys:"SYS"};
-const TPL_EFF={CHL:"21/11/2026"}; /* prefix -> DD/MM/YYYY of the release in which that template last changed; default DOC_REL */
+const TPL_EFF={CHL:"21/11/2026",PHA:"21/11/2026",RIS:"21/11/2026",SRA:"21/11/2026",DFM:"21/11/2026",PFM:"21/11/2026",UFM:"21/11/2026",SFM:"21/11/2026",URA:"21/11/2026",STC:"21/11/2026"}; /* prefix -> DD/MM/YYYY of the release in which that template last changed; default DOC_REL */
 function tplNo(code){ const eff=TPL_EFF[code]||DOC_REL; return {no:code+"-0000-"+eff.slice(-2),eff}; }
 function docNo(code){ const S=lsGet("qah-docno-v1",{}); const yy=String(new Date().getFullYear()).slice(-2), k=code+"-"+yy; S[k]=(S[k]||0)+1; lsSet("qah-docno-v1",S); return code+"-"+String(S[k]).padStart(4,"0")+"-"+yy; }
 function docCodeOf(doc){ if(doc.code) return doc.code; const t=[doc.title,doc.subtitle,doc.footer].join(" ");
@@ -2457,18 +2465,18 @@ function docCodeOf(doc){ if(doc.code) return doc.code; const t=[doc.title,doc.su
   for(const [re,c] of R) if(re.test(t)) return c; return "QRF"; }
 function buildPdf(doc,opt){
   // doc: {title, subtitle, sections:[{h, rows:[[k,v]]}], decision:{text,ok}, hist:{bins,lo,w,mean,sd,n,LSL,USL}|null, data:[numbers]}
-  const pages=[]; let ops=[]; let y=800; const L=50, R=545; const code=docCodeOf(doc), ref=doc.ref||docNo(code), TPL=tplNo(code), NAVY="0.12 0.37 0.55";
-  const newPage=()=>{ if(ops.length) pages.push(ops.join("\n")); ops=[]; y=722; };
+  const PW=doc.landscape?842:595, PH=doc.landscape?595:842; const pages=[]; let ops=[]; let y=PH-42; const L=50, R=PW-50; const code=docCodeOf(doc), ref=doc.ref||docNo(code), TPL=tplNo(code), NAVY="0.12 0.37 0.55";
+  const newPage=()=>{ if(ops.length) pages.push(ops.join("\n")); ops=[]; y=PH-120; };
   const text=(x,yy,s,size,bold,col,f)=>{ ops.push(`${col||"0.12 0.16 0.2"} rg BT /${f||(bold?"F2":"F1")} ${size} Tf ${x} ${yy} Td (${pdfTxt(s)}) Tj ET`); };
   const need=h=>{ if(y-h<78) newPage(); };
   const wrap=(s,max,size,bold)=>pdfWrap(s,max*(size||9.5)*0.5,size||9.5,bold);
   const pdfTable=T=>{ const fs=T.size||9, lh=Math.round(fs*1.33), TW=R-L-6; const cols=T.auto?pdfAutoCols(T.head,T.rows,TW,fs):T.cols;
     const cw=i=>cols[i][2]?cols[i][2]-8:((i+1<cols.length?cols[i+1][0]:TW)-cols[i][0]-7);
     const row=(r,b)=>{ const cells=r.map((c,i)=>cols[i]?pdfWrap(String(c??""),cw(i),fs,b):[]); const nl=Math.max(1,...cells.map(c=>c.length)); if(y-(lh*nl+8)<78){ newPage(); if(T.head&&!b){ row(T.head,true); } } cells.forEach((ls,i)=>ls.forEach((ln,j)=>text(L+6+cols[i][0],y-j*lh,ln,fs,b,b?"0.25 0.3 0.35":null))); y-=lh*nl; ops.push(`0.86 0.89 0.91 RG 0.5 w ${L} ${y+6} m ${R} ${y+6} l S`); y-=6; }; if(T.head){ const fr=T.rows[0]?Math.max(1,...T.rows[0].map((c,i)=>cols[i]?pdfWrap(String(c??""),cw(i),fs,false).length:1)):1; need(lh*(fr+2)+16); row(T.head,true); } T.rows.forEach(r=>row(r,false)); y-=4; };
-  y=806; text(L,y,"Document Reference # "+ref,8.5,false,"0.36 0.45 0.52"); y-=21;
+  y=PH-36; text(L,y,"Document Reference # "+ref,8.5,false,"0.36 0.45 0.52"); y-=21;
   pdfWrap(doc.title,R-L-175,16,true).forEach((ln,i)=>{ if(i) y-=19; text(L,y,ln,16,true,NAVY); }); y-=16;
   pdfWrap(doc.subtitle||"",R-L-175,9,false).forEach((ln,i)=>{ if(i) y-=11.5; text(L,y,ln,9,false,"0.4 0.45 0.5"); }); y-=9;
-  y=Math.min(y,742); ops.push(`0.62 0.71 0.78 RG 1 w ${L} ${y} m ${R} ${y} l S`); y-=22;
+  y=Math.min(y,PH-100); ops.push(`0.62 0.71 0.78 RG 1 w ${L} ${y} m ${R} ${y} l S`); y-=22;
   if(doc.decision){ need(40); ops.push(`${doc.decision.ok?"0.88 0.95 0.91":"0.98 0.9 0.89"} rg ${L} ${y-12} ${R-L} 26 re f`); text(L+10,y-3,doc.decision.text,12,true,doc.decision.ok?"0.1 0.45 0.25":"0.6 0.18 0.15"); y-=36; }
   doc.sections.forEach(sec=>{ need(sec.rows&&sec.rows[0]&&sec.rows[0].table?110:58); text(L,y,sec.h,11.5,true); y-=16;
     sec.rows.forEach(r=>{ if(r&&r.table){ pdfTable(r.table); return; } if(r&&r.lbl){ const pl=pdfWrap(r.lbl,R-L-6,9.5,true); need(13*pl.length+70); pl.forEach((ln,i)=>text(L+6,y-i*13,ln,9.5,true,"0.25 0.3 0.35")); y-=13*pl.length+2; return; } if(r.length===1){ const pl=pdfWrap(r[0],R-L-6,9.5,false); need(13*pl.length+4); pl.forEach((ln,i)=>text(L+6,y-i*13,ln,9.5,false)); y-=13*pl.length+3; return; } const [k,v]=r; const lines=pdfWrap(v,R-L-196,9.5,false); const kl=pdfWrap(k,176,9.5,false); const nl=Math.max(lines.length,kl.length); need(13*nl+4); kl.forEach((ln,i)=>text(L+6,y-i*13,ln,9.5,false,"0.35 0.4 0.45")); lines.forEach((ln,i)=>text(L+190,y-i*13,ln,9.5,false)); y-=13*nl+3; }); y-=8; });
@@ -2497,10 +2505,10 @@ function buildPdf(doc,opt){
   const imgIds=imgs.map(im=>{ const bin=atob(im.d.split(",")[1]); return add(`<< /Type /XObject /Subtype /Image /Width ${im.w} /Height ${im.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${bin.length} >>\nstream\n${bin}\nendstream`); });
   const xo=` /XObject << /Lg ${lgId} 0 R ${imgIds.map((id,k)=>`/Im${k+1} ${id} 0 R`).join(" ")} >>`;
   const pagesId=objs.length+1; objs.push(null); const kids=[];
-  const fin=pages.map((content,i)=>content+"\n"+docChrome(i,pages.length,{L,R,ref,title:doc.title,tpl:TPL}));
-  if(opt&&opt.raw) return {pages:fin,imgs:[...imgs.map((im,k)=>({name:"Im"+(k+1),d:im.d})),{name:"Lg",d:DOC_LOGO.d}]};
+  const fin=pages.map((content,i)=>content+"\n"+docChrome(i,pages.length,{L,R,PH,ref,title:doc.title,tpl:TPL}));
+  if(opt&&opt.raw) return {w:PW,h:PH,pages:fin,imgs:[...imgs.map((im,k)=>({name:"Im"+(k+1),d:im.d})),{name:"Lg",d:DOC_LOGO.d}]};
   fin.forEach((s,i)=>{
-    const cid=add(`<< /Length ${s.length} >>\nstream\n${s}\nendstream`); kids.push(add(`<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 ${fontR} 0 R /F2 ${fontB} 0 R /F3 ${fontI} 0 R >>${xo} >> /Contents ${cid} 0 R >>`)); });
+    const cid=add(`<< /Length ${s.length} >>\nstream\n${s}\nendstream`); kids.push(add(`<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 ${PW} ${PH}] /Resources << /Font << /F1 ${fontR} 0 R /F2 ${fontB} 0 R /F3 ${fontI} 0 R >>${xo} >> /Contents ${cid} 0 R >>`)); });
   objs[pagesId-1]=`<< /Type /Pages /Kids [${kids.map(k=>k+" 0 R").join(" ")}] /Count ${kids.length} >>`;
   const cat=add(`<< /Type /Catalog /Pages ${pagesId} 0 R >>`);
   let out="%PDF-1.4\n"; const offs=[]; objs.forEach((o,i)=>{ offs.push(out.length); out+=`${i+1} 0 obj\n${o}\nendobj\n`; });
@@ -2508,16 +2516,16 @@ function buildPdf(doc,opt){
   const bytes=new Uint8Array(out.length); for(let i=0;i<out.length;i++) bytes[i]=out.charCodeAt(i)&255; return new Blob([bytes],{type:"application/pdf"});
 }
 /* header and footer drawn on every page (also used by the sample viewer) */
-function docChrome(i,n,o){ const {L,R}=o, NAVY="0.12 0.37 0.55", G="0.4 0.45 0.5", out=[];
+function docChrome(i,n,o){ const {L,R}=o, PH=o.PH||842, NAVY="0.12 0.37 0.55", G="0.4 0.45 0.5", out=[];
   const t=(x,y,s,size,f,col)=>out.push(`${col||G} rg BT /${f} ${size} Tf ${x.toFixed(1)} ${y.toFixed(1)} Td (${pdfTxt(s)}) Tj ET`);
-  const W=118, H=W*DOC_LOGO.h/DOC_LOGO.w, X=R-W, Y=842-28-H;
+  const W=118, H=W*DOC_LOGO.h/DOC_LOGO.w, X=R-W, Y=PH-28-H;
   out.push(`q ${W} 0 0 ${H.toFixed(1)} ${X} ${Y.toFixed(1)} cm /Lg Do Q`);
   t(X+W*DOC_LOGO.wx/DOC_LOGO.w,Y-9,DOC_SLOGAN[0],7.5,"F3",NAVY); t(R-pdfW(DOC_SLOGAN[1],7.5,false),Y-18.5,DOC_SLOGAN[1],7.5,"F3",NAVY);
-  if(i>0){ t(L,806,"Document Reference # "+o.ref,8.5,"F1","0.36 0.45 0.52"); const tl=pdfWrap(o.title,R-L-175,11,true); t(L,790,tl[0]+(tl.length>1?" \u2026":""),11,"F2",NAVY);
-    out.push(`0.62 0.71 0.78 RG 1 w ${L} 742 m ${R} 742 l S`); }
+  if(i>0){ t(L,PH-36,"Document Reference # "+o.ref,8.5,"F1","0.36 0.45 0.52"); const tl=pdfWrap(o.title,R-L-175,11,true); t(L,PH-52,tl[0]+(tl.length>1?" \u2026":""),11,"F2",NAVY);
+    out.push(`0.62 0.71 0.78 RG 1 w ${L} ${PH-100} m ${R} ${PH-100} l S`); }
   out.push(`0.77 0.82 0.86 RG 0.6 w ${L} 64 m ${R} 64 l S`);
   t(L,50,"Page "+(i+1)+" of "+n,8,"F1");
-  pdfWrap(DOC_COPY,270,7.5,false).forEach((ln,k)=>t(297.5-pdfW(ln,7.5,false)/2,50-k*9.5,ln,7.5,"F1"));
+  pdfWrap(DOC_COPY,270,7.5,false).forEach((ln,k)=>t((L+R)/2-pdfW(ln,7.5,false)/2,50-k*9.5,ln,7.5,"F1"));
   const a="Template # "+o.tpl.no, b="Effective date "+o.tpl.eff; t(R-pdfW(a,8,true),50,a,8,"F2","0.2 0.25 0.3"); t(R-pdfW(b,8,false),40,b,8,"F1");
   return out.join("\n"); }
 function safeName(s,ext){ let b=String(s||"").trim().replace(/[\\/:*?"<>|]+/g,"-").replace(/\s+/g," ").replace(/\.(xlsx|pdf)$/i,""); if(!b) b="sample-size-run"; return b.slice(0,120)+"."+ext; }
@@ -2559,11 +2567,11 @@ const TOOLS=[["sampling","Sample size tool (ISO 2859-1:2026)","Lot acceptance pl
  ["qa-rep","Report Template","Report of an executed protocol: results against criteria, deviations and conclusion.","agree",true],
  ["qa-iq","Installation Qualification (IQ)","Equipment identification, installation checks, utilities, documents and calibration.","gauge",true],
  ["qa-oq","Operational Qualification (OQ)","Functional and alarm tests, and challenge runs at the process limits to set the operating window.","chart",true],
- ["qa-pq","Performance Qualification (PQ)","Routine production runs with statistical sampling and capability to show the process is consistent.","fdapre",true],["qa-tmv","Test Method Validation (TMV)","Gage R&R, bias and attribute agreement to show a test method is fit for use.","caliper",true],["qa-cmp","Complaint Intake and Investigation","Record, assess for reporting, investigate and close a complaint.","survey",true],["qa-rpt","Reportability Assessment (FDA MDR and EU Vigilance)","Decide and time FDA MDR and EU serious incident reports.","fdapre",true],["qa-hhe","Health Hazard Evaluation (HHE)","Health risk of a product problem to decide on field action.","risk",true],["qa-fsca","Recall / FSCA Assessment","Plan, notify and close a correction, removal or FSCA.","swap",true],["qa-pmsp","Post-Market Surveillance (PMS) Plan","Data sources, indicators, thresholds and PMCF for a device.","chart",true],["qa-psur","Periodic Safety Update Report (PSUR)","Period results, trends, benefit-risk and actions.","agree",true],["qa-trend","Complaint and NC Trend Report","Rates, control limits, signals and actions.","gauge",true],["qa-ddp","Design and Development Plan","Stages, reviews, V&V, transfer and team.","dates",true],["qa-dir","Design Input Requirements","Verifiable requirements with sources and criteria.","list",true],["qa-drv","Design Review Minutes","Participants, findings, decision and actions.","eye",true],["qa-trace","Design Traceability Matrix","Inputs to outputs, risk controls, V&V evidence.","map",true],["qa-dtc","Design Transfer Checklist","Readiness of production, service and labeling.","factory",true],["qa-dhf","Design History File (DHF) Index","Index of design records with status.","tmpl",true],["qa-chl","Clinical Hazards List","Harms per hazardous situation with IMDRF clinical condition and health impact codes, severity and P2.","risk",true],["qa-mr","Management Review Record","ISO 13485 5.6 inputs, outputs and actions.","audit",true],["qa-qo","Quality Objectives and KPI Tracker","Measurable objectives, targets and results.","gauge",true],["qa-qm","Quality Manual Template","Scope, exclusions, policy, process map and procedures.","iso",true],
+ ["qa-pq","Performance Qualification (PQ)","Routine production runs with statistical sampling and capability to show the process is consistent.","fdapre",true],["qa-tmv","Test Method Validation (TMV)","Gage R&R, bias and attribute agreement to show a test method is fit for use.","caliper",true],["qa-cmp","Complaint Intake and Investigation","Record, assess for reporting, investigate and close a complaint.","survey",true],["qa-rpt","Reportability Assessment (FDA MDR and EU Vigilance)","Decide and time FDA MDR and EU serious incident reports.","fdapre",true],["qa-hhe","Health Hazard Evaluation (HHE)","Health risk of a product problem to decide on field action.","risk",true],["qa-fsca","Recall / FSCA Assessment","Plan, notify and close a correction, removal or FSCA.","swap",true],["qa-pmsp","Post-Market Surveillance (PMS) Plan","Data sources, indicators, thresholds and PMCF for a device.","chart",true],["qa-psur","Periodic Safety Update Report (PSUR)","Period results, trends, benefit-risk and actions.","agree",true],["qa-trend","Complaint and NC Trend Report","Rates, control limits, signals and actions.","gauge",true],["qa-ddp","Design and Development Plan","Stages, reviews, V&V, transfer and team.","dates",true],["qa-dir","Design Input Requirements","Verifiable requirements with sources and criteria.","list",true],["qa-drv","Design Review Minutes","Participants, findings, decision and actions.","eye",true],["qa-trace","Design Traceability Matrix","Inputs to outputs, risk controls, V&V evidence.","map",true],["qa-dtc","Design Transfer Checklist","Readiness of production, service and labeling.","factory",true],["qa-dhf","Design History File (DHF) Index","Index of design records with status.","tmpl",true],["qadrafts","Drafts","All saved Daily QA Work records with status, and their project link.","list",true],["qa-chl","Clinical Hazards List","Harms per hazardous situation with IMDRF clinical condition and health impact codes, severity and P2.","risk",true],["qa-mr","Management Review Record","ISO 13485 5.6 inputs, outputs and actions.","audit",true],["qa-qo","Quality Objectives and KPI Tracker","Measurable objectives, targets and results.","gauge",true],["qa-qm","Quality Manual Template","Scope, exclusions, policy, process map and procedures.","iso",true],
  ["qa-nps","Non-Product / Non-GxP Software Assessment","GxP relevance, risk classification and risk-based assurance of business software.","search",true],
  ["qa-npsl","Non-Product Software List","Inventory of business software with GxP status, risk, assessment, validation status and review dates.","list",true],
  ["grr","Gauge R&R / Kappa test","A guide to choose between variable Gauge R&R and attribute agreement (Kappa), sample definitions with defect notes and photos, analysis, and the test protocol and report.","gauge",true]];
-const TOOLGROUPS={daily:["Daily QA Work","Tools for daily QA work","Ready-to-use QA forms and templates: change control, nonconformance and CAPA, suppliers and CMOs, audits, documents, validation, software and training. Each has a filled sample and exports to Word and PDF.",["#Management responsibility","qa-mr","qa-qo","qa-qm","#Design controls","qa-ddp","qa-dir","qa-drv","qa-trace","qa-dtc","qa-dhf","qa-chl","#Change control","impact","#Nonconformance and CAPA","qa-ncr","qa-mrb","qa-dev","qa-capa","#Complaints and vigilance","qa-cmp","qa-rpt","qa-hhe","qa-fsca","#Post-Market surveillance","qa-pmsp","qa-psur","qa-trend","#Suppliers and CMOs","sq-quest","sq-eval","sq-scar","sq-scn","sq-asl","sq-fai","sq-sqa","sq-cmo","#Audits and quality planning","qa-iap","qa-iac","qa-qp","#Documents","qa-sop","qa-wi","qa-pol","#Inspection and validation","qa-vis","qa-prot","qa-rep","qa-iq","qa-oq","qa-pq","qa-tmv","qa-mvp","qa-mvpr","#Non-Product software","qa-nps","qa-npsl","#Training","qa-trn","qa-gtr"],[["Coming soon","More tools and ready-to-use QMS templates for daily QA work.","tmpl"]]],
+const TOOLGROUPS={daily:["Daily QA Work","Tools for daily QA work","Ready-to-use QA forms and templates: change control, nonconformance and CAPA, suppliers and CMOs, audits, documents, validation, software and training. Each has a filled sample and exports to Word and PDF.",["#Management responsibility","qa-mr","qa-qo","qa-qm","#Design controls","qa-ddp","qa-dir","qa-drv","qa-trace","qa-dtc","qa-dhf","qa-chl","#Change control","impact","#Nonconformance and CAPA","qa-ncr","qa-mrb","qa-dev","qa-capa","#Complaints and vigilance","qa-cmp","qa-rpt","qa-hhe","qa-fsca","#Post-Market surveillance","qa-pmsp","qa-psur","qa-trend","#Suppliers and CMOs","sq-quest","sq-eval","sq-scar","sq-scn","sq-asl","sq-fai","sq-sqa","sq-cmo","#Audits and quality planning","qa-iap","qa-iac","qa-qp","#Documents","qa-sop","qa-wi","qa-pol","#Inspection and validation","qa-vis","qa-prot","qa-rep","qa-iq","qa-oq","qa-pq","qa-tmv","qa-mvp","qa-mvpr","#Non-Product software","qa-nps","qa-npsl","#Training","qa-trn","qa-gtr","#Drafts","qadrafts"],[["Coming soon","More tools and ready-to-use QMS templates for daily QA work.","tmpl"]]],
   stats:["Statistical Tools","Statistical Tools","Sampling plans, basic statistical calculators, measurement system analysis and attribute agreement.",["sampling","bstats","msa","grr"],[]]};
 /* ---- 1.8.1 title case for form headings, and Daily QA Work sub-tabs ---- */
 const TC_SMALL=new Set("a an and as at but by for from in into nor of on or per the to vs via with".split(" "));
@@ -2627,13 +2635,13 @@ function sideTour(c){ if(!tourOk()) return; const keys=c.keys; if(keys.length<2)
   const t=tourStart(()=>c.restore(home)); t.home=home; t.commit=k=>c.commit(k);
   const mark=k=>{ t.shown=k; c.show(k); const i=keys.indexOf(k); const it=[...document.querySelectorAll(".dSide .dItem")]; it.forEach((b,j)=>b.classList.toggle("tour",j===i)); };
   const lay=document.querySelector(".dLay"); if(lay){ lay.classList.add("touring"); t.off.push(()=>{ const l=document.querySelector(".dLay"); if(l) l.classList.remove("touring"); }); const r=lay.getBoundingClientRect(); const nb=document.getElementById("navRow2"); const off=nb&&getComputedStyle(nb).position==="sticky"?nb.offsetHeight+12:80; if(r.top>innerHeight*0.45) window.scrollBy({top:r.top-off,behavior:"smooth"}); }
-  const STEP=2000, LENS=5800, L3=Math.min(2,keys.length-1); let at=0;
+  const STEP=2000, LENS=5800, L3=c.lensKey&&keys.includes(c.lensKey)?keys.indexOf(c.lensKey):Math.min(2,keys.length-1); let at=0;
   keys.forEach((k,i)=>{ const when=i*STEP+(i>L3?LENS:0); t.timers.push(setTimeout(()=>{ if(TOUR!==t) return; mark(k); document.querySelector(".dLay")&&document.querySelector(".dLay").classList.add("touring");
-      if(i===L3){ t.timers.push(setTimeout(()=>{ if(TOUR!==t) return; const item=[...document.querySelectorAll(".dSide .dItem")].find(x=>x.offsetParent&&x.classList.contains("tour"))||document.querySelector(".dPick"); const tg=[item,...c.content().slice(0,2)];
+      if(i===L3){ t.timers.push(setTimeout(()=>{ if(TOUR!==t) return; const item=[...document.querySelectorAll(".dSide .dItem")].find(x=>x.offsetParent&&x.classList.contains("tour"))||document.querySelector(".dPick"); const tg=[item,...(c.lensContent?c.lensContent():c.content().slice(0,2))];
         lensTour(tg,5100,t); t.lens&&t.lens.classList.add("keep"); },500)); } },when)); at=when; });
   t.timers.push(setTimeout(()=>{ if(TOUR!==t) return; if(t.lens){ t.lens.remove(); t.lens=null; } c.restore(home); t.shown=home; tourStop(); },at+STEP)); }
 function dailyIntro(){ if(!DAILY_SHOW) return; const groups=dailyGroups(TOOLGROUPS.daily);
-  sideTour({keys:groups.map(x=>x.h), home:DAILY_TAB, show:k=>DAILY_SHOW(k), content:()=>[...document.querySelectorAll(".dLay .toolGrid .toolCard")],
+  sideTour({keys:groups.map(x=>x.h), home:DAILY_TAB, lensKey:groups.map(x=>x.h).find(x=>/Nonconformance and CAPA/i.test(x)), lensContent:()=>[...document.querySelectorAll(".dLay .toolGrid .toolCard")].filter(x=>/CAPA/.test(x.innerText)&&!/Nonconformance Report/i.test(x.innerText)).slice(0,1), show:k=>DAILY_SHOW(k), content:()=>[...document.querySelectorAll(".dLay .toolGrid .toolCard")],
     restore:k=>{ if(DAILY_SHOW&&location.hash==="#daily") DAILY_SHOW(k); document.querySelectorAll(".dItem.tour").forEach(x=>x.classList.remove("tour")); },
     commit:k=>{ DAILY_TAB=k; try{ localStorage.setItem("qah-daily-tab",k); }catch(e){} const gs=dailyGroups(TOOLGROUPS.daily); document.querySelectorAll(".dLay .dSide .dItem").forEach((b,i)=>b.setAttribute("aria-current",String(gs[i]&&gs[i].h===k))); } }); }
 function keepScroll(f){ const y=scrollY; f(); scrollTo(0,y); }
@@ -2641,7 +2649,13 @@ function riskIntro(){ const home=rm.tab; sideTour({keys:RM_TABS.map(x=>x[0]), ho
     restore:k=>{ rm.tab=k; if(location.hash==="#risk") keepScroll(renderRisk); }, commit:k=>{ rm.tab=k; rm._save(); keepScroll(renderRisk); } }); }
 function rmtIntro(){ const home=RMT_GROUPS.some(x=>x[0]===RMT_TAB)?RMT_TAB:RMT_GROUPS[0][0]; sideTour({keys:RMT_GROUPS.map(x=>x[0]), home, show:k=>keepScroll(()=>{ RMT_TAB=k; renderRmTools(); }), content:()=>[...document.querySelectorAll(".dLay .toolGrid .toolCard")],
     restore:k=>{ RMT_TAB=k; if(location.hash==="#rmtools") keepScroll(renderRmTools); }, commit:k=>{ RMT_TAB=k; try{ localStorage.setItem("qah-rmt-tab",k); }catch(e){} keepScroll(renderRmTools); } }); }
-function statsIntro(page){ if(!tourOk()) return; if(page==="stats"){ const c=[...document.querySelectorAll("#main .toolCard")].find(x=>/Sample Size/i.test(x.innerText)); lensTour([c],2600); }
+function statsIntro(page){ if(!tourOk()) return; if(page==="stats"){ const cs=[...document.querySelectorAll("#main .toolCard")], bs=cs.find(x=>/Basic Statistical/i.test(x.innerText)), sm=cs.find(x=>/Sample Size/i.test(x.innerText)); if(!sm) return;
+    const t=tourStart(); const tg=[bs,sm].filter(Boolean); lensTour(tg,1500*tg.length,t); if(t.lens) t.lens.classList.add("keep");
+    t.timers.push(setTimeout(()=>{ if(TOUR!==t) return; const r=sm.getBoundingClientRect(); const L=t.lens&&t.lens.getBoundingClientRect(); const x0=L?L.left+L.width*0.7:r.left+60, y0=L?L.top+L.height*0.7:r.top+30;
+      const pop=el("div",{class:"lensPop","aria-hidden":"true"}, el("b",{},"Sample size tool"), el("ul",{}, ...["Plan lot acceptance or DV sampling","Type of value","Lot size and AQL / probability and confidence levels","Enter results / raw data","Download Statistical Analysis Report"].map((s,i,a)=>el("li",{class:i===a.length-1?"lpGreen":""},s))));
+      pop.style.left=Math.max(8,Math.min(innerWidth-300,x0))+"px"; pop.style.top=Math.max(8,Math.min(innerHeight-220,y0))+"px"; document.body.append(pop); t.off.push(()=>pop.remove());
+      requestAnimationFrame(()=>pop.classList.add("in")); [...pop.querySelectorAll("li")].forEach((li,i)=>t.timers.push(setTimeout(()=>li.classList.add("in"),450+i*450)));
+      t.timers.push(setTimeout(()=>{ pop.classList.remove("in"); pop.classList.add("out"); },450+5*450+2600)); t.timers.push(setTimeout(()=>{ if(TOUR===t) tourStop(); },450+5*450+3200)); },80+1500*tg.length+300)); }
   else if(page==="sampling"){ const h=document.querySelector("#main .chHead h2"), b=[...document.querySelectorAll("#main .sampBox .choiceBtn")]; if(b.length) lensTour([h,...b],5000); } }
 window.addEventListener("hashchange",()=>tourStop());
 function dailyStick(){ const n=document.getElementById("navRow2"); const h=(n&&getComputedStyle(n).position==="sticky")?n.offsetHeight:0; document.documentElement.style.setProperty("--stickH",(h+topH())+"px"); }
@@ -3005,7 +3019,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="2.13.0", APPDATE="21-NOV-2026";
+const APPVER="2.14.0", APPDATE="21-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Asaf Ben Zion. All rights reserved.";
 const LEGAL=[["Copyright", "No part of this handbook’s original content may be copied or redistributed without written permission. Cited regulations, standards and guidance, and their links, remain the property of their official publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, data selection and design, developed with AI tools, and has been verified against requirements set by the author and against the official sources."], ["Sources", "Sources are limited to official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs, FDA webinars and town halls, and FDA databases. EU: EUR-Lex and European Commission pages, including MDCG guidance."], ["Important", "This application is intended for training only. Results from its tools require human review, verification and approval. Always check the linked source before citing anything in an audit response."]];
@@ -4691,7 +4705,7 @@ function rmWorksheet(p,type){
         isU?el("label",{class:"chk"}, (()=>{ const c=el("input",{type:"checkbox"}); c.checked=!!r.crit; c.addEventListener("change",()=>{ r.crit=c.checked; rm._save(); }); return c; })(), " Critical task"):""));
       upd(); wrap.append(card); }); };
   p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},W.l+" worksheet"), el("p",{class:"src"},W.d+" Rows get an ID ("+W.pre+"-001…) for traceability. Severity and probability use your matrix from the Acceptability tab."+(isU?" A task is flagged critical automatically when severity is “"+rm.sev[critMin()-1][0]+"” or higher; you can change the flag.":"")+(nodes.length||sraRows.length?"":" Build a system diagram (xFMEA → System Risk Analysis) to link rows to system elements; it is optional.")),
-    draftBanner(type,()=>{ rm.ws[type]=[]; }), el("div",{class:"mact"}, el("button",{class:"cta",type:"button",onclick:()=>{ rows.push(wsBlank(type)); draw(); }},"+ Add row"), el("button",{class:"cta alt",type:"button",onclick:()=>{ rows.push(wsExample(type)); draw(); }},"Load example row"), el("button",{class:"cta save",type:"button",onclick:()=>{ if(!rows.length){ flash("Add a row first."); return; } saveToDrafts(type,{rows},()=>renderRisk()); }},"💾 Save all rows to drafts")), wrap));
+    draftBanner(type,()=>{ rm.ws[type]=[]; }), el("div",{class:"mact"}, el("button",{class:"cta",type:"button",onclick:()=>{ rows.push(wsBlank(type)); draw(); }},"+ Add row"), (window.__wsAdd=()=>{ rows.push(wsExample(type)); draw(); }, smpBtn(()=>riskSamples(type))), el("button",{class:"cta save",type:"button",onclick:()=>{ if(!rows.length){ flash("Add a row first."); return; } saveToDrafts(type,{rows},()=>renderRisk()); }},"💾 Save all rows to drafts")), wrap));
   draw();
   const ttl=W.l+" - "+DEVT[rm.dev].l;
   const B=()=>wsBuild(type,rows,ttl);
@@ -4971,8 +4985,18 @@ function wsBuild(type,rows,ttl){
   const xr=[h,...rows.map(r=>[r.id,r.node?nodeLabel(r.node):"",r.sra||"",...W.f.map(f=>r[f[0]]),...(W.p1p2?[p12Txt(1,r.p1),p12Txt(2,r.p2v)]:[]),lab(rm.sev,r.s),lab(rm.prob,r.p),lvT(r.s,r.p),r.ctl,r.ct,r.ver,...(W.noAfter?[]:[lab(rm.prob,r.p2),lvT(r.s,r.p2)]),...(isU?[r.crit?"Yes":"No"]:[]),...(type==="sra"?[det(r.id)]:[])])];
   const secs=rows.map(r=>({h:r.id+" "+(r.who||""),rows:[...(r.node?[["System element",nodeLabel(r.node)]]:[]),...(r.sra?[["SRA row",r.sra]]:[]),...W.f.slice(1).map(f=>[f[1],r[f[0]]||"-"]),...(W.p1p2?[["P1 / P2",p12Txt(1,r.p1)+" / "+p12Txt(2,r.p2v)]]:[]),["Severity / P",(lab(rm.sev,r.s)||"-")+" / "+(lab(rm.prob,r.p)||"-")+" -> "+(lvT(r.s,r.p)||"-")],[(W.ctlLab||"Risk control")+" ("+(r.ct||"")+")",r.ctl||"-"],[W.verLab||"Verification",r.ver||"-"],...(W.noAfter?[]:[["P after / residual",(lab(rm.prob,r.p2)||"-")+" -> "+(lvT(r.s,r.p2)||"-")]]),...(isU?[["Critical task",r.crit?"Yes":"No"]]:[]),...(type==="sra"?[["Detailed in",det(r.id)||"-"]]:[])]}));
   const scale={h:"Scales",rows:[["Severity",rm.sev.map((s,i)=>(i+1)+" "+s[0]).join(", ")],["Probability",rm.prob.map((s,i)=>(i+1)+" "+s[0]).join(", ")]]};
-  return {xlsx:()=>buildXlsx(mkDoc("Risk management",ttl,[scale],null,[{name:W.l.slice(0,28),rows:xr,widths:[9,20,9,...W.f.map(()=>24),14,14,18,30,16,26,14,18,10]}]).sheets),pdf:()=>buildPdf(Object.assign(mkDoc("Risk management",ttl,[scale,...secs],null).pdf,{code:RISK_CODE[type]||"RIS"}))};
+  return {xlsx:()=>buildXlsx(mkDoc("Risk management",ttl,[scale],null,[{name:W.l.slice(0,28),rows:xr,widths:[9,20,9,...W.f.map(()=>24),14,14,18,30,16,26,14,18,10]}]).sheets),pdf:()=>buildPdf(wsPdfDoc(type,xr,scale,ttl)), doc:()=>wsPdfDoc(type,xr,scale,ttl)};
 }
+/* 2.14.0 worksheet PDF: one landscape table (empty columns left out) */
+function wsPdfDoc(type,xr,scale,ttl){ const cv=c=>c&&typeof c==="object"?(c.v??""):c; xr=xr.map(r=>r.map(cv)); const keep=xr[0].map((_,j)=>xr.slice(1).some(r=>String(r[j]??"").trim())); const head=xr[0].filter((_,j)=>keep[j]), rows=xr.slice(1).map(r=>r.filter((_,j)=>keep[j]).map(c=>String(c??"")));
+  return Object.assign(mkDoc("Risk management",ttl,[scale,{h:WS[type].l+" worksheet",rows:[{table:{auto:true,size:rows.length&&head.length>12?7:7.5,head,rows}}]}],null).pdf,{code:RISK_CODE[type]||"RIS",landscape:true}); }
+const RS_CTL={pha:["Design requirement to remove or guard the hazard","Follow-up in DFMEA and URRA"],ha:["Inherent safety by design, then protective measure, then information for safety","Design verification test report"],sra:["Allocate a monitoring or redundancy requirement to the sub-system","System verification"],dfmea:["Design change or independent monitoring of the function","Design verification test"],pfmea:["Validated process (OQ/PQ) and in-process check","PQ report and inspection record"],ufmea:["User interface change and a warning in the instructions","Summative usability evaluation"],sfmea:["Software safety requirement with an independent check","Software system test (IEC 62304)"],urra:["Interface redesign of the critical step and training","Summative evaluation of the critical task"]};
+function riskSampleRows(type){ const W=WS[type], devs=[...new Set([rm.dev,"cardio","home","generic"])].filter(k=>DEVT[k]).slice(0,3), keep=rm.dev; const sv=[4,3,5], pv=[3,2,3], pa=[1,1,2]; const cl=n=>v=>String(Math.min(n,v));
+  const seq=JSON.stringify(rm.seq||{});
+  const rows=devs.map((k,i)=>{ rm.dev=k; let r; try{ r=wsExample(type); } finally { rm.dev=keep; rm.seq=JSON.parse(seq); } const c=RS_CTL[type]||RS_CTL.ha;
+    return Object.assign(r,{id:(W.pre||"R")+"-S0"+(i+1),s:cl(rm.sevN||5)(sv[i]),p:cl(rm.probN||5)(pv[i]),p1:W.p1p2?"3":"",p2v:W.p1p2?"4":"",ctl:c[0],ct:["Design","Protective","Information"][i],ver:c[1],p2:cl(rm.probN||5)(pa[i]),crit:i===0,node:"",sra:""}); });
+  return rows; }
+function riskSamples(type){ const W=WS[type]; return [{name:W.l+" sample ("+DEVT[rm.dev].l+" and two other device types)", doc:()=>buildPdf(Object.assign(wsBuild(type,riskSampleRows(type),W.l+" – sample").doc(),{ref:W.pre+"-SAMPLE"}),{raw:true})}]; }
 function matrixSecs(){ return [{h:"Severity scale",rows:rm.sev.map((s,i)=>[(i+1)+". "+s[0],s[1]])},{h:"Probability scale",rows:rm.prob.map((s,i)=>[(i+1)+". "+s[0],s[1]])},{h:"Matrix (probability rows, high to low)",rows:[...Array(rm.probN)].map((_,k)=>{ const pi=rm.probN-1-k; return [rm.prob[pi][0],rm.cells[pi].map((v,si)=>rm.sev[si][0]+": "+["A","R","N"][v]).join(" | ")]; })},{h:"Key",rows:ACC.map((a,i)=>[["A","R","N"][i],a[0]])}]; }
 function matrixRows(){ const rows=[[{v:"P \\ S",b:true},...rm.sev.map((s,i)=>({v:(i+1)+". "+s[0],b:true}))]]; for(let pi=rm.probN-1;pi>=0;pi--) rows.push([{v:(pi+1)+". "+rm.prob[pi][0]+" ("+rm.prob[pi][1]+")",b:true},...rm.cells[pi].map(v=>ACC[v][0])]); return rows; }
 function matrixBuild(ttl){ return {xlsx:()=>buildXlsx(mkDoc("Risk management",ttl,matrixSecs(),null,[{name:"Matrix",rows:matrixRows(),widths:[34,...rm.sev.map(()=>22)]}]).sheets),pdf:()=>buildPdf(Object.assign(mkDoc("Risk management",ttl,matrixSecs(),null).pdf,{code:"RAM"}))}; }
@@ -5001,14 +5025,15 @@ function rmDrafts(p){
   rm.dType=rm.dType||"All"; const types=["All",...new Set(drafts.docs.map(d=>d.type))];
   p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Drafts"), el("p",{class:"src"},"Every document you save from a worksheet, the matrix, the FTA or the system diagram is kept here (in this browser) with its ID and timestamps. Open a draft to keep editing it; “Save to drafts” then updates the same document. Export or delete it here."),
     el("div",{class:"chipRow"}, ...types.map(t=>el("button",{class:"chipBtn",type:"button","aria-pressed":String(rm.dType===t),onclick:()=>{ rm.dType=t; rm._save(); renderRisk(); }},t==="All"?"All ("+drafts.docs.length+")":DOC_L(t)+" ("+drafts.docs.filter(d=>d.type===t).length+")")))));
-  const list=drafts.docs.filter(d=>rm.dType==="All"||d.type===rm.dType);
+  rm.dPrj=rm.dPrj||"All"; p.append(el("div",{class:"chipRow"}, ...["All","Not linked",...PRJ.list.map(x=>x.id)].map(k=>el("button",{class:"chipBtn",type:"button","aria-pressed":String(rm.dPrj===k),onclick:()=>{ rm.dPrj=k; rm._save(); renderRisk(); }},k==="All"?"All projects":k==="Not linked"?"Not linked":k))));
+  const list=drafts.docs.filter(d=>(rm.dType==="All"||d.type===rm.dType)&&(rm.dPrj==="All"||(rm.dPrj==="Not linked"?!d.prj:d.prj===rm.dPrj)));
   if(!list.length) p.append(el("p",{class:"src"},"No drafts yet. Use “Save to drafts” in any worksheet."));
   const st=el("small",{class:"src",role:"status"});
   list.forEach(d=>{ const nm=el("input",{type:"text",class:"rIn","aria-label":"Draft name"}); nm.value=d.name; nm.addEventListener("change",()=>{ d.name=nm.value.trim()||d.name; d.updated=nowTs(); saveDrafts(); renderRisk(); });
     const ex=async kind=>{ const b=docBuild(d); const name=safeName(d.id+"_"+d.name,kind); st.textContent="Preparing "+name+"…"; await saveFile(name,b[kind](),st); };
     p.append(el("div",{class:"card draftRow"+(rm.active&&rm.active[d.type]===d.id?" act":"")},
       el("div",{class:"wsHead"}, el("b",{}, el("span",{class:"idTag"},d.id)," ",DOC_L(d.type)), el("span",{class:"src"},(d.rows&&WS[d.type]?d.rows.length+(d.rows.length===1?" row · ":" rows · "):"")+DEVT[d.dev||"generic"].l)),
-      el("label",{class:"rField"}, el("span",{},"Name"), nm),
+      el("label",{class:"rField"}, el("span",{},"Name"), nm), prjSel(d.prj,v=>{ d.prj=v||undefined; d.updated=nowTs(); saveDrafts(); }),
       el("div",{class:"tsRow"}, el("span",{},"Created "+d.created), el("span",{},"Last saved "+d.updated)),
       el("div",{class:"mact"}, el("button",{class:"cta",type:"button",onclick:()=>openDraft(d)},"Open & edit"), el("button",{class:"cta alt",type:"button",onclick:()=>ex("xlsx")},"Excel"), el("button",{class:"cta alt",type:"button",onclick:()=>ex("pdf")},"PDF"),
         el("button",{class:"linkBtn del",type:"button",onclick:()=>modalConfirm("Delete "+d.id+"?","Delete “"+d.name+"” from drafts? This cannot be undone.","Delete",()=>{ drafts.docs=drafts.docs.filter(x=>x!==d); if(rm.active&&rm.active[d.type]===d.id) delete rm.active[d.type]; saveDrafts(); rm._save(); renderRisk(); })},"Delete")))); });
@@ -6398,8 +6423,8 @@ function iaSamples(){ return [["cath","Sample 1: catheter delivery system"],["pu
   return iaPdf(iaDocModel(a),"Change Impact Assessment","Sample · Medical Device QA Handbook - Change Impact Assessment - Opened on "+a.created,{code:"CIA",ref:smpRef("CIA",j+1),opt:{raw:true}}); }})); }
 /* draws one page of the app's own PDF content stream on a canvas */
 const PDF_CPI=Object.fromEntries(Object.entries(PDF_CP).map(([c,v])=>[v,c]));
-function pdfPaint(cv,stream,imgs,s){ const g=cv.getContext("2d"); g.fillStyle="#fff"; g.fillRect(0,0,cv.width,cv.height);
-  const X=x=>x*s, Y=y=>(842-y)*s; const st=[]; let fill="#000", stroke="#000", lw=1, dash=[], font="F1", size=10, tx=0, ty=0, cm=null, path=[];
+function pdfPaint(cv,stream,imgs,s,PH){ PH=PH||842; const g=cv.getContext("2d"); g.fillStyle="#fff"; g.fillRect(0,0,cv.width,cv.height);
+  const X=x=>x*s, Y=y=>(PH-y)*s; const st=[]; let fill="#000", stroke="#000", lw=1, dash=[], font="F1", size=10, tx=0, ty=0, cm=null, path=[];
   const col=a=>`rgb(${a.map(v=>Math.round(v*255)).join(",")})`;
   let i=0; const S=stream, ops=[];
   const tok=()=>{ while(i<S.length&&/\s/.test(S[i])) i++; if(i>=S.length) return null; const c=S[i];
@@ -6421,7 +6446,7 @@ function pdfPaint(cv,stream,imgs,s){ const g=cv.getContext("2d"); g.fillStyle="#
       case "Do": { const im=imgs[a[0].n]; if(im&&cm) g.drawImage(im,X(cm[4]),Y(cm[5]+cm[3]),cm[0]*s,cm[3]*s); break; }
       default: break; } } }
 async function pdfImages(raw,scale){ const imgs={}; await Promise.all(raw.imgs.map(o=>new Promise(res=>{ const im=new Image(); im.onload=()=>{ imgs[o.name]=im; res(); }; im.onerror=res; im.src=o.d; })));
-  return raw.pages.map((p,k)=>{ const cv=document.createElement("canvas"); cv.width=Math.round(595*scale); cv.height=Math.round(842*scale); pdfPaint(cv,p,imgs,scale); return cv; }); }
+  return raw.pages.map((p,k)=>{ const cv=document.createElement("canvas"); cv.width=Math.round((raw.w||595)*scale); cv.height=Math.round((raw.h||842)*scale); pdfPaint(cv,p,imgs,scale,raw.h||842); return cv; }); }
 function openSamples(list){ let k=0; const tabs=el("div",{class:"chipRow smpTabs"}), pages=el("div",{class:"smpPages"}), st=el("p",{class:"src",role:"status"});
   const show=async()=>{ [...tabs.children].forEach((b,j)=>b.setAttribute("aria-pressed",String(j===k))); pages.innerHTML=""; st.textContent="Preparing the sample…";
     const cvs=await pdfImages(list[k].doc(),2); cvs.forEach((cv,j)=>{ const img=el("img",{src:cv.toDataURL("image/png"),alt:list[k].name+", page "+(j+1)+" of "+cvs.length}); pages.append(el("figure",{class:"smpPage"}, img, el("figcaption",{},"Page "+(j+1)+" of "+cvs.length))); });
@@ -6454,7 +6479,7 @@ function renderProjects(){ const m=document.getElementById("main"); m.innerHTML=
     if(!PRJ.list.length) c.append(el("p",{class:"src"},"No projects yet. Use Add a new project to start one."));
     PRJ.list.forEach(p=>c.append(el("div",{class:"iaRow prjRow"+(PRJ.cur===p.id?" on":"")},
       el("button",{class:"linkBtn",type:"button",onclick:()=>{ PRJ.cur=p.id; prjSave(); renderProjects(); }}, el("span",{class:"idTag"},p.id)," "+p.name),
-      el("span",{class:"src"},[p.device,p.cls,p.market,p.phase].filter(Boolean).join(" · ")+" · created "+p.created),
+      el("span",{class:"src"},[p.device,p.cls,p.market,p.phase].filter(Boolean).join(" · ")+" · created "+p.created+" · linked: "+(SQ_STORE.list.filter(r=>r.prj===p.id).length+IA_STORE.list.filter(a=>a.prj===p.id).length)+" records, "+drafts.docs.filter(d=>d.prj===p.id).length+" risk drafts"),
       el("button",{class:"linkBtn del",type:"button",onclick:()=>modalConfirm("Delete "+p.id+"?","Delete this project? This cannot be undone.","Delete",()=>{ PRJ.list=PRJ.list.filter(x=>x!==p); if(PRJ.cur===p.id) PRJ.cur=null; prjSave(); renderProjects(); })},"Delete"))));
     m.append(c); }
   tcDom(m); }
@@ -6698,6 +6723,22 @@ function renderBstats(){ const m=document.getElementById("main"); m.innerHTML=""
   if(Object.keys(v).some(k=>String(v[k]||"").trim()&&!cur.fields.find(f=>f[0]===k&&f[1]==="sel"))) run(); tcDom(m); }
 function bstatsIntro(){ sideTour({keys:BS_CALC.map(c=>c.id), home:BS.cur, show:k=>keepScroll(()=>{ BS.cur=k; renderBstats(); }), content:()=>[...document.querySelectorAll(".bsCard h3.secTitle, .bsTut summary")].filter(x=>x.offsetParent),
   restore:k=>{ BS.cur=k; if(location.hash==="#bstats") keepScroll(renderBstats); }, commit:k=>{ BS.cur=k; bsSave(); keepScroll(renderBstats); } }); }
+/* 2.14.0 project link for drafts and records */
+function prjSel(cur,on,label){ const opts=[["","Not linked"],...PRJ.list.map(p=>[p.id,p.id+" "+p.name])]; return el("label",{class:"rField prjLink"}, el("span",{},label||"Project"), selectEl(opts,cur||"",on)); }
+function prjName(id){ const p=PRJ.list.find(x=>x.id===id); return p?p.id+" "+p.name:""; }
+let QD_PRJ="All";
+function renderQaDrafts(){ const m=document.getElementById("main"); m.innerHTML="";
+  m.append(toolHead("Drafts","Every record you started in Daily QA Work, with its status. Open it to continue, or link it to a project.",["#daily","Daily QA Work"]));
+  const rows=[...SQ_STORE.list.map(r=>({k:"sq",id:r.id,form:r.form,t:tc((SQF[r.form]||{}).t||r.form),title:r.v[(SQF[r.form]||{}).titleKey]||"Untitled",upd:r.updated,prog:SQF[r.form]?sqProgress(SQF[r.form],r):null,o:r})),
+    ...IA_STORE.list.map(a=>({k:"ia",id:a.id,t:"Change Impact Assessment",title:(a.info.cc?a.info.cc+" · ":"")+(a.info.title||"Untitled"),upd:a.updated,prog:null,o:a}))];
+  const flt=el("div",{class:"card"}, el("div",{class:"chipRow"}, ...["All","Not linked",...PRJ.list.map(p=>p.id)].map(k=>el("button",{class:"chipBtn",type:"button","aria-pressed":String(QD_PRJ===k),onclick:()=>{ QD_PRJ=k; renderQaDrafts(); }},k==="All"?"All ("+rows.length+")":k==="Not linked"?"Not linked ("+rows.filter(r=>!r.o.prj).length+")":k+" ("+rows.filter(r=>r.o.prj===k).length+")"))),
+    PRJ.list.length?"":el("p",{class:"src"},"Create a project under Tools › Projects to link records to it."));
+  m.append(flt);
+  const list=rows.filter(r=>QD_PRJ==="All"||(QD_PRJ==="Not linked"?!r.o.prj:r.o.prj===QD_PRJ)).sort((a,b)=>String(b.upd).localeCompare(String(a.upd)));
+  const c=el("div",{class:"card"}); if(!list.length) c.append(el("p",{class:"src"},"No records here yet. Use + New in any Daily QA Work template."));
+  list.forEach(r=>c.append(el("div",{class:"iaRow qdRow"}, el("button",{class:"linkBtn",type:"button",onclick:()=>{ if(r.k==="sq"){ SQ_STORE.cur[r.form]=r.id; sqSave(); location.hash=r.form; } else { IA_STORE.cur=r.id; iaSave(); location.hash="impact"; } }}, el("span",{class:"idTag"},r.id)," "+r.t+" · "+r.title),
+    el("span",{class:"src"},(r.prog?r.prog[0]+" of "+r.prog[1]+" fields · ":"")+"saved "+r.upd), prjSel(r.o.prj,v=>{ r.o.prj=v||undefined; if(r.k==="sq") sqSave(); else iaSave(); renderQaDrafts(); }))));
+  m.append(c); tcDom(m); }
 function renderSqForm(fid){
   const F=SQF[fid]; const m=document.getElementById("main"); m.innerHTML=""; dailySetTab(fid);
   { const th=toolHead(tc(F.t),F.sub,["#daily","Daily QA Work"]); th.classList.add("sqHead"); m.append(th); }
@@ -6712,7 +6753,7 @@ function renderSqForm(fid){
   const v=cur.v; const st=el("p",{class:"src",role:"status"});
   const touch=()=>{ cur.updated=nowTs(); sqSave(); const [d,n]=sqProgress(F,cur); st.textContent=d+" of "+n+" fields completed."; };
   const p=el("div",{class:"panel"}); m.append(p);
-  p.append(el("div",{class:"card sqStat"}, st, el("button",{class:"smpBtn wkOpenBtn",type:"button",onclick:()=>openSqWork(fid,0)}, el("span",{class:"wkGI","aria-hidden":"true"},"i"), "Open guided editor")));
+  p.append(el("div",{class:"card sqStat"}, st, prjSel(cur.prj,v=>{ cur.prj=v||undefined; sqSave(); }), el("button",{class:"smpBtn wkOpenBtn",type:"button",onclick:()=>openSqWork(fid,0)}, el("span",{class:"wkGI","aria-hidden":"true"},"i"), "Open guided editor")));
   F.secs.forEach(S=>p.append(sqSecCard(F,S,v,touch)));
   touch();
   const ttl=tc(F.short)+" "+cur.id;
@@ -6754,11 +6795,11 @@ function pinScroll(){ const a=document.getElementById("navAnchor"); const y=a?a.
 let LAST_ROUTE=null;
 function route(){
   const id=(location.hash||"").slice(1)||"home";
-  { const sec=["random","dilemmas","audit"].includes(id)?"practice":["tools","daily","stats","sampling","bstats","msa","grr","rmtools","impact","risk","cvss","projects"].includes(id)||SQF[id]?"tools":"learn"; document.documentElement.dataset.sec=sec; document.documentElement.dataset.mod=(sec==="practice"||CH.some(c=>c.id===id))?"train":""; }
+  { const sec=["random","dilemmas","audit"].includes(id)?"practice":["tools","daily","stats","sampling","bstats","msa","grr","rmtools","impact","risk","cvss","projects","qadrafts"].includes(id)||SQF[id]?"tools":"learn"; document.documentElement.dataset.sec=sec; document.documentElement.dataset.mod=(sec==="practice"||CH.some(c=>c.id===id))?"train":""; }
   if(SQF[id]){ closeModal(); renderNav(id); renderSqForm(id); totals(); try{ if(navPinned()) pinScroll(); else window.scrollTo({top:0}); }catch(e){} return; }
   if(["daily","stats","sampling","risk","rmtools","bstats"].includes(id)&&LAST_ROUTE!==id) setTimeout(()=>{ if((location.hash||"").slice(1)!==id) return; if(id==="daily") dailyIntro(); else if(id==="risk") riskIntro(); else if(id==="rmtools") rmtIntro(); else if(id==="bstats") bstatsIntro(); else statsIntro(id); },450);
   LAST_ROUTE=id;
-  if(["home","explore","dilemmas","map","sampling","bstats","tools","daily","stats","dates","audit","risk","msa","grr","rmtools","impact","cvss","projects"].includes(id)){ closeModal(); renderNav(id); ({home:()=>renderHome(false),explore:()=>renderHome(true),dilemmas:renderDilemmas,map:renderMap,sampling:renderSampling,tools:()=>renderTools("daily"),daily:()=>renderTools("daily"),stats:()=>renderTools("stats"),risk:renderRisk,msa:renderMsa,grr:renderGrr,rmtools:renderRmTools,impact:renderImpact,cvss:renderCvss,projects:renderProjects,bstats:renderBstats,dates:renderDates,audit:renderAudit})[id](); totals(); try{ if(navPinned()) pinScroll(); else window.scrollTo({top:0}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
+  if(["home","explore","dilemmas","map","sampling","bstats","tools","daily","stats","dates","audit","risk","msa","grr","rmtools","impact","cvss","projects","qadrafts"].includes(id)){ closeModal(); renderNav(id); ({home:()=>renderHome(false),explore:()=>renderHome(true),dilemmas:renderDilemmas,map:renderMap,sampling:renderSampling,tools:()=>renderTools("daily"),daily:()=>renderTools("daily"),stats:()=>renderTools("stats"),risk:renderRisk,msa:renderMsa,grr:renderGrr,rmtools:renderRmTools,impact:renderImpact,cvss:renderCvss,projects:renderProjects,bstats:renderBstats,qadrafts:renderQaDrafts,dates:renderDates,audit:renderAudit})[id](); totals(); try{ if(navPinned()) pinScroll(); else window.scrollTo({top:0}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
   if(id==="random"){ closeModal(); renderNav("random"); renderRandom(); totals(); try{ if(navPinned()) pinScroll(); else window.scrollTo({top:document.getElementById("dnav").offsetTop}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
   const valid=CH.some(c=>c.id===id)?id:CH[0].id;
   currentTab=pendingTab||""; pendingTab=null;
