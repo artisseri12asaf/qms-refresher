@@ -1695,7 +1695,11 @@ html:not([data-home="true"]) #heroTop{display:none !important}
   #main .choiceGrid .toolCard:not(.dLay .toolCard) > b{font-size:15px !important; margin:0 !important}
   #main .choiceGrid .toolCard:not(.dLay .toolCard) > span:not(.toolIco){font-size:13px !important; line-height:1.4}
 }
-.legalLinks{display:flex; flex-wrap:wrap; justify-content:center; gap:8px 10px; margin:12px auto 0; max-width:1100px}
+.legalLinks{display:flex; flex-wrap:nowrap; gap:8px; width:100%; margin:10px 0 6px; break-inside:avoid; box-sizing:border-box}
+.legalBtn{flex:1 1 auto; justify-content:center; min-width:0; white-space:nowrap; padding:7px 8px; line-height:1.2}
+@media (max-width:640px){ .legalLinks{gap:6px} .legalBtn{font-size:12px; padding:7px 4px; gap:4px} .legalBtn .ico{width:13px; height:13px} }
+.legalBtn .ico{flex:none}
+@media (max-width:400px){ .legalBtn .ico{display:none} }
 .legalBtn{display:inline-flex; align-items:center; gap:6px; font:inherit; font-size:13px; font-weight:600; padding:7px 12px; border-radius:999px; border:1px solid var(--line,#cfd8e0); background:var(--card); color:var(--ink); cursor:pointer}
 .legalBtn .ico{width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round}
 .legalBtn:hover{border-color:var(--fda)}
@@ -3214,7 +3218,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="3.2.0", APPDATE="22-NOV-2026";
+const APPVER="3.2.1", APPDATE="22-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Qraft (Asaf Ben Zion). All rights reserved.";
 const LEGAL=[["Risk Management Approach", "Content is a paraphrased summary for training. It does not replace the standards: ISO 14971:2019 (with EN ISO 14971:2019+A11:2021 for the EU), ISO/TR 24971:2020 and IEC 62366-1:2015+A1:2020. Use your licensed copies for exact requirements."], ["Copyright", "© 2026 Qraft (Asaf Ben Zion). The selection, structure, design and original text of this handbook may not be copied or redistributed without written permission. Regulations and official guidance are cited from their publishers: US federal texts are in the public domain, and EU texts are reused with attribution. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number and described in the author’s own words; their text remains the property of their publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, selection and design, and was developed and tested with AI tools. Key facts, such as regulatory reporting timelines, device classifications and clause numbers, were checked against official sources; other content is the author’s interpretation and may contain inaccuracies."], ["Sources", "Cited sources are official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs and FDA databases. EU: EUR-Lex, European Commission pages and MDCG guidance. International: IMDRF codes and MDSAP documents. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number, based on freely available published information and the author’s own interpretation and knowledge."], ["Important", "This application is intended for training purposes only and is not legal or regulatory advice. It is provided without warranty. Results from its tools require human review, verification and approval. Always check the linked official source before citing anything in a formal regulatory or customer response."]];
@@ -3222,11 +3226,11 @@ function renderFooter(){
   const f=document.getElementById("siteFoot"); if(!f) return; f.innerHTML="";
   const id=(location.hash||"").slice(1)||"home", full=id==="home";
   const rk=["risk","rmtool","rmtools"].includes(id); const items=LEGAL.filter(([h])=>full||h==="Copyright"||h==="Important"||(rk&&h==="Risk Management Approach"));
-  f.append(el("div",{class:"legalBody"+(full?" full":"")}, ...items.map(([h,t])=>el("p",{class:h==="Important"?"imp":""}, el("b",{},h+". "), t))),
+  f.append(el("div",{class:"legalBody"+(full?" full":"")}, ...items.map(([h,t])=>el("p",{class:h==="Important"?"imp":""}, el("b",{},h+". "), t)),
     full?el("div",{class:"legalLinks"},
       el("button",{class:"legalBtn",type:"button",onclick:()=>openLegal("tc")}, ico("agree"), el("span",{},"Terms & Conditions")),
       el("button",{class:"legalBtn",type:"button",onclick:()=>openLegal("pp")}, ico("shield"), el("span",{},"Privacy Policy")),
-      el("button",{class:"legalBtn",type:"button",onclick:openContact}, ico("mail"), el("span",{},"Contact us"))):"",
+      el("button",{class:"legalBtn",type:"button",onclick:openContact}, ico("mail"), el("span",{},"Contact us"))):""),
     el("p",{class:"footLine"}, el("span",{},VERLINE), " ", el("span",{},COPYLINE)));
 }
 /* ---------- 3.2.0 Terms & Conditions, Privacy Policy, Contact us ---------- */
