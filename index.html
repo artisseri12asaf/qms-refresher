@@ -1921,7 +1921,8 @@ html:not([data-home="true"]) #heroTop{display:none !important}
 .wlPaper .wlNote{font-family:Inter,system-ui,sans-serif}
 @media (max-width:640px){ .wlPaper{padding:22px 16px 16px} .wlPaper .wlStamp{position:static; display:inline-block; margin:6px 0 4px} }
 
-.trlRow{display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin:0 auto 10px}
+.trlRow{display:flex; flex-wrap:nowrap; justify-content:center; gap:10px; margin:0 auto 10px}
+.trlRow .trlBtn b{white-space:nowrap}
 .trlRow .trlBtn{margin:0}
 .trlBtn.light{background:linear-gradient(135deg,#ffffff 0%,#e3f0f8 60%,#cfe4f1 100%); color:#14324a; border-color:#a9cfe3; box-shadow:0 6px 18px rgba(20,50,75,.14)}
 .trlBtn.light small{color:#2b7299}
@@ -2250,11 +2251,11 @@ function choiceGrid(){
 /* 2.8.0 trailer: button on the Welcome screen; plays trailer.mp4 (published next to index.html) in an in-app player */
 /* 3.5.0 two trailers: full (trailer.mp4) and short (trailer_short.mp4) */
 function trailerBtn(){ const mk=(lab,src,cls,aria)=>{ const b=el("button",{class:"trlBtn"+(cls?" "+cls:""),type:"button","aria-label":aria},
-    el("span",{class:"trlPlay","aria-hidden":"true"}), el("span",{}, el("b",{},lab), el("small",{},"Qraft")));
+    el("span",{class:"trlPlay","aria-hidden":"true"}), el("b",{},lab));
   b.addEventListener("click",()=>openTrailer(src)); return b; };
-  return el("div",{class:"trlRow"}, mk("Watch the Short Trailer","trailer_short.mp4","light","Watch the Qraft short trailer"), mk("Watch the Full Trailer","trailer.mp4","","Watch the Qraft full trailer")); }
+  return el("div",{class:"trlRow"}, mk("Full Trailer","trailer.mp4","","Watch the Qraft full trailer"), mk("Short Trailer","trailer_short.mp4","light","Watch the Qraft short trailer")); }
 function openTrailer(src){ if(document.getElementById("trlOv")) return;
-  const v=el("video",{src:typeof src==="string"?src:"trailer.mp4",controls:"",playsinline:"",preload:"auto","aria-label":"Qraft trailer"});
+  const v=el("video",{src:(typeof src==="string"?src:"trailer.mp4")+"?v="+APPVER, /* 3.5.1 versioned link: devices never replay an old cached trailer */controls:"",playsinline:"",preload:"auto","aria-label":"Qraft trailer"});
   const st=el("p",{class:"trlSt",role:"status"});
   const close=()=>{ try{ v.pause(); }catch(e){} ov.remove(); document.removeEventListener("keydown",esc,true); };
   const esc=e=>{ if(e.key==="Escape"){ e.stopPropagation(); close(); } };
@@ -3430,7 +3431,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="3.5.0", APPDATE="22-NOV-2026";
+const APPVER="3.5.1", APPDATE="22-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Qraft (Asaf Ben Zion). All rights reserved.";
 const LEGAL=[["Risk Management Approach", "Content is a paraphrased summary for training. It does not replace the standards: ISO 14971:2019 (with EN ISO 14971:2019+A11:2021 for the EU), ISO/TR 24971:2020 and IEC 62366-1:2015+A1:2020. Use your licensed copies for exact requirements."], ["Copyright", "© 2026 Qraft (Asaf Ben Zion). The selection, structure, design and original text of this handbook may not be copied or redistributed without written permission. Regulations and official guidance are cited from their publishers: US federal texts are in the public domain, and EU texts are reused with attribution. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number and described in the author’s own words; their text remains the property of their publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, selection and design, and was developed and tested with AI tools. Key facts, such as regulatory reporting timelines, device classifications and clause numbers, were checked against official sources; other content is the author’s interpretation and may contain inaccuracies."], ["Sources", "Cited sources are official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs and FDA databases. EU: EUR-Lex, European Commission pages and MDCG guidance. International: IMDRF codes and MDSAP documents. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number, based on freely available published information and the author’s own interpretation and knowledge."], ["Important", "This application is intended for training purposes only and is not legal or regulatory advice. It is provided without warranty. Results from its tools require human review, verification and approval. Always check the linked official source before citing anything in a formal regulatory or customer response."]];
