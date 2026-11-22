@@ -2287,7 +2287,7 @@ function showLaunch(){
   cb.addEventListener("change",()=>{ try{ localStorage.setItem(LKEY, cb.checked?"on":"off"); }catch(e){} });
   body.append(el("div",{class:"mact"}, el("label",{class:"unl"}, cb, " Show this menu when the app opens")),
     el("p",{class:"welcomeCopy"}, el("span",{},VERLINE), el("span",{},COPYLINE)));
-  modal("Welcome to the guide to Medical Device Quality Training Requirements",body);
+  modal("Welcome to Your Medical Device Quality Training Hub",body);
   const mb=document.querySelector("#ovl .mbox"); if(mb) mb.classList.add("launchBox");
   { const hd=document.querySelector("#ovl .launchBox .mhead"), x=hd&&hd.querySelector(".mclose"); if(hd){ const lg=heroLogo(); lg.classList.add("wLogo"); hd.insertBefore(lg,x); } }
 }
@@ -3423,7 +3423,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="3.4.2", APPDATE="22-NOV-2026";
+const APPVER="3.4.3", APPDATE="22-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Qraft (Asaf Ben Zion). All rights reserved.";
 const LEGAL=[["Risk Management Approach", "Content is a paraphrased summary for training. It does not replace the standards: ISO 14971:2019 (with EN ISO 14971:2019+A11:2021 for the EU), ISO/TR 24971:2020 and IEC 62366-1:2015+A1:2020. Use your licensed copies for exact requirements."], ["Copyright", "© 2026 Qraft (Asaf Ben Zion). The selection, structure, design and original text of this handbook may not be copied or redistributed without written permission. Regulations and official guidance are cited from their publishers: US federal texts are in the public domain, and EU texts are reused with attribution. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number and described in the author’s own words; their text remains the property of their publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, selection and design, and was developed and tested with AI tools. Key facts, such as regulatory reporting timelines, device classifications and clause numbers, were checked against official sources; other content is the author’s interpretation and may contain inaccuracies."], ["Sources", "Cited sources are official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs and FDA databases. EU: EUR-Lex, European Commission pages and MDCG guidance. International: IMDRF codes and MDSAP documents. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number, based on freely available published information and the author’s own interpretation and knowledge."], ["Important", "This application is intended for training purposes only and is not legal or regulatory advice. It is provided without warranty. Results from its tools require human review, verification and approval. Always check the linked official source before citing anything in a formal regulatory or customer response."]];
