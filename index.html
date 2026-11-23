@@ -2039,7 +2039,8 @@ html:not([data-home="true"]) #heroTop{display:none !important}
 .hlpGo{margin-left:auto; flex:0 0 auto; font-style:normal; font-size:11.5px; font-weight:700; color:var(--skyInk); background:color-mix(in srgb,var(--sky) 14%,var(--card)); padding:2px 7px; border-radius:999px; align-self:center}
 .hlpTip .hlpStep{margin-left:auto; color:var(--muted); font-weight:700; font-size:12px}
 .hlpTip .hlpBar{height:4px; border-radius:2px; background:color-mix(in srgb,var(--sky) 18%,var(--card)); overflow:hidden; margin:0 0 9px} .hlpTip .hlpBar i{display:block; height:100%; width:0; background:#1f5f8b}
-.hlpTipBtns{display:flex; gap:8px}
+.hlpTip.tour .hlpBar{margin:2px 0 0}
+.hlpPanel.headonly .hlpBody{display:none} .hlpPanel.headonly .hlpHead{border-bottom:0}
 #hlpRoot[data-spot="l"] .hlpBot{right:auto; left:22px}
 #hlpRoot[data-spot="l"] .hlpPanel{right:auto; left:calc(22px + var(--hlpW,190px) + 10px)}
 #hlpRoot[data-spot="l"] .hlpPanel::after{right:auto; left:-8px; transform:rotate(-135deg)}
@@ -3549,7 +3550,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="3.10.0", APPDATE="23-NOV-2026";
+const APPVER="3.10.1", APPDATE="23-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Qraft (Asaf Ben Zion). All rights reserved.";
 const LEGAL=[["Risk Management Approach", "Content is a paraphrased summary for training. It does not replace the standards: ISO 14971:2019 (with EN ISO 14971:2019+A11:2021 for the EU), ISO/TR 24971:2020 and IEC 62366-1:2015+A1:2020. Use your licensed copies for exact requirements."], ["Copyright", "© 2026 Qraft (Asaf Ben Zion). The selection, structure, design and original text of this handbook may not be copied or redistributed without written permission. Regulations and official guidance are cited from their publishers: US federal texts are in the public domain, and EU texts are reused with attribution. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number and described in the author’s own words; their text remains the property of their publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, selection and design, and was developed and tested with AI tools. Key facts, such as regulatory reporting timelines, device classifications and clause numbers, were checked against official sources; other content is the author’s interpretation and may contain inaccuracies."], ["Sources", "Cited sources are official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs and FDA databases. EU: EUR-Lex, European Commission pages and MDCG guidance. International: IMDRF codes and MDSAP documents. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number, based on freely available published information and the author’s own interpretation and knowledge."], ["Important", "This application is intended for training purposes only and is not legal or regulatory advice. It is provided without warranty. Results from its tools require human review, verification and approval. Always check the linked official source before citing anything in a formal regulatory or customer response."]];
@@ -4037,7 +4038,7 @@ const HELP_FEAT=[
  {r:"home",t:"Explore the regulations",s:".navGroup||Explore",h:"Open a chapter: ISO 13485, FDA QMSR, EU MDR or FDA premarket and postmarket, or the QMS map and the Regulatory Timeline.",k:"learn read study chapters iso 13485 qmsr 820 mdr eu fda premarket postmarket regulations clauses",q:["how can i learn the regulations","where are the chapters","where is iso 13485","where is the fda qmsr","where is the eu mdr","what can i read"]},
  {r:"home",t:"Search the handbook",s:".navSearchRow .qIn,.qIn",h:"Type a clause (7.4.1), a regulation section (820.45), an article or a word. Results appear under the box; click one to jump to it.",k:"find look up clause article section keyword search",q:["how do i find a clause","where is the search","how can i look up a regulation"]},
  {r:"home",t:"Practice",s:".navGroup||Practice",h:"Random Question, Selected Dilemmas, Inspection mode (virtual FDA inspections) and GDP Training.",k:"practice train exercise quiz test yourself",q:["what can i practice","how can i test myself","where are the exercises"]},
- {r:"home",t:"Tools",s:".navGroup||Tools",h:"QMS Assistant forms, Statistical Tools, Risk management and Projects.",k:"tools forms templates calculators work",q:["which tools are there","what tools can i use"]},
+ {r:"home",t:"Tools",s:".navGroup||Tools",h:"QMS Assistant forms, Statistical Tools, Risk management and Projects.",k:"tools work",q:["which tools are there","what tools can i use"]},
  {r:"home",t:"Glossary",s:".glossCard",h:"Open the glossary and type a term (AQL, PSUR) or pick an area chip to filter the definitions.",k:"glossary terms abbreviations definitions acronym meaning",q:["what does this abbreviation mean","where is the glossary","how can i find a definition"]},
  {r:"home",t:"Quick Survey",s:".hBtns .svyBtn:not(.ctBtn)",h:"A short feedback form. Answers are sent only if you choose to email, share or copy them.",k:"survey feedback opinion",q:["how can i give feedback"]},
  {r:"home",t:"Contact us",s:".hBtns .ctBtn",h:"Shows how to reach us with a question or a suggestion.",k:"contact email phone support",q:["how can i contact you"]},
@@ -4099,7 +4100,7 @@ const HELP_FEAT=[
  {r:"map",t:"Filter topics",s:"#main .cfilter",h:"Type a topic, clause or article (purchasing, 7.5.8, Art. 87).",k:"filter topic clause article",q:["how do i find a clause in the map"]},
  {r:"map",t:"Exemptions",s:"#main .tab||Exemptions",h:"Show only the exemptions and scope limits.",k:"exemption scope exclusion",q:["where are the exemptions"]}
 ];
-const HELP_SYN={inspect:"inspection",inspector:"inspection",investigator:"inspection",audit:"inspection",interview:"inspection",letter:"warning",letters:"warning",enforcement:"warning",learn:"learn",study:"learn",read:"learn",chapter:"chapters",sample:"sample",sampling:"sample",samples:"sample",aql:"sample",form:"form",forms:"form",template:"form",templates:"form",record:"form",records:"form",quiz:"question",questions:"question",test:"question",dilemma:"dilemmas",scenario:"dilemmas",statistic:"statistics",stats:"statistics",statistical:"statistics",calculator:"statistics",calculators:"statistics",cpk:"cpk",hazard:"risk",hazards:"risk",fmea:"fmea",danger:"risk",term:"glossary",terms:"glossary",abbreviation:"glossary",abbreviations:"glossary",definition:"glossary",definitions:"glossary",meaning:"glossary",date:"timeline",dates:"timeline",deadline:"timeline",deadlines:"timeline",transition:"timeline",crosswalk:"map",compare:"map",documentation:"gdp",alcoa:"gdp",cyber:"cvss",cybersecurity:"cvss",security:"cvss",vulnerability:"cvss",project:"projects",draft:"drafts",saved:"drafts",feedback:"survey",email:"contact",qmsr:"fda",820:"fda",mdr:"eu",notified:"eu",13485:"iso",practise:"practice",exercise:"practice",train:"practice",training:"practice"};let HLP=null;
+const HELP_SYN={inspect:"inspection",inspector:"inspection",investigator:"inspection",audit:"inspection",interview:"inspection",letter:"warning",letters:"warning",enforcement:"warning",learn:"learn",study:"learn",read:"learn",chapter:"chapters",sample:"sample",sampling:"sample",samples:"sample",aql:"sample",form:"form",forms:"form",template:"form",templates:"form",record:"form",records:"form",quiz:"question",questions:"question",test:"question",dilemma:"dilemmas",scenario:"dilemmas",statistic:"statistics",stats:"statistics",statistical:"statistics",calculator:"statistics",calculators:"statistics",cpk:"cpk",hazard:"risk",hazards:"risk",fmea:"fmea",danger:"risk",term:"glossary",terms:"glossary",abbreviation:"glossary",abbreviations:"glossary",definition:"glossary",definitions:"glossary",meaning:"glossary",date:"timeline",dates:"timeline",deadline:"timeline",deadlines:"timeline",transition:"timeline",crosswalk:"map",compare:"map",documentation:"gdp",alcoa:"gdp",cyber:"cvss",cybersecurity:"cvss",security:"cvss",vulnerability:"cvss",project:"projects",draft:"drafts",saved:"drafts",feedback:"survey",email:"contact",qmsr:"fda",mdr:"eu",notified:"eu",practise:"practice",exercise:"practice",train:"practice",training:"practice"};let HLP=null;
 /* 3.8.0: the step guidance of forms and risk tools is no longer shown on the page; the helper shows it on request */
 function helpWkOpen(){ const w=document.querySelector(".wkOv"); return w&&w.getClientRects().length?w:null; }
 function helpGuideBox(){ const ov=helpWkOpen(); return [...document.querySelectorAll(".wkGuide")].find(g=>{ if(ov) return ov.contains(g); const w=g.closest(".wkGrid"); return w&&w.getClientRects().length>0; })||null; }
@@ -4152,11 +4153,12 @@ function helpExamples(res,input){ res.innerHTML=""; const scr=helpScreen(); cons
   const ex=[...own.map(f=>f.q[0]),"where are the warning letters","how can i calculate a sample size","where is the fmea"].filter((v,i,a)=>a.indexOf(v)===i).slice(0,3);
   const row=el("div",{class:"hlpEx"}, el("small",{},"Try:"), ...ex.map(q=>{ const b=el("button",{type:"button",class:"hlpChip"},q.charAt(0).toUpperCase()+q.slice(1)+"?"); b.addEventListener("click",()=>{ input.value=q; helpSearch(q,res,input); }); return b; }));
   res.append(row); }
-const HELP_STOP=new Set("how do does did i me my we our you your can could would should will to the a an of in on at for and or is are be it this that what which where when who why there here find show get use using work works feature features help helps assist assists with about please want need see open".split(" "));
+const HELP_STOP=new Set("how do does did i me my we our you your can could would should will to the a an of in on at for and or is are be it this that what which where when who why there here find show get use using work works feature features help helps assist assists with about please want need see open here screen page this".split(" "));
 function helpStem(w){ if(HELP_SYN[w]) return HELP_SYN[w]; let t=w; if(t.length>5&&t.endsWith("ing")) t=t.slice(0,-3); else if(t.length>4&&t.endsWith("ies")) t=t.slice(0,-3)+"y"; else if(t.length>4&&t.endsWith("es")&&!t.endsWith("ses")) t=t.slice(0,-2); else if(t.length>3&&t.endsWith("s")&&!t.endsWith("ss")) t=t.slice(0,-1); return HELP_SYN[t]||t; }
 function helpTok(s){ return (s||"").toLowerCase().replace(/r&r/g,"rr").replace(/[^a-z0-9.\s-]/g," ").split(/[\s-]+/).filter(w=>w.length>1&&!HELP_STOP.has(w)).map(helpStem); }
 function helpTier(r,cur){ if(r===cur) return 0; let p=HELP_PARENT[r]; while(p){ if(p===cur) return 1; p=HELP_PARENT[p]; } if(HELP_PARENT[cur]===r) return 1; return 2; }
-function helpRank(q){ const qt=[...new Set(helpTok(q))]; if(!qt.length) return []; const cur=helpScreen();
+function helpRank(q){ const qt=[...new Set(helpTok(q))]; const cur=helpScreen();
+  if(!qt.length) return /[a-z]/i.test(q)?helpFeats().filter(f=>f.r===cur):[];   /* "What can I do here?" -> this screen's features */
   const sc=helpFeats().map(f=>{ const F=f._tok||(f._tok={t:helpTok(f.t),k:helpTok(f.k),h:helpTok(f.h),q:helpTok((f.q||[]).join(" ")),s:helpTok(HELP_SCREENS[f.r]||"")}); let s=0, hit=0;
     qt.forEach(w=>{ const m=a=>a.some(x=>x===w||(w.length>3&&x.length>3&&(x.startsWith(w)||w.startsWith(x)))); let b=0; if(m(F.t)) b=Math.max(b,3); if(m(F.q)) b=Math.max(b,3); if(m(F.k)) b=Math.max(b,2.5); if(m(F.s)) b=Math.max(b,2); if(m(F.h)) b=Math.max(b,1); if(b) hit++; s+=b; });
     s=s*(0.6+0.4*hit/qt.length); return {f,s,tier:helpTier(f.r,cur)}; }).filter(x=>x.s>=2);
@@ -4195,7 +4197,7 @@ function helpTransit(hk,target,done){ const H=HLP; if(!H) return; const old=H.bo
 const HELP_TOUR_MS=10000;
 function helpPlayIcon(){ if(!HLP||!HLP.play) return; const on=HLP.tour&&!HLP.tour.paused; HLP.play.classList.toggle("on",!!on); HLP.play.setAttribute("aria-label",on?"Pause the tour":"Play a short tour of this screen"); HLP.play.innerHTML=on?'<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><rect x="2" y="1.5" width="3" height="9" rx="1" fill="currentColor"/><rect x="7" y="1.5" width="3" height="9" rx="1" fill="currentColor"/></svg>':'<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1.5v9l7.5-4.5z" fill="currentColor"/></svg>'; }
 function helpTourToggle(){ if(!HLP) return; const T=HLP.tour;
-  if(!T){ const list=helpFeats().filter(f=>f.r===helpScreen()&&helpFind(f.s)); if(!list.length) return; const step=Math.min(4000,Math.max(1600,Math.round(HELP_TOUR_MS/list.length)));
+  if(!T){ const list=helpFeats().filter(f=>f.r===helpScreen()&&helpFind(f.s)); if(!list.length) return; const step=Math.min(4000,Math.max(1600,Math.round(HELP_TOUR_MS/list.length)))+2000;
     HLP.tour={list,i:0,paused:false,step}; helpTourShow(); }
   else if(T.paused){ T.paused=false; helpTourShow(); }
   else { T.paused=true; clearTimeout(T.t); const bar=document.querySelector(".hlpTip .hlpBar i"); if(bar){ const w=getComputedStyle(bar).width; bar.style.transition="none"; bar.style.width=w; } }
@@ -4211,9 +4213,9 @@ function helpTip(f,opt){ opt=opt||{}; helpTipClose(); const t=helpFind(f.s); con
   if(f.dyn){ const g=helpGuideBox(), box=el("div",{class:"hlpGB"}); if(g) g.querySelectorAll(".wkGB").forEach(x=>box.append(x.cloneNode(true))); if(!box.children.length) box.append(el("p",{},"Fill in each field with facts and evidence. Open Sample to see a completed example.")); tip.append(box); }
   else tip.append(el("p",{},f.h));
   const ok=el("button",{class:"hlpOk",type:"button"},T?"✕ Stop":"Got it"); ok.addEventListener("click",()=>{ if(HLP&&HLP.tour) helpTourStop(); else helpTipClose(); });
-  if(T){ const tp=el("button",{class:"hlpOk hlpTP",type:"button"}); tp.addEventListener("click",helpTourToggle); tip.append(el("div",{class:"hlpBar"},el("i",{})), el("div",{class:"hlpTipBtns"},tp,ok)); }
+  if(T) tip.append(el("div",{class:"hlpBar"},el("i",{})));
   else tip.append(ok);
-  const small=innerWidth<=700; if(small&&HLP&&HLP.panel) HLP.panel.classList.add("mini");
+  const small=innerWidth<=700; if(small&&HLP&&HLP.panel) HLP.panel.classList.add(T?"headonly":"mini");
   document.body.append(tip); HLP.tip={tip,t}; helpPose("point");
   if(!t){ const pp=tip.querySelector("p"); if(pp&&!f.dyn) pp.textContent=f.h+" (This part is not visible right now. Scroll or widen the window to see it.)"; tip.style.position="fixed"; tip.style.left="50%"; tip.style.top="30%"; tip.style.transform="translateX(-50%)"; ok.focus({preventScroll:true}); return; }
   t.classList.add("hlpTarget"); setTimeout(()=>{ if(!HLP||!HLP.tip) return; const tr=t.getBoundingClientRect(), br=HLP.bot.getBoundingClientRect(); HLP.fig.style.setProperty("--lean",(tr.left+tr.width/2<br.left?-5:4)+"deg"); },500); t.scrollIntoView({block:"center",behavior:helpReduce()?"auto":"smooth"});
@@ -4226,7 +4228,7 @@ function helpTip(f,opt){ opt=opt||{}; helpTipClose(); const t=helpFind(f.s); con
   place(); setTimeout(place,350); setTimeout(place,700); HLP.tip.place=place; addEventListener("resize",place); addEventListener("scroll",place,{passive:true,capture:true});
   if(T) helpTourCtl(); else setTimeout(()=>ok.focus({preventScroll:true}),400); }
 function helpTipClose(){ if(!HLP||!HLP.tip) return; const {tip,t,place}=HLP.tip; tip.remove(); if(t) t.classList.remove("hlpTarget");
-  if(place){ removeEventListener("resize",place); removeEventListener("scroll",place,{capture:true}); } HLP.tip=null; if(HLP.panel) HLP.panel.classList.remove("mini"); if(HLP.fig) HLP.fig.style.setProperty("--lean","0deg"); helpPose("thumb"); }
+  if(place){ removeEventListener("resize",place); removeEventListener("scroll",place,{capture:true}); } HLP.tip=null; if(HLP.panel) HLP.panel.classList.remove("mini","headonly"); if(HLP.fig) HLP.fig.style.setProperty("--lean","0deg"); helpPose("thumb"); }
 function helpClose(){ if(!HLP) return; helpTourStop(); const H=HLP; clearTimeout(H.idleT); clearTimeout(H.routeT); helpTipClose(); HLP=null;
   if(H.panel) H.panel.classList.add("out");
   const hat=helpHatEl(); const end=()=>{ H.root.remove(); if(hat){ hat.classList.remove("catch"); void hat.offsetWidth; hat.classList.add("catch"); setTimeout(()=>hat.classList.remove("catch"),650); hat.focus({preventScroll:true}); } };
