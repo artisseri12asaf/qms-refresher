@@ -2024,6 +2024,26 @@ html:not([data-home="true"]) #heroTop{display:none !important}
 }
 @media (max-width:370px){ .hBtns{gap:6px} .hBtns .svyBtn{font-size:13px; gap:5px; padding:0 6px} .helpHat{width:52px} .helpHat img{height:52px} }
 @media (prefers-reduced-motion: reduce){ .helpHat img,#hlpRoot .hlpBot.idle .hlpBreath,#hlpRoot .hlpBot.idle .hlpShadow,#hlpRoot .hlpBot.idle .hlpSheen,.hlpTarget{animation:none} #hlpRoot .hlpFig{transition:none} .hlpPanel,.hlpTip{animation:none} }
+
+/* 3.10.0 help v2: play tour, examples, richer results, left/right spots */
+.hlpTtl{display:flex; align-items:center; gap:8px}
+.hlpPlay{width:26px; height:26px; border-radius:50%; border:0; display:grid; place-items:center; cursor:pointer; color:#fff; background:linear-gradient(180deg,#2d7fb3,#1f5f8b); box-shadow:0 2px 6px rgba(31,95,139,.35); transition:transform .15s}
+.hlpPlay:hover{transform:scale(1.12)} .hlpPlay.on{background:linear-gradient(180deg,#c0623f,#9b3b22)}
+.hlpPlay:focus-visible{outline:3px solid var(--sky); outline-offset:2px}
+.hlpEx{display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-top:2px}
+.hlpEx small{color:var(--muted); font-weight:700; font-size:12px}
+.hlpChip{font:inherit; font-size:12.5px; font-weight:600; color:var(--skyInk); background:color-mix(in srgb,var(--sky) 10%,var(--card)); border:1px solid color-mix(in srgb,var(--sky) 45%,var(--line)); border-radius:999px; padding:4px 10px; cursor:pointer; text-align:left}
+.hlpChip:hover{background:color-mix(in srgb,var(--sky) 20%,var(--card))}
+.hlpItem{align-items:flex-start}
+.hlpIT{display:grid; gap:1px; min-width:0} .hlpIT b{font-size:14.5px} .hlpIA{color:var(--muted); font-weight:500; font-size:12.5px; line-height:1.35}
+.hlpGo{margin-left:auto; flex:0 0 auto; font-style:normal; font-size:11.5px; font-weight:700; color:var(--skyInk); background:color-mix(in srgb,var(--sky) 14%,var(--card)); padding:2px 7px; border-radius:999px; align-self:center}
+.hlpTip .hlpStep{margin-left:auto; color:var(--muted); font-weight:700; font-size:12px}
+.hlpTip .hlpBar{height:4px; border-radius:2px; background:color-mix(in srgb,var(--sky) 18%,var(--card)); overflow:hidden; margin:0 0 9px} .hlpTip .hlpBar i{display:block; height:100%; width:0; background:#1f5f8b}
+.hlpTipBtns{display:flex; gap:8px}
+#hlpRoot[data-spot="l"] .hlpBot{right:auto; left:22px}
+#hlpRoot[data-spot="l"] .hlpPanel{right:auto; left:calc(22px + var(--hlpW,190px) + 10px)}
+#hlpRoot[data-spot="l"] .hlpPanel::after{right:auto; left:-8px; transform:rotate(-135deg)}
+@media (max-width:700px){ #hlpRoot[data-spot="l"] .hlpBot{left:6px} #hlpRoot[data-spot="l"] .hlpPanel{left:10px; right:10px} #hlpRoot[data-spot="l"] .hlpPanel::after{left:46px; right:auto; transform:rotate(135deg)} }
 </style>
 </head>
 <body>
@@ -3529,7 +3549,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="3.9.1", APPDATE="23-NOV-2026";
+const APPVER="3.10.0", APPDATE="23-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Qraft (Asaf Ben Zion). All rights reserved.";
 const LEGAL=[["Risk Management Approach", "Content is a paraphrased summary for training. It does not replace the standards: ISO 14971:2019 (with EN ISO 14971:2019+A11:2021 for the EU), ISO/TR 24971:2020 and IEC 62366-1:2015+A1:2020. Use your licensed copies for exact requirements."], ["Copyright", "© 2026 Qraft (Asaf Ben Zion). The selection, structure, design and original text of this handbook may not be copied or redistributed without written permission. Regulations and official guidance are cited from their publishers: US federal texts are in the public domain, and EU texts are reused with attribution. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number and described in the author’s own words; their text remains the property of their publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, selection and design, and was developed and tested with AI tools. Key facts, such as regulatory reporting timelines, device classifications and clause numbers, were checked against official sources; other content is the author’s interpretation and may contain inaccuracies."], ["Sources", "Cited sources are official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs and FDA databases. EU: EUR-Lex, European Commission pages and MDCG guidance. International: IMDRF codes and MDSAP documents. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number, based on freely available published information and the author’s own interpretation and knowledge."], ["Important", "This application is intended for training purposes only and is not legal or regulatory advice. It is provided without warranty. Results from its tools require human review, verification and approval. Always check the linked official source before citing anything in a formal regulatory or customer response."]];
@@ -3982,14 +4002,14 @@ const HELP_SCREEN_HELPER={chapter:"engineer",map:"engineer",dates:"engineer",aud
 function helpPoseSrc(k,pose){ const H=HELPERS[k]||HELPERS[HELP_DEFAULT]; return H.poses[pose]||H.poses.thumb; }
 function helpPose(pose){ if(!HLP) return; HLP.pose=pose; helpShow(helpPoseSrc(HLP.key,pose)); }
 /* two stacked images cross-fade between poses; the sheen is masked by the current pose so only the figure catches the light */
-function helpShow(src,instant){ if(!HLP) return; const [a,b]=HLP.imgs, cur=a.classList.contains("on")?a:b, nx=cur===a?b:a;
+function helpShow(src,instant){ if(!HLP) return; const H=HLP; const [a,b]=H.imgs, cur=a.classList.contains("on")?a:b, nx=cur===a?b:a;
   if(cur.getAttribute("src")===src&&cur.classList.contains("on")) return;
-  const swap=()=>{ if(nx.naturalWidth) HLP.bot.style.setProperty("--hlpAR",(nx.naturalWidth/nx.naturalHeight).toFixed(3)); nx.classList.add("on"); cur.classList.remove("on"); HLP.sheen.style.webkitMaskImage=HLP.sheen.style.maskImage='url("'+src+'")';
-    if(!instant&&!helpReduce()){ HLP.fig.classList.remove("pop"); void HLP.fig.offsetWidth; HLP.fig.classList.add("pop"); } };
+  const swap=()=>{ if(HLP!==H) return; if(nx.naturalWidth) H.bot.style.setProperty("--hlpAR",(nx.naturalWidth/nx.naturalHeight).toFixed(3)); nx.classList.add("on"); cur.classList.remove("on"); H.sheen.style.webkitMaskImage=H.sheen.style.maskImage='url("'+src+'")';
+    if(!instant&&!helpReduce()){ H.fig.classList.remove("pop"); void H.fig.offsetWidth; H.fig.classList.add("pop"); } };
   if(nx.getAttribute("src")===src&&nx.complete) swap(); else { nx.onload=swap; nx.src=src; } }
 /* while nobody is using the helper it changes pose now and then, at random */
 function helpIdleTick(){ if(!HLP) return; clearTimeout(HLP.idleT); HLP.idleT=setTimeout(()=>{ if(!HLP) return;
-  const busy=HLP.tip||(HLP.panel&&HLP.panel.contains(document.activeElement)&&document.activeElement.value)||document.hidden;
+  const busy=HLP.tip||HLP.tour||(HLP.panel&&HLP.panel.contains(document.activeElement)&&document.activeElement.value)||document.hidden;
   if(!busy){ const P=Object.keys((HELPERS[HLP.key]||{}).poses||{}).filter(p=>p!==HLP.pose&&p!=="point"); if(P.length) helpPose(P[Math.floor(Math.random()*P.length)]); }
   helpIdleTick(); }, 6500+Math.random()*5000); }
 function helpBuildBot(hk,H){ const bot=el("div",{class:"hlpBot",role:"img","aria-label":H.name,title:H.name+" (click me)"});
@@ -4007,64 +4027,86 @@ function helpTilt(e){ if(!HLP||HELP_TILT) return; HELP_TILT=requestAnimationFram
 function helpHop(){ if(!HLP||helpReduce()||!HLP.fig.animate) return; const f=HLP.fig;
   f.animate([{transform:"translateY(0) rotateY(0deg) scale(1,1)"},{transform:"translateY(4px) scale(1.08,.9)",offset:.12},{transform:"translateY(-70px) rotateY(180deg) scale(.96,1.06)",offset:.5},{transform:"translateY(0) rotateY(360deg) scale(1.1,.88)",offset:.86},{transform:"translateY(0) rotateY(360deg) scale(1,1)"}],{duration:900,easing:"cubic-bezier(.3,.7,.4,1)"});
   if(HLP.root.querySelector(".hlpShadow")) HLP.root.querySelector(".hlpShadow").animate([{transform:"scale(1)",opacity:1},{transform:"scale(.45)",opacity:.35,offset:.5},{transform:"scale(1.1)",opacity:1,offset:.86},{transform:"scale(1)",opacity:1}],{duration:900}); }
-const HELP_SCREENS={home:"Home",chapter:"Chapter",random:"Random Question",dilemmas:"Selected Dilemmas",audit:"Inspection mode",gdp:"GDP Training",daily:"QMS Assistant",form:"QMS Assistant form",stats:"Statistical Tools",sampling:"Sample Size Tool",risk:"Risk management",projects:"Projects",dates:"Regulatory Timeline",map:"QMS map",rmtool:"Risk tool",rmtools:"Risk tools",impact:"Impact assessment",cvss:"CVSS calculator",msa:"MSA",grr:"Gauge R&R",bstats:"Basic calculators",qadrafts:"Drafts",explore:"Explore",tools:"Tools"};
-/* Features: r = screen, t = name, s = where it is ("css" or "css||text", first visible match), h = how to use it, k = extra search words */
+const HELP_SCREENS={home:"Home",chapter:"Chapter",random:"Random Question",dilemmas:"Selected Dilemmas",audit:"Inspection mode",gdp:"GDP Training",daily:"QMS Assistant",form:"QMS Assistant form",qadrafts:"QMS Assistant drafts",stats:"Statistical Tools",sampling:"Sample Size Tool",bstats:"Basic Statistical Calculators",msa:"Measurement System Analysis",grr:"Gauge R&R / Kappa",risk:"Risk management",rmtools:"Risk Management Tools",rmtool:"Risk tool",cvss:"CVSS calculator",impact:"Change Impact Assessment",projects:"Projects",dates:"Regulatory Timeline",map:"QMS map"};
+/* sub-screens: searches look at this screen first, then its sub-screens (and parent), then the rest of the app */
+const HELP_PARENT={sampling:"stats",bstats:"stats",msa:"stats",grr:"stats",rmtools:"risk",rmtool:"rmtools",cvss:"rmtools",impact:"rmtools",form:"daily",qadrafts:"daily"};
+/* Feature database. r screen, t name, s where it is ("css" or "css||text", first visible match), h how to use it,
+   k topic words, q typical questions (What can I / How do I / Where is / Which feature ...), go = screen to open if r has no route of its own */
 const HELP_FEAT=[
- {r:"home",t:"Counters",s:".hStats",h:"Shows how much practice is in the app: virtual inspections, questions and dilemmas. The numbers grow as new content is added.",k:"numbers totals statistics count"},
- {r:"home",t:"Explore the regulations",s:".navGroup||Explore",h:"Open a reference chapter: ISO 13485, FDA QMSR, EU MDR, the QMS map, the Regulatory Timeline or FDA premarket and postmarket.",k:"iso 13485 qmsr mdr chapters read learn reference"},
- {r:"home",t:"Search",s:".navSearchRow .qIn,.qIn",h:"Type a clause (7.4.1), a regulation section (820.45), an article or a word. Results appear under the box; click one to jump straight to it.",k:"find look clause article section keyword"},
- {r:"home",t:"Practice",s:".navGroup||Practice",h:"Four ways to practice: Random Question, Selected Dilemmas, Inspection mode (virtual FDA inspections) and GDP Training.",k:"quiz train exercise test yourself"},
- {r:"home",t:"Tools",s:".navGroup||Tools",h:"Working tools: QMS Assistant forms, Statistical Tools, Risk management and Projects.",k:"forms templates calculators"},
- {r:"home",t:"Glossary",s:".glossCard",h:"Open the glossary and type a term (AQL, PSUR) or pick an area chip to filter the definitions.",k:"terms abbreviations definitions acronym meaning"},
- {r:"home",t:"Quick Survey",s:".hBtns .svyBtn:not(.ctBtn)",h:"A short feedback form. Your answers are sent only if you choose to email, share or copy them.",k:"feedback opinion questionnaire"},
- {r:"home",t:"Contact us",s:".hBtns .ctBtn",h:"Shows how to reach us with a question or a suggestion.",k:"email phone support message"},
- {r:"chapter",t:"Chapter tabs",s:"#chTabs,.chTabs",h:"Switch between Best practices, Takeaways, Questions, Debates, Dilemmas and Sources for this chapter.",k:"tabs best practices takeaways sources debates"},
- {r:"chapter",t:"Chapter list",s:"#rail,#partSwitch",h:"Pick another chapter. On a phone, use the part switch and tabs at the top instead.",k:"chapters menu navigate clause"},
- {r:"chapter",t:"Questions",s:"#tab-q",h:"Open the multiple-choice questions for this chapter. Pick an answer to see why it is right or wrong.",k:"quiz multiple choice"},
- {r:"chapter",t:"Next and previous",s:".cNext",h:"Move to the next item in this tab, or back with Previous.",k:"next previous move"},
- {r:"random",t:"Level filter",s:".lvBtn",h:"Choose Advanced, Proficient or Expert, or All, to set how hard the questions are.",k:"difficulty level stars expert"},
- {r:"random",t:"Topic tabs",s:"#main .tab",h:"Limit questions to Basics, QMS, FDA or EU MDR.",k:"topic area filter fda eu"},
- {r:"random",t:"Answer a question",s:"#main .opt",h:"Read the question and click the answer you think is right. You get the explanation and the source at once.",k:"answer option choose explanation"},
- {r:"random",t:"Next random question",s:".next.shuf,.next",h:"Draw another random question. Questions you answered are skipped.",k:"shuffle another next"},
- {r:"random",t:"Progress ring",s:".mRingSvg,.mRingReset",h:"Shows how many questions you answered and how many were right. Reset clears your answers.",k:"score progress reset results"},
- {r:"dilemmas",t:"Level filter",s:".lvBtn",h:"Choose the difficulty of the dilemmas, or All.",k:"difficulty level stars"},
- {r:"dilemmas",t:"The dilemma",s:"#main h3",h:"Read the real-life situation and pick the option you would choose. You then see the likely outcome of each option.",k:"case scenario decision outcome"},
- {r:"dilemmas",t:"Next dilemma",s:"#main .cta||Next",h:"Move to the next dilemma, or back with Previous.",k:"next previous"},
- {r:"audit",t:"Level filter",s:".lvBtn",h:"Choose the difficulty of the inspections, or All.",k:"difficulty level"},
- {r:"audit",t:"Study cases",s:"#main summary||study case",h:"Open the list of device study cases. Each is a 20-question virtual inspection of one device company.",k:"device case interview investigator"},
- {r:"audit",t:"QMS topics",s:"#main summary||topic",h:"Open a QMS topic (CAPA, complaints, suppliers and more). Each scenario has 12 questions.",k:"topic scenario capa complaints suppliers"},
- {r:"audit",t:"Real Events",s:"#main summary||Real Event",h:"Cases based on real FDA warning letters. At the closing meeting you see what FDA actually wrote.",k:"warning letter real fda case"},
- {r:"gdp",t:"Start the training",s:".gdpStart .cta,#main .cta",h:"Opens a short GDP session: why it matters, right and wrong records, golden rules and a 10-question check.",k:"good documentation practice alcoa records"},
- {r:"daily",t:"QMS areas",s:".dItem,.dPick",h:"Pick a QMS area (design controls, CAPA, suppliers and more) to see its forms.",k:"area category list"},
- {r:"daily",t:"Forms",s:"#main .toolCard",h:"Open a form. Each has a filled sample, guidance and export to Word and PDF.",k:"form template record document export word pdf"},
- {r:"daily",t:"Drafts",s:".dItem||Drafts,.dPick",h:"Find forms you started and saved on this device.",k:"saved draft continue"},
- {r:"stats",t:"Sample Size Tool",s:"#main .toolCard||Sample Size",h:"Find sample sizes for lot acceptance (ISO 2859-1, AQL) or design verification (confidence and reliability).",k:"sample size aql sampling plan confidence reliability lot"},
- {r:"stats",t:"Basic calculators",s:"#main .toolCard||Basic",h:"Standard deviation, capability (Cpk), tolerance intervals and more. Paste your results to get the analysis.",k:"cpk capability standard deviation normality tolerance"},
- {r:"stats",t:"Measurement System Analysis",s:"#main .toolCard||MSA",h:"Check resolution, bias and repeatability of a measuring system.",k:"msa measurement bias resolution type 1"},
- {r:"stats",t:"Gauge R&R / Kappa",s:"#main .toolCard||Gauge",h:"Choose and run a Gauge R&R study for variables, or Kappa for attribute inspection.",k:"gauge r&r kappa attribute repeatability reproducibility"},
- {r:"sampling",t:"What do you need?",s:".sampBox",h:"Choose lot acceptance (AQL) or design verification. The tool then asks only what it needs.",k:"aql lot verification"},
- {r:"risk",t:"Device type",s:"#main .rField,#main select",h:"Pick your device type. The page then recommends the risk tools that fit it.",k:"device type recommend"},
- {r:"risk",t:"Topics",s:".dItem,.rmPick",h:"Switch between the ISO 14971 process, the risk glossary, the acceptability matrix and your drafts.",k:"process glossary acceptability matrix drafts"},
- {r:"risk",t:"ISO 14971 step by step",s:"#main summary",h:"Open a clause to read what it asks for and how to do it.",k:"iso 14971 clause steps hazard estimation control"},
- {r:"projects",t:"Add a new project",s:".prjBig.cta,#main .cta",h:"Create a project with its name, device, class and markets. Your work is saved on this device.",k:"new create project"},
- {r:"projects",t:"Project list",s:".prjAlt",h:"Open a project you already created.",k:"open list existing"},
- {r:"dates",t:"Search dates",s:".dSearch",h:"Type a topic or year (UDI, eSTAR, AI Act, 2027) to filter the milestones.",k:"filter year milestone deadline"},
- {r:"dates",t:"Milestones",s:"#main h3",h:"Each card shows a date, what changes and a link to the official source.",k:"timeline transition deadline"},
- {r:"map",t:"Filter topics",s:"#main .cfilter",h:"Type a topic, clause or article (purchasing, 7.5.8, Art. 87) to find where ISO 13485, 21 CFR 820 and the EU MDR meet.",k:"crosswalk compare clause article"},
- {r:"map",t:"Exemptions",s:"#main .tab||Exemptions",h:"Show only the exemptions and scope limits.",k:"exemption scope exclusion"},
- {r:"form",t:"About this form",s:"#main .card||About This Form",h:"What the record is for, the template number and the clauses it supports.",k:"purpose template references"},
- {r:"form",t:"Sample",s:"#main button||Sample",h:"Opens a completed example of this form, so you can see what good looks like before you start.",k:"example filled completed"},
- {r:"form",t:"Start a new record",s:"#main .cta||New",h:"Starts a new record in a step-by-step workspace. Your entries are saved on this device and export to Word and PDF.",k:"new create start record fill export word pdf"},
- {r:"form",t:"Your records",s:"#main .card||Records",h:"Records you started appear here. Open one to continue, export it or delete it.",k:"records list saved continue export delete"}
+ {r:"home",t:"What this app offers",s:".hStats",h:"Learn the regulations in Explore, practice with questions, dilemmas and virtual FDA inspections, and work with tools: QMS forms, statistics, risk management and projects.",k:"overview start begin features about app counters numbers",q:["what can i do here","what is this app","where do i start","what can i learn","what can i practice"]},
+ {r:"home",t:"Explore the regulations",s:".navGroup||Explore",h:"Open a chapter: ISO 13485, FDA QMSR, EU MDR or FDA premarket and postmarket, or the QMS map and the Regulatory Timeline.",k:"learn read study chapters iso 13485 qmsr 820 mdr eu fda premarket postmarket regulations clauses",q:["how can i learn the regulations","where are the chapters","where is iso 13485","where is the fda qmsr","where is the eu mdr","what can i read"]},
+ {r:"home",t:"Search the handbook",s:".navSearchRow .qIn,.qIn",h:"Type a clause (7.4.1), a regulation section (820.45), an article or a word. Results appear under the box; click one to jump to it.",k:"find look up clause article section keyword search",q:["how do i find a clause","where is the search","how can i look up a regulation"]},
+ {r:"home",t:"Practice",s:".navGroup||Practice",h:"Random Question, Selected Dilemmas, Inspection mode (virtual FDA inspections) and GDP Training.",k:"practice train exercise quiz test yourself",q:["what can i practice","how can i test myself","where are the exercises"]},
+ {r:"home",t:"Tools",s:".navGroup||Tools",h:"QMS Assistant forms, Statistical Tools, Risk management and Projects.",k:"tools forms templates calculators work",q:["which tools are there","what tools can i use"]},
+ {r:"home",t:"Glossary",s:".glossCard",h:"Open the glossary and type a term (AQL, PSUR) or pick an area chip to filter the definitions.",k:"glossary terms abbreviations definitions acronym meaning",q:["what does this abbreviation mean","where is the glossary","how can i find a definition"]},
+ {r:"home",t:"Quick Survey",s:".hBtns .svyBtn:not(.ctBtn)",h:"A short feedback form. Answers are sent only if you choose to email, share or copy them.",k:"survey feedback opinion",q:["how can i give feedback"]},
+ {r:"home",t:"Contact us",s:".hBtns .ctBtn",h:"Shows how to reach us with a question or a suggestion.",k:"contact email phone support",q:["how can i contact you"]},
+ {r:"chapter",t:"Chapter tabs",s:"#chTabs,.chTabs",h:"Switch between Best practices, Takeaways, Questions, Debates, Dilemmas and Sources for this chapter.",k:"tabs best practices takeaways sources debates",q:["how do i switch tabs","where are the takeaways","where are the sources"]},
+ {r:"chapter",t:"Chapter list",s:"#rail,#partSwitch",h:"Pick another chapter. On a phone, use the part switch and tabs at the top.",k:"chapters list menu clause navigate",q:["how do i open another chapter","where is the chapter list"]},
+ {r:"chapter",t:"Chapter questions",s:"#tab-q",h:"Open the multiple-choice questions for this chapter. Pick an answer to see why it is right or wrong.",k:"questions quiz multiple choice",q:["where are the questions of this chapter"]},
+ {r:"chapter",t:"Next and previous",s:".cNext",h:"Move to the next item in this tab, or back with Previous.",k:"next previous",q:["how do i go to the next item"]},
+ {r:"random",t:"Random Question",s:"#main h2",h:"One question at a time from any chapter. Answers count toward your progress.",k:"random question quiz test practice multiple choice",q:["how can i answer questions","where are the questions","how do i practice questions"]},
+ {r:"random",t:"Level filter",s:".lvBtn",h:"Choose Advanced, Proficient or Expert, or All, to set how hard the questions are.",k:"level difficulty stars expert advanced proficient",q:["how do i change the difficulty","how can i choose the level"]},
+ {r:"random",t:"Topic tabs",s:"#main .tab",h:"Limit questions to Basics, QMS, FDA or EU MDR.",k:"topic area filter fda eu basics",q:["how can i choose a topic"]},
+ {r:"random",t:"Answer a question",s:"#main .opt",h:"Click the answer you think is right. You get the explanation and the source at once.",k:"answer option choose explanation",q:["how do i answer"]},
+ {r:"random",t:"Next random question",s:".next.shuf,.next",h:"Draw another random question. Questions you answered are skipped.",k:"next shuffle another",q:["how do i get another question"]},
+ {r:"random",t:"Progress ring",s:".mRingSvg,.mRingReset",h:"Shows how many questions you answered and how many were right. Reset clears your answers.",k:"progress score results reset",q:["where is my score","how do i reset my answers"]},
+ {r:"dilemmas",t:"Selected Dilemmas",s:"#main h2",h:"Real-life QA situations. Pick what you would do and see the likely outcome of each option.",k:"dilemma dilemmas case scenario decision judgment",q:["where are the dilemmas","how can i practice decisions"]},
+ {r:"dilemmas",t:"Level filter",s:".lvBtn",h:"Choose the difficulty of the dilemmas, or All.",k:"level difficulty",q:["how do i change the difficulty"]},
+ {r:"dilemmas",t:"The dilemma",s:"#main h3",h:"Read the situation and pick your option. You then see the outcome of each option.",k:"situation option outcome",q:["how do i answer a dilemma"]},
+ {r:"dilemmas",t:"Next dilemma",s:"#main .cta||Next",h:"Move to the next dilemma, or back with Previous.",k:"next previous",q:["how do i get the next dilemma"]},
+ {r:"audit",t:"Inspection mode",s:"#main h2",h:"Virtual FDA inspections: an investigator asks questions and follows the trail of your answers. Your score shows at the closing meeting.",k:"inspection inspect audit investigator interview fda simulation virtual",q:["how can i practice an inspection","where is the fda inspection","how do inspections work"]},
+ {r:"audit",t:"Level filter",s:".lvBtn",h:"Choose the difficulty of the inspections, or All.",k:"level difficulty",q:["how do i choose the difficulty"]},
+ {r:"audit",t:"Study cases",s:"#main summary||study case",h:"Device study cases: a 20-question virtual inspection of one device company.",k:"study case device company",q:["where are the study cases"]},
+ {r:"audit",t:"QMS topics",s:"#main summary||topic",h:"Topic scenarios (CAPA, complaints, suppliers and more), 12 questions each.",k:"topic scenario capa complaints suppliers",q:["where are the topic scenarios","how can i practice capa"]},
+ {r:"audit",t:"Real Events",s:"#main summary||Real Event",h:"Cases based on real FDA warning letters. At the closing meeting you see what FDA actually wrote.",k:"warning letter letters real event fda enforcement",q:["where are the warning letters","what are real events","how can i see real fda cases"]},
+ {r:"gdp",t:"GDP Training",s:".gdpStart .cta,#main .cta",h:"A short Good Documentation Practices session: why it matters, right and wrong records, golden rules and a 10-question check.",k:"gdp good documentation practice alcoa records training",q:["how can i learn gdp","where is the gdp training","what is alcoa"]},
+ {r:"daily",t:"QMS Assistant",s:"#main h2",h:"Ready-to-use QA forms with filled samples, step guidance and export to Word and PDF.",k:"qms assistant forms templates records documents word pdf export",q:["where are the forms","how can i fill a form","where are the templates","which feature helps me write a capa"]},
+ {r:"daily",t:"QMS areas",s:".dItem,.dPick",h:"Pick a QMS area (design, CAPA, complaints, suppliers and more) to see its forms.",k:"area category capa complaints suppliers design change",q:["where is the capa form","where is the complaint form","where is the supplier form"]},
+ {r:"daily",t:"Forms",s:"#main .toolCard",h:"Open a form to see a sample, start a new record or continue one.",k:"form template record",q:["how do i open a form"]},
+ {r:"daily",t:"Drafts",s:".dItem||Drafts,.dPick",h:"Forms you started and saved on this device.",k:"draft saved continue",q:["where are my drafts","how do i continue a saved form"]},
+ {r:"form",go:"daily",t:"About this form",s:"#main .card||About This Form",h:"What the record is for, its template number and the clauses it supports.",k:"purpose template references",q:["what is this form for"]},
+ {r:"form",go:"daily",t:"Sample",s:"#main button||Sample",h:"Opens a completed example of the form.",k:"example sample filled completed",q:["where is an example","how does a filled form look"]},
+ {r:"form",go:"daily",t:"Start a new record",s:"#main .cta||New",h:"Starts a new record in a step-by-step workspace. Entries are saved on this device and export to Word and PDF.",k:"new create start record export word pdf",q:["how do i start a new record","how can i export to word"]},
+ {r:"form",go:"daily",t:"Your records",s:"#main .card||Records",h:"Records you started. Open one to continue, export or delete it.",k:"records list saved",q:["where are my records"]},
+ {r:"stats",t:"Statistical Tools",s:"#main h2",h:"Sample size, basic calculators, measurement system analysis and Gauge R&R.",k:"statistics statistical tools calculator",q:["where are the statistical tools","which tools help with statistics"]},
+ {r:"stats",t:"Sample Size Tool",s:"#main .toolCard||Sample Size",h:"Sample sizes for lot acceptance (ISO 2859-1, AQL) or design verification (confidence and reliability).",k:"sample size sampling aql lot acceptance plan confidence reliability verification",q:["how can i calculate a sample size","which feature helps with sampling","where is the aql table"]},
+ {r:"stats",t:"Basic calculators",s:"#main .toolCard||Basic",h:"Standard deviation, Cp/Cpk, p-value, normality, t-test, ANOVA, regression and more.",k:"cpk capability standard deviation normality t-test anova regression p-value",q:["how do i calculate cpk","where is the normality test","how can i run a t-test"]},
+ {r:"stats",t:"Measurement System Analysis",s:"#main .toolCard||MSA",h:"Resolution, bias, linearity, stability and repeatability of a measuring system.",k:"msa measurement bias linearity stability resolution",q:["how do i check a measurement system"]},
+ {r:"stats",t:"Gauge R&R / Kappa",s:"#main .toolCard||Gauge",h:"Plan and analyze a Gauge R&R study, or Kappa for attribute inspection.",k:"gauge r&r kappa repeatability reproducibility attribute",q:["how do i run a gauge r&r"]},
+ {r:"sampling",t:"What do you need?",s:".sampBox",h:"Choose lot acceptance (AQL) or design verification; the tool asks only what it needs.",k:"aql lot acceptance design verification",q:["how do i choose a sampling plan"]},
+ {r:"bstats",t:"Pick a calculator",s:".dItem,.dPick",h:"Choose a calculator from the list: standard deviation, Cp/Cpk, p-value, normality and more.",k:"calculator list choose",q:["how do i choose a calculator"]},
+ {r:"bstats",t:"Load example data",s:"#main .cta||Load example",h:"Fills the calculator with example data so you can see how it works.",k:"example data demo",q:["how can i try the calculator"]},
+ {r:"msa",t:"MSA guide",s:".toolTabs,#main .tab",h:"Start with the Guide tab to choose the study you need, then open its tab.",k:"guide tabs study choose",q:["which msa study do i need"]},
+ {r:"grr",t:"Gauge R&R steps",s:".toolTabs,#main .tab",h:"Follow the four steps: choose the path, plan and samples, record results, analysis and report.",k:"steps path plan record analysis report",q:["how do i do a gauge r&r study"]},
+ {r:"risk",t:"Risk management",s:"#main h2",h:"The ISO 14971 process step by step, recommended tools for your device type, the risk glossary and the acceptability matrix.",k:"risk management iso 14971 hazard harm acceptability",q:["where is risk management","how do i do risk management","what is iso 14971"]},
+ {r:"risk",t:"Device type",s:"#main .rField,#main select",h:"Pick your device type; the page recommends the risk tools that fit it.",k:"device type recommend",q:["which risk tools fit my device"]},
+ {r:"risk",t:"Topics",s:".dItem,.rmPick",h:"Switch between the process, the risk glossary, the acceptability matrix and drafts.",k:"process glossary acceptability matrix drafts",q:["where is the acceptability matrix"]},
+ {r:"risk",t:"ISO 14971 step by step",s:"#main summary",h:"Open a clause to read what it asks for and how to do it.",k:"clause steps hazard estimation evaluation control residual",q:["how do i estimate risk","what is residual risk"]},
+ {r:"rmtools",t:"Risk Management Tools",s:"#main h2",h:"Worksheets: PHA, risk analysis, FMEA, FTA, usability and cybersecurity, with samples and export.",k:"fmea pha fta dfmea pfmea worksheet hazard analysis usability tools",q:["where is the fmea","how can i do a pha","where is the fault tree","which tool helps with hazard analysis"]},
+ {r:"rmtools",t:"Tool groups",s:".dItem,.dPick",h:"Pick a group: hazard and risk analysis, system analysis and FMEA, FTA and usability, cybersecurity, or saved drafts.",k:"group list fmea fta usability cybersecurity drafts",q:["where are my saved risk drafts"]},
+ {r:"rmtools",t:"Open a tool",s:"#main .toolCard",h:"Open a worksheet to see a sample or start your own.",k:"open worksheet sample",q:["how do i start an fmea"]},
+ {r:"cvss",t:"CVSS calculator",s:"#main h2",h:"Score cybersecurity vulnerabilities with CVSS v4.0, with samples.",k:"cvss cyber cybersecurity vulnerability security score",q:["how can i score a vulnerability","where is the cybersecurity tool"]},
+ {r:"cvss",t:"New assessment",s:"#main .cta||New",h:"Start a new vulnerability assessment.",k:"new assessment",q:["how do i add a vulnerability"]},
+ {r:"impact",t:"Change Impact Assessment",s:"#main h2",h:"Assess a change: regulatory impact, risk, verification and validation needs.",k:"change impact assessment 510k change control",q:["how can i assess a change","do i need a new 510k"]},
+ {r:"impact",t:"New assessment",s:"#main .cta||New",h:"Start a new change impact assessment.",k:"new assessment",q:["how do i start an impact assessment"]},
+ {r:"projects",t:"Projects",s:"#main h2",h:"Group your forms, risk files and assessments by device project.",k:"project projects device organize",q:["where are my projects","how can i organize my work"]},
+ {r:"projects",t:"Add a new project",s:".prjBig.cta,#main .cta",h:"Create a project with its name, device, class and markets. Your work is saved on this device.",k:"new create project",q:["how do i create a project"]},
+ {r:"projects",t:"Project list",s:".prjAlt",h:"Open a project you already created.",k:"open list existing",q:["how do i open a project"]},
+ {r:"dates",t:"Regulatory Timeline",s:"#main h2",h:"Regulatory milestones and transition dates, with links to official sources.",k:"timeline dates deadlines milestones transition qmsr mdr udi estar ai act",q:["when does the qmsr apply","where are the deadlines","what are the mdr transition dates"]},
+ {r:"dates",t:"Search dates",s:".dSearch",h:"Type a topic or year (UDI, eSTAR, AI Act, 2027) to filter the milestones.",k:"filter year search",q:["how do i find a date"]},
+ {r:"map",t:"QMS map",s:"#main h2",h:"A crosswalk between ISO 13485, 21 CFR 820 and the EU MDR.",k:"map crosswalk compare iso 820 mdr clause article",q:["how do iso 13485 and 820 compare","where is the crosswalk"]},
+ {r:"map",t:"Filter topics",s:"#main .cfilter",h:"Type a topic, clause or article (purchasing, 7.5.8, Art. 87).",k:"filter topic clause article",q:["how do i find a clause in the map"]},
+ {r:"map",t:"Exemptions",s:"#main .tab||Exemptions",h:"Show only the exemptions and scope limits.",k:"exemption scope exclusion",q:["where are the exemptions"]}
 ];
-let HLP=null;
+const HELP_SYN={inspect:"inspection",inspector:"inspection",investigator:"inspection",audit:"inspection",interview:"inspection",letter:"warning",letters:"warning",enforcement:"warning",learn:"learn",study:"learn",read:"learn",chapter:"chapters",sample:"sample",sampling:"sample",samples:"sample",aql:"sample",form:"form",forms:"form",template:"form",templates:"form",record:"form",records:"form",quiz:"question",questions:"question",test:"question",dilemma:"dilemmas",scenario:"dilemmas",statistic:"statistics",stats:"statistics",statistical:"statistics",calculator:"statistics",calculators:"statistics",cpk:"cpk",hazard:"risk",hazards:"risk",fmea:"fmea",danger:"risk",term:"glossary",terms:"glossary",abbreviation:"glossary",abbreviations:"glossary",definition:"glossary",definitions:"glossary",meaning:"glossary",date:"timeline",dates:"timeline",deadline:"timeline",deadlines:"timeline",transition:"timeline",crosswalk:"map",compare:"map",documentation:"gdp",alcoa:"gdp",cyber:"cvss",cybersecurity:"cvss",security:"cvss",vulnerability:"cvss",project:"projects",draft:"drafts",saved:"drafts",feedback:"survey",email:"contact",qmsr:"fda",820:"fda",mdr:"eu",notified:"eu",13485:"iso",practise:"practice",exercise:"practice",train:"practice",training:"practice"};let HLP=null;
 /* 3.8.0: the step guidance of forms and risk tools is no longer shown on the page; the helper shows it on request */
 function helpWkOpen(){ const w=document.querySelector(".wkOv"); return w&&w.getClientRects().length?w:null; }
 function helpGuideBox(){ const ov=helpWkOpen(); return [...document.querySelectorAll(".wkGuide")].find(g=>{ if(ov) return ov.contains(g); const w=g.closest(".wkGrid"); return w&&w.getClientRects().length>0; })||null; }
 function helpGuideFeat(){ const g=helpGuideBox(); if(!g) return null; const sm=(g.querySelector("summary")||{}).textContent||"";
   return {r:helpScreen(),t:/·/.test(sm)?"Guidance: "+sm.split("·").slice(1).join("·").trim():"Guidance for this step",s:".wkOv .wkMain,.wkGrid > .wkMain,.wkGrid > :first-child",h:"",dyn:true,k:"guidance how to fill in field step where to look links good practice help form"}; }
 function helpFeats(){ const g=helpGuideFeat(); if(helpWkOpen()) return g?[g]:[]; return g?[g,...HELP_FEAT]:HELP_FEAT; }
-function helpScreen(){ const id=(location.hash||"").slice(1)||"home"; if(typeof SQF!=="undefined"&&SQF[id]) return "form"; if(CH.some(c=>c.id===id)) return "chapter"; return id; }
+function helpScreen(){ let id=(location.hash||"").slice(1)||"home"; if(id==="tools") id="daily"; if(id==="explore") id="home"; if(typeof SQF!=="undefined"&&SQF[id]) return "form"; if(CH.some(c=>c.id===id)) return "chapter"; return id; }
 function helpReduce(){ try{ return matchMedia("(prefers-reduced-motion: reduce)").matches; }catch(e){ return false; } }
 function helpFind(s){ for(const part of s.split(",")){ const [css,txt]=part.split("||"); let L=[]; try{ L=[...document.querySelectorAll(css.trim())]; }catch(e){}
   if(txt) L=L.filter(e=>(e.innerText||"").toLowerCase().includes(txt.toLowerCase()));
@@ -4078,7 +4120,7 @@ function helpRect(e){ if(!e) return {x:innerWidth-40,y:30}; const r=e.getBoundin
 function helpOpen(from){ if(HLP){ const i=HLP.panel.querySelector("input"); if(i) i.focus(); return; }
   const scr=helpScreen(), hk=HELP_SCREEN_HELPER[scr]||HELP_DEFAULT, H=HELPERS[hk];
   const root=el("div",{id:"hlpRoot"}); const B=helpBuildBot(hk,H), bot=B.bot;
-  root.append(bot); document.body.append(root); HLP={root,bot,fig:B.fig,imgs:B.imgs,sheen:B.sheen,panel:null,tip:null,key:hk,scr,pose:"wave"};
+  root.append(bot); document.body.append(root); HLP={root,bot,fig:B.fig,imgs:B.imgs,sheen:B.sheen,panel:null,tip:null,key:hk,scr,pose:"wave",spot:"r"}; root.dataset.spot="r";
   try{ if(matchMedia("(hover: hover)").matches&&!helpReduce()) addEventListener("pointermove",helpTilt,{passive:true}); }catch(e){}
   from=from||helpHatEl(); if(from){ from.classList.remove("launch"); void from.offsetWidth; from.classList.add("launch"); setTimeout(()=>from.classList.remove("launch"),600); }
   const land=()=>{ bot.classList.add("idle"); helpPanel(); setTimeout(()=>{ if(HLP&&HLP.pose!=="point") helpPose("thumb"); },2200); helpIdleTick(); };
@@ -4092,51 +4134,85 @@ function helpOpen(from){ if(HLP){ const i=HLP.panel.querySelector("input"); if(i
 }
 function helpPanel(){ if(!HLP) return; const scr=helpScreen(); HLP.scr=scr;
   const w=HLP.bot.getBoundingClientRect().width||190; document.documentElement.style.setProperty("--hlpW",Math.round(w)+"px");
-  const input=el("input",{type:"search",placeholder:"Ask how something works…","aria-label":"Ask your helper"});
+  const input=el("input",{type:"search",placeholder:"Ask: How can I…, Where is…, or a topic","aria-label":"Ask your helper"});
   const res=el("div",{class:"hlpRes","aria-live":"polite"});
-  const list=el("div",{class:"hlpList"});
-  const fill=()=>{ const sig=helpFeats().filter(f=>f.r===helpScreen()).map(f=>f.t).join("|"); if(list.dataset.sig===sig) return; list.dataset.sig=sig; list.innerHTML="";
-    helpFeats().filter(f=>f.r===helpScreen()).forEach(f=>list.append(helpItem(f,false)));
-    if(!list.children.length) list.append(el("p",{class:"src"},"Ask me anything about the app in the box above.")); };
-  fill(); HLP.fill=fill;
   const sIco=el("span",{}); sIco.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>';
   const x=el("button",{class:"hlpX",type:"button","aria-label":"Close help"},"×"); x.addEventListener("click",helpClose);
+  const play=el("button",{class:"hlpPlay",type:"button","aria-label":"Play a short tour of this screen",title:"Tour this screen"}); play.addEventListener("click",helpTourToggle);
   const p=el("section",{class:"hlpPanel",role:"dialog","aria-label":"Help assistant"},
-    el("div",{class:"hlpHead"}, el("div",{}, el("b",{},"How can I help?"), el("small",{},"You are on: "+(HELP_SCREENS[scr]||"this screen"))), x),
-    el("div",{class:"hlpBody"}, el("div",{class:"hlpSearch"}, sIco, input), res, el("div",{class:"hlpLbl"},"On this screen"), list));
-  let tmr=null; const run=()=>helpSearch(input.value,res); input.addEventListener("input",()=>{ helpPose(input.value.trim()?"read":"thumb"); clearTimeout(tmr); tmr=setTimeout(run,320); });
-  input.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); const b=res.querySelector(".hlpItem"); if(b) b.click(); else run(); } });
-  p.addEventListener("pointerenter",fill); p.addEventListener("focusin",fill);
-  if(HLP.panel) HLP.panel.remove(); HLP.panel=p; HLP.root.append(p);
+    el("div",{class:"hlpHead"}, el("div",{}, el("div",{class:"hlpTtl"}, el("b",{},"How can I help?"), play), el("small",{},"You are on: "+(HELP_SCREENS[scr]||"this screen"))), x),
+    el("div",{class:"hlpBody"}, el("div",{class:"hlpSearch"}, sIco, input), res));
+  let tmr=null; const run=()=>helpSearch(input.value,res,input); input.addEventListener("input",()=>{ helpPose(input.value.trim()?"read":"thumb"); clearTimeout(tmr); tmr=setTimeout(run,300); });
+  input.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); run(); const b=res.querySelector(".hlpItem"); if(b) b.click(); } });
+  helpExamples(res,input);
+  if(HLP.panel) HLP.panel.remove(); HLP.panel=p; HLP.play=play; HLP.root.append(p); helpPlayIcon();
   try{ if(matchMedia("(hover: hover)").matches) input.focus({preventScroll:true}); }catch(e){}
 }
-function helpItem(f,showScr){ const b=el("button",{class:"hlpItem",type:"button"}, el("i",{"aria-hidden":"true"},"i"), el("span",{},f.t), showScr&&f.r!==helpScreen()?el("small",{},HELP_SCREENS[f.r]||f.r):"");
+function helpExamples(res,input){ res.innerHTML=""; const scr=helpScreen(); const own=helpFeats().filter(f=>f.r===scr&&f.q&&f.q.length);
+  const ex=[...own.map(f=>f.q[0]),"where are the warning letters","how can i calculate a sample size","where is the fmea"].filter((v,i,a)=>a.indexOf(v)===i).slice(0,3);
+  const row=el("div",{class:"hlpEx"}, el("small",{},"Try:"), ...ex.map(q=>{ const b=el("button",{type:"button",class:"hlpChip"},q.charAt(0).toUpperCase()+q.slice(1)+"?"); b.addEventListener("click",()=>{ input.value=q; helpSearch(q,res,input); }); return b; }));
+  res.append(row); }
+const HELP_STOP=new Set("how do does did i me my we our you your can could would should will to the a an of in on at for and or is are be it this that what which where when who why there here find show get use using work works feature features help helps assist assists with about please want need see open".split(" "));
+function helpStem(w){ if(HELP_SYN[w]) return HELP_SYN[w]; let t=w; if(t.length>5&&t.endsWith("ing")) t=t.slice(0,-3); else if(t.length>4&&t.endsWith("ies")) t=t.slice(0,-3)+"y"; else if(t.length>4&&t.endsWith("es")&&!t.endsWith("ses")) t=t.slice(0,-2); else if(t.length>3&&t.endsWith("s")&&!t.endsWith("ss")) t=t.slice(0,-1); return HELP_SYN[t]||t; }
+function helpTok(s){ return (s||"").toLowerCase().replace(/r&r/g,"rr").replace(/[^a-z0-9.\s-]/g," ").split(/[\s-]+/).filter(w=>w.length>1&&!HELP_STOP.has(w)).map(helpStem); }
+function helpTier(r,cur){ if(r===cur) return 0; let p=HELP_PARENT[r]; while(p){ if(p===cur) return 1; p=HELP_PARENT[p]; } if(HELP_PARENT[cur]===r) return 1; return 2; }
+function helpRank(q){ const qt=[...new Set(helpTok(q))]; if(!qt.length) return []; const cur=helpScreen();
+  const sc=helpFeats().map(f=>{ const F=f._tok||(f._tok={t:helpTok(f.t),k:helpTok(f.k),h:helpTok(f.h),q:helpTok((f.q||[]).join(" ")),s:helpTok(HELP_SCREENS[f.r]||"")}); let s=0, hit=0;
+    qt.forEach(w=>{ const m=a=>a.some(x=>x===w||(w.length>3&&x.length>3&&(x.startsWith(w)||w.startsWith(x)))); let b=0; if(m(F.t)) b=Math.max(b,3); if(m(F.q)) b=Math.max(b,3); if(m(F.k)) b=Math.max(b,2.5); if(m(F.s)) b=Math.max(b,2); if(m(F.h)) b=Math.max(b,1); if(b) hit++; s+=b; });
+    s=s*(0.6+0.4*hit/qt.length); return {f,s,tier:helpTier(f.r,cur)}; }).filter(x=>x.s>=2);
+  if(!sc.length) return []; const best=Math.max(...sc.map(x=>x.s));
+  return sc.filter(x=>x.s>=best*0.6).sort((a,b)=>a.tier-b.tier||b.s-a.s).map(x=>x.f); }
+function helpSearch(q,res,input){ res.innerHTML=""; if(!q.trim()){ helpExamples(res,input); return; } const L=helpRank(q).slice(0,4);
+  helpPose(L.length?"idea":"read");
+  if(!L.length){ res.append(el("p",{},"I don't know that one yet. Try a question like “How can I…”, “Where is…”, or a topic such as FDA, risk, sample size, warning letter or practice.")); helpExamples(res,input); return; }
+  L.forEach(f=>res.append(helpItem(f,true))); }
+function helpItem(f,showScr){ const other=showScr&&f.r!==helpScreen();
+  const b=el("button",{class:"hlpItem",type:"button"}, el("i",{"aria-hidden":"true"},"i"), el("span",{class:"hlpIT"}, el("b",{},f.t), el("small",{class:"hlpIA"},(f.h||"").split(". ")[0].replace(/\.$/,"")+".")), other?el("em",{class:"hlpGo"},"→ "+(HELP_SCREENS[f.r]||f.r)):"");
   b.addEventListener("click",()=>helpGoFeature(f)); return b; }
-const HELP_STOP=new Set("how do i the a an to of in on for and or is it can what where with my this that use using does work works find show me get".split(" "));
-function helpTok(s){ return (s||"").toLowerCase().replace(/[^a-z0-9&.\s-]/g," ").split(/\s+/).filter(w=>w.length>1&&!HELP_STOP.has(w)); }
-function helpSearch(q,res){ res.innerHTML=""; const qt=helpTok(q); if(!qt.length) return; const cur=helpScreen();
-  const sc=helpFeats().map(f=>{ const T=helpTok(f.t), K=helpTok(f.k), H=helpTok(f.h), S=helpTok(HELP_SCREENS[f.r]); let s=0;
-    qt.forEach(w=>{ const m=a=>a.some(x=>x===w||(w.length>3&&(x.startsWith(w)||w.startsWith(x)))); if(m(T)) s+=3; if(m(K)) s+=2; if(m(S)) s+=2; if(m(H)) s+=1; });
-    if(s&&f.r===cur) s+=.5; return [s,f]; }).filter(x=>x[0]>0).sort((a,b)=>b[0]-a[0]).slice(0,4);
-  helpPose(sc.length?"idea":"read");
-  if(!sc.length){ res.append(el("p",{},"I couldn't find that. Try words like sample size, CAPA form, inspection or glossary.")); return; }
-  sc.forEach(([s,f])=>res.append(helpItem(f,true))); }
-function helpGoFeature(f){ helpTipClose(); const cur=helpScreen();
+function helpGoFeature(f){ helpTourStop(); helpTipClose(); const cur=helpScreen();
   if(f.r===cur){ helpTip(f); return; }
-  const target=f.r==="chapter"?CH[0].id:f.r;
-  HLP.pending=f; if(HLP.panel) HLP.panel.classList.add("out");
-  location.hash=target; }
-function helpOnRoute(){ if(!HLP) return; helpTipClose(); const scr=helpScreen(); const hk=HELP_SCREEN_HELPER[scr]||HELP_DEFAULT;
-  const f=HLP.pending; HLP.pending=null;
-  const swap=()=>{ helpPanel(); if(f&&f.r===helpScreen()) setTimeout(()=>helpTip(f),250); };
-  if(hk!==HLP.key){ HLP.key=hk; HLP.bot.setAttribute("aria-label",HELPERS[hk].name); HLP.bot.title=HELPERS[hk].name+" (click me)"; helpPose("wave"); setTimeout(()=>{ if(HLP&&HLP.pose==="wave") helpPose("thumb"); },2000); }
-  if(!helpReduce()&&HLP.bot.animate) HLP.bot.animate([{transform:"translateY(0) scale(1)"},{transform:"translateY(-46px) scale(1.06) rotate(-4deg)",offset:.45},{transform:"translateY(0) scale(.97)",offset:.8},{transform:"none"}],{duration:620,easing:"ease-out"});
-  setTimeout(swap,f?900:300); }
-function helpTip(f){ helpTipClose(); const t=helpFind(f.s);
-  const tip=el("div",{class:"hlpTip"+(f.dyn?" wide":""),role:"note"}, el("div",{class:"hlpTipH"}, el("i",{"aria-hidden":"true"},"i"), el("span",{},"Guidance")), el("b",{},f.t));
+  const target=f.go||(f.r==="chapter"?CH[0].id:f.r);
+  HLP.pending=f.go?HELP_FEAT.find(x=>x.r===f.go&&x.s.startsWith("#main h2"))||null:f; if(HLP.panel) HLP.panel.classList.add("out");
+  if(location.hash==="#"+target) helpOnRoute(); else location.hash=target; }
+/* moving to another screen: the helper spins twice on its axis, the new screen's helper is revealed during the spin,
+   and it jumps to the other side of the screen (away from what it will point at) */
+function helpOnRoute(){ if(!HLP) return; helpTourStop(); helpTipClose(); const f=HLP.pending; HLP.pending=null;
+  if(HLP.panel) HLP.panel.classList.add("out");
+  clearTimeout(HLP.routeT); HLP.routeT=setTimeout(()=>{ if(!HLP) return; const hk=HELP_SCREEN_HELPER[helpScreen()]||HELP_DEFAULT; const t=f?helpFind(f.s):null;
+    helpTransit(hk,t,()=>{ helpPanel(); if(f&&f.r===helpScreen()) setTimeout(()=>helpTip(f),180); setTimeout(()=>{ if(HLP&&HLP.pose==="wave") helpPose("thumb"); },1600); helpIdleTick(); }); }, f?520:220); }
+function helpTransit(hk,target,done){ const H=HLP; if(!H) return; const old=H.bot.getBoundingClientRect();
+  let spot=H.spot==="l"?"r":"l";
+  if(target){ const r=target.getBoundingClientRect(), cx=r.left+r.width/2; spot=cx>innerWidth*0.55?"l":cx<innerWidth*0.45?"r":spot; }
+  const setKey=()=>{ if(H.key!==hk){ H.key=hk; const N=HELPERS[hk]||HELPERS[HELP_DEFAULT]; H.bot.setAttribute("aria-label",N.name); H.bot.title=N.name+" (click me)"; } H.pose="wave"; helpShow(helpPoseSrc(hk,"wave"),true); };
+  if(helpReduce()||!H.bot.animate){ setKey(); H.spot=spot; H.root.dataset.spot=spot; done&&done(); return; }
+  H.bot.classList.remove("idle"); H.fig.style.setProperty("--ry","0deg"); H.fig.style.setProperty("--rx","0deg");
+  H.fig.animate([{transform:"rotateY(0deg) scale(1)"},{transform:"rotateY(360deg) scale(1.06)",offset:.5},{transform:"rotateY(720deg) scale(1)"}],{duration:950,easing:"cubic-bezier(.35,.05,.35,1)"});
+  setTimeout(setKey,240);
+  H.spot=spot; H.root.dataset.spot=spot; const nr=H.bot.getBoundingClientRect(), dx=old.left-nr.left, dy=old.top-nr.top;
+  const a=H.bot.animate([{transform:`translate(${dx}px,${dy}px)`},{transform:`translate(${dx*.5}px,${dy*.5-170}px) scale(1.06)`,offset:.5},{transform:"translate(0,0) scale(1.1,.88)",offset:.86},{transform:"none"}],{duration:950,easing:"cubic-bezier(.4,0,.3,1)"});
+  a.onfinish=()=>{ if(HLP!==H) return; H.bot.classList.add("idle"); done&&done(); }; }
+/* the play button: a short walk through this screen's features (about 10 s in all), with pause */
+const HELP_TOUR_MS=10000;
+function helpPlayIcon(){ if(!HLP||!HLP.play) return; const on=HLP.tour&&!HLP.tour.paused; HLP.play.classList.toggle("on",!!on); HLP.play.setAttribute("aria-label",on?"Pause the tour":"Play a short tour of this screen"); HLP.play.innerHTML=on?'<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><rect x="2" y="1.5" width="3" height="9" rx="1" fill="currentColor"/><rect x="7" y="1.5" width="3" height="9" rx="1" fill="currentColor"/></svg>':'<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1.5v9l7.5-4.5z" fill="currentColor"/></svg>'; }
+function helpTourToggle(){ if(!HLP) return; const T=HLP.tour;
+  if(!T){ const list=helpFeats().filter(f=>f.r===helpScreen()&&helpFind(f.s)); if(!list.length) return; const step=Math.min(4000,Math.max(1600,Math.round(HELP_TOUR_MS/list.length)));
+    HLP.tour={list,i:0,paused:false,step}; helpTourShow(); }
+  else if(T.paused){ T.paused=false; helpTourShow(); }
+  else { T.paused=true; clearTimeout(T.t); const bar=document.querySelector(".hlpTip .hlpBar i"); if(bar){ const w=getComputedStyle(bar).width; bar.style.transition="none"; bar.style.width=w; } }
+  helpPlayIcon(); helpTourCtl(); }
+function helpTourShow(){ const T=HLP&&HLP.tour; if(!T) return; clearTimeout(T.t);
+  helpTip(T.list[T.i],{tour:true}); const bar=document.querySelector(".hlpTip .hlpBar i");
+  if(bar){ bar.style.transition="none"; bar.style.width="0"; requestAnimationFrame(()=>requestAnimationFrame(()=>{ bar.style.transition="width "+T.step+"ms linear"; bar.style.width="100%"; })); }
+  T.t=setTimeout(()=>{ if(!HLP||HLP.tour!==T||T.paused) return; T.i++; if(T.i>=T.list.length){ helpTourStop(); helpPose("thumb"); } else helpTourShow(); },T.step); }
+function helpTourCtl(){ const b=document.querySelector(".hlpTip .hlpTP"); if(!b||!HLP||!HLP.tour) return; const on=!HLP.tour.paused; b.textContent=on?"❚❚ Pause":"▶ Play"; b.setAttribute("aria-label",on?"Pause the tour":"Resume the tour"); }
+function helpTourStop(){ if(!HLP||!HLP.tour) return; clearTimeout(HLP.tour.t); HLP.tour=null; helpTipClose(); helpPlayIcon(); }
+function helpTip(f,opt){ opt=opt||{}; helpTipClose(); const t=helpFind(f.s); const T=opt.tour&&HLP&&HLP.tour;
+  const tip=el("div",{class:"hlpTip"+(f.dyn?" wide":"")+(T?" tour":""),role:"note","aria-live":T?"polite":"off"}, el("div",{class:"hlpTipH"}, el("i",{"aria-hidden":"true"},"i"), el("span",{},"Guidance"), T?el("small",{class:"hlpStep"},(T.i+1)+" / "+T.list.length):""), el("b",{},f.t));
   if(f.dyn){ const g=helpGuideBox(), box=el("div",{class:"hlpGB"}); if(g) g.querySelectorAll(".wkGB").forEach(x=>box.append(x.cloneNode(true))); if(!box.children.length) box.append(el("p",{},"Fill in each field with facts and evidence. Open Sample to see a completed example.")); tip.append(box); }
   else tip.append(el("p",{},f.h));
-  const ok=el("button",{class:"hlpOk",type:"button"},"Got it"); ok.addEventListener("click",helpTipClose); tip.append(ok);
+  const ok=el("button",{class:"hlpOk",type:"button"},T?"✕ Stop":"Got it"); ok.addEventListener("click",()=>{ if(HLP&&HLP.tour) helpTourStop(); else helpTipClose(); });
+  if(T){ const tp=el("button",{class:"hlpOk hlpTP",type:"button"}); tp.addEventListener("click",helpTourToggle); tip.append(el("div",{class:"hlpBar"},el("i",{})), el("div",{class:"hlpTipBtns"},tp,ok)); }
+  else tip.append(ok);
   const small=innerWidth<=700; if(small&&HLP&&HLP.panel) HLP.panel.classList.add("mini");
   document.body.append(tip); HLP.tip={tip,t}; helpPose("point");
   if(!t){ const pp=tip.querySelector("p"); if(pp&&!f.dyn) pp.textContent=f.h+" (This part is not visible right now. Scroll or widen the window to see it.)"; tip.style.position="fixed"; tip.style.left="50%"; tip.style.top="30%"; tip.style.transform="translateX(-50%)"; ok.focus({preventScroll:true}); return; }
@@ -4148,18 +4224,18 @@ function helpTip(f){ helpTipClose(); const t=helpFind(f.s);
     tip.style.left=(left+ox)+"px"; tip.style.top=((below?r.bottom+14:r.top-th-14)+oy)+"px";
     tip.style.setProperty("--ax",Math.max(16,Math.min(tw-30,r.left+Math.min(r.width,260)/2-left-7))+"px"); };
   place(); setTimeout(place,350); setTimeout(place,700); HLP.tip.place=place; addEventListener("resize",place); addEventListener("scroll",place,{passive:true,capture:true});
-  setTimeout(()=>ok.focus({preventScroll:true}),400); }
+  if(T) helpTourCtl(); else setTimeout(()=>ok.focus({preventScroll:true}),400); }
 function helpTipClose(){ if(!HLP||!HLP.tip) return; const {tip,t,place}=HLP.tip; tip.remove(); if(t) t.classList.remove("hlpTarget");
   if(place){ removeEventListener("resize",place); removeEventListener("scroll",place,{capture:true}); } HLP.tip=null; if(HLP.panel) HLP.panel.classList.remove("mini"); if(HLP.fig) HLP.fig.style.setProperty("--lean","0deg"); helpPose("thumb"); }
-function helpClose(){ if(!HLP) return; const H=HLP; clearTimeout(H.idleT); helpTipClose(); HLP=null;
+function helpClose(){ if(!HLP) return; helpTourStop(); const H=HLP; clearTimeout(H.idleT); clearTimeout(H.routeT); helpTipClose(); HLP=null;
   if(H.panel) H.panel.classList.add("out");
   const hat=helpHatEl(); const end=()=>{ H.root.remove(); if(hat){ hat.classList.remove("catch"); void hat.offsetWidth; hat.classList.add("catch"); setTimeout(()=>hat.classList.remove("catch"),650); hat.focus({preventScroll:true}); } };
   if(helpReduce()||!H.bot.animate){ removeEventListener("pointermove",helpTilt); end(); return; }
   removeEventListener("pointermove",helpTilt); H.bot.classList.remove("idle"); H.fig.style.setProperty("--ry","0deg"); H.fig.style.setProperty("--rx","0deg"); { const w=helpPoseSrc(H.key,"wave"); const on=H.imgs.find(i=>i.classList.contains("on")); if(on&&on.getAttribute("src")!==w) on.src=w; } const r=H.bot.getBoundingClientRect(), s=helpRect(hat), dx=s.x-(r.left+r.width/2), dy=s.y-(r.top+r.height/2);
   const a=H.bot.animate([{transform:"none",opacity:1},{transform:"translate(0,-30px) scale(1.06) rotate(6deg)",offset:.18},{transform:`translate(${dx*.55}px,${dy*.55-90}px) scale(.55) rotate(-14deg)`,opacity:1,offset:.6},{transform:`translate(${dx}px,${dy}px) scale(.08) rotate(-30deg)`,opacity:.2}],{duration:820,easing:"cubic-bezier(.5,0,.6,1)",fill:"forwards"});
   a.onfinish=end; }
-document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&HLP&&!document.getElementById("ovl")){ e.stopPropagation(); e.preventDefault(); if(HLP.tip) helpTipClose(); else helpClose(); } },true);
-document.addEventListener("pointerdown",e=>{ if(HLP&&HLP.tip&&!HLP.tip.tip.contains(e.target)&&!(HLP.panel&&HLP.panel.contains(e.target))) helpTipClose(); },true);
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&HLP&&!document.getElementById("ovl")){ e.stopPropagation(); e.preventDefault(); if(HLP.tour) helpTourStop(); else if(HLP.tip) helpTipClose(); else helpClose(); } },true);
+document.addEventListener("pointerdown",e=>{ if(HLP&&HLP.tip&&!HLP.tip.tip.contains(e.target)&&!(HLP.panel&&HLP.panel.contains(e.target))){ if(HLP.tour) helpTourStop(); else helpTipClose(); } },true);
 window.addEventListener("hashchange",()=>setTimeout(helpOnRoute,60));
 helpHdrHat();
 function helpWkHats(){ document.querySelectorAll(".wkOv .wkHead").forEach(hd=>{ if(hd.querySelector(".hdrHat")) return; const b=el("button",{class:"hdrHat",type:"button","aria-label":"Help: open your QA helper",title:"Help"}, el("img",{src:HELP_IMG.hat,alt:"",width:"56",height:"46"})); b.addEventListener("click",()=>helpOpen(b)); const x=hd.querySelector(".wkX"); if(x) hd.insertBefore(b,x); else hd.append(b); }); }
