@@ -2058,6 +2058,54 @@ html[data-theme="dark"] .crsCard.won{background:linear-gradient(160deg,#2a2618,t
 @media (max-width:370px){ .hBtns{gap:6px} .hBtns .svyBtn{font-size:13px; gap:5px; padding:0 6px} .helpHat{width:52px} .helpHat img{height:52px} }
 @media (prefers-reduced-motion: reduce){ .helpHat img,#hlpRoot .hlpBot.idle .hlpBreath,#hlpRoot .hlpBot.idle .hlpShadow,#hlpRoot .hlpBot.idle .hlpSheen,.hlpTarget{animation:none} #hlpRoot .hlpFig{transition:none} .hlpPanel,.hlpTip{animation:none} }
 
+/* 3.14.0 plans, profile, avatar */
+header.top .appbar .brand2{min-width:0; flex:1 1 auto}
+@media (max-width:560px){ header.top .appbar{gap:6px} header.top .hdrHat{width:44px} header.top .avChip{margin-left:4px; margin-right:2px} }
+.plTag{display:inline-block; margin-left:6px; padding:1px 7px; border-radius:9px; font-size:10.5px; font-weight:800; letter-spacing:.02em; vertical-align:middle; white-space:nowrap}
+.plTag.premium{background:#e6f0f8; color:#1f5f8b} .plTag.all{background:#f6ecd6; color:#8a5f10} .plTag.locked{opacity:.95; outline:1px dashed currentColor}
+.toolCard .plTag,.caseCard .plTag{position:absolute; top:8px; right:8px; margin:0} .toolCard,.caseCard{position:relative}
+.plWall{text-align:center; padding:10px 6px} .plWall h3{margin:6px 0} .plWall p{color:var(--muted); max-width:520px; margin:0 auto 12px}
+.plWallIco{font-size:34px}
+.avChip{flex:0 0 auto; width:40px; height:40px; margin-left:auto; margin-right:6px; padding:2px; border-radius:50%; border:2px solid #cfe0ec; background:var(--card); cursor:pointer; display:grid; place-items:center; transition:transform .2s}
+.avChip:hover{transform:scale(1.08)} .avChip.adm{border-color:#c08a1e; box-shadow:0 0 0 2px rgba(192,138,30,.25)} .avChip.unset{opacity:.85}
+.avChip + .hdrHat{margin-left:0}
+.avSvg .avHead{animation:avBob 3.2s ease-in-out infinite; transform-origin:50% 90%} .avSvg .avEye{animation:avBlink 4.6s infinite; transform-box:fill-box; transform-origin:center}
+@keyframes avBob{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-2px) rotate(-2deg)}}
+@keyframes avBlink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+@media (prefers-reduced-motion: reduce){ .avSvg .avHead,.avSvg .avEye{animation:none} }
+.mbox.profBox{max-width:760px}
+.prof h3{margin:4px 0 10px} .profTop{display:flex; gap:14px; align-items:center; margin-bottom:6px} .profTop h3{margin:0 0 2px}
+.avBig{border:0; background:none; padding:0; cursor:pointer; border-radius:50%}
+.profProg{display:flex; gap:5px; margin-bottom:6px} .profProg i{flex:1; height:5px; border-radius:3px; background:#e3ebf1} .profProg i.done{background:#8ccbf2} .profProg i.on{background:#1f5f8b}
+.profN{color:var(--muted); font-weight:700}
+.profOpts{display:grid; gap:8px; margin:10px 0}
+.profOpt{text-align:left; padding:12px 14px; border-radius:12px; border:1.5px solid var(--line); background:var(--card); color:var(--ink); font:inherit; font-weight:650; cursor:pointer}
+.profOpt:hover,.profOpt.on{border-color:#1f5f8b; background:color-mix(in srgb,#8ccbf2 14%,var(--card))}
+.avGrid{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:10px 0}
+.avPick{display:grid; justify-items:center; gap:4px; padding:10px 4px; border-radius:14px; border:1.5px solid var(--line); background:var(--card); color:var(--ink); cursor:pointer; font:inherit}
+.avPick.on,.avPick:hover{border-color:#1f5f8b}
+.profStart{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:10px 0 4px; padding:10px 12px; border-radius:12px; background:color-mix(in srgb,#8ccbf2 12%,var(--card))}
+.profStart a{font-weight:700; color:#1f5f8b; text-decoration:none; padding:4px 10px; border-radius:9px; background:var(--card); border:1px solid var(--line)}
+.profH{margin:14px 0 6px}
+.plTableW{overflow-x:auto} .plTable{width:100%; border-collapse:collapse; font-size:13.5px}
+.plTable th,.plTable td{padding:7px 8px; border-bottom:1px solid var(--line); text-align:center} .plTable td:first-child{text-align:left}
+.plTable th{font-size:13px} .plTable th small{display:block; color:#237a4e; font-size:10.5px; text-transform:uppercase; letter-spacing:.04em}
+.plTable .rec{background:color-mix(in srgb,#2b8a5a 9%,transparent)} .plTable th.premium{color:#1f5f8b} .plTable th.all{color:#8a5f10}
+.plNote{margin-top:6px}
+.profAdm{margin-top:12px; padding-top:10px; border-top:1px dashed var(--line); display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+.profAdm summary{cursor:pointer; color:var(--muted); font-size:13px}
+.profPwRow{display:flex; gap:8px; margin-top:8px} .profPw{height:36px; padding:0 10px; border-radius:10px; border:1px solid var(--line); background:var(--card); color:var(--ink); font:inherit}
+.profMsg{color:var(--bad); display:block; margin-top:4px}
+.profHome{display:flex; gap:14px; align-items:center; margin-top:14px} .profHome p{margin:2px 0 0; color:var(--muted)} .profHome .cta{margin-left:auto}
+.forYou{display:inline-block; margin-left:6px; padding:1px 7px; border-radius:9px; background:#e8f4ee; color:#237a4e; font-size:10.5px; font-weight:800}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .plTag.premium{background:#16324a; color:#9fd3f5} :root:not([data-theme="light"]) .plTag.all{background:#3a2e12; color:#f2cf7a} :root:not([data-theme="light"]) .forYou{background:#163a2a; color:#8fe0b5} :root:not([data-theme="light"]) .plTable th.premium{color:#9fd3f5} :root:not([data-theme="light"]) .plTable th.all{color:#f2cf7a} :root:not([data-theme="light"]) .plTable th small{color:#8fe0b5} }
+:root[data-theme="dark"] .plTag.premium{background:#16324a; color:#9fd3f5} :root[data-theme="dark"] .plTag.all{background:#3a2e12; color:#f2cf7a} :root[data-theme="dark"] .forYou{background:#163a2a; color:#8fe0b5} :root[data-theme="dark"] .plTable th.premium{color:#9fd3f5} :root[data-theme="dark"] .plTable th.all{color:#f2cf7a} :root[data-theme="dark"] .plTable th small{color:#8fe0b5}
+@media (max-width:700px){ .avChip{width:34px; height:34px} .avGrid{grid-template-columns:repeat(4,1fr)} .profHome{flex-wrap:wrap} .profHome .cta{margin-left:0; width:100%} .plTable{font-size:12px} }
+/* 3.14.0 topic dropdown */
+.topicL{display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:700; color:var(--muted)}
+.topicSel{max-width:min(320px,70vw); height:34px; padding:0 30px 0 10px; border-radius:10px; border:1px solid var(--line); background:var(--card); color:var(--ink); font:inherit; font-weight:600; font-size:13.5px}
+.topicSel{min-width:0}
+@media (max-width:700px){ .topicL{flex:1 1 100%; min-width:0} .topicSel{flex:1; width:100%; max-width:none} }
 /* 3.13.1 helpers: half size, top corner (right, or left when data-spot="l") */
 #hlpRoot .hlpBot{top:78px; bottom:auto; height:var(--hlpH,min(115px,15vh))}
 .hlpPanel{top:78px; bottom:auto; max-height:min(470px,calc(100vh - 100px))}
@@ -2138,7 +2186,8 @@ html[data-theme="dark"] .crsCard.won{background:linear-gradient(160deg,#2a2618,t
 .tlRange{display:flex; gap:6px; justify-content:flex-end; margin:-4px 0 6px}
 .dState em{font-style:normal; font-weight:800; color:#6b5a9a}
 .dateItem.past .dState::before{content:"✓ "}
-@media (max-width:700px){ .tlNext{grid-template-columns:1fr 1fr} #main .tlCard{overflow-x:auto} #main .tl2{min-width:1000px} #main .tlRange{position:sticky; left:0} }
+@media (max-width:700px){ .tlNext{grid-template-columns:1fr 1fr} #main .tl2{min-width:1000px} }
+#main .tlCard{overflow-x:auto} #main .tl2{min-width:1500px} #main .tlCard .tlLeg{position:sticky; left:0}
 </style>
 </head>
 <body>
@@ -2326,10 +2375,13 @@ function qCard(c,i,num,after){
 }
 
 /* ---------- random practice ---------- */
-const rnd={scope:"all", unanswered:true, cur:null};
+const rnd={scope:"all", unanswered:true, cur:null, ch:""};
+function topicSel(kind,scope,val,on){ const s=el("select",{class:"topicSel","aria-label":"Choose a topic"}); s.append(el("option",{value:""},"All topics"));
+  CH.filter(c=>(scope==="all"||c.part===scope)&&(kind==="q"?c.qs.length:c.dils.length)).forEach(c=>s.append(el("option",{value:c.id},c.num+" · "+c.title)));
+  s.value=val||""; s.onchange=()=>on(s.value); return el("label",{class:"topicL"}, el("span",{},"Topic"), s); }
 function pickRandom(){
   const pool=[];
-  CH.forEach(c=>{ if(rnd.scope!=="all" && c.part!==rnd.scope) return;
+  CH.forEach(c=>{ if(rnd.scope!=="all" && c.part!==rnd.scope) return; if(rnd.ch && c.id!==rnd.ch) return;
     c.qs.forEach((q,i)=>{ const k=c.id+"-"+i; if(!lvOk(q.lv)) return; if(rnd.unanswered && state[k]!==undefined) return; if(rnd.cur && rnd.cur[0]===c.id && rnd.cur[1]===i) return; pool.push([c.id,i]); }); });
   rnd.cur = pool.length ? pool[Math.floor(Math.random()*pool.length)] : null;
 }
@@ -2340,10 +2392,10 @@ function renderRandom(){
     el("h2",{},"Answer a random question"),
     el("p",{},"One question at a time from any chapter. Answers here and in the chapter tabs count toward your training progress.")), moduleRing("train")));
   const ctl=el("div",{class:"randCtl stickyCtl"});
-  [["all","All"],["basics","Basics"],["qms","QMS"],["fda","FDA"],["eu","EU MDR"]].forEach(([k,l])=>ctl.append(el("button",{class:"tab",type:"button","aria-pressed":String(rnd.scope===k),onclick:()=>{ rnd.scope=k; rnd.cur=null; pickRandom(); renderRandom(); }},l)));
+  [["all","All"],["basics","Basics"],["qms","QMS"],["fda","FDA"],["eu","EU MDR"]].forEach(([k,l])=>ctl.append(el("button",{class:"tab",type:"button","aria-pressed":String(rnd.scope===k),onclick:()=>{ rnd.scope=k; rnd.ch=""; rnd.cur=null; pickRandom(); renderRandom(); }},l)));
   const un=el("label",{class:"unl"}, el("input",{type:"checkbox",id:"unans"}), " Unanswered only");
-  ctl.append(un);
-  m.append(ctl, lvBar(lvCounts(CH.filter(c=>rnd.scope==="all"||c.part===rnd.scope).flatMap(c=>c.qs)),()=>{ rnd.cur=null; pickRandom(); renderRandom(); }));
+  ctl.append(topicSel("q",rnd.scope,rnd.ch,v=>{ rnd.ch=v; rnd.cur=null; pickRandom(); renderRandom(); }), un);
+  m.append(ctl, lvBar(lvCounts(CH.filter(c=>(rnd.scope==="all"||c.part===rnd.scope)&&(!rnd.ch||c.id===rnd.ch)).flatMap(c=>c.qs)),()=>{ rnd.cur=null; pickRandom(); renderRandom(); }));
   const cb=un.querySelector("input"); cb.checked=rnd.unanswered; cb.addEventListener("change",()=>{ rnd.unanswered=cb.checked; rnd.cur=null; pickRandom(); renderRandom(); });
   if(!rnd.cur) pickRandom();
   const box=el("div",{class:"panel"}); m.append(box);
@@ -2351,7 +2403,7 @@ function renderRandom(){
   else{
     const c=CH.find(x=>x.id===rnd.cur[0]);
     box.append(el("div",{class:"src"},"From ", el("a",{href:"#"+c.id},c.num+" · "+c.title)));
-    box.append(qCard(c,rnd.cur[1],0,()=>{ renderRandom(); totals(); }));
+    const qk=c.id+"-"+rnd.cur[1]; if(typeof planDaily==="function"&&state[qk]===undefined&&!planDaily("rq",qk)) box.append(planLimitCard("rq")); else box.append(qCard(c,rnd.cur[1],0,()=>{ if(typeof planUsed==="function"&&state[qk]!==undefined) planUsed("rq",qk); renderRandom(); totals(); }));
   }
   m.append(el("div",{class:"pager"}, el("button",{type:"button",class:"next shuf",onclick:()=>{ pickRandom(); renderRandom(); window.scrollTo({top:0}); }}, el("small",{},"Shuffle again"), "Next random question →")));
 }
@@ -2526,18 +2578,19 @@ function enterApp(btn){
 }
 
 /* ---------- selected dilemmas ---------- */
-const dsel={scope:"all",i:0};
+const dsel={scope:"all",i:0,ch:""};
 function renderDilemmas(){
   const m=document.getElementById("main"); m.innerHTML="";
-  const list=[]; CH.filter(c=>(dsel.scope==="all"||c.part===dsel.scope)&&c.dils.length).forEach(c=>{ if(LEVEL==="all"){ const L=c.dils.length; [0,L-5,L-4,L-3,L-2,L-1].filter((v,k,a)=>v>0||k===0).forEach(di=>list.push({c,di})); } else c.dils.forEach((d,di)=>{ if(lvOk(d.lv)) list.push({c,di}); }); });
+  const list=[]; CH.filter(c=>(dsel.scope==="all"||c.part===dsel.scope)&&c.dils.length&&(!dsel.ch||c.id===dsel.ch)).forEach(c=>{ if(LEVEL==="all"&&!dsel.ch){ const L=c.dils.length; [0,L-5,L-4,L-3,L-2,L-1].filter((v,k,a)=>v>0||k===0).forEach(di=>list.push({c,di})); } else c.dils.forEach((d,di)=>{ if(lvOk(d.lv)) list.push({c,di}); }); });
   if(dsel.i>=list.length) dsel.i=0;
   m.append(el("section",{class:"chHead dilHead withRing"},
     el("div",{class:"hTxt"}, el("div",{class:"eyebrow"},"Selected Dilemmas"),
     el("h2",{},"Real-life dilemmas"),
     el("p",{},"Six real-life dilemmas from every chapter, one at a time (or every dilemma at the level you choose). Pick an option to see the analysis, then move on.")), moduleRing("dil")));
   const ctl=el("div",{class:"randCtl stickyCtl"});
-  [["all","All"],["basics","Basics"],["qms","QMS"],["fda","FDA"],["eu","EU MDR"]].forEach(([k,l])=>ctl.append(el("button",{class:"tab",type:"button","aria-pressed":String(dsel.scope===k),onclick:()=>{ dsel.scope=k; dsel.i=0; renderDilemmas(); }},l)));
-  m.append(ctl, lvBar(lvCounts(CH.filter(c=>dsel.scope==="all"||c.part===dsel.scope).flatMap(c=>c.dils)),()=>{ dsel.i=0; renderDilemmas(); }));
+  [["all","All"],["basics","Basics"],["qms","QMS"],["fda","FDA"],["eu","EU MDR"]].forEach(([k,l])=>ctl.append(el("button",{class:"tab",type:"button","aria-pressed":String(dsel.scope===k),onclick:()=>{ dsel.scope=k; dsel.ch=""; dsel.i=0; renderDilemmas(); }},l)));
+  ctl.append(topicSel("d",dsel.scope,dsel.ch,v=>{ dsel.ch=v; dsel.i=0; renderDilemmas(); }));
+  m.append(ctl, lvBar(lvCounts(CH.filter(c=>(dsel.scope==="all"||c.part===dsel.scope)&&(!dsel.ch||c.id===dsel.ch)).flatMap(c=>c.dils)),()=>{ dsel.i=0; renderDilemmas(); }));
   if(!list.length){ m.append(el("div",{class:"card"},"No dilemmas at this level in this part. Choose another level.")); return; }
   const {c,di}=list[dsel.i];
   const nav=()=>{ const pv=el("button",{class:"reset",type:"button",onclick:()=>{ dsel.i=Math.max(0,dsel.i-1); renderDilemmas(); }},"← Previous"); pv.disabled=dsel.i===0; return el("div",{class:"dilPager"},
@@ -2545,7 +2598,7 @@ function renderDilemmas(){
     el("span",{}, el("b",{},String(dsel.i+1))," of "+list.length),
     el("button",{class:"cta",type:"button",onclick:()=>{ dsel.i=(dsel.i+1)%list.length; renderDilemmas(); }},dsel.i===list.length-1?"Start again ↺":"Next dilemma →")); };
   m.append(nav());
-  m.append(el("div",{class:"panel"}, dilCard(c,di,()=>renderDilemmas(),true)));
+  const dk=c.id+"-dil-"+di; if(typeof planDaily==="function"&&state[dk]===undefined&&!planDaily("dl",dk)) m.append(el("div",{class:"panel"},planLimitCard("dl"))); else m.append(el("div",{class:"panel"}, dilCard(c,di,()=>{ if(typeof planUsed==="function"&&state[dk]!==undefined) planUsed("dl",dk); renderDilemmas(); },true)));
   m.append(nav());
 }
 
@@ -3185,11 +3238,11 @@ function renderTools(which){ DAILY_SHOWN=null;
     const nav=areaNav({label:"QMS area",unit:"forms",items:groups.map(x=>({k:x.h,l:tc(x.h),n:x.ids.length})),cur,onPick:k=>{ DAILY_TAB=k; try{ localStorage.setItem("qah-daily-tab",k); }catch(e){} renderTools(which); }});
     m.append(nav.pick); lay=el("div",{class:"dLay"}, nav.side);
     ids=groups.find(x=>x.h===cur).ids; }
-  const fill=list=>{ g.innerHTML=""; list.forEach(id=>{ if(id[0]==="#") return; const t=TOOLS.find(x=>x[0]===id); if(!t) return; const [k,lab,sub,ic]=t; const sh=lay?(TOOL_SHORT[k]||sub):sub; g.append(el("button",Object.assign({class:"choiceBtn samp toolCard",type:"button",onclick:()=>{ location.hash=k; }},lay?{title:sub}:{}), el("span",{class:"toolIco"},ico(ic)), el("b",{},lab), el("span",{},sh))); }); tcDom(g); };
+  const fill=list=>{ g.innerHTML=""; list.forEach(id=>{ if(id[0]==="#") return; const t=TOOLS.find(x=>x[0]===id); if(!t) return; const [k,lab,sub,ic]=t; const sh=lay?(TOOL_SHORT[k]||sub):sub; g.append(el("button",Object.assign({class:"choiceBtn samp toolCard",type:"button","data-tool":k,onclick:()=>{ location.hash=k; }},lay?{title:sub}:{}), el("span",{class:"toolIco"},ico(ic)), el("b",{},lab), el("span",{},sh))); }); tcDom(g); };
   fill(ids);
-  if(lay) DAILY_SHOW=(k)=>{ const gr=groups.find(x=>x.h===k); if(!gr) return; DAILY_SHOWN=k; fill(gr.ids); document.querySelectorAll(".dLay .dSide .dItem").forEach((b,i)=>{ const on=groups[i]&&groups[i].h===k; b.classList.toggle("tour",on); }); const pk=document.querySelector(".dPick"); if(pk){ const i=groups.indexOf(gr); pk.querySelector("small").textContent="QMS area · "+(i+1)+" of "+groups.length; pk.querySelector("b").textContent=tc(gr.h); const em=pk.querySelector("em"); if(em) em.textContent="("+gr.ids.length+")"; } };
+  if(lay) DAILY_SHOW=(k)=>{ const gr=groups.find(x=>x.h===k); if(!gr) return; DAILY_SHOWN=k; fill(gr.ids); if(typeof planMark==="function") planMark(g); document.querySelectorAll(".dLay .dSide .dItem").forEach((b,i)=>{ const on=groups[i]&&groups[i].h===k; b.classList.toggle("tour",on); }); const pk=document.querySelector(".dPick"); if(pk){ const i=groups.indexOf(gr); pk.querySelector("small").textContent="QMS area · "+(i+1)+" of "+groups.length; pk.querySelector("b").textContent=tc(gr.h); const em=pk.querySelector("em"); if(em) em.textContent="("+gr.ids.length+")"; } };
   if(groups.length<=1) G[4].forEach(([lab,sub,ic])=>g.append(el("div",{class:"choiceBtn toolCard soon","aria-disabled":"true"}, el("span",{class:"toolIco"},ico(ic)), el("b",{},lab), el("span",{},sub))));
-  if(lay){ lay.append(g); m.append(lay); dailyStick(); } else m.append(g); tcDom(m);
+  if(lay){ lay.append(g); m.append(lay); dailyStick(); } else m.append(g); tcDom(m); if(typeof planMark==="function") planMark(m);
 }
 /* 2.1.0 guided highlights: area cycle on Daily QA Work and a moving magnifying lens (stops on any user action; off with reduced motion) */
 let TOUR=null;
@@ -3644,7 +3697,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="3.13.1", APPDATE="27-NOV-2026";
+const APPVER="3.14.0", APPDATE="27-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Qraft (Asaf Ben Zion). All rights reserved.";
 const LEGAL=[["Risk Management Approach", "Content is a paraphrased summary for training. It does not replace the standards: ISO 14971:2019 (with EN ISO 14971:2019+A11:2021 for the EU), ISO/TR 24971:2020 and IEC 62366-1:2015+A1:2020. Use your licensed copies for exact requirements."], ["Copyright", "© 2026 Qraft (Asaf Ben Zion). The selection, structure, design and original text of this handbook may not be copied or redistributed without written permission. Regulations and official guidance are cited from their publishers: US federal texts are in the public domain, and EU texts are reused with attribution. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number and described in the author’s own words; their text remains the property of their publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, selection and design, and was developed and tested with AI tools. Key facts, such as regulatory reporting timelines, device classifications and clause numbers, were checked against official sources; other content is the author’s interpretation and may contain inaccuracies."], ["Sources", "Cited sources are official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs and FDA databases. EU: EUR-Lex, European Commission pages and MDCG guidance. International: IMDRF codes and MDSAP documents. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number, based on freely available published information and the author’s own interpretation and knowledge."], ["Important", "This application is intended for training purposes only and is not legal or regulatory advice. It is provided without warranty. Results from its tools require human review, verification and approval. Always check the linked official source before citing anything in a formal regulatory or customer response."]];
@@ -3873,7 +3926,7 @@ function crsAll(){ const g=gdpBest();
     .concat(COURSES.map(c=>{ const b=crsBest()[c.id]||{}; return Object.assign({},c,{best:b.best,date:b.date,total:c.quiz.length}); })); }
 function crsBadge(n,on){ const c=on?["#c08a1e","#f2c65b","#8a5f10"]:["#9fb0bd","#d5dee5","#6d7f8c"];
   return `<svg viewBox="0 0 64 76" class="crsMedal${on?" on":""}" aria-hidden="true"><path d="M18 40 L10 74 L22 66 L28 76 L32 46 Z" fill="${on?"#2b7299":"#b8c6d1"}"/><path d="M46 40 L54 74 L42 66 L36 76 L32 46 Z" fill="${on?"#1f5f8c":"#a6b6c3"}"/><circle cx="32" cy="28" r="24" fill="${c[0]}"/><circle cx="32" cy="28" r="19" fill="${c[1]}" stroke="${c[2]}" stroke-width="1.5" stroke-dasharray="2 2"/><text x="32" y="35" text-anchor="middle" font-size="19" font-weight="800" fill="${c[2]}" font-family="inherit">${n===0?"GDP":n}</text></svg>`.replace('font-size="19"',n===0?'font-size="13"':'font-size="19"'); }
-function crsRun(ids){ ids=ids.slice(); const id=ids.shift(); if(!id) return; const all=crsAll(), nx=ids.length?all.find(c=>c.id===ids[0]):null;
+function crsRun(ids){ ids=ids.slice(); const id=ids.shift(); if(!id) return; if(typeof planCan==="function"&&!planCan(needCourse(id))){ planWall(needCourse(id),"This course"); return; } const all=crsAll(), nx=ids.length?all.find(c=>c.id===ids[0]):null;
   const after=nx?{title:nx.title,fn:()=>{ closeModal(); crsRefresh(); setTimeout(()=>crsRun(ids),120); }}:{title:"",fn:()=>{ closeModal(); crsRefresh(); },last:true};
   if(id==="gdp") openGdp(after); else openCourse(COURSES.find(c=>c.id===id),after); }
 function crsRefresh(){ if((location.hash||"").slice(1)==="gdp"&&typeof renderGdp==="function") renderGdp(); }
@@ -3905,7 +3958,7 @@ function renderGdp(){
     grid.append(card); });
   CRS_SOON.forEach(([n,t])=>grid.append(el("div",{class:"card crsCard soon","aria-disabled":"true"}, el("span",{class:"crsPick"}), el("div",{class:"crsArt",html:crsBadge(n,false)}),
     el("div",{class:"crsTxt"}, el("small",{class:"crsNum"},"Course "+n), el("h3",{},t), el("div",{class:"crsMeta"}, el("span",{class:"crsSt"},"Coming soon"))))));
-  m.append(grid);
+  m.append(grid); if(typeof planMark==="function") planMark(m);
 }
 function openCourse(C,after){
   if(!C) return; if(after&&!after.fn) after=null;
@@ -3966,6 +4019,129 @@ function openCourse(C,after){
   const mb=document.querySelector("#ovl .mbox"); if(mb) mb.classList.add("gdpBox");
   draw();
 }
+
+/* ===== 3.14.0 Plans, profile, avatar and administrator ===== */
+// PLAN_ENFORCE stays false until payments go live: every visitor sees everything, with plan tags shown.
+// The administrator can preview any plan on his own device ("View the app as").
+const PLAN_ENFORCE=false;
+const ADMIN_H="e11d3734e9a44393526bc9343c4b7c72f76e1361339bc87416293aa08085e554";
+const PLAN_NAMES={free:"Free trial",premium:"Premium",all:"All inclusive",admin:"Administrator"};
+const PLAN_RANK={free:0,premium:1,all:2,admin:3};
+const PLAN_FREE_COURSES=["gdp","complaint","nc"];
+const PLAN_FREE_FORMS=["qa-ncr","qa-capa","qa-cmp","qa-sop","qa-trn"];
+const PLAN_PREM_FORMS=PLAN_FREE_FORMS.concat(["qa-mr","qa-qo","qa-ddp","qa-dir","qa-drv","qa-trace","qa-mrb","qa-dev","qa-rpt","qa-pmsp","qa-trend","sq-quest","sq-eval","sq-scar","qa-iap","qa-iac","qa-wi","qa-vis","qa-prot","qa-rep"]);
+const PLAN_ROUTE_NEED={sampling:"premium",bstats:"all",msa:"all",grr:"all",risk:"all",rmtools:"all",rmtool:"all",cvss:"all",impact:"all",projects:"all"};
+const PLAN_LIMIT={rq:10,dl:3};
+const PROF_KEY="qah-profile-v1", ADM_KEY="qah-admin-v1", VIEW_KEY="qah-plan-view", USE_KEY="qah-plan-use";
+function ls(k,v){ try{ if(v===undefined) return localStorage.getItem(k); if(v===null) localStorage.removeItem(k); else localStorage.setItem(k,v); }catch(e){ return null; } }
+function profGet(){ try{ return JSON.parse(ls(PROF_KEY)||"{}")||{}; }catch(e){ return {}; } }
+function profSet(o){ ls(PROF_KEY,JSON.stringify(Object.assign(profGet(),o))); }
+function isAdmin(){ return ls(ADM_KEY)==="1"; }
+function planEff(){ if(isAdmin()) return ls(VIEW_KEY)||"admin"; return PLAN_ENFORCE?(profGet().plan||"free"):"all"; }
+function planCan(need){ return PLAN_RANK[planEff()]>=PLAN_RANK[need||"free"]; }
+function needForm(id){ return PLAN_FREE_FORMS.includes(id)?"free":PLAN_PREM_FORMS.includes(id)?"premium":"all"; }
+function needCourse(id){ return PLAN_FREE_COURSES.includes(id)?"free":"premium"; }
+function needRoute(id){ if(typeof SQF!=="undefined"&&SQF[id]) return needForm(id); return PLAN_ROUTE_NEED[id]||"free"; }
+function needAud(st){ const id=st&&st.c&&st.c.id; if(st.kind==="topic") return "premium"; if(st.kind==="real") return AUD_REAL[0]&&AUD_REAL[0].id===id?"free":"premium"; return AUD_CASES[0]&&AUD_CASES[0].id===id?"free":"premium"; }
+function planTag(need){ return need==="free"?null:el("span",{class:"plTag "+need+(planCan(need)?"":" locked"),title:PLAN_NAMES[need]+" plan"},(planCan(need)?"":"🔒 ")+PLAN_NAMES[need]); }
+function planWallBody(need,what){ return el("div",{class:"plWall"}, el("div",{class:"plWallIco"},"🔒"), el("h3",{},what+" is part of "+PLAN_NAMES[need]),
+  el("p",{},need==="premium"?"Premium opens every question, dilemma, inspection, course, 25 QMS forms and the sampling tools for incoming inspection and design verification.":"All inclusive adds every QMS form, the statistical and risk tools, Projects and the quarterly regulatory watch."),
+  el("button",{class:"cta",type:"button",onclick:()=>{ closeModal(); setTimeout(planSheet,60); }},"See the plans")); }
+function planWall(need,what){ modal("Upgrade",planWallBody(need,what)); }
+function planGateRoute(id){ const need=needRoute(id); if(planCan(need)) return false;
+  const m=document.getElementById("main"); if(!m) return false; closeModal(); try{ renderNav(id); }catch(e){}
+  m.innerHTML=""; m.append(el("div",{class:"card"},planWallBody(need,(typeof SQF!=="undefined"&&SQF[id]?"This form":"This tool")))); try{ window.scrollTo({top:0}); }catch(e){} return true; }
+function planAud(st){ const need=needAud(st); if(planCan(need)) return true; planWall(need,st.kind==="topic"?"Topic scenarios":st.kind==="real"?"This Real Event":"This study case"); return false; }
+function planUseGet(){ const d=new Date().toDateString(); let u={}; try{ u=JSON.parse(ls(USE_KEY)||"{}")||{}; }catch(e){} if(u.d!==d) u={d,rq:[],dl:[]}; return u; }
+function planDaily(kind,key){ if(planCan("premium")) return true; const u=planUseGet(); return u[kind].includes(key)||u[kind].length<PLAN_LIMIT[kind]; }
+function planUsed(kind,key){ const u=planUseGet(); if(!u[kind].includes(key)) u[kind].push(key); ls(USE_KEY,JSON.stringify(u)); }
+function planLimitCard(kind){ return el("div",{class:"card"}, el("div",{class:"plWall"}, el("div",{class:"plWallIco"},"⏳"), el("h3",{},"That's today's "+PLAN_LIMIT[kind]+(kind==="rq"?" questions":" dilemmas")),
+  el("p",{},"The Free trial gives "+PLAN_LIMIT[kind]+(kind==="rq"?" random questions":" dilemmas")+" a day. New ones open tomorrow, or upgrade for unlimited practice."),
+  el("button",{class:"cta",type:"button",onclick:planSheet},"See the plans"))); }
+function planMark(root){ root=root||document;
+  root.querySelectorAll("[data-tool]").forEach(b=>{ if(b.querySelector(".plTag")) return; const t=planTag(needRoute(b.dataset.tool)); if(t) b.append(t); });
+  root.querySelectorAll(".crsCard[data-id]").forEach(c=>{ if(c.querySelector(".plTag")) return; const t=planTag(needCourse(c.dataset.id)); if(t) c.querySelector(".crsMeta").append(t); });
+  root.querySelectorAll("[data-aud]").forEach(b=>{ if(b.querySelector(".plTag")) return; const [k,id]=b.dataset.aud.split(":"); const t=planTag(needAud({kind:k==="t"?"topic":k==="r"?"real":"case",c:{id}})); if(t) b.append(t);
+    if(k==="c"){ const c=AUD_CASES.find(x=>x.id===id); if(c&&profForYou(c)){ const h=b.querySelector("b,strong,h3")||b; h.append(el("span",{class:"forYou"},"For you")); b.parentNode.prepend(b); } } }); }
+
+/* avatars: animal faces drawn as SVG (eyes blink, head bobs) */
+const AVATARS={fox:["Fox","#e8833a","#fff3e6"],owl:["Owl","#8a6a4f","#f3e3cf"],lion:["Lion","#d9a441","#fbe6b4"],cat:["Cat","#8f9aa6","#eef1f4"],dog:["Dog","#c99a6b","#f6e7d4"],panda:["Panda","#f4f4f4","#ffffff"],penguin:["Penguin","#2f3b47","#ffffff"],bear:["Bear","#8b5e3c","#e7c9a6"]};
+function avatarSvg(k,size){ const A=AVATARS[k]||AVATARS.fox, c=A[1], f=A[2], s=size||64; let ears="", extra="", eyes, nose;
+  const eye=(x,y,r)=>`<g class="avEye"><ellipse cx="${x}" cy="${y}" rx="${r}" ry="${r*1.15}" fill="#1d2a33"/><circle cx="${x+r*.35}" cy="${y-r*.4}" r="${r*.35}" fill="#fff"/></g>`;
+  eyes=eye(38,50,4.6)+eye(62,50,4.6); nose=`<ellipse cx="50" cy="62" rx="5" ry="3.6" fill="#2a2a2a"/><path d="M44 68 Q50 73 56 68" stroke="#2a2a2a" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+  if(k==="fox"){ ears=`<path d="M18 40 L22 8 L44 26 Z" fill="${c}"/><path d="M82 40 L78 8 L56 26 Z" fill="${c}"/><path d="M24 30 L26 16 L38 26Z" fill="#5b3420"/><path d="M76 30 L74 16 L62 26Z" fill="#5b3420"/>`; extra=`<path d="M20 52 Q50 96 80 52 Q66 70 50 70 Q34 70 20 52Z" fill="${f}"/>`; }
+  if(k==="owl"){ ears=`<path d="M22 30 L18 6 L40 22Z" fill="${c}"/><path d="M78 30 L82 6 L60 22Z" fill="${c}"/>`; extra=`<circle cx="38" cy="50" r="13" fill="${f}"/><circle cx="62" cy="50" r="13" fill="${f}"/>`; eyes=eye(38,50,6)+eye(62,50,6); nose=`<path d="M45 62 L55 62 L50 72Z" fill="#e0a12b"/>`; }
+  if(k==="lion"){ ears=`<circle cx="50" cy="52" r="47" fill="#a8641f"/><circle cx="24" cy="24" r="9" fill="${c}"/><circle cx="76" cy="24" r="9" fill="${c}"/>`; extra=`<ellipse cx="50" cy="66" rx="16" ry="12" fill="${f}"/>`; }
+  if(k==="cat"){ ears=`<path d="M18 42 L20 8 L44 26Z" fill="${c}"/><path d="M82 42 L80 8 L56 26Z" fill="${c}"/><path d="M24 32 L25 16 L37 26Z" fill="#f2b8c6"/><path d="M76 32 L75 16 L63 26Z" fill="#f2b8c6"/>`; extra=`<path d="M30 64 H12 M30 68 L14 74 M70 64 H88 M70 68 L86 74" stroke="#55606b" stroke-width="1.6" stroke-linecap="round"/>`; nose=`<path d="M46 60 L54 60 L50 65Z" fill="#e48aa0"/><path d="M44 69 Q50 73 50 66 Q50 73 56 69" stroke="#2a2a2a" stroke-width="1.8" fill="none"/>`; }
+  if(k==="dog"){ ears=`<ellipse cx="16" cy="48" rx="11" ry="24" fill="#7a5233" transform="rotate(14 16 48)"/><ellipse cx="84" cy="48" rx="11" ry="24" fill="#7a5233" transform="rotate(-14 84 48)"/>`; extra=`<ellipse cx="50" cy="66" rx="17" ry="13" fill="${f}"/><path d="M47 72 Q50 80 53 72Z" fill="#e47a8a"/>`; }
+  if(k==="panda"){ ears=`<circle cx="22" cy="20" r="12" fill="#1d2a33"/><circle cx="78" cy="20" r="12" fill="#1d2a33"/>`; extra=`<ellipse cx="37" cy="50" rx="9" ry="11" fill="#1d2a33" transform="rotate(-20 37 50)"/><ellipse cx="63" cy="50" rx="9" ry="11" fill="#1d2a33" transform="rotate(20 63 50)"/>`; eyes=`<g class="avEye"><circle cx="38" cy="49" r="3.4" fill="#fff"/><circle cx="62" cy="49" r="3.4" fill="#fff"/></g>`; }
+  if(k==="penguin"){ extra=`<path d="M22 56 Q22 30 50 34 Q78 30 78 56 Q78 86 50 88 Q22 86 22 56Z" fill="${f}"/>`; nose=`<path d="M43 61 Q50 56 57 61 L50 69Z" fill="#f0a43a"/>`; }
+  if(k==="bear"){ ears=`<circle cx="20" cy="22" r="12" fill="${c}"/><circle cx="80" cy="22" r="12" fill="${c}"/><circle cx="20" cy="22" r="6" fill="${f}"/><circle cx="80" cy="22" r="6" fill="${f}"/>`; extra=`<ellipse cx="50" cy="66" rx="15" ry="12" fill="${f}"/>`; }
+  return `<svg class="avSvg" viewBox="0 0 100 100" width="${s}" height="${s}" aria-hidden="true"><g class="avHead">${ears}<circle cx="50" cy="54" r="38" fill="${c}" stroke="${k==="panda"?"#d5dbe0":"none"}"/>${extra}${eyes}${nose}</g></svg>`; }
+
+/* profile questions */
+const PROF_Q=[["role","Your role",[["qa","QA / RA professional"],["mgr","Manager or team lead"],["aud","Auditor or consultant"],["rd","R&D or production"],["stu","Student or career changer"]]],
+ ["years","Years in medical devices",[["0","0–2 years"],["3","3–5 years"],["6","6–10 years"],["10","More than 10 years"]]],
+ ["device","Main device type",[["impl","Non-active or implant"],["active","Active or electrical"],["ivd","In vitro diagnostic (IVD)"],["sw","Software (SaMD)"],["combo","Combination product"]]],
+ ["market","Main market",[["us","United States"],["eu","European Union"],["both","US and EU"],["other","Other"]]],
+ ["goal","Main goal",[["learn","Learn the basics"],["audit","Prepare for an audit or inspection"],["career","Career or job interview"],["tools","Daily work: forms and tools"]]]];
+const DEV_RX={impl:/implant|stent|orthop|hip|knee|spinal|catheter|graft|suture|lens|valve|screw/i,active:/pump|monitor|ventilat|laser|generator|stimulat|defibril|ultrasound|x-ray|electro|infusion|dialys/i,ivd:/assay|ivd|analy[sz]er|glucose|strip|reagent|test kit|diagnostic/i,sw:/software|app\b|samd|algorithm|\bai\b|digital/i,combo:/drug|prefilled|inhal|inject|pen\b/i};
+function profRecommend(p){ if(p.goal==="tools"||p.role==="mgr") return "all"; if(p.goal==="audit"||p.goal==="career"||p.role==="aud"||(+p.years)>=3) return "premium"; return "free"; }
+function profLevel(p){ return p.years==="0"?"3":p.years==="3"?"4":"all"; }
+function profStart(p){ const L=[];
+  if(p.goal==="learn") L.push(["QMS fundamentals chapter","#"+CH[0].id],["Course 0: Good Documentation Practices","#gdp"],["Course 1: Complaint or not?","#gdp"]);
+  if(p.goal==="audit") L.push(["Inspection mode: a study case","#audit"],["Course 9: Facing an FDA inspection","#gdp"],["Random Question","#random"]);
+  if(p.goal==="career") L.push(["Random Question","#random"],["Real-life Dilemmas","#dilemmas"],["Inspection mode: Real Events","#audit"]);
+  if(p.goal==="tools") L.push(["QMS Assistant forms","#daily"],["Sample Size Tool","#sampling"],["Risk management","#risk"]);
+  if(p.market==="eu") L.push(["EU MDR 2017/745","#mdr"]); else if(p.market==="us") L.push(["FDA QMSR","#qmsr"]); else L.push(["QMS map ISO ↔ QMSR ↔ MDR","#map"]);
+  return L; }
+function profForYou(c){ const p=profGet(); const rx=DEV_RX[p.device]; return !!(rx&&rx.test((c.dev||"")+" "+(c.name||""))); }
+
+/* the profile sheet: questions, avatar, plan, administrator */
+function planSheet(){ const p=profGet(); const box=el("div",{class:"prof"});
+  const draw=(step)=>{ box.innerHTML="";
+    if(step==="q"){ const a=Object.assign({},p); let i=0; const st=el("div",{});
+      const one=()=>{ st.innerHTML=""; const [k,t,opts]=PROF_Q[i];
+        st.append(el("div",{class:"profProg"}, ...PROF_Q.map((_,j)=>el("i",{class:j<i?"done":j===i?"on":""}))), el("small",{class:"profN"},"Question "+(i+1)+" of "+PROF_Q.length), el("h3",{},t),
+          el("div",{class:"profOpts"}, ...opts.map(([v,l])=>el("button",{class:"profOpt"+(a[k]===v?" on":""),type:"button",onclick:()=>{ a[k]=v; if(i<PROF_Q.length-1){ i++; one(); } else { a.plan=a.plan||profRecommend(a); profSet(Object.assign(a,{done:1,rec:profRecommend(a)})); Object.assign(p,profGet()); try{ LEVEL=profLevel(a); localStorage.setItem("qah-level",LEVEL); }catch(e){} draw(p.avatar?"res":"av"); } }},l))),
+          i>0?el("button",{class:"linkBtn",type:"button",onclick:()=>{ i--; one(); }},"‹ Back"):""); };
+      one(); box.append(st); return; }
+    if(step==="av"){ box.append(el("h3",{},"Pick your avatar"), el("p",{class:"src"},"It represents you in the app: top bar, results and badges."),
+        el("div",{class:"avGrid"}, ...Object.keys(AVATARS).map(k=>el("button",{class:"avPick"+(p.avatar===k?" on":""),type:"button","aria-label":AVATARS[k][0],onclick:()=>{ profSet({avatar:k}); p.avatar=k; profHdrRefresh(); draw(p.done?"res":"q"); }}, el("span",{html:avatarSvg(k,64)}), el("small",{},AVATARS[k][0]))))); return; }
+    // result / overview
+    const rec=p.rec||profRecommend(p), cur=planEff();
+    box.append(el("div",{class:"profTop"}, el("button",{class:"avBig",type:"button",title:"Change avatar",onclick:()=>draw("av"),html:avatarSvg(p.avatar||"fox",76)}),
+      el("div",{}, el("h3",{},p.done?"Your Qraft profile":"Personalise Qraft"), el("p",{class:"src"},p.done?PROF_Q.map(([k,,o])=>(o.find(x=>x[0]===p[k])||[,""])[1]).filter(Boolean).join(" · "):"Answer 5 quick questions and we'll recommend a plan and where to start."),
+        el("button",{class:"linkBtn",type:"button",onclick:()=>draw("q")},p.done?"Change my answers":"Start the 5 questions ›"))));
+    if(p.done){ box.append(el("div",{class:"profStart"}, el("b",{},"Start here"), ...profStart(p).map(([t,h])=>el("a",{href:h,onclick:()=>closeModal()},t+" ›"))),
+      el("p",{class:"src"},"Content level set to "+({"3":"Advanced (★★★)","4":"Proficient (★★★★)","all":"All levels"})[profLevel(p)]+" to match your experience. Change it any time with the level buttons.")); }
+    box.append(el("h4",{class:"profH"},"Plans"), planTable(p.done?rec:null));
+    box.append(el("p",{class:"src plNote"},PLAN_ENFORCE?"Your plan: "+PLAN_NAMES[cur]+".":"Preview: everything is open for now. Plan tags show what each plan will include."));
+    // administrator
+    const adm=el("div",{class:"profAdm"});
+    if(isAdmin()){ const sel=el("select",{class:"topicSel","aria-label":"View the app as"}, ...["admin","free","premium","all"].map(k=>el("option",{value:k},k==="admin"?"Administrator (everything)":PLAN_NAMES[k])));
+      sel.value=ls(VIEW_KEY)||"admin"; sel.onchange=()=>{ if(sel.value==="admin") ls(VIEW_KEY,null); else ls(VIEW_KEY,sel.value); profHdrRefresh(); try{ route(); }catch(e){} draw("res"); };
+      adm.append(el("b",{},"Administrator signed in"), el("label",{class:"topicL"}, el("span",{},"View the app as"), sel),
+        el("button",{class:"linkBtn",type:"button",onclick:()=>{ ls(ADM_KEY,null); ls(VIEW_KEY,null); profHdrRefresh(); try{ route(); }catch(e){} draw("res"); }},"Sign out")); }
+    else { const pw=el("input",{type:"password",class:"profPw",placeholder:"Administrator password",autocomplete:"current-password","aria-label":"Administrator password"}), msg=el("small",{class:"profMsg"});
+      const go=async()=>{ const ok=await admCheck(pw.value); pw.value=""; if(ok){ ls(ADM_KEY,"1"); ls("qah-admin-device","1"); try{ if(typeof rwBadges==="function") rwBadges(); }catch(e){} profHdrRefresh(); draw("res"); } else { msg.textContent="Wrong password."; } };
+      pw.addEventListener("keydown",e=>{ if(e.key==="Enter") go(); });
+      adm.append(el("details",{}, el("summary",{},"Administrator sign-in"), el("div",{class:"profPwRow"}, pw, el("button",{class:"cta alt",type:"button",onclick:go},"Sign in")), msg)); }
+    box.append(adm); };
+  modal("Profile and plans",box); const mb=document.querySelector("#ovl .mbox"); if(mb) mb.classList.add("profBox");
+  draw(p.done||p.avatar?"res":"res"); }
+async function admCheck(v){ try{ const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("qraft-admin|"+v)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")===ADMIN_H; }catch(e){ return false; } }
+function planTable(rec){ const rows=[["Chapters, QMS map, Regulatory Timeline, search, glossary","✓","✓","✓"],["Random Question","10 a day","All","All"],["Real-life Dilemmas","3 a day","All","All"],
+  ["Inspection mode","1 study case + 1 Real Event","All 160","All 160"],["Training Courses","GDP + 2 courses","All 11","All 11"],["Today's suggestion","✓","✓","✓"],["QMS Assistant forms","5","25","All"],
+  ["Sample Size Tool (incoming inspection, design verification)","–","✓","✓"],["Other statistics, risk tools, Projects","–","–","✓"],["Quarterly regulatory watch","–","–","✓"]];
+  const t=el("table",{class:"plTable"}); const cols=["free","premium","all"];
+  t.append(el("thead",{},el("tr",{}, el("th",{},""), ...cols.map(k=>el("th",{class:k+(rec===k?" rec":"")}, PLAN_NAMES[k], rec===k?el("small",{},"Recommended"):"")))));
+  const tb=el("tbody",{}); rows.forEach(r=>tb.append(el("tr",{}, el("td",{},r[0]), ...r.slice(1).map((v,j)=>el("td",{class:cols[j]+(rec===cols[j]?" rec":"")},v))))); t.append(tb);
+  return el("div",{class:"plTableW"},t); }
+function profHdrRefresh(){ document.querySelectorAll(".avChip").forEach(b=>{ const p=profGet(); b.innerHTML=avatarSvg(p.avatar||"fox",34); b.classList.toggle("unset",!p.avatar); b.classList.toggle("adm",isAdmin()); b.title=isAdmin()?"Administrator · "+PLAN_NAMES[planEff()]:"Profile and plans"; }); }
+function profHdr(a,hat){ if(a.querySelector(".avChip")) return; const b=el("button",{class:"avChip",type:"button","aria-label":"Profile and plans",onclick:planSheet}); a.insertBefore(b,hat); profHdrRefresh(); }
+function profHomeCard(m){ const p=profGet(); if(p.done) return; m.append(el("div",{class:"card profHome"}, el("span",{class:"profHomeAv",html:avatarSvg(p.avatar||"owl",56)}),
+  el("div",{}, el("b",{},"Make Qraft yours"), el("p",{},"5 quick questions: we'll suggest a plan, where to start, and you pick your avatar.")), el("button",{class:"cta",type:"button",onclick:planSheet},"Start ›"))); }
 
 function openContact(){
   const rows=[["phone","Phone",CONTACT.phone,v=>"tel:"+v.replace(/[^+\d]/g,"")],["globe","Website",CONTACT.web,v=>/^https?:/.test(v)?v:"https://"+v],["mail","Email",CONTACT.email,v=>"mailto:"+v]];
@@ -4256,6 +4432,7 @@ const HELP_FEAT=[
  {r:"audit",t:"QMS topics",s:"#main summary||topic",h:"Topic scenarios (CAPA, complaints, suppliers and more), 12 questions each.",k:"topic scenario capa complaints suppliers",q:["where are the topic scenarios","how can i practice capa"]},
  {r:"audit",t:"Real Events",s:"#main summary||Real Event",h:"Cases based on real FDA warning letters. At the closing meeting you see what FDA actually wrote.",k:"warning letter letters real event fda enforcement",q:["where are the warning letters","what are real events","how can i see real fda cases"]},
  {r:"gdp",t:"Training Courses",s:".crsGrid||Course",h:"Short practical courses (GDP, complaints, MDR and vigilance, root cause and CAPA, more coming): why it matters, right and wrong examples, golden rules and a 10-question check. 8 of 10 earns the course badge.",k:"training courses course gdp good documentation practice alcoa records complaint complaints mdr vigilance reportable capa root cause badge learn",q:["how can i learn gdp","where is the gdp training","what is alcoa","which courses are there","is there a course on complaints","how do i learn mdr reporting","where can i practice capa writing","how do i earn a badge"]},
+ {r:"home",t:"Profile and plans",s:".avChip",h:"Tap your avatar (top bar) to answer 5 quick questions, get a plan recommendation and a start-here path, choose your animal avatar and compare Free trial, Premium and All inclusive.",k:"profile plan plans premium free trial all inclusive subscription price avatar animal account upgrade",q:["what plans are there","what is in premium","how do i change my avatar","how do i upgrade","what does the free trial include"],go:"home"},
  {r:"gdp",t:"Run several courses",s:".crsBar||Start selected",h:"Tick the box on two or more course cards (the number shows the order), then press Start. Each course opens when the previous one ends.",k:"select several multiple courses sequence queue in a row tick",q:["how do i take several courses","can i run courses one after another","how do i select courses"]},
  {r:"daily",t:"QMS Assistant",s:"#main h2",h:"Ready-to-use QA forms with filled samples, step guidance and export to Word and PDF.",k:"qms assistant forms templates records documents word pdf export",q:["where are the forms","how can i fill a form","where are the templates","which feature helps me write a capa"]},
  {r:"daily",t:"QMS areas",s:".dItem,.dPick",h:"Pick a QMS area (design, CAPA, complaints, suppliers and more) to see its forms.",k:"area category capa complaints suppliers design change",q:["where is the capa form","where is the complaint form","where is the supplier form"]},
@@ -4310,7 +4487,7 @@ function helpFind(s){ for(const part of s.split(",")){ const [css,txt]=part.spli
 function helpButton(){ const b=el("button",{class:"helpHat",type:"button","aria-label":"Help: open your QA helper",title:"Help"}, el("img",{src:HELP_IMG.hat,alt:"",width:"86",height:"70"})); b.addEventListener("click",()=>helpOpen(b)); return b; }
 function helpHdrHat(){ const a=document.querySelector("header.top .appbar"); if(!a||a.querySelector(".hdrHat")) return;
   const b=el("button",{class:"hdrHat",type:"button","aria-label":"Help: open your QA helper",title:"Help"}, el("img",{src:HELP_IMG.hat,alt:"",width:"56",height:"46"}));
-  b.addEventListener("click",()=>helpOpen(b)); a.append(b); }
+  b.addEventListener("click",()=>helpOpen(b)); a.append(b); if(typeof profHdr==="function") profHdr(a,b); }
 function helpHatEl(){ const c=[...document.querySelectorAll(".hdrHat,.helpHat")].filter(e=>{ const r=e.getBoundingClientRect(); return r.width&&r.bottom>0&&r.top<innerHeight&&getComputedStyle(e.closest(".appbar")||e).opacity!=="0"; }); return c[0]||null; }
 function helpRect(e){ if(!e) return {x:innerWidth-40,y:30}; const r=e.getBoundingClientRect(); return {x:r.left+r.width/2,y:r.top+r.height/2}; }
 function helpOpen(from){ if(HLP){ const i=HLP.panel.querySelector("input"); if(i) i.focus(); return; }
@@ -4474,7 +4651,7 @@ function openGlossary(){
 function renderHome(openExplore){
   const m=document.getElementById("main"); m.innerHTML="";
   /* 3.12.0: the home glossary card was removed; the Glossary button next to the search box opens the same term search */
-  const hs=document.createElement("div"); hs.id="homeSlot"; m.append(hs); if(typeof homeSlot==="function") homeSlot(hs);
+  const hs=document.createElement("div"); hs.id="homeSlot"; if(typeof profHomeCard==="function") profHomeCard(m); m.append(hs); if(typeof homeSlot==="function") homeSlot(hs);
   if(openExplore) setTimeout(()=>{ const i=window.NAVSEARCH&&NAVSEARCH.querySelector("input"); if(i){ i.focus({preventScroll:true}); i.scrollIntoView({block:"center"}); } },80);
 }
 function renderGlossaryHome(host,body){
@@ -4516,14 +4693,14 @@ function renderDates(){
   m.append(sIn);
   const q=(dtsel.q||"").toLowerCase();
   const items=TL2.map((x,i)=>({x,i})).filter(o=>(dtsel.reg==="All"||o.x[2]===dtsel.reg)&&(!q||o.x.join(" ").toLowerCase().includes(q)));
-  const now=Date.now(), near=dtsel.range==="near";
+  const now=Date.now(), near=false;
   const t0=near?now-2*365.25*864e5:new Date("2021-01-01").getTime(), t1=near?now+3*365.25*864e5:new Date("2030-01-01").getTime();
   /* coming next: the next four milestones with a countdown */
   const fut=items.filter(o=>new Date(o.x[0]).getTime()>=now).slice(0,4);
   if(fut.length){ m.append(el("div",{class:"tlNextH"},"Coming next")); m.append(el("div",{class:"tlNext"}, ...fut.map(({x,i})=>{ const b=el("button",{class:"tlNextI "+REGC[x[2]],type:"button",onclick:()=>{ dtsel.sel=i; dtsel.clu=null; renderDates(); }}, el("small",{},x[1]), el("b",{},x[3]), el("em",{},dtCountdown(x[0]))); return b; }))); }
   const wrap=el("div",{class:"card tlCard"});
-  const rg=el("div",{class:"tlRange"}, ...[["all","2021–2029"],["near","Around today"]].map(([k,l])=>el("button",{class:"chipBtn",type:"button","aria-pressed":String(dtsel.range===k),onclick:()=>{ dtsel.range=k; renderDates(); }},l)));
-  const bar=el("div",{class:"tl2"}); wrap.append(rg,bar);
+  const bar=el("div",{class:"tl2"}); wrap.append(bar);
+  requestAnimationFrame(()=>{ try{ const n=bar.querySelector(".tlNow"), a=n.getBoundingClientRect(), r=wrap.getBoundingClientRect(); wrap.scrollLeft+=(a.left+a.width/2-r.left)-r.width/2; }catch(e){} });
   for(let y=new Date(t0).getFullYear()+(near?1:0);y<=new Date(t1).getFullYear()-(near?0:1);y++){ const x=(new Date(y+"-01-01").getTime()-t0)/(t1-t0)*100; if(x<0||x>100) continue; bar.append(el("span",{class:"tlYear",style:"left:"+x+"%"},String(y))); }
   const nx=(now-t0)/(t1-t0)*100; bar.append(el("span",{class:"tlNow",style:"left:"+nx+"%"},"Today"));
   const list=el("div",{class:"dateList"});
@@ -4989,9 +5166,9 @@ function audAllIds(){ return [...AUD_CASES.map(c=>c.id),...Object.keys(AUD_SCEN)
 function audResults(){ return audAllIds().map(id=>state["aud-"+id]).filter(Boolean); }
 const audSel={c:false,t:false,topic:null};
 let audTick=null;
-function audStart(st){ invHush(); AUD={st,pick:null,phase:"open"}; renderAudit(); window.scrollTo({top:0}); }
+function audStart(st){ if(typeof planAud==="function"&&!planAud(st)) return; invHush(); AUD={st,pick:null,phase:"open"}; renderAudit(); window.scrollTo({top:0}); }
 function audTimerSvg(sec){ const R=17, C=2*Math.PI*R, f=(sec%60)/60; return '<svg viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="'+R+'" fill="none" stroke="var(--line)" stroke-width="4"/><circle class="tArc" cx="22" cy="22" r="'+R+'" fill="none" stroke-width="4" stroke-linecap="round" stroke-dasharray="'+(C*f).toFixed(1)+' '+C.toFixed(1)+'" transform="rotate(-90 22 22)"/></svg>'; }
-function renderAudit(){
+function renderAudit(){ setTimeout(()=>{ try{ planMark(document.getElementById("main")); }catch(e){} },0);
   if(audTick){ clearInterval(audTick); audTick=null; }
   if(!AUD) invHush(); /* 3.4.1 no voice may outlive its investigator */
   const m=document.getElementById("main"); m.innerHTML="";
@@ -5003,7 +5180,7 @@ function renderAudit(){
   if(!AUD){
     const res=id=>{ const r=state["aud-"+id]; return r?el("span",{class:"caseRes "+(r.pass?"pass":"fail")},(r.pass?"Passed ":"Last ")+r.pct+"%"):null; };
     const g=el("div",{class:"caseGrid"});
-    AUD_CASES.filter(c=>lvOk(AUD_LV[c.id])).forEach(c=>g.append(el("button",{class:"caseCard",type:"button",onclick:()=>audStart(audNew(c.id,Math.floor(Math.random()*1e6)))},
+    AUD_CASES.filter(c=>lvOk(AUD_LV[c.id])).forEach(c=>g.append(el("button",{class:"caseCard",type:"button","data-aud":"c:"+c.id,onclick:()=>audStart(audNew(c.id,Math.floor(Math.random()*1e6)))},
       el("div",{class:"caseTop"}, audIco(c.icon), el("span",{class:"caseNo"},c.id), res(c.id)), el("b",{},c.name), lvBadge(AUD_LV[c.id]), el("span",{class:"caseCls"},"US: "+c.us+" · EU: "+c.eu))));
     const dc=el("details",{class:"card audPick"}, el("summary",{}, el("b",{},"Choose a study case"), el("small",{},AUD_CASES.filter(c=>lvOk(AUD_LV[c.id])).length+" device cases"+(LEVEL==="all"?"":" at this level")+" · 20 questions each")), g);
     dc.open=audSel.c; dc.addEventListener("toggle",()=>{ audSel.c=dc.open; });
@@ -5013,7 +5190,7 @@ function renderAudit(){
       const T=AUD_TSETS.find(t=>t.key===audSel.topic); if(!T) return;
       const sg=el("div",{class:"caseGrid"});
       const SS=T.scen.filter(S=>lvOk(S.lv)); if(!SS.length) sg.append(el("p",{class:"src"},"No scenario at this level in this topic. Choose another topic or level."));
-      SS.forEach(S=>sg.append(el("button",{class:"caseCard scenCard",type:"button",onclick:()=>audStart(audNewTopic(S.id,Math.floor(Math.random()*1e6)))},
+      SS.forEach(S=>sg.append(el("button",{class:"caseCard scenCard",type:"button","data-aud":"t:"+S.id,onclick:()=>audStart(audNewTopic(S.id,Math.floor(Math.random()*1e6)))},
         el("div",{class:"caseTop"}, el("span",{class:"caseNo"},S.id), res(S.id)), el("b",{},S.title), lvBadge(S.lv), el("span",{class:"caseCls"},S.sit))));
       sc.append(el("h3",{class:"secTitle"},T.title+": choose a scenario"), sg); };
     AUD_TSETS.forEach(t=>{ const n=t.scen.filter(S=>lvOk(S.lv)).length; tg.append(el("button",{class:"topicBtn"+(n?"":" lvNone"),type:"button","data-k":t.key,"aria-pressed":"false",onclick:()=>{ audSel.topic=audSel.topic===t.key?null:t.key; drawScen(); }}, audIco(t.icon), el("span",{},t.title), LEVEL!=="all"?el("small",{class:"lvN"},n+" at this level"):"")); });
@@ -5022,7 +5199,7 @@ function renderAudit(){
     drawScen();
     const rg=el("div",{class:"caseGrid"}); const RR=AUD_REAL.filter(R=>lvOk(R.lv));
     if(!RR.length) rg.append(el("p",{class:"src"},"No case at this level. Choose another level."));
-    RR.forEach(R=>rg.append(el("button",{class:"caseCard realCard",type:"button",onclick:()=>audStart(audNewReal(R.id,Math.floor(Math.random()*1e6)))},
+    RR.forEach(R=>rg.append(el("button",{class:"caseCard realCard",type:"button","data-aud":"r:"+R.id,onclick:()=>audStart(audNewReal(R.id,Math.floor(Math.random()*1e6)))},
       el("div",{class:"caseTop"}, ico("audit"), el("span",{class:"caseNo"},R.id), res(R.id)), el("b",{},R.title), lvBadge(R.lv), el("span",{class:"caseCls"},R.areas+" · "+R.plan.length+" questions"))));
     const dr=el("details",{class:"card audPick realPick"}, el("summary",{}, el("b",{},"Choose a Real Event"), el("small",{},RR.length+" cases"+(LEVEL==="all"?"":" at this level")+" · up to 20 questions · the real outcome is revealed at the closing meeting")), rg);
     dr.open=audSel.r; dr.addEventListener("toggle",()=>{ audSel.r=dr.open; });
@@ -8219,6 +8396,7 @@ function pinScroll(){ const n=document.getElementById("navRow2"); if(!n||!WIDE()
 let LAST_ROUTE=null;
 function route(){
   const id=(location.hash||"").slice(1)||"home";
+  if(typeof planGateRoute==="function"&&planGateRoute(id)){ LAST_ROUTE=id; return; }
   { const sec=["random","dilemmas","audit","gdp"].includes(id)?"practice":["tools","daily","stats","sampling","bstats","msa","grr","rmtools","rmtool","impact","risk","cvss","projects","qadrafts"].includes(id)||SQF[id]?"tools":"learn"; document.documentElement.dataset.sec=sec; document.documentElement.dataset.mod=(sec==="practice"||CH.some(c=>c.id===id))?"train":""; }
   if(SQF[id]){ closeModal(); renderNav(id); renderSqForm(id); totals(); try{ if(navPinned()) pinScroll(); else window.scrollTo({top:0}); }catch(e){} return; }
   if(["daily","stats","sampling","risk","rmtools","bstats","rmtool","audit","random","dilemmas","grr","projects","cvss","impact"].includes(id)&&LAST_ROUTE!==id) setTimeout(()=>{ if((location.hash||"").slice(1)!==id) return; const nx=()=>{ if((location.hash||"").slice(1)!==id) return; if(id==="daily") dailyIntro(); else if(id==="risk") riskIntro(); else if(id==="rmtools") rmtIntro(); else if(id==="bstats") bstatsIntro(); else if(id==="stats"||id==="sampling") statsIntro(id); }; guideIntro(id,nx); },450);
