@@ -3719,7 +3719,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="3.15.0", APPDATE="27-NOV-2026";
+const APPVER="3.15.1", APPDATE="27-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Qraft (Asaf Ben Zion). All rights reserved.";
 const LEGAL=[["Risk Management Approach", "Content is a paraphrased summary for training. It does not replace the standards: ISO 14971:2019 (with EN ISO 14971:2019+A11:2021 for the EU), ISO/TR 24971:2020 and IEC 62366-1:2015+A1:2020. Use your licensed copies for exact requirements."], ["Copyright", "© 2026 Qraft (Asaf Ben Zion). The selection, structure, design and original text of this handbook may not be copied or redistributed without written permission. Regulations and official guidance are cited from their publishers: US federal texts are in the public domain, and EU texts are reused with attribution. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number and described in the author’s own words; their text remains the property of their publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, selection and design, and was developed and tested with AI tools. Key facts, such as regulatory reporting timelines, device classifications and clause numbers, were checked against official sources; other content is the author’s interpretation and may contain inaccuracies."], ["Sources", "Cited sources are official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs and FDA databases. EU: EUR-Lex, European Commission pages and MDCG guidance. International: IMDRF codes and MDSAP documents. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number, based on freely available published information and the author’s own interpretation and knowledge."], ["Important", "This application is intended for training purposes only and is not legal or regulatory advice. It is provided without warranty. Results from its tools require human review, verification and approval. Always check the linked official source before citing anything in a formal regulatory or customer response."]];
@@ -4147,7 +4147,7 @@ function planSheet(start){ const p=profGet(); const box=el("div",{class:"prof"})
     const adm=el("div",{class:"profAdm"});
     if(isAdmin()){ const sel=el("select",{class:"topicSel","aria-label":"View the app as"}, ...["admin","free","premium","all"].map(k=>el("option",{value:k},k==="admin"?"Administrator (everything)":PLAN_NAMES[k])));
       sel.value=ls(VIEW_KEY)||"admin"; sel.onchange=()=>{ if(sel.value==="admin") ls(VIEW_KEY,null); else ls(VIEW_KEY,sel.value); profHdrRefresh(); try{ route(); }catch(e){} draw("res"); };
-      adm.append(el("b",{},"Administrator signed in"), el("label",{class:"topicL"}, el("span",{},"View the app as"), sel),
+      adm.append(el("b",{},"Administrator signed in"), el("label",{class:"topicL"}, el("span",{},"View the app as"), sel), el("button",{class:"linkBtn",type:"button",onclick:()=>{ closeModal(); setTimeout(openSources,60); }},"Sources"),
         el("button",{class:"linkBtn",type:"button",onclick:()=>{ ls(ADM_KEY,null); ls(VIEW_KEY,null); profHdrRefresh(); try{ route(); }catch(e){} draw("res"); }},"Sign out")); }
     else { const pw=el("input",{type:"password",class:"profPw",placeholder:"Administrator password",autocomplete:"current-password","aria-label":"Administrator password"}), msg=el("small",{class:"profMsg"});
       const go=async()=>{ const ok=await admCheck(pw.value); pw.value=""; if(ok){ ls(ADM_KEY,"1"); ls("qah-admin-device","1"); try{ if(typeof rwBadges==="function") rwBadges(); }catch(e){} profHdrRefresh(); draw("res"); } else { msg.textContent="Wrong password."; } };
@@ -4390,6 +4390,16 @@ function openVV(){ if(vvUnlocked()) return openVVDocs();
     el("label",{class:"vvPinL"}, "PIN code", inp), el("div",{class:"mact"}, el("button",{class:"cta",type:"button",onclick:go2},"Unlock")), st));
   setTimeout(()=>inp.focus(),30);
 }
+/* 3.15.1 Sources: admin only (hidden menu); removed links are logged by the regulatory watch runs */
+/*SRCRM-DATA*/const SRC_REMOVED=[];/*SRCRM-END*/
+function srcAdmin(){ try{ return (typeof isAdmin==="function"&&isAdmin())||vvUnlocked(); }catch(e){ return false; } }
+function openSources(){ const box=el("div",{class:"srcAll"}); const seen=new Set();
+  const lnk=k=>{ const s=SRC[k]; return s?el("li",{}, el("a",{href:s.u,target:"_blank",rel:"noopener"},s.t)):null; };
+  box.append(el("p",{class:"src"},"All sources cited in the app, by chapter. New and updated official links are added, and retired or superseded ones removed, at each regulatory watch run (quarterly)."));
+  box.append(el("details",{open:""}, el("summary",{}, el("b",{},"Official requirements and guidance databases")), el("ul",{class:"srcList"}, ...OFFICIAL.map(lnk).filter(Boolean))));
+  CH.forEach(c=>{ const L=(c.refs||[]).map(lnk).filter(Boolean); (c.refs||[]).forEach(k=>seen.add(k)); if(L.length) box.append(el("details",{}, el("summary",{}, el("b",{},c.num+" · "+c.title), el("small",{}," "+L.length)), el("ol",{class:"srcList"}, ...L))); });
+  box.append(el("h4",{class:"profH"},"Removed sources"), SRC_REMOVED.length?el("ul",{class:"srcList"}, ...SRC_REMOVED.map(r=>el("li",{}, el("b",{},r.t)," · removed "+r.d+": "+r.why+(r.by?" (replaced by "+r.by+")":""), el("br",{}), el("small",{},r.u)))):el("p",{class:"src"},"None so far."));
+  modal("Sources (administrator)",box); }
 function openVVDocs(){
   const st=el("p",{class:"vvSt",role:"status"});
   const list=el("div",{class:"vvList"});
@@ -4398,6 +4408,7 @@ function openVVDocs(){
       el("div",{class:"vvBtns"}, el("button",{class:"tab",type:"button",onclick:()=>vvGet(code,ext,id,st)},ext==="xlsx"?"Excel":"Word"), el("button",{class:"tab",type:"button",onclick:()=>vvGet(code,"pdf",id,st)},"PDF"))));
   });
   const adm=el("div",{class:"svyAdm"});
+  list.append(el("div",{class:"vvRow"}, el("div",{}, el("b",{},"Sources"), el("small",{},"All cited links by chapter, plus the log of removed links")), el("div",{class:"vvBtns"}, el("button",{class:"tab",type:"button",onclick:openSources},"View"))));
   list.append(el("div",{class:"vvRow"}, el("div",{}, el("b",{},"Screen flow map (interactive)"), el("small",{},"Screens, links, happy and alternative flows")), el("div",{class:"vvBtns"}, el("button",{class:"tab",type:"button",onclick:()=>openSFM(st)},"View"))));
   modal("Software V&V records", el("div",{class:"vvBox"}, el("p",{},"Read-only validation records for "+VERLINE+". Approach: risk-based software assurance for a training tool."), list, st, adm));
   issueLog(adm);
@@ -5396,7 +5407,7 @@ function renderChapter(id){
   let tabs=[];
   if(c.clauses) tabs.push(["c","Clauses",c.clauses.length]);
   if(c.best) tabs.push(["b","Best practices",c.best.length]);
-  tabs.push(["kp","Takeaways",c.kps.length+(c.map?1:0)],["q","Questions",c.qs.length],["d","Debates",c.debates.length],["x","Dilemmas",c.dils.length],["s","Sources",c.refs.length]);
+  tabs.push(["kp","Takeaways",c.kps.length+(c.map?1:0)],["q","Questions",c.qs.length],["d","Debates",c.debates.length],["x","Dilemmas",c.dils.length]); if(srcAdmin()) tabs.push(["s","Sources",c.refs.length]);
   tabs=tabs.filter(t=>t[2]>0);
   if(!tabs.some(t=>t[0]===currentTab)) currentTab=tabs[0][0];
   const tl=el("div",{class:"tabs",role:"tablist"});
