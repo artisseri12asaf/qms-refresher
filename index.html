@@ -2121,6 +2121,30 @@ header.top .appbar .brand2{min-width:0; flex:1 1 auto}
 .mapHead{position:relative; padding-right:230px} .mapTlBtn{position:absolute; top:16px; right:16px; display:inline-flex; align-items:center; gap:7px; height:40px; padding:0 14px; white-space:nowrap; text-decoration:none; font-size:14.5px}
 .mapTlBtn svg{width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; flex:none}
 @media (max-width:700px){ .mapHead{padding-right:16px} .mapTlBtn{position:static; margin:0 0 8px} }
+/* 3.17.0 practice hub, quiz, sets, expert views, home start */
+.pxGrid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; margin-top:14px}
+.pxCard{display:grid; grid-template-columns:auto 1fr auto; gap:14px; align-items:center; text-decoration:none; color:var(--ink); border:2px solid transparent; transition:transform .15s, border-color .15s}
+.pxCard:hover{transform:translateY(-2px); border-color:var(--pc,#1f5f8b)} .pxCard h3{margin:0 0 4px} .pxCard p{margin:0 0 8px; color:var(--muted); font-size:14px}
+.pxIco{display:grid; place-items:center; width:52px; height:52px; border-radius:14px; background:color-mix(in srgb,var(--pc,#1f5f8b) 12%,var(--card)); color:var(--pc,#1f5f8b); flex:none}
+.px-quiz{--pc:#a8771f} .px-dil{--pc:#a8483f} .px-insp{--pc:#6b5a9a} .px-crs{--pc:#2e7d74}
+.pxMeta{display:flex; flex-wrap:wrap; gap:8px; align-items:center} .pxMeta span{font-size:12px; font-weight:800; color:var(--pc); background:color-mix(in srgb,var(--pc) 10%,var(--card)); padding:2px 9px; border-radius:10px} .pxMeta small{color:var(--muted)}
+.pxGo{font-weight:800; color:var(--pc); white-space:nowrap}
+.qzBar,.dsBar{display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin:10px 0; padding:8px 14px; border-radius:12px; background:var(--card); border:1px solid var(--line)}
+.dsBar .linkBtn{margin-left:auto}
+.dsBar .linkBtn{color:#1f5f8b; font-weight:800}
+:root[data-theme="dark"] .dsBar .linkBtn{color:#9fd3f5}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .dsBar .linkBtn{color:#9fd3f5} }
+.qzDots{display:inline-flex; gap:5px} .qzDots i{width:12px; height:12px; border-radius:50%; background:#dfe8ef; border:2px solid transparent} .qzDots i.ok{background:#2b8a5a} .qzDots i.no{background:#c0392b} .qzDots i.on{border-color:#1f5f8b; background:#fff}
+.qzRes{display:flex; gap:18px; align-items:center; margin-top:12px} .qzRes h3{margin:0 0 4px} .qzRing{flex:none} .qzAct{display:flex; flex-wrap:wrap; gap:10px; margin-top:10px}
+.dvTabs{display:flex; gap:6px; margin:12px 0 4px; padding:4px; border-radius:14px; background:var(--card); border:1px solid var(--line); width:max-content; max-width:100%}
+.dvTab{border:0; background:none; padding:8px 16px; border-radius:10px; font:inherit; font-weight:800; color:var(--muted); cursor:pointer} .dvTab[aria-selected="true"]{background:#1f5f8b; color:#fff}
+.hStart{display:grid; gap:8px} .hStartT{font-size:13px; letter-spacing:.04em; text-transform:uppercase; color:var(--muted)}
+.hStartG{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px}
+.hStartB{display:flex; gap:10px; align-items:center; padding:8px 10px; border-radius:12px; background:var(--card); border:1px solid var(--line); text-decoration:none; color:var(--ink)} .hStartB:hover{border-color:var(--pc)}
+.hStartB .pxIco{width:36px; height:36px; border-radius:10px} .hStartB .pxIco svg{width:20px; height:20px} .hStartB b{display:block; font-size:14px} .hStartB small{color:var(--muted); font-size:12px}
+a.navLabLink{text-decoration:none; color:inherit} a.navLabLink:hover{color:#1f5f8b; text-decoration:underline}
+.pfLib{grid-column:1/-1; margin:0}
+@media (max-width:700px){ .pxGrid{grid-template-columns:1fr} .pxCard{grid-template-columns:auto 1fr} .pxGo{grid-column:2} .qzRes{flex-direction:column; text-align:center} .qzAct{justify-content:center} }
 /* 3.16.0 chapter practice bar */
 .chPractice{display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin:12px 0 4px; padding:10px 14px; border-radius:14px; background:var(--card); border:1px solid var(--line)}
 .chPractice b{margin-right:auto}
@@ -2365,7 +2389,7 @@ function renderNav(active){
   const NK=Object.fromEntries(NAV.map(x=>[x[0],x]));
   const PARTK={iso:"basics",qmsr:"qms",mdr:"eu",fdapre:"fda"};
   const navBtn=([k,l,ic])=>el("button",{class:"navBtn n-"+ic,type:"button","aria-current":String(active===k||(PARTK[k]&&c.part===PARTK[k])||(k==="daily"&&(["tools","impact"].includes(active)||!!(typeof SQF!=="undefined"&&SQF[active])))||(k==="stats"&&["sampling","msa","grr"].includes(active))||(k==="risk"&&active==="rmtools")),onclick:()=>{ if(k==="random"){ rnd.cur=null; } const t=PARTK[k]?CH.find(x=>x.part===PARTK[k]).id:k; if(location.hash==="#"+t) route(); else location.hash=t; }}, ico(ic), el("span",{},l));
-  const grp=(lab,keys)=>el("div",{class:"navGroup","data-g":lab}, el("span",{class:"navLab"},lab), el("div",{class:"navRowG c"+keys.length}, ...keys.map(k=>navBtn(NK[k]))));
+  const grp=(lab,keys)=>el("div",{class:"navGroup","data-g":lab}, lab==="Practice"?el("a",{class:"navLab navLabLink",href:"#practice",title:"Practice: all four ways to train"},lab):el("span",{class:"navLab"},lab), el("div",{class:"navRowG c"+keys.length}, ...keys.map(k=>navBtn(NK[k]))));
   if(!window.NAVSEARCH) window.NAVSEARCH=searchWidget();
   { const ni=NAVSEARCH.querySelector("input"), nb=NAVSEARCH.querySelector(".qres"); if(ni && document.activeElement!==ni){ ni.value=""; nb.innerHTML=""; nb.classList.remove("open"); } }
   r2.append(grp("Explore",["iso","qmsr","mdr","map","dates","fdapre"]), el("div",{class:"navGroup navSearchG","data-g":"Search"}, el("span",{class:"navLab"},"Search"), el("div",{class:"navSearchRow"}, NAVSEARCH, el("button",{class:"glossBtn",type:"button",title:"Glossary and abbreviations","aria-label":"Open the glossary and abbreviations",onclick:openGlossary}, ico("gloss"), el("span",{},"Glossary")))), grp("Practice",["random","dilemmas","audit","gdp"]), grp("Tools",["daily","stats","risk","projects"]));
@@ -2424,36 +2448,14 @@ function topicSel(kind,scope,val,on){ const s=el("select",{class:"topicSel","ari
   s.value=val||""; s.onchange=()=>on(s.value); return el("label",{class:"topicL"}, el("span",{},"Topic"), s); }
 function practiceChapter(kind,id,hit){ const c=CH.find(x=>x.id===id); if(!c) return; const h=(hit||"").toLowerCase();
   if(kind==="q"){ rnd.scope="all"; rnd.q=""; rnd.ch=id; const i=h?c.qs.findIndex(q=>q.q.toLowerCase().startsWith(h)):-1; rnd.cur=i>=0?[id,i]:null; location.hash="#random"; }
-  else { dsel.scope="all"; dsel.q=""; dsel.ch=id; dsel.i=0; dsel.goT=h?(c.dils.find(d=>d.t.toLowerCase()===h)||{}).t:null; location.hash="#dilemmas"; } }
+  else if(kind==="d"){ dsel.scope="all"; dsel.q=""; dsel.ch=id; dsel.vi=0; dsel.mode="views"; dsel.allViews=true; dsel.goV=h?(c.debates.find(d=>d.t.toLowerCase()===h)||{}).t:null; location.hash="#dilemmas"; }
+  else { dsel.scope="all"; dsel.q=""; dsel.ch=id; dsel.i=0; dsel.mode="set"; dsel.set=null; dsel.goT=h?(c.dils.find(d=>d.t.toLowerCase()===h)||{}).t:null; location.hash="#dilemmas"; } }
 function chapterChip(id,onClear){ const c=CH.find(x=>x.id===id); return c?el("span",{class:"chChip"}, "Chapter: "+c.num+" · "+c.title, el("button",{type:"button","aria-label":"Show all chapters",onclick:onClear},"×")):""; }
 function pickRandom(){
   const pool=[];
   CH.forEach(c=>{ if(rnd.scope!=="all" && c.part!==rnd.scope) return; if(rnd.ch && c.id!==rnd.ch) return;
     c.qs.forEach((q,i)=>{ const k=c.id+"-"+i; if(!lvOk(q.lv)) return; if(rnd.q&&!tMatch(q.q+" "+q.o.join(" ")+" "+c.num+" "+c.title,rnd.q)) return; if(rnd.unanswered && state[k]!==undefined) return; if(rnd.cur && rnd.cur[0]===c.id && rnd.cur[1]===i) return; pool.push([c.id,i]); }); });
   rnd.cur = pool.length ? pool[Math.floor(Math.random()*pool.length)] : null;
-}
-function renderRandom(){
-  const m=document.getElementById("main"); m.innerHTML="";
-  m.append(el("section",{class:"chHead rand withRing"},
-    el("div",{class:"hTxt"}, el("div",{class:"eyebrow"},"Shuffle · random practice"),
-    el("h2",{},"Answer a random question"),
-    el("p",{},"One question at a time from any chapter. Answers here and in the chapter tabs count toward your training progress.")), moduleRing("train")));
-  const ctl=el("div",{class:"randCtl stickyCtl"});
-  [["all","All"],["basics","ISO 13485"],["qms","QMSR"],["fda","FDA"],["eu","EU MDR"]].forEach(([k,l])=>ctl.append(el("button",{class:"tab",type:"button","aria-pressed":String(rnd.scope===k),onclick:()=>{ rnd.scope=k; rnd.ch=""; rnd.cur=null; pickRandom(); renderRandom(); }},l)));
-  const un=el("label",{class:"unl"}, el("input",{type:"checkbox",id:"unans"}), " Unanswered only");
-  const rqList=CH.filter(c=>(rnd.scope==="all"||c.part===rnd.scope)&&(!rnd.ch||c.id===rnd.ch)).flatMap(c=>c.qs.filter(q=>tMatch(q.q+" "+q.o.join(" ")+" "+c.num+" "+c.title,rnd.q)));
-  ctl.append(tSearch("rq","Search a topic, e.g. CAPA, UDI, sterilization",rnd.q,rqList.filter(q=>lvOk(q.lv)).length,v=>{ rnd.q=v; rnd.cur=null; pickRandom(); renderRandom(); }), un, rnd.ch?chapterChip(rnd.ch,()=>{ rnd.ch=""; rnd.cur=null; pickRandom(); renderRandom(); }):"");
-  m.append(ctl, lvBar(lvCounts(rqList),()=>{ rnd.cur=null; pickRandom(); renderRandom(); }));
-  const cb=un.querySelector("input"); cb.checked=rnd.unanswered; cb.addEventListener("change",()=>{ rnd.unanswered=cb.checked; rnd.cur=null; pickRandom(); renderRandom(); });
-  if(!rnd.cur) pickRandom();
-  const box=el("div",{class:"panel"}); m.append(box);
-  if(!rnd.cur){ box.append(el("div",{class:"card"},"No questions left in this selection. Untick “Unanswered only”, change the search, or choose another part or level.")); }
-  else{
-    const c=CH.find(x=>x.id===rnd.cur[0]);
-    box.append(el("div",{class:"src"},"From ", el("a",{href:"#"+c.id},c.num+" · "+c.title)));
-    const qk=c.id+"-"+rnd.cur[1]; if(typeof planDaily==="function"&&state[qk]===undefined&&!planDaily("rq",qk)) box.append(planLimitCard("rq")); else box.append(qCard(c,rnd.cur[1],0,()=>{ if(typeof planUsed==="function"&&state[qk]!==undefined) planUsed("rq",qk); renderRandom(); totals(); }));
-  }
-  m.append(el("div",{class:"pager"}, el("button",{type:"button",class:"next shuf",onclick:()=>{ pickRandom(); renderRandom(); window.scrollTo({top:0}); }}, el("small",{},"Shuffle again"), "Next random question →")));
 }
 
 function dilCard(c,di,after,showSource){
@@ -2545,7 +2547,7 @@ function openPerf(){
 /* ---------- launch menu ---------- */
 const LKEY="sc-qmsr-launch";
 const CHOICES=[
- ["Random Question","Random practice questions","random","train"],
+ ["Quick quiz","Random practice questions","random","train"],
  ["Real-life Dilemmas","Real-life QA decisions","dilemmas","dil"],
  ["Inspection mode","A mock FDA inspection","audit","auditc"],
  ["QMS map","ISO 13485 ↔ 21 CFR 820 ↔ MDR","map","mapc"],
@@ -2627,28 +2629,143 @@ function enterApp(btn){
 
 /* ---------- selected dilemmas ---------- */
 const dsel={scope:"all",i:0,ch:"",q:""};
-function renderDilemmas(){
+
+/* ===== 3.17.0 Practice: hub page, Quick quiz (10), dilemma sets of 5, Expert views ===== */
+const QZ_N=10, DS_N=5;
+const PX_ICO={quiz:'<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.4"/><path d="M12 17h.01"/></svg>',
+ dil:'<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M7 21h10M5 7h14"/><path d="m5 7-3 6a3 3 0 0 0 6 0z"/><path d="m19 7-3 6a3 3 0 0 0 6 0z"/></svg>',
+ insp:'<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1"/><path d="m9 13 2 2 4-4"/></svg>',
+ crs:'<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg>'};
+function pxCards(){ const T=modStats("train"), D=modStats("dil"), A=modStats("audit"), C=(typeof crsAll==="function"?crsAll():[]), won=C.filter(c=>c.best!==undefined&&c.best>=Math.ceil(c.total*0.8)).length;
+  return [["quiz","Quick quiz","10 questions, then your score.","About 5 min","#random",T.line,()=>{ rnd.sess=null; rnd.cur=null; }],
+   ["dil","Real-life Dilemma","A set of 5 situations: pick what you would do and see what happens.","About 10 min","#dilemmas",D.line,()=>{ dsel.mode="set"; dsel.set=null; }],
+   ["insp","Inspection","A virtual FDA inspection: the investigator follows your answers. Pass mark 85%.","20 to 40 min","#audit",A.line,null],
+   ["crs","Training Course","A short course: right and wrong examples, golden rules and a 10-question check.","10 to 15 min","#gdp",won+" of "+C.length+" badges earned",null]]; }
+function renderPractice(){ const m=document.getElementById("main"); m.innerHTML="";
+  m.append(el("section",{class:"chHead pxHead"}, el("div",{class:"hTxt"}, el("div",{class:"eyebrow"},"Practice"), el("h2",{},"How do you want to practise today?"),
+    el("p",{},"Four ways to train. Each one ends with clear feedback."))));
+  const g=el("div",{class:"pxGrid"});
+  pxCards().forEach(([k,t,d,time,href,line,pre])=>g.append(el("a",{class:"card pxCard px-"+k,href,onclick:()=>{ if(pre) pre(); }},
+    el("span",{class:"pxIco",html:PX_ICO[k]}), el("div",{class:"pxTxt"}, el("h3",{},t), el("p",{},d), el("div",{class:"pxMeta"}, el("span",{},time), el("small",{},line))), el("span",{class:"pxGo","aria-hidden":"true"},"Start ›"))));
+  m.append(g); }
+function homeStart(){ const box=el("div",{class:"hStart"}, el("b",{class:"hStartT"},"Start practising"));
+  const g=el("div",{class:"hStartG"});
+  pxCards().forEach(([k,t,,time,href,,pre])=>g.append(el("a",{class:"hStartB px-"+k,href,onclick:()=>{ if(pre) pre(); }}, el("span",{class:"pxIco",html:PX_ICO[k]}), el("span",{}, el("b",{},t), el("small",{},time)))));
+  box.append(g); return box; }
+
+/* Quick quiz: Quick quiz in sets of 10 */
+function renderRandom(){
   const m=document.getElementById("main"); m.innerHTML="";
-  const list=[]; const dlM=(c,d)=>tMatch(d.t+" "+d.s+" "+(d.p||[]).join(" ")+" "+c.num+" "+c.title,dsel.q); CH.filter(c=>(dsel.scope==="all"||c.part===dsel.scope)&&c.dils.length&&(!dsel.ch||c.id===dsel.ch)).forEach(c=>{ if(LEVEL==="all"&&!dsel.q&&!dsel.ch){ const L=c.dils.length; [0,L-5,L-4,L-3,L-2,L-1].filter((v,k,a)=>v>0||k===0).forEach(di=>list.push({c,di})); } else c.dils.forEach((d,di)=>{ if(lvOk(d.lv)&&dlM(c,d)) list.push({c,di}); }); });
-  if(dsel.i>=list.length) dsel.i=0;
-  m.append(el("section",{class:"chHead dilHead withRing"},
-    el("div",{class:"hTxt"}, el("div",{class:"eyebrow"},"Real-life Dilemmas"),
-    el("h2",{},"Real-life dilemmas"),
-    el("p",{},"Six real-life dilemmas from every chapter, one at a time (or every dilemma at the level you choose). Pick an option to see the analysis, then move on.")), moduleRing("dil")));
+  if(!rnd.sess) rnd.sess={keys:[],right:0,show:false}; const S=rnd.sess;
+  m.append(el("section",{class:"chHead rand withRing"},
+    el("div",{class:"hTxt"}, el("div",{class:"eyebrow"},"Practice · Quick quiz"),
+    el("h2",{},"Quick quiz: 10 questions"),
+    el("p",{},"Questions from every chapter, 10 at a time. You see the right answer and why after each one, and your score at the end.")), moduleRing("train")));
   const ctl=el("div",{class:"randCtl stickyCtl"});
-  [["all","All"],["basics","ISO 13485"],["qms","QMSR"],["fda","FDA"],["eu","EU MDR"]].forEach(([k,l])=>ctl.append(el("button",{class:"tab",type:"button","aria-pressed":String(dsel.scope===k),onclick:()=>{ dsel.scope=k; dsel.ch=""; dsel.i=0; renderDilemmas(); }},l)));
+  [["all","All"],["basics","ISO 13485"],["qms","QMSR"],["fda","FDA"],["eu","EU MDR"]].forEach(([k,l])=>ctl.append(el("button",{class:"tab",type:"button","aria-pressed":String(rnd.scope===k),onclick:()=>{ rnd.scope=k; rnd.ch=""; rnd.cur=null; pickRandom(); renderRandom(); }},l)));
+  const un=el("label",{class:"unl"}, el("input",{type:"checkbox",id:"unans"}), " Unanswered only");
+  const rqList=CH.filter(c=>(rnd.scope==="all"||c.part===rnd.scope)&&(!rnd.ch||c.id===rnd.ch)).flatMap(c=>c.qs.filter(q=>tMatch(q.q+" "+q.o.join(" ")+" "+c.num+" "+c.title,rnd.q)));
+  ctl.append(tSearch("rq","Search a topic, e.g. CAPA, UDI, sterilization",rnd.q,rqList.filter(q=>lvOk(q.lv)).length,v=>{ rnd.q=v; rnd.cur=null; pickRandom(); renderRandom(); }), un, rnd.ch?chapterChip(rnd.ch,()=>{ rnd.ch=""; rnd.cur=null; pickRandom(); renderRandom(); }):"");
+  m.append(ctl, lvBar(lvCounts(rqList),()=>{ rnd.cur=null; pickRandom(); renderRandom(); }));
+  const cb=un.querySelector("input"); cb.checked=rnd.unanswered; cb.addEventListener("change",()=>{ rnd.unanswered=cb.checked; rnd.cur=null; pickRandom(); renderRandom(); });
+  const restart=()=>{ rnd.sess={keys:[],right:0,show:false}; rnd.cur=null; pickRandom(); renderRandom(); window.scrollTo({top:0}); };
+  if(S.show){ const pct=Math.round(S.right/QZ_N*100);
+    m.append(el("div",{class:"card qzRes"}, el("span",{class:"qzRing",html:ringSvg(pct,100,110)}),
+      el("div",{}, el("h3",{},S.right+" of "+QZ_N+" correct"), el("p",{},pct>=80?"Excellent. You are ready for harder levels.":pct>=60?"Good. Read the explanations of the ones you missed.":"Worth another round: the explanations show where to look."),
+        el("div",{class:"qzAct"}, el("button",{class:"cta",type:"button",onclick:restart},"Start another 10"), el("a",{class:"cta alt",href:"#dilemmas",onclick:()=>{ dsel.mode="set"; dsel.set=null; }},"Try a dilemma set")))));
+    return; }
+  if(!rnd.cur) pickRandom();
+  const curDone=rnd.cur&&state[rnd.cur[0]+"-"+rnd.cur[1]]!==undefined&&S.keys.includes(rnd.cur[0]+"-"+rnd.cur[1]);
+  const n=Math.min(QZ_N,S.keys.length+(curDone?0:1));
+  const dots=el("span",{class:"qzDots","aria-hidden":"true"}); for(let i=0;i<QZ_N;i++){ const k=S.keys[i]; let cls=""; if(k){ const [cid,qi]=[k.slice(0,k.lastIndexOf("-")),+k.slice(k.lastIndexOf("-")+1)]; const c=CH.find(x=>x.id===cid); cls=c&&state[k]===c.qs[qi].a?"ok":"no"; } dots.append(el("i",{class:cls+(i===S.keys.length&&!curDone?" on":"")})); }
+  m.append(el("div",{class:"qzBar"}, el("b",{},"Question "+n+" of "+QZ_N), dots, el("span",{},S.right+" correct")));
+  const box=el("div",{class:"panel"}); m.append(box);
+  if(!rnd.cur){ box.append(el("div",{class:"card"},"No questions left in this selection. Untick “Unanswered only”, change the search, or choose another part or level.")); }
+  else{
+    const c=CH.find(x=>x.id===rnd.cur[0]);
+    box.append(el("div",{class:"src"},"From ", el("a",{href:"#"+c.id},c.num+" · "+c.title)));
+    const qk=c.id+"-"+rnd.cur[1], qa=c.qs[rnd.cur[1]].a;
+    if(typeof planDaily==="function"&&state[qk]===undefined&&!planDaily("rq",qk)) box.append(planLimitCard("rq"));
+    else box.append(qCard(c,rnd.cur[1],0,()=>{ if(state[qk]!==undefined&&!S.keys.includes(qk)&&S.keys.length<QZ_N){ S.keys.push(qk); if(state[qk]===qa) S.right++; } if(typeof planUsed==="function"&&state[qk]!==undefined) planUsed("rq",qk); renderRandom(); totals(); }));
+  }
+  const last=S.keys.length>=QZ_N;
+  m.append(el("div",{class:"pager"}, el("button",{type:"button",class:"next shuf",onclick:()=>{ if(last){ S.show=true; renderRandom(); window.scrollTo({top:0}); return; } pickRandom(); renderRandom(); window.scrollTo({top:0}); }}, el("small",{},last?"Quiz complete":"Question "+Math.min(QZ_N,S.keys.length+1)+" of "+QZ_N), last?"See my score →":"Next question →")));
+}
+
+/* Real-life Dilemmas: sets of 5, Browse all, Expert views */
+function dvScore(d){ return (d.ask&&d.ask.length?2:0)+(d.ex?2:0)+(d.mp&&d.mc?1:0)+Math.min(1,(d.anchor||"").length/240); }
+let EXPERT_TOP=null;
+function expertTop(){ if(EXPERT_TOP) return EXPERT_TOP; const all=[]; CH.forEach(c=>(c.debates||[]).forEach((d,i)=>all.push({c,i,s:dvScore(d)})));
+  const pick=new Set(); CH.forEach(c=>all.filter(x=>x.c===c).sort((a,b)=>b.s-a.s||a.i-b.i).slice(0,2).forEach(x=>pick.add(x)));
+  all.slice().sort((a,b)=>b.s-a.s).forEach(x=>{ if(pick.size<50) pick.add(x); });
+  EXPERT_TOP=all.filter(x=>pick.has(x)); return EXPERT_TOP; }
+function debateCard(c,d,showSource){
+  const pro=el("div",{class:"side pro"}, el("b",{},"Argument"), el("p",{},d.pro)); if(d.mp) pro.append(el("p",{class:"more"},d.mp));
+  const con=el("div",{class:"side con"}, el("b",{},"Counter-argument"), el("p",{},d.con)); if(d.mc) con.append(el("p",{class:"more"},d.mc));
+  const card=el("div",{class:"card debate"}); if(showSource) card.append(el("div",{class:"src"},"From ", el("a",{href:"#"+c.id},c.num+" · "+c.title)));
+  card.append(el("h3",{},d.t), el("div",{class:"sides"}, pro, con));
+  if(d.ask&&d.ask.length){ const ul=el("ul",{class:"askList"}); d.ask.forEach(a=>ul.append(el("li",{},a))); card.append(el("div",{class:"decide"}, el("b",{},"How to decide"), ul)); }
+  if(d.ex) card.append(el("div",{class:"exmp"}, el("b",{},"Real-world example"), d.ex));
+  card.append(el("div",{class:"anchor"}, el("b",{},"Regulatory anchor"), d.anchor), el("div",{class:"take"}, el("b",{},"Where I land"), d.take));
+  return card; }
+function renderDilemmas(){
+  const m=document.getElementById("main"); m.innerHTML=""; if(!dsel.mode) dsel.mode="set";
+  const views=dsel.mode==="views";
+  m.append(el("section",{class:"chHead dilHead withRing"},
+    el("div",{class:"hTxt"}, el("div",{class:"eyebrow"},"Practice · "+(views?"Expert views":"Real-life Dilemmas")),
+    el("h2",{},views?"Expert views":"Real-life dilemmas"),
+    el("p",{},views?"Debated QA questions: two expert positions, how to decide, and where I land. Read one at a time.":"Situations from real QA work. Pick what you would do and see the likely outcome. Work in sets of 5.")), moduleRing("dil")));
+  m.append(el("div",{class:"dvTabs",role:"tablist"}, ...[["set","Real-life Dilemmas"],["views","Expert views"]].map(([k,l])=>el("button",{class:"dvTab",type:"button",role:"tab","aria-selected":String(views===(k==="views")),onclick:()=>{ dsel.mode=k; dsel.i=0; dsel.vi=0; renderDilemmas(); window.scrollTo({top:0}); }},l))));
+  const ctl=el("div",{class:"randCtl stickyCtl"});
+  [["all","All"],["basics","ISO 13485"],["qms","QMSR"],["fda","FDA"],["eu","EU MDR"]].forEach(([k,l])=>ctl.append(el("button",{class:"tab",type:"button","aria-pressed":String(dsel.scope===k),onclick:()=>{ dsel.scope=k; dsel.ch=""; dsel.i=0; dsel.vi=0; renderDilemmas(); }},l)));
+  if(views) return renderViews(m,ctl);
+  const list=[]; const dlM=(c,d)=>tMatch(d.t+" "+d.s+" "+(d.p||[]).join(" ")+" "+c.num+" "+c.title,dsel.q);
+  CH.filter(c=>(dsel.scope==="all"||c.part===dsel.scope)&&c.dils.length&&(!dsel.ch||c.id===dsel.ch)).forEach(c=>{ if(LEVEL==="all"&&!dsel.q&&!dsel.ch){ const L=c.dils.length; [0,L-5,L-4,L-3,L-2,L-1].filter((v,k,a)=>v>0||k===0).forEach(di=>list.push({c,di})); } else c.dils.forEach((d,di)=>{ if(lvOk(d.lv)&&dlM(c,d)) list.push({c,di}); }); });
   ctl.append(tSearch("dl","Search a topic, e.g. supplier, labeling, software",dsel.q,list.length,v=>{ dsel.q=v; dsel.i=0; renderDilemmas(); }), dsel.ch?chapterChip(dsel.ch,()=>{ dsel.ch=""; dsel.i=0; renderDilemmas(); }):"");
-  if(dsel.goT){ const k=list.findIndex(({c,di})=>c.dils[di].t===dsel.goT); dsel.goT=null; if(k>=0){ dsel.i=k; return renderDilemmas(); } }
+  if(dsel.goT){ const k=list.findIndex(({c,di})=>c.dils[di].t===dsel.goT); dsel.goT=null; if(k>=0){ dsel.mode="all"; dsel.i=k; return renderDilemmas(); } }
   m.append(ctl, lvBar(lvCounts(CH.filter(c=>(dsel.scope==="all"||c.part===dsel.scope)&&(!dsel.ch||c.id===dsel.ch)).flatMap(c=>c.dils.filter(d=>dlM(c,d)))),()=>{ dsel.i=0; renderDilemmas(); }));
   if(!list.length){ m.append(el("div",{class:"card"},dsel.q?"No dilemma matches this search. Try another word, part or level.":"No dilemmas at this level in this part. Choose another level.")); return; }
-  const {c,di}=list[dsel.i];
-  const nav=()=>{ const pv=el("button",{class:"reset",type:"button",onclick:()=>{ dsel.i=Math.max(0,dsel.i-1); renderDilemmas(); }},"← Previous"); pv.disabled=dsel.i===0; return el("div",{class:"dilPager"},
-    pv,
-    el("span",{}, el("b",{},String(dsel.i+1))," of "+list.length),
-    el("button",{class:"cta",type:"button",onclick:()=>{ dsel.i=(dsel.i+1)%list.length; renderDilemmas(); }},dsel.i===list.length-1?"Start again ↺":"Next dilemma →")); };
-  m.append(nav());
-  const dk=c.id+"-dil-"+di; if(typeof planDaily==="function"&&state[dk]===undefined&&!planDaily("dl",dk)) m.append(el("div",{class:"panel"},planLimitCard("dl"))); else m.append(el("div",{class:"panel"}, dilCard(c,di,()=>{ if(typeof planUsed==="function"&&state[dk]!==undefined) planUsed("dl",dk); renderDilemmas(); },true)));
-  m.append(nav());
+  const key=({c,di})=>c.id+"-dil-"+di;
+  const show=(c,di,after)=>{ const dk=c.id+"-dil-"+di; if(typeof planDaily==="function"&&state[dk]===undefined&&!planDaily("dl",dk)) return el("div",{class:"panel"},planLimitCard("dl")); return el("div",{class:"panel"}, dilCard(c,di,()=>{ if(typeof planUsed==="function"&&state[dk]!==undefined) planUsed("dl",dk); after(); },true)); };
+  if(dsel.mode==="all"){
+    if(dsel.i>=list.length) dsel.i=0; const {c,di}=list[dsel.i];
+    const nav=()=>{ const pv=el("button",{class:"reset",type:"button",onclick:()=>{ dsel.i=Math.max(0,dsel.i-1); renderDilemmas(); }},"← Previous"); pv.disabled=dsel.i===0; return el("div",{class:"dilPager"}, pv, el("span",{}, el("b",{},String(dsel.i+1))," of "+list.length),
+      el("button",{class:"cta",type:"button",onclick:()=>{ dsel.i=(dsel.i+1)%list.length; renderDilemmas(); }},dsel.i===list.length-1?"Start again ↺":"Next dilemma →")); };
+    m.append(el("div",{class:"dsBar"}, el("b",{},"Browsing all "+list.length), el("button",{class:"linkBtn",type:"button",onclick:()=>{ dsel.mode="set"; dsel.set=null; renderDilemmas(); }},"‹ Back to sets of 5")), nav(), show(c,di,()=>renderDilemmas()), nav());
+    return; }
+  // set of 5
+  const sig=[dsel.scope,dsel.q,dsel.ch,LEVEL].join("|");
+  if(!dsel.set||dsel.set.sig!==sig){ const un=list.filter(x=>state[key(x)]===undefined), dn=list.filter(x=>state[key(x)]!==undefined); const sh=a=>{ a=a.slice(); for(let j=a.length-1;j>0;j--){ const r=Math.floor(Math.random()*(j+1)); [a[j],a[r]]=[a[r],a[j]]; } return a; };
+    dsel.set={sig,items:sh(un).concat(sh(dn)).slice(0,DS_N).map(x=>({cid:x.c.id,di:x.di})),k:0,show:false}; }
+  const T=dsel.set, items=T.items.map(x=>({c:CH.find(c=>c.id===x.cid),di:x.di})), N=items.length;
+  const answered=items.filter(x=>state[key(x)]!==undefined).length;
+  if(T.show){ const match=items.filter(x=>state[key(x)]===dilRec(x.c.dils[x.di])).length;
+    m.append(el("div",{class:"card qzRes"}, el("span",{class:"qzRing",html:ringSvg(Math.round(match/N*100),100,110)}),
+      el("div",{}, el("h3",{},match+" of "+N+" matched the recommended path"), el("p",{},"Dilemmas have more than one defensible answer; the analysis shows the likely outcome of each choice."),
+        el("div",{class:"qzAct"}, el("button",{class:"cta",type:"button",onclick:()=>{ dsel.set=null; renderDilemmas(); window.scrollTo({top:0}); }},"Next 5 dilemmas"), el("button",{class:"cta alt",type:"button",onclick:()=>{ dsel.mode="all"; dsel.i=0; renderDilemmas(); }},"Browse all "+list.length)))));
+    return; }
+  if(T.k>=N) T.k=N-1; const {c,di}=items[T.k];
+  const dots=el("span",{class:"qzDots","aria-hidden":"true"}); items.forEach((x,i)=>dots.append(el("i",{class:(state[key(x)]!==undefined?"ok":"")+(i===T.k?" on":"")})));
+  m.append(el("div",{class:"dsBar"}, el("b",{},"Set of "+N+" · "+answered+" answered"), dots, el("button",{class:"linkBtn",type:"button",onclick:()=>{ dsel.mode="all"; dsel.i=0; renderDilemmas(); }},"Browse all "+list.length+" ›")));
+  const nav=()=>{ const pv=el("button",{class:"reset",type:"button",onclick:()=>{ T.k=Math.max(0,T.k-1); renderDilemmas(); }},"← Previous"); pv.disabled=T.k===0; const lastOne=T.k===N-1;
+    return el("div",{class:"dilPager"}, pv, el("span",{}, el("b",{},String(T.k+1))," of "+N),
+      el("button",{class:"cta",type:"button",onclick:()=>{ if(lastOne){ if(answered>=N){ T.show=true; } renderDilemmas(); window.scrollTo({top:0}); return; } T.k++; renderDilemmas(); window.scrollTo({top:0}); }},lastOne?(answered>=N?"See my result →":"Answer all 5 to see your result"):"Next dilemma →")); };
+  m.append(nav(), show(c,di,()=>renderDilemmas()), nav());
+}
+function renderViews(m,ctl){
+  const top=expertTop(); const all=[]; CH.forEach(c=>(c.debates||[]).forEach((d,i)=>all.push({c,i})));
+  const base=(dsel.allViews?all:top).filter(x=>(dsel.scope==="all"||x.c.part===dsel.scope)&&(!dsel.ch||x.c.id===dsel.ch));
+  const list=base.filter(x=>{ const d=x.c.debates[x.i]; return tMatch([d.t,d.pro,d.con,d.anchor,d.take,x.c.num,x.c.title].join(" "),dsel.q); });
+  ctl.append(tSearch("dv","Search a topic, e.g. CAPA, validation, notified body",dsel.q,list.length,v=>{ dsel.q=v; dsel.vi=0; renderDilemmas(); }), dsel.ch?chapterChip(dsel.ch,()=>{ dsel.ch=""; dsel.vi=0; renderDilemmas(); }):"");
+  m.append(ctl);
+  if(dsel.goV){ const k=list.findIndex(x=>x.c.debates[x.i].t===dsel.goV); dsel.goV=null; if(k>=0) dsel.vi=k; }
+  m.append(el("div",{class:"dsBar"}, el("b",{},dsel.allViews?"All "+all.length+" expert views":"The "+top.length+" key expert views"),
+    el("button",{class:"linkBtn",type:"button",onclick:()=>{ dsel.allViews=!dsel.allViews; dsel.vi=0; renderDilemmas(); }},dsel.allViews?"Show the "+top.length+" key views":"Browse all "+all.length+" ›")));
+  if(!list.length){ m.append(el("div",{class:"card"},"No expert view matches. Try another word or part, or browse all.")); return; }
+  if(!(dsel.vi<list.length)) dsel.vi=0; const x=list[dsel.vi];
+  const nav=()=>{ const pv=el("button",{class:"reset",type:"button",onclick:()=>{ dsel.vi=Math.max(0,dsel.vi-1); renderDilemmas(); }},"← Previous"); pv.disabled=dsel.vi===0;
+    return el("div",{class:"dilPager"}, pv, el("span",{}, el("b",{},String(dsel.vi+1))," of "+list.length), el("button",{class:"cta",type:"button",onclick:()=>{ dsel.vi=(dsel.vi+1)%list.length; renderDilemmas(); window.scrollTo({top:0}); }},dsel.vi===list.length-1?"Start again ↺":"Next view →")); };
+  m.append(nav(), el("div",{class:"panel"}, debateCard(x.c,x.c.debates[x.i],true)), nav());
 }
 
 /* ---------- search ---------- */
@@ -2666,7 +2783,7 @@ function buildIndex(){
     (c.best||[]).forEach(([t,x])=>add({kind:"Best practice",rank:2,title:t,text:x,show:x,ch:c.id,tab:"b",hit:t}));
     c.kps.forEach(([k,x])=>add({kind:"Takeaway",rank:2,title:base,text:x,show:x,ch:c.id,tab:"kp",hit:x.slice(0,40)}));
     c.qs.forEach(q=>add({kind:"Question",rank:3,title:q.q,text:q.o.join(" ")+" "+q.w,show:q.q,ch:c.id,tab:"q",hit:q.q.slice(0,40)}));
-    c.debates.forEach(x=>add({kind:"Debate",rank:3,title:x.t,text:[x.pro,x.con,x.anchor,x.take].join(" "),show:x.anchor,ch:c.id,tab:"d",hit:x.t}));
+    c.debates.forEach(x=>add({kind:"Expert view",rank:3,title:x.t,text:[x.pro,x.con,x.anchor,x.take].join(" "),show:x.anchor,ch:c.id,tab:"d",hit:x.t}));
     c.dils.forEach(x=>add({kind:"Dilemma",rank:3,title:x.t,text:[x.s,x.anchor,x.path].join(" "),show:x.s,ch:c.id,tab:"x",hit:x.t}));
   });
   return d;
@@ -3700,7 +3817,7 @@ const ICONS={
  gdp:'<path d="M5 3h10l4 4v14H5z"/><path d="M15 3v4h4"/><path d="M8 12h8M8 15.5h5"/><path d="M14.5 19.5l5-5 1.5 1.5-5 5h-1.5z"/>'
 };
 function ico(k){ const s=document.createElementNS("http://www.w3.org/2000/svg","svg"); s.setAttribute("viewBox","0 0 24 24"); s.setAttribute("aria-hidden","true"); s.setAttribute("class","ico"); s.innerHTML=ICONS[k]; return s; }
-const NAV=[["home","Home","home"],["iso","ISO 13485:2016","iso"],["qmsr","FDA QMSR","qmsr"],["mdr","EU MDR 2017/745","mdr"],["fdapre","FDA Premarket & Postmarket","fdapre"],["explore","Explore","explore"],["random","Random Question","quest"],["gdp","Training Courses","gdp"],["dilemmas","Real-life Dilemmas","dil"],["map","QMS map","map"],["risk","Risk management","risk"],["dates","Regulatory Timeline","dates"],["tools","Useful tools","samp"],["daily","QMS Assistant","change"],["stats","Statistical Tools","chart"],["audit","Inspection mode","audit"],["projects","Projects","folder"]];
+const NAV=[["home","Home","home"],["iso","ISO 13485:2016","iso"],["qmsr","FDA QMSR","qmsr"],["mdr","EU MDR 2017/745","mdr"],["fdapre","FDA Premarket & Postmarket","fdapre"],["explore","Explore","explore"],["random","Quick quiz","quest"],["gdp","Training Courses","gdp"],["dilemmas","Real-life Dilemmas","dil"],["map","QMS map","map"],["risk","Risk management","risk"],["dates","Regulatory Timeline","dates"],["tools","Useful tools","samp"],["daily","QMS Assistant","change"],["stats","Statistical Tools","chart"],["audit","Inspection mode","audit"],["projects","Projects","folder"]];
 
 /* ---------- search widget (one component, used inside Explore) ---------- */
 function searchWidget(){
@@ -3747,7 +3864,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="3.16.1", APPDATE="27-NOV-2026";
+const APPVER="3.17.0", APPDATE="27-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Qraft (Asaf Ben Zion). All rights reserved.";
 const LEGAL=[["Risk Management Approach", "Content is a paraphrased summary for training. It does not replace the standards: ISO 14971:2019 (with EN ISO 14971:2019+A11:2021 for the EU), ISO/TR 24971:2020 and IEC 62366-1:2015+A1:2020. Use your licensed copies for exact requirements."], ["Copyright", "© 2026 Qraft (Asaf Ben Zion). The selection, structure, design and original text of this handbook may not be copied or redistributed without written permission. Regulations and official guidance are cited from their publishers: US federal texts are in the public domain, and EU texts are reused with attribution. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number and described in the author’s own words; their text remains the property of their publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, selection and design, and was developed and tested with AI tools. Key facts, such as regulatory reporting timelines, device classifications and clause numbers, were checked against official sources; other content is the author’s interpretation and may contain inaccuracies."], ["Sources", "Cited sources are official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs and FDA databases. EU: EUR-Lex, European Commission pages and MDCG guidance. International: IMDRF codes and MDSAP documents. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number, based on freely available published information and the author’s own interpretation and knowledge."], ["Important", "This application is intended for training purposes only and is not legal or regulatory advice. It is provided without warranty. Results from its tools require human review, verification and approval. Always check the linked official source before citing anything in a formal regulatory or customer response."]];
@@ -4125,8 +4242,8 @@ function profRecommend(p){ if(p.goal==="tools"||p.role==="mgr") return "all"; if
 function profLevel(p){ return p.years==="0"?"3":p.years==="3"?"4":"all"; }
 function profStart(p){ const L=[];
   if(p.goal==="learn") L.push(["QMS fundamentals chapter","#"+CH[0].id],["Course 0: Good Documentation Practices","#gdp"],["Course 1: Complaint or not?","#gdp"]);
-  if(p.goal==="audit") L.push(["Inspection mode: a study case","#audit"],["Course 9: Facing an FDA inspection","#gdp"],["Random Question","#random"]);
-  if(p.goal==="career") L.push(["Random Question","#random"],["Real-life Dilemmas","#dilemmas"],["Inspection mode: Real Events","#audit"]);
+  if(p.goal==="audit") L.push(["Inspection mode: a study case","#audit"],["Course 9: Facing an FDA inspection","#gdp"],["Quick quiz","#random"]);
+  if(p.goal==="career") L.push(["Quick quiz","#random"],["Real-life Dilemmas","#dilemmas"],["Inspection mode: Real Events","#audit"]);
   if(p.goal==="tools") L.push(["QMS Assistant forms","#daily"],["Sample Size Tool","#sampling"],["Risk management","#risk"]);
   if(p.market==="eu") L.push(["EU MDR 2017/745","#mdr"]); else if(p.market==="us") L.push(["FDA QMSR","#qmsr"]); else L.push(["QMS map ISO ↔ QMSR ↔ MDR","#map"]);
   return L; }
@@ -4134,7 +4251,7 @@ function profForYou(c){ const p=profGet(); const rx=DEV_RX[p.device]; return !!(
 
 /* administrator check and plan table */
 async function admCheck(v){ try{ const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("qraft-admin|"+v)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")===ADMIN_H; }catch(e){ return false; } }
-function planTable(rec){ const rows=[["Chapters, QMS map, Regulatory Timeline, search, glossary","✓","✓","✓"],["Random Question","10 a day","All","All"],["Real-life Dilemmas","3 a day","All","All"],
+function planTable(rec){ const rows=[["Chapters, QMS map, Regulatory Timeline, search, glossary","✓","✓","✓"],["Quick quiz","10 a day","All","All"],["Real-life Dilemmas","3 a day","All","All"],
   ["Inspection mode","1 study case + 1 Real Event","All 160","All 160"],["Training Courses","GDP + 2 courses","All 11","All 11"],["Today's suggestion","✓","✓","✓"],["QMS Assistant forms","5","25","All"],
   ["Sample Size Tool (incoming inspection, design verification)","–","✓","✓"],["Other statistics, risk tools, Projects","–","–","✓"],["Quarterly regulatory watch","–","–","✓"]];
   const t=el("table",{class:"plTable"}); const cols=["free","premium","all"];
@@ -4195,6 +4312,7 @@ function statsSheet(){ const p=profGet(); const box=el("div",{class:"pfStats"});
       tile("Selected Questions",T.acc,T.cov,T.line,"#random"),
       tile("Real-life Dilemmas",D.acc,D.cov,D.line,"#dilemmas"),
       tile("Inspection mode",A.acc,A.cov,A.line,"#audit"),
+      el("p",{class:"src pfLib"},"Library: "+(AUD_CASES.length+Object.keys(AUD_SCEN).length+AUD_REAL.length)+" virtual inspections · "+CH.reduce((a,c)=>a+c.qs.length,0).toLocaleString("en-US")+" questions · "+CH.reduce((a,c)=>a+c.dils.length,0).toLocaleString("en-US")+" dilemmas · "+CH.reduce((a,c)=>a+(c.debates||[]).length,0)+" expert views · "+(typeof crsAll==="function"?crsAll().length:0)+" courses"),
       tile("Training Courses",tried?Math.round(won/C.length*100):null,C.length?Math.round(tried/C.length*100):0,won+" of "+C.length+" badges earned · "+tried+" courses taken","#gdp")),
     el("div",{class:"pfAct"},
       typeof openPerf==="function"?el("button",{class:"cta alt",type:"button",onclick:()=>{ closeModal(); setTimeout(openPerf,60); }},"Detailed performance"):"",
@@ -4215,7 +4333,7 @@ function navTrack(id){ if(NAVSKIP){ NAVSKIP=false; return; } if(NAVSTK[NAVSTK.le
 function navBack(){ if(document.getElementById("ovl")){ closeModal(); return; } NAVSTK.pop(); const prev=NAVSTK[NAVSTK.length-1]||"home"; if(!NAVSTK.length) NAVSTK.push("home"); NAVSKIP=true; document.documentElement.dataset.route=prev; location.hash="#"+prev; }
 function navBackBtn(){ return el("button",{class:"backBtn",type:"button","aria-label":"Back",title:"Back",onclick:navBack}, el("span",{"aria-hidden":"true"},"‹"), el("small",{},"Back")); }
 
-/* topic search bar (Random Question, Dilemmas, Inspection mode) */
+/* topic search bar (Quick quiz, Dilemmas, Inspection mode) */
 function tWords(q){ return (q||"").toLowerCase().split(/\s+/).filter(w=>w.length>1); }
 function tMatch(text,q){ const W=tWords(q); if(!W.length) return true; const t=(text||"").toLowerCase(); return W.every(w=>t.includes(w)); }
 function tSearch(key,ph,val,count,on){ const inp=el("input",{type:"search",placeholder:ph,value:val||"","aria-label":ph,autocomplete:"off"}); let tm=null;
@@ -4240,7 +4358,7 @@ const SVY_HEAD="Quick Survey · Medical Device QA Handbook";
 const SVY_RATE=[
  ["overall","How would you rate your overall experience with the app?","Poor","Excellent"],
  ["nav","How easy was it to navigate between the different screens?","Difficult","Very easy"],
- ["train","How would you rate the difficulty of the Random Question practice?","Too easy","Very difficult"],
+ ["train","How would you rate the difficulty of the Quick quiz practice?","Too easy","Very difficult"],
  ["insp","How would you rate your experience of Inspection mode?","Poor","Excellent"]];
 const SVY_NM={overall:"Overall experience",nav:"Navigation",train:"Training difficulty",insp:"Inspection mode"};
 const SVY_NUM={overall:"1",nav:"2",train:"3",insp:"4"};
@@ -4312,7 +4430,7 @@ function openSurvey(){
 const ISS_KEY="qah-issues-v1";
 const ISS_SEED=[{"id":"ISS-001","t":"Correct answer was often the longest option (answer-length bias).","d":"Correct answer was often the longest option (answer-length bias).","type":"Bug","area":"General","prio":"Medium","st":"Fixed","found":"≤ 1.1.0","fixed":"≤ 1.1.0","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Options rewritten per chapter; noticeably longest now 5.4%."}]},{"id":"ISS-002","t":"44 duplicate questions and 4 duplicate dilemmas.","d":"44 duplicate questions and 4 duplicate dilemmas.","type":"Bug","area":"Content","prio":"Medium","st":"Fixed","found":"≤ 1.1.0","fixed":"≤ 1.1.0","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Removed; 52 new questions added."}]},{"id":"ISS-003","t":"Wrong citations: 820.75 'reserved' (removed), FDARA instead of FDORA for 704(a)(4), annex and form numbers.","d":"Wrong citations: 820.75 'reserved' (removed), FDARA instead of FDORA for 704(a)(4), annex and form numbers.","type":"Bug","area":"Daily QA Work forms","prio":"Medium","st":"Fixed","found":"≤ 1.1.0","fixed":"≤ 1.1.0","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Corrected against eCFR and FDA pages."}]},{"id":"ISS-004","t":"Timeline links pointed to the general MDCG page.","d":"Timeline links pointed to the general MDCG page.","type":"Bug","area":"Regulatory Timeline","prio":"Medium","st":"Fixed","found":"≤ 1.1.0","fixed":"≤ 1.1.0","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Linked to the specific MDCG documents and AI Act pages; titles matched."}]},{"id":"ISS-005","t":"ISO 13485 7.5.9.1 and 7.5.9.2 had no pop-up title; 4-level clause numbers not detected.","d":"ISO 13485 7.5.9.1 and 7.5.9.2 had no pop-up title; 4-level clause numbers not detected.","type":"Bug","area":"General","prio":"Medium","st":"Fixed","found":"≤ 1.1.0","fixed":"≤ 1.1.0","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Titles and detection added in 1.1.0 (TC-14)."}]},{"id":"ISS-006","t":"Test script t35 clicked a disabled option (test defect, not a software defect).","d":"Test script t35 clicked a disabled option (test defect, not a software defect).","type":"Test","area":"Test harness","prio":"Medium","st":"Fixed","found":"≤ 1.1.0","fixed":"≤ 1.1.0","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Selector changed to :not([disabled]); re-run passed."}]},{"id":"ISS-007","t":"in the new inspection content the correct answer was the longest option in 97% of questions.","d":"in the new inspection content the correct answer was the longest option in 97% of questions.","type":"Bug","area":"Inspection mode","prio":"Medium","st":"Fixed","found":"1.2.0","fixed":"1.2.0","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Distractors rewritten and answers shortened; final 17.7% longest (0.9% noticeably)."}]},{"id":"ISS-008","t":"inspection pickers opened by default, and a data table was used before it was defined (page error).","d":"inspection pickers opened by default, and a data table was used before it was defined (page error).","type":"Bug","area":"Inspection mode","prio":"Medium","st":"Fixed","found":"1.2.0","fixed":"1.2.0","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Fixed in code; t39 and t40 re-run passed."}]},{"id":"ISS-009","t":"test scripts t14, t30, t32, t33 tapped menu buttons that moved into the phone bottom bar; t25 read two external /tmp files; t36 used footer ","d":"test scripts t14, t30, t32, t33 tapped menu buttons that moved into the phone bottom bar; t25 read two external /tmp files; t36 used footer selectors removed in 1.1.1 (test defects, not software defects).","type":"Test","area":"Test harness","prio":"Medium","st":"Fixed","found":"1.3.0","fixed":"1.3.0","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Scripts updated; all re-run passed."}]},{"id":"ISS-010","t":"the 1.4.0 survey stored answers in the Claude database, which colleagues without edit rights cannot write to (design defect found before rel","d":"the 1.4.0 survey stored answers in the Claude database, which colleagues without edit rights cannot write to (design defect found before release to users).","type":"Bug","area":"Quick Survey","prio":"Medium","st":"Fixed","found":"1.4.1","fixed":"1.4.1","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Replaced by a message-based design; t44 rewritten and passed."}]},{"id":"ISS-011","t":"in the PDF the Answer column header wrapped to a second line (column one character too narrow).","d":"in the PDF the Answer column header wrapped to a second line (column one character too narrow).","type":"Bug","area":"Export (PDF/Word)","prio":"Medium","st":"Fixed","found":"1.5.0","fixed":"1.5.0","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Column widened and the PDF word-wrap fixed; t29 re-run passed."}]},{"id":"ISS-012","t":"23 of the first 31 drafted dilemmas repeated topics already in the bank (found by a word-overlap check against all 1,019 items).","d":"23 of the first 31 drafted dilemmas repeated topics already in the bank (found by a word-overlap check against all 1,019 items).","type":"Bug","area":"Export (PDF/Word)","prio":"Medium","st":"Fixed","found":"1.5.1","fixed":"1.5.1","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Replaced with new topics; the final 31 have at most 25% word overlap with any existing item and were reviewed by title."}]},{"id":"ISS-013","t":"test t29 still used the old 'CC / DCN / ECO' field label (test defect); the t45 pop-up check clicked a term and the page scroll closed the p","d":"test t29 still used the old 'CC / DCN / ECO' field label (test defect); the t45 pop-up check clicked a term and the page scroll closed the pop-up (test defect).","type":"Test","area":"Navigation","prio":"Medium","st":"Fixed","found":"1.6.0","fixed":"1.6.0","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Both scripts corrected; re-run passed."}]},{"id":"ISS-014","t":"the CMO sample left one note cell empty; in the ASL PDF two long column headers overlapped.","d":"the CMO sample left one note cell empty; in the ASL PDF two long column headers overlapped.","type":"Bug","area":"Export (PDF/Word)","prio":"Medium","st":"Fixed","found":"1.7.0","fixed":"1.7.0","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Note filled; headers shortened; t46 re-run passed."}]},{"id":"ISS-015","t":"the audit checklist sample was dated in the future; test scripts selected tool cards by partial text and opened NCR instead of CAPA (test de","d":"the audit checklist sample was dated in the future; test scripts selected tool cards by partial text and opened NCR instead of CAPA (test defect); tool-card icons rendered as filled shapes; PDF titles started in lower case.","type":"Test","area":"Export (PDF/Word)","prio":"Medium","st":"Fixed","found":"1.8.0","fixed":"1.8.0","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Sample re-dated to October 2026; tests select cards by exact title; icon outline style and title case fixed; t46 and t47 re-run passed."}]},{"id":"ISS-016","t":"OQ sample cited ASTM F88 as if it set the seal-strength limit, and the PQ pooled Ppk was mis-stated (2.28 instead of about 2.5); the softwar","d":"OQ sample cited ASTM F88 as if it set the seal-strength limit, and the PQ pooled Ppk was mis-stated (2.28 instead of about 2.5); the software tab read 'Non-product'.","type":"Bug","area":"Daily QA Work forms","prio":"Medium","st":"Fixed","found":"1.9.0","fixed":"1.9.0","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Wording corrected (internal specification tested per ASTM F88), Ppk recalculated, tab label fixed; t48 re-run passed."}]},{"id":"ISS-017","t":"desktop side menu slid under the pinned top menu when scrolling (wrong element looked up for its height).","d":"desktop side menu slid under the pinned top menu when scrolling (wrong element looked up for its height).","type":"Bug","area":"General","prio":"Medium","st":"Fixed","found":"1.13.1","fixed":"1.13.1","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Lookup fixed to the pinned menu by id; side menu now stays fully visible below it; screenshots re-checked."}]},{"id":"ISS-018","t":"survey inbox rejected answers pasted from WhatsApp or email (date and name prefix, quote marks or changed spaces before the header line) - r","d":"survey inbox rejected answers pasted from WhatsApp or email (date and name prefix, quote marks or changed spaces before the header line) - reported by the owner.","type":"Bug","area":"Quick Survey","prio":"Medium","st":"Fixed","found":"1.13.1","fixed":"1.13.1","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: svyNorm() added before parsing; nine formats tested in t49."}]},{"id":"ISS-019","t":"consecutive questions could show the same investigator expression; tool cards briefly got a literal title \"null\" in the draft code.","d":"consecutive questions could show the same investigator expression; tool cards briefly got a literal title \"null\" in the draft code.","type":"Bug","area":"Inspection mode","prio":"Medium","st":"Fixed","found":"1.13.1","fixed":"1.13.1","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Expressions now follow a shuffled cycle per session; title set only when needed; t49 checks five different expressions."}]},{"id":"ISS-020","t":"in PDF exports text in narrow table columns ran into the next column and looked like words without spaces (e.g. Assessment|Status, GmbH|(con","d":"in PDF exports text in narrow table columns ran into the next column and looked like words without spaces (e.g. Assessment|Status, GmbH|(contract); non-Latin-1 letters were dropped; record line repeated under the title - reported by the owner.","type":"Bug","area":"Export (PDF/Word)","prio":"Medium","st":"Fixed","found":"1.13.1","fixed":"1.13.1","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: PDF engine rebuilt with Helvetica metrics, content-sized columns and word breaking; WinAnsi mapping; titles and captions tidied; all 49 form PDFs re-checked."}]},{"id":"ISS-021","t":"Quality Manual sample declared ISO 13485 7.5.5 (sterile devices) not applicable although the company supplies sterile infusion sets.","d":"Quality Manual sample declared ISO 13485 7.5.5 (sterile devices) not applicable although the company supplies sterile infusion sets.","type":"Bug","area":"Daily QA Work forms","prio":"Medium","st":"Fixed","found":"1.13.1","fixed":"1.13.1","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Replaced by 7.5.3 (installation) with a valid justification."}]},{"id":"ISS-022","t":"in Word exports, tables with many columns split words in the middle (e.g. Agreemen-t, Calibratio-n) and broke dates, because the Word font i","d":"in Word exports, tables with many columns split words in the middle (e.g. Agreemen-t, Calibratio-n) and broke dates, because the Word font is larger than the PDF font - found when the owner asked whether Word had the PDF bug.","type":"Bug","area":"Export (PDF/Word)","prio":"Medium","st":"Fixed","found":"1.13.1","fixed":"1.13.1","date":"2026-11-18","notes":[{"d":"2026-11-18","t":"Resolution: Wide Word tables use 8 pt text and narrow margins; hyphens between digits are non-breaking; all Word samples re-checked."}]},{"id":"ISS-023","t":"Phone, dark mode: copyright text at the bottom of the page is hard to read","d":"Phone, dark mode: copyright text at the bottom of the page is hard to read","type":"Bug","area":"General","prio":"Low","st":"Fixed","found":"1.13.1","fixed":"2.0.0","date":"2026-11-18","notes":[{"d":"2026-11-19","t":"Fixed in 2.0.0 validation: footer now sits on its own panel and is readable in both themes."}]},{"id":"ISS-024","t":"Read aloud: confirm voice quality on a real iPhone and Android phone","d":"Read aloud: confirm voice quality on a real iPhone and Android phone","type":"Verification","area":"Inspection mode","prio":"Medium","st":"Open","found":"1.13.1","fixed":"","date":"2026-11-18","notes":[]},{"id":"ISS-025","t":"Investigator photos: confirm the order of the male attentive and stern photos","d":"Investigator photos: confirm the order of the male attentive and stern photos","type":"Content","area":"Inspection mode","prio":"Low","st":"Open","found":"1.13.1","fixed":"","date":"2026-11-18","notes":[]},{"id":"ISS-026","t":"Daily QA Work: Medium and Low priority tools still to build (19 suggested)","d":"Daily QA Work: Medium and Low priority tools still to build (19 suggested)","type":"Improvement","area":"Daily QA Work forms","prio":"Medium","st":"Open","found":"1.13.1","fixed":"","date":"2026-11-18","notes":[]},{"id":"ISS-027","t":"Some timeline links point to a database or publisher page, not a specific official page","d":"Some timeline links point to a database or publisher page, not a specific official page","type":"Limitation","area":"Regulatory Timeline","prio":"Low","st":"Accepted","found":"1.13.1","fixed":"","date":"2026-11-18","notes":[]},{"id":"ISS-028","t":"Inspection questions mostly written from knowledge; not every citation verified against the source","d":"Inspection questions mostly written from knowledge; not every citation verified against the source","type":"Content","area":"Content","prio":"Medium","st":"Open","found":"1.13.1","fixed":"","date":"2026-11-18","notes":[]},{"id":"ISS-029","t":"ISO 13485 content paraphrased; only clause numbers checked against the MDSAP companion document","d":"ISO 13485 content paraphrased; only clause numbers checked against the MDSAP companion document","type":"Limitation","area":"Content","prio":"Low","st":"Accepted","found":"1.13.1","fixed":"","date":"2026-11-18","notes":[]},{"id":"ISS-030","t":"Device type profiles added in 1.11.0 written from knowledge; standards not checked online","d":"Device type profiles added in 1.11.0 written from knowledge; standards not checked online","type":"Content","area":"Risk management","prio":"Medium","st":"Open","found":"1.13.1","fixed":"","date":"2026-11-18","notes":[]},{"id":"ISS-201","t":"Dark mode: selected tab and filter chip unreadable (white text on a light background)","d":"Found in the 2.0.0 full validation (screen sweep t53): chapter tabs, timeline chips, Training mode filters and Statistics tabs in dark mode.","type":"Bug","area":"Navigation","prio":"High","st":"Fixed","found":"1.14.0","fixed":"2.0.0","date":"2026-11-19","notes":[{"d":"2026-11-19","t":"Selected state uses the teal accent with dark text in dark mode."}]},{"id":"ISS-202","t":"Dark mode: red 'Delete row' links had low contrast","d":"Found in the 2.0.0 screen sweep on all form pages.","type":"Bug","area":"Daily QA Work forms","prio":"Low","st":"Fixed","found":"1.14.0","fixed":"2.0.0","date":"2026-11-19","notes":[{"d":"2026-11-19","t":"Lighter red in dark mode."}]},{"id":"ISS-203","t":"184 questions explain the answer with a clause number only","d":"Found in the 2.0.0 content check: the explanation (why) is just a citation such as '5.4.1.'. Not wrong, but less helpful for learning.","type":"Improvement","area":"Content","prio":"Medium","st":"Open","found":"2.0.0","fixed":"","date":"2026-11-19","notes":[]},{"id":"ISS-204","t":"Dilemma recommendations: 9 started 'Option X.' instead of 'Option X:'","d":"Format check in the 2.0.0 validation.","type":"Content","area":"Real-life Dilemmas","prio":"Low","st":"Fixed","found":"1.14.0","fixed":"2.0.0","date":"2026-11-19","notes":[{"d":"2026-11-19","t":"Normalised to 'Option X:'."}]},{"id":"ISS-205","t":"EU proposal COM(2025) 1023 may change PSUR frequency; not adopted (watch item)","d":"Secondary sources report a December 2025 Commission proposal to amend the MDR, including PSUR frequency. Current Art. 86 frequencies remain in force. Verify on EUR-Lex when it is adopted and update the PSUR and PMS plan templates.","type":"Verification","area":"Daily QA Work forms","prio":"Low","st":"Open","found":"2.0.0","fixed":"","date":"2026-11-19","notes":[]},{"id":"ISS-206","t":"Dark mode: Regulatory Timeline past-event cards, hero counters and risk best-practice notes kept a light background with light text","d":"Found in the 2.0.0 contrast scan (t54): titles such as 'EU MDR applies' were almost invisible in dark mode.","type":"Bug","area":"Regulatory Timeline","prio":"High","st":"Fixed","found":"1.14.0","fixed":"2.0.0","date":"2026-11-19","notes":[{"d":"2026-11-19","t":"Backgrounds follow the theme; t54 finds 0 low-contrast blocks in either theme."}]}];
 const ISS_ST=["Open","In progress","Fixed","Closed","Accepted"], ISS_TY=["Bug","Improvement","Content","Verification","Test","Limitation","Question"], ISS_PR=["High","Medium","Low"];
-const ISS_AREAS=["General","Welcome and main page","Navigation","Explore and chapters","QMS map","Regulatory Timeline","Search and glossary","Random Question","Training Courses","Real-life Dilemmas","Inspection mode","QMS Assistant forms","Daily QA Work forms","Training mode","Change Impact Assessment","Statistical Tools","Risk management","Export (PDF/Word)","Quick Survey","Hidden menu and V&V","Content","Test harness"];
+const ISS_AREAS=["General","Welcome and main page","Navigation","Explore and chapters","QMS map","Regulatory Timeline","Search and glossary","Quick quiz","Training Courses","Real-life Dilemmas","Inspection mode","QMS Assistant forms","Daily QA Work forms","Training mode","Change Impact Assessment","Statistical Tools","Risk management","Export (PDF/Word)","Quick Survey","Hidden menu and V&V","Content","Test harness"];
 function issLoad(){ let a=null; try{ a=JSON.parse(localStorage.getItem(ISS_KEY)||"null"); }catch(e){} if(!Array.isArray(a)){ a=ISS_SEED.map(x=>JSON.parse(JSON.stringify(x))); issSave(a); } else { const ids=new Set(a.map(x=>x.id)); let add=false; ISS_SEED.forEach(x=>{ if(!ids.has(x.id)){ a.push(JSON.parse(JSON.stringify(x))); add=true; } }); if(issApplyUpd(a)) add=true; if(add) issSave(a); } return a; }
 const ISS_UPD={"ISS-023":{v:"2.0.0",st:"Fixed",fixed:"2.0.0",note:"Fixed in 2.0.0 validation: footer now sits on its own panel and is readable in both themes."}};
 function issApplyUpd(a){ let ch=false; a.forEach(x=>{ const u=ISS_UPD[x.id]; if(u&&!(x.upd||[]).includes(u.v)){ if(["Open","In progress"].includes(x.st)){ x.st=u.st; x.fixed=u.fixed; x.notes=x.notes||[]; x.notes.push({d:"2026-11-19",t:u.note}); } x.upd=(x.upd||[]).concat(u.v); ch=true; } }); return ch; }
@@ -4490,7 +4608,7 @@ function helpTilt(e){ if(!HLP||HELP_TILT) return; HELP_TILT=requestAnimationFram
 function helpHop(){ if(!HLP||helpReduce()||!HLP.fig.animate) return; const f=HLP.fig;
   f.animate([{transform:"translateY(0) rotateY(0deg) scale(1,1)"},{transform:"translateY(4px) scale(1.08,.9)",offset:.12},{transform:"translateY(-70px) rotateY(180deg) scale(.96,1.06)",offset:.5},{transform:"translateY(0) rotateY(360deg) scale(1.1,.88)",offset:.86},{transform:"translateY(0) rotateY(360deg) scale(1,1)"}],{duration:900,easing:"cubic-bezier(.3,.7,.4,1)"});
   if(HLP.root.querySelector(".hlpShadow")) HLP.root.querySelector(".hlpShadow").animate([{transform:"scale(1)",opacity:1},{transform:"scale(.45)",opacity:.35,offset:.5},{transform:"scale(1.1)",opacity:1,offset:.86},{transform:"scale(1)",opacity:1}],{duration:900}); }
-const HELP_SCREENS={home:"Home",chapter:"Chapter",random:"Random Question",dilemmas:"Real-life Dilemmas",audit:"Inspection mode",gdp:"Training Courses",daily:"QMS Assistant",form:"QMS Assistant form",qadrafts:"QMS Assistant drafts",stats:"Statistical Tools",sampling:"Sample Size Tool",bstats:"Basic Statistical Calculators",msa:"Measurement System Analysis",grr:"Gauge R&R / Kappa",risk:"Risk management",rmtools:"Risk Management Tools",rmtool:"Risk tool",cvss:"CVSS calculator",impact:"Change Impact Assessment",projects:"Projects",dates:"Regulatory Timeline",map:"QMS map"};
+const HELP_SCREENS={practice:"Practice",home:"Home",chapter:"Chapter",random:"Quick quiz",dilemmas:"Real-life Dilemmas",audit:"Inspection mode",gdp:"Training Courses",daily:"QMS Assistant",form:"QMS Assistant form",qadrafts:"QMS Assistant drafts",stats:"Statistical Tools",sampling:"Sample Size Tool",bstats:"Basic Statistical Calculators",msa:"Measurement System Analysis",grr:"Gauge R&R / Kappa",risk:"Risk management",rmtools:"Risk Management Tools",rmtool:"Risk tool",cvss:"CVSS calculator",impact:"Change Impact Assessment",projects:"Projects",dates:"Regulatory Timeline",map:"QMS map"};
 /* sub-screens: searches look at this screen first, then its sub-screens (and parent), then the rest of the app */
 const HELP_PARENT={sampling:"stats",bstats:"stats",msa:"stats",grr:"stats",rmtools:"risk",rmtool:"rmtools",cvss:"rmtools",impact:"rmtools",form:"daily",qadrafts:"daily"};
 /* Feature database. r screen, t name, s where it is ("css" or "css||text", first visible match), h how to use it,
@@ -4499,7 +4617,7 @@ const HELP_FEAT=[
  {r:"home",t:"What this app offers",s:".hStats",h:"Learn the regulations in Explore, practice with questions, dilemmas and virtual FDA inspections, and work with tools: QMS forms, statistics, risk management and projects.",k:"overview start begin features about app counters numbers",q:["what can i do here","what is this app","where do i start","what can i learn","what can i practice"]},
  {r:"home",t:"Explore the regulations",s:".navGroup||Explore",h:"Open a chapter: ISO 13485, FDA QMSR, EU MDR or FDA premarket and postmarket, or the QMS map and the Regulatory Timeline.",k:"learn read study chapters iso 13485 qmsr 820 mdr eu fda premarket postmarket regulations clauses",q:["how can i learn the regulations","where are the chapters","where is iso 13485","where is the fda qmsr","where is the eu mdr","what can i read"]},
  {r:"home",t:"Search the handbook",s:".navSearchRow .qIn,.qIn",h:"Type a clause (7.4.1), a regulation section (820.45), an article or a word. Results appear under the box; click one to jump to it.",k:"find look up clause article section keyword search",q:["how do i find a clause","where is the search","how can i look up a regulation"]},
- {r:"home",t:"Practice",s:".navGroup||Practice",h:"Random Question, Real-life Dilemmas, Inspection mode (virtual FDA inspections) and Training Courses.",k:"practice train exercise quiz test yourself",q:["what can i practice","how can i test myself","where are the exercises"]},
+ {r:"home",t:"Practice",s:".navGroup||Practice",h:"Quick quiz, Real-life Dilemmas, Inspection mode (virtual FDA inspections) and Training Courses.",k:"practice train exercise quiz test yourself",q:["what can i practice","how can i test myself","where are the exercises"]},
  {r:"home",t:"Tools",s:".navGroup||Tools",h:"QMS Assistant forms, Statistical Tools, Risk management and Projects.",k:"tools work",q:["which tools are there","what tools can i use"]},
  {r:"home",t:"Glossary",s:".glossBtn",h:"Click Glossary next to the search box, then type a term (AQL, PSUR) or pick an area chip to filter the definitions.",k:"glossary terms abbreviations definitions acronym meaning",q:["what does this abbreviation mean","where is the glossary","how can i find a definition"]},
  {r:"home",t:"Quick Survey",s:".hBtns .svyBtn:not(.ctBtn)",h:"A short feedback form. Answers are sent only if you choose to email, share or copy them.",k:"survey feedback opinion",q:["how can i give feedback"]},
@@ -4508,7 +4626,7 @@ const HELP_FEAT=[
  {r:"chapter",t:"Chapter list",s:"#rail,#partSwitch",h:"Pick another chapter. On a phone, use the part switch and tabs at the top.",k:"chapters list menu clause navigate",q:["how do i open another chapter","where is the chapter list"]},
  {r:"chapter",t:"Chapter questions",s:"#tab-q",h:"Open the multiple-choice questions for this chapter. Pick an answer to see why it is right or wrong.",k:"questions quiz multiple choice",q:["where are the questions of this chapter"]},
  {r:"chapter",t:"Next and previous",s:".cNext",h:"Move to the next item in this tab, or back with Previous.",k:"next previous",q:["how do i go to the next item"]},
- {r:"random",t:"Random Question",s:"#main h2",h:"One question at a time from any chapter. Answers count toward your progress.",k:"random question quiz test practice multiple choice",q:["how can i answer questions","where are the questions","how do i practice questions"]},
+ {r:"random",t:"Quick quiz",s:"#main h2",h:"One question at a time from any chapter. Answers count toward your progress.",k:"random question quiz test practice multiple choice",q:["how can i answer questions","where are the questions","how do i practice questions"]},
  {r:"random",t:"Level filter",s:".lvBtn",h:"Choose Foundation, Practitioner or Expert, or All, to set how hard the questions are.",k:"level difficulty stars expert advanced proficient",q:["how do i change the difficulty","how can i choose the level"]},
  {r:"random",t:"Topic tabs",s:"#main .tab",h:"Limit questions to Basics, QMS, FDA or EU MDR.",k:"topic area filter fda eu basics",q:["how can i choose a topic"]},
  {r:"random",t:"Answer a question",s:"#main .opt",h:"Click the answer you think is right. You get the explanation and the source at once.",k:"answer option choose explanation",q:["how do i answer"]},
@@ -4528,6 +4646,10 @@ const HELP_FEAT=[
  {r:"home",t:"Profile and plans",s:".profHome||Welcome",h:"Set your nickname and answer 5 quick questions to get a plan recommendation and a start-here path; compare Free trial, Premium and All inclusive.",k:"profile plan plans premium free trial all inclusive subscription price account upgrade nickname questions",q:["what plans are there","what is in premium","how do i upgrade","what does the free trial include"],go:"home"},
  {r:"random",t:"Search a topic",s:".tSearch",h:"Type a topic (for example CAPA, UDI or sterilization): only matching questions are drawn. The same search is on Dilemmas and Inspection mode.",k:"search topic filter find subject keyword",q:["how do i choose a topic","can i practice one topic","how do i filter questions"]},
  {r:"map",t:"Regulatory Timeline button",s:".mapTlBtn",h:"Opens the Regulatory Timeline with today in the centre.",k:"timeline dates milestones transition deadlines",q:["where is the regulatory timeline","how do i see the deadlines"]},
+ {r:"practice",t:"Practice",s:".pxGrid||Practice",h:"Four ways to train: Quick quiz (10 questions and a score), Real-life Dilemma (sets of 5), Inspection (virtual FDA inspection) and Training Course.",k:"practice start train quiz dilemma inspection course where begin",q:["where do i start practising","what can i practise","what is a quick quiz"],go:"practice"},
+ {r:"random",t:"Quick quiz",s:".qzBar",h:"Questions come 10 at a time. After each answer you see why; after 10 you get your score and can start another 10.",k:"quiz score ten questions session result",q:["how is my quiz scored","how many questions in a quiz"]},
+ {r:"dilemmas",t:"Sets of 5",s:".dsBar",h:"Dilemmas come in sets of 5; answer all 5 to see how many matched the recommended path. Browse all opens the full list.",k:"set five result browse all dilemmas",q:["how do dilemma sets work","how do i see all dilemmas"]},
+ {r:"dilemmas",t:"Expert views",s:".dvTabs",h:"Debated QA questions: argument, counter-argument, how to decide and where I land. The 50 key views first; Browse all for every one.",k:"expert views debate debates argument opinion",q:["what are expert views","where are the debates"]},
  {r:"gdp",t:"Run several courses",s:".crsBar||Start selected",h:"Tick the box on two or more course cards (the number shows the order), then press Start. Each course opens when the previous one ends.",k:"select several multiple courses sequence queue in a row tick",q:["how do i take several courses","can i run courses one after another","how do i select courses"]},
  {r:"daily",t:"QMS Assistant",s:"#main h2",h:"Ready-to-use QA forms with filled samples, step guidance and export to Word and PDF.",k:"qms assistant forms templates records documents word pdf export",q:["where are the forms","how can i fill a form","where are the templates","which feature helps me write a capa"]},
  {r:"daily",t:"QMS areas",s:".dItem,.dPick",h:"Pick a QMS area (design, CAPA, complaints, suppliers and more) to see its forms.",k:"area category capa complaints suppliers design change",q:["where is the capa form","where is the complaint form","where is the supplier form"]},
@@ -4728,7 +4850,7 @@ function heroTop(show){
   h.append(el("div",{class:"hTxt"},
     el("h2",{class:"srOnly"},"Qraft: a Quality Handbook and Training Guide for QA Experts"),
     el("div",{class:"hHead"}, heroLogo(), el("div",{class:"hTitleBlk"}, hTag))),
-    el("div",{class:"hRight"}, stats, el("div",{class:"hBtns"}, svyButton(), helpButton(), contactButton()), el("p",{class:"hVer"},VERLINE)));
+    el("div",{class:"hRight"}, homeStart(), el("div",{class:"hBtns"}, svyButton(), helpButton(), contactButton()), el("p",{class:"hVer"},VERLINE)));
   const reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
   const bs=[...stats.querySelectorAll("b")];
   if(reduce){ bs.forEach(b=>b.textContent=b.dataset.n); }
@@ -5478,13 +5600,14 @@ function renderChapter(id){
   let tabs=[];
   if(c.clauses) tabs.push(["c","Clauses",c.clauses.length]);
   if(c.best) tabs.push(["b","Best practices",c.best.length]);
-  tabs.push(["kp","Takeaways",c.kps.length+(c.map?1:0)],["d","Debates",c.debates.length]); if(srcAdmin()) tabs.push(["s","Sources",c.refs.length]);
+  tabs.push(["kp","Takeaways",c.kps.length+(c.map?1:0)]); if(srcAdmin()) tabs.push(["s","Sources",c.refs.length]);
   tabs=tabs.filter(t=>t[2]>0);
   if(!tabs.some(t=>t[0]===currentTab)) currentTab=tabs[0][0];
   const tl=el("div",{class:"tabs",role:"tablist"});
-  if(c.qs.length||c.dils.length) m.append(el("div",{class:"chPractice"}, el("b",{},"Practice this chapter"),
+  if(c.qs.length||c.dils.length||c.debates.length) m.append(el("div",{class:"chPractice"}, el("b",{},"Practice this chapter"),
     c.qs.length?el("button",{class:"cta",type:"button",onclick:()=>practiceChapter("q",c.id)},"Questions ("+c.qs.length+")"):"",
-    c.dils.length?el("button",{class:"cta alt",type:"button",onclick:()=>practiceChapter("x",c.id)},"Real-life Dilemmas ("+c.dils.length+")"):""));
+    c.dils.length?el("button",{class:"cta alt",type:"button",onclick:()=>practiceChapter("x",c.id)},"Real-life Dilemmas ("+c.dils.length+")"):"",
+    c.debates.length?el("button",{class:"cta alt",type:"button",onclick:()=>practiceChapter("d",c.id)},"Expert views ("+c.debates.length+")"):""));
   tabs.forEach(([k,label,n])=>tl.append(el("button",{class:"tab",type:"button",role:"tab","aria-selected":String(currentTab===k),id:"tab-"+k,onclick:()=>{currentTab=k; renderChapter(c.id); try{ const t=document.querySelector('.chHead'); window.scrollTo({top:t.offsetTop+t.offsetHeight-60}); }catch(e){} }},label,el("span",{class:"cnt"},String(n)))));
   m.append(tl);
   const panel=el("div",{class:"panel",role:"tabpanel","aria-labelledby":"tab-"+currentTab});
@@ -8541,7 +8664,7 @@ function navMiniState(){ const R=document.documentElement, n=document.getElement
 function navMiniBuild(){ const n=document.getElementById("navRow2"); if(!n) return; let b=document.getElementById("navMini"); if(!b){ b=document.createElement("nav"); b.id="navMini"; b.setAttribute("aria-label","Quick menu"); document.body.append(b); } b.innerHTML="";
   const up=focusSearch=>{ const a=document.getElementById("navAnchor"); const y=a?a.getBoundingClientRect().top+window.scrollY:0; window.scrollTo({top:Math.max(0,y-topH()-8),behavior:"smooth"}); if(focusSearch) setTimeout(()=>{ const i=n.querySelector(".searchBox input"); if(i) i.focus({preventScroll:true}); },350); };
   b.append(el("button",{class:"mMenu",type:"button","aria-label":"Show the full menu (Explore, Search, Glossary)",onclick:()=>up(false)}, ico("explore"), el("span",{},"Explore")), el("button",{class:"mMenu",type:"button","aria-label":"Search",onclick:()=>up(true)}, ico("search"), el("span",{},"Search")), el("span",{class:"mSep"}));
-  ["Practice","Tools"].forEach((g,gi)=>{ n.querySelectorAll('.navGroup[data-g="'+g+'"] .navBtn').forEach(x=>{ const c=el("button",{type:"button",class:x.className.replace("navBtn","mBtn"),"aria-current":x.getAttribute("aria-current")||"false",title:x.innerText.trim(),onclick:()=>x.click()}); c.innerHTML=x.innerHTML; const sp=c.querySelector("span"); const SH={"Random Question":"Random","GDP Training":"GDP","Real-life Dilemmas":"Dilemmas","Inspection mode":"Inspection","QMS Assistant":"QMS Assistant","Statistical Tools":"Statistics","Risk management":"Risk"}; if(sp&&SH[sp.textContent.trim()]) sp.textContent=SH[sp.textContent.trim()]; b.append(c); }); if(gi===0) b.append(el("span",{class:"mSep"})); });
+  ["Practice","Tools"].forEach((g,gi)=>{ n.querySelectorAll('.navGroup[data-g="'+g+'"] .navBtn').forEach(x=>{ const c=el("button",{type:"button",class:x.className.replace("navBtn","mBtn"),"aria-current":x.getAttribute("aria-current")||"false",title:x.innerText.trim(),onclick:()=>x.click()}); c.innerHTML=x.innerHTML; const sp=c.querySelector("span"); const SH={"Quick quiz":"Quiz","GDP Training":"GDP","Real-life Dilemmas":"Dilemmas","Inspection mode":"Inspection","QMS Assistant":"QMS Assistant","Statistical Tools":"Statistics","Risk management":"Risk"}; if(sp&&SH[sp.textContent.trim()]) sp.textContent=SH[sp.textContent.trim()]; b.append(c); }); if(gi===0) b.append(el("span",{class:"mSep"})); });
   navMiniState(); }
 function pinScroll(){ const n=document.getElementById("navRow2"); if(!n||!WIDE()) return; const go=()=>{ const y=n.getBoundingClientRect().bottom+window.scrollY-topH()-44; window.scrollTo({top:Math.max(0,y)}); topBar(); }; go(); requestAnimationFrame(()=>{ go(); setTimeout(go,60); }); }
 let LAST_ROUTE=null;
@@ -8549,15 +8672,16 @@ function route(){
   const id=(location.hash||"").slice(1)||"home";
   if(typeof navTrack==="function") navTrack(id);
   if(typeof planGateRoute==="function"&&planGateRoute(id)){ LAST_ROUTE=id; return; }
-  { const sec=["random","dilemmas","audit","gdp"].includes(id)?"practice":["tools","daily","stats","sampling","bstats","msa","grr","rmtools","rmtool","impact","risk","cvss","projects","qadrafts"].includes(id)||SQF[id]?"tools":"learn"; document.documentElement.dataset.sec=sec; document.documentElement.dataset.mod=(sec==="practice"||CH.some(c=>c.id===id))?"train":""; }
+  { const sec=["practice","random","dilemmas","audit","gdp"].includes(id)?"practice":["tools","daily","stats","sampling","bstats","msa","grr","rmtools","rmtool","impact","risk","cvss","projects","qadrafts"].includes(id)||SQF[id]?"tools":"learn"; document.documentElement.dataset.sec=sec; document.documentElement.dataset.mod=(sec==="practice"||CH.some(c=>c.id===id))?"train":""; }
   if(SQF[id]){ closeModal(); renderNav(id); renderSqForm(id); totals(); try{ if(navPinned()) pinScroll(); else window.scrollTo({top:0}); }catch(e){} return; }
   if(["daily","stats","sampling","risk","rmtools","bstats","rmtool","audit","random","dilemmas","grr","projects","cvss","impact"].includes(id)&&LAST_ROUTE!==id) setTimeout(()=>{ if((location.hash||"").slice(1)!==id) return; const nx=()=>{ if((location.hash||"").slice(1)!==id) return; if(id==="daily") dailyIntro(); else if(id==="risk") riskIntro(); else if(id==="rmtools") rmtIntro(); else if(id==="bstats") bstatsIntro(); else if(id==="stats"||id==="sampling") statsIntro(id); }; guideIntro(id,nx); },450);
   LAST_ROUTE=id;
+  if(id==="practice"){ closeModal(); renderNav("practice"); renderPractice(); totals(); try{ window.scrollTo({top:0}); }catch(e){} return; }
   if(id==="gdp"){ closeModal(); renderNav("gdp"); renderGdp(); totals(); try{ window.scrollTo({top:0}); }catch(e){} return; }
   if(["home","explore","dilemmas","map","sampling","bstats","tools","daily","stats","dates","audit","risk","rmtool","msa","grr","rmtools","impact","cvss","projects","qadrafts"].includes(id)){ closeModal(); renderNav(id); ({home:()=>renderHome(false),explore:()=>renderHome(true),dilemmas:renderDilemmas,map:renderMap,sampling:renderSampling,tools:()=>renderTools("daily"),daily:()=>renderTools("daily"),stats:()=>renderTools("stats"),risk:renderRisk,rmtool:renderRisk,msa:renderMsa,grr:renderGrr,rmtools:renderRmTools,impact:renderImpact,cvss:renderCvss,projects:renderProjects,bstats:renderBstats,qadrafts:renderQaDrafts,dates:renderDates,audit:renderAudit})[id](); totals(); try{ if(navPinned()) pinScroll(); else window.scrollTo({top:0}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
   if(id==="random"){ closeModal(); renderNav("random"); renderRandom(); totals(); try{ if(navPinned()) pinScroll(); else window.scrollTo({top:document.getElementById("dnav").offsetTop}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
   const valid=CH.some(c=>c.id===id)?id:CH[0].id;
-  if((pendingTab==="q"||pendingTab==="x")&&CH.some(c=>c.id===id)){ const t=pendingTab, h=pendingHit; pendingTab=null; pendingHit=null; practiceChapter(t,id,h); return; }
+  if((pendingTab==="q"||pendingTab==="x"||pendingTab==="d")&&CH.some(c=>c.id===id)){ const t=pendingTab, h=pendingHit; pendingTab=null; pendingHit=null; practiceChapter(t,id,h); return; }
   currentTab=pendingTab||""; pendingTab=null;
   renderRail(valid); renderChapter(valid); totals();
   if(pendingHit){ const t=pendingHit; pendingHit=null; setTimeout(()=>showHit(t),60); return; }
