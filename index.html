@@ -2058,6 +2058,16 @@ html[data-theme="dark"] .crsCard.won{background:linear-gradient(160deg,#2a2618,t
 @media (max-width:370px){ .hBtns{gap:6px} .hBtns .svyBtn{font-size:13px; gap:5px; padding:0 6px} .helpHat{width:52px} .helpHat img{height:52px} }
 @media (prefers-reduced-motion: reduce){ .helpHat img,#hlpRoot .hlpBot.idle .hlpBreath,#hlpRoot .hlpBot.idle .hlpShadow,#hlpRoot .hlpBot.idle .hlpSheen,.hlpTarget{animation:none} #hlpRoot .hlpFig{transition:none} .hlpPanel,.hlpTip{animation:none} }
 
+/* 3.13.1 helpers: half size, top corner (right, or left when data-spot="l") */
+#hlpRoot .hlpBot{top:78px; bottom:auto; height:var(--hlpH,min(115px,15vh))}
+.hlpPanel{top:78px; bottom:auto; max-height:min(470px,calc(100vh - 100px))}
+.hlpPanel::after{top:34px; bottom:auto}
+@media (max-width:700px){
+  #hlpRoot .hlpBot{top:62px; bottom:auto; --hlpH:64px}
+  .hlpPanel{top:calc(62px + 64px + 10px); bottom:auto; max-height:calc(100vh - 62px - 64px - 96px)}
+  .hlpPanel::after{top:-8px; bottom:auto; right:30px; transform:rotate(-45deg)}
+  #hlpRoot[data-spot="l"] .hlpPanel::after{left:30px; right:auto; transform:rotate(-45deg)}
+}
 /* 3.10.0 help v2: play tour, examples, richer results, left/right spots */
 .hlpTtl{display:flex; align-items:center; gap:8px}
 .hlpPlay{width:26px; height:26px; border-radius:50%; border:0; display:grid; place-items:center; cursor:pointer; color:#fff; background:linear-gradient(180deg,#2d7fb3,#1f5f8b); box-shadow:0 2px 6px rgba(31,95,139,.35); transition:transform .15s}
@@ -3634,7 +3644,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="3.13.0", APPDATE="27-NOV-2026";
+const APPVER="3.13.1", APPDATE="27-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Qraft (Asaf Ben Zion). All rights reserved.";
 const LEGAL=[["Risk Management Approach", "Content is a paraphrased summary for training. It does not replace the standards: ISO 14971:2019 (with EN ISO 14971:2019+A11:2021 for the EU), ISO/TR 24971:2020 and IEC 62366-1:2015+A1:2020. Use your licensed copies for exact requirements."], ["Copyright", "© 2026 Qraft (Asaf Ben Zion). The selection, structure, design and original text of this handbook may not be copied or redistributed without written permission. Regulations and official guidance are cited from their publishers: US federal texts are in the public domain, and EU texts are reused with attribution. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number and described in the author’s own words; their text remains the property of their publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, selection and design, and was developed and tested with AI tools. Key facts, such as regulatory reporting timelines, device classifications and clause numbers, were checked against official sources; other content is the author’s interpretation and may contain inaccuracies."], ["Sources", "Cited sources are official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs and FDA databases. EU: EUR-Lex, European Commission pages and MDCG guidance. International: IMDRF codes and MDSAP documents. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number, based on freely available published information and the author’s own interpretation and knowledge."], ["Important", "This application is intended for training purposes only and is not legal or regulatory advice. It is provided without warranty. Results from its tools require human review, verification and approval. Always check the linked official source before citing anything in a formal regulatory or customer response."]];
