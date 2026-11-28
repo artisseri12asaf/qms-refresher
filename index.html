@@ -2657,6 +2657,17 @@ html[data-home="true"] #navRow2 .navGroup:first-child{border-top:0}
 .chSideH,.chGrpH{display:none}
 @media (min-width:901px){ html[data-chs="1"] .chSideH,html[data-chs="1"] .chGrpH{display:block} }
 @media (max-width:700px){ .qHeroTools .hcLab{display:none} .qHeroSearch .qhelp{display:none} #heroTop .qHero{padding-bottom:16px !important} .qHeroTools{gap:8px} .qHeroTools .heroAbout{padding:6px 10px; font-size:13px} .qHeroTools .helpHat{width:48px} .qHeroSearch{max-width:none} .qHeroSearch .heroGloss span{display:none} }
+/* 3.26.0 Budget status */
+.budModal{max-width:860px}
+.budIn{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:10px; margin:10px 0}
+.budKpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:10px; margin:8px 0 4px} .budKpis>div{border:1px solid var(--q-line); border-radius:10px; padding:10px 12px} .budKpis b{display:block; font-size:22px} .budKpis small{color:var(--q-muted)}
+.budNum{text-align:right; font-variant-numeric:tabular-nums}
+.budRow{display:grid; grid-template-columns:1fr 140px auto; gap:8px; margin:6px 0}
+.budSls{display:grid; gap:10px; margin:8px 0} .budSl{display:grid; grid-template-columns:200px 1fr 60px; gap:10px; align-items:center} .budSl b{text-align:right}
+.budSvg{width:100%; height:auto; color:var(--q-text)} .budBe{font-weight:700; margin:4px 0}
+.budAct{display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin:14px 0 4px}
+@media (max-width:600px){ .budSl{grid-template-columns:1fr 1fr 50px} .budRow{grid-template-columns:1fr 100px auto} }
+
 </style>
 </head>
 <body>
@@ -4257,7 +4268,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="3.25.0", APPDATE="28-NOV-2026";
+const APPVER="3.26.0", APPDATE="28-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Qraft (Asaf Ben Zion). All rights reserved.";
 const LEGAL=[["Risk Management Approach", "Content is a paraphrased summary for training. It does not replace the standards: ISO 14971:2019 (with EN ISO 14971:2019+A11:2021 for the EU), ISO/TR 24971:2020 and IEC 62366-1:2015+A1:2020. Use your licensed copies for exact requirements."], ["Copyright", "© 2026 Qraft (Asaf Ben Zion). The selection, structure, design and original text of this handbook may not be copied or redistributed without written permission. Regulations and official guidance are cited from their publishers: US federal texts are in the public domain, and EU texts are reused with attribution. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number and described in the author’s own words; their text remains the property of their publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, selection and design, and was developed and tested with AI tools. Key facts, such as regulatory reporting timelines, device classifications and clause numbers, were checked against official sources; other content is the author’s interpretation and may contain inaccuracies."], ["Sources", "Cited sources are official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs and FDA databases. EU: EUR-Lex, European Commission pages and MDCG guidance. International: IMDRF codes and MDSAP documents. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number, based on freely available published information and the author’s own interpretation and knowledge."], ["Important", "This application is intended for training simulation purposes only. It is provided without warranty. Results from its tools require human review, verification and approval. Not legal or regulatory advice. Not an official FDA, EC or ISO document. No affiliation with FDA, the European Commission or ISO. Always check the linked official source before citing anything in a formal regulatory or customer response."]];
@@ -5246,6 +5257,51 @@ function openSources(){ const box=el("div",{class:"srcAll"}); const seen=new Set
   CH.forEach(c=>{ const L=(c.refs||[]).map(lnk).filter(Boolean); (c.refs||[]).forEach(k=>seen.add(k)); if(L.length) box.append(el("details",{}, el("summary",{}, el("b",{},c.num+" · "+c.title), el("small",{}," "+L.length)), el("ol",{class:"srcList"}, ...L))); });
   box.append(el("h4",{class:"profH"},"Removed sources"), SRC_REMOVED.length?el("ul",{class:"srcList"}, ...SRC_REMOVED.map(r=>el("li",{}, el("b",{},r.t)," · removed "+r.d+": "+r.why+(r.by?" (replaced by "+r.by+")":""), el("br",{}), el("small",{},r.u)))):el("p",{class:"src"},"None so far."));
   modal("Sources (administrator)",box); }
+/* ===== 3.26.0 Budget status (hidden menu): hours from both git histories, costs, business plan and return on investment ===== */
+const BUDGET_DATA=/*BUD-DATA*/{"built":"28-NOV-2026","from":"12-NOV-2026","commits":311,"sessions":28,"hours":79.7,"days":[["12-NOV-2026",2.0],["15-NOV-2026",3.7],["16-NOV-2026",5.6],["17-NOV-2026",11.4],["18-NOV-2026",5.5],["19-NOV-2026",3.4],["20-NOV-2026",7.3],["21-NOV-2026",12.2],["22-NOV-2026",9.3],["23-NOV-2026",7.4],["27-NOV-2026",3.8],["28-NOV-2026",8.0]],"versions":[["earlier",15.1,34],["1.0.0",1.2,1],["1.1.0",0.8,2],["1.1.1",0.2,2],["1.2.0",1.2,2],["1.2.1",0.9,3],["1.3.0",1.0,4],["1.3.1",0.2,2],["1.4.0",1.4,2],["1.4.1",0.5,2],["1.4.2",0.0,2],["1.4.3",0.1,2],["1.5.0",0.5,2],["1.5.1",0.3,2],["1.6.0",0.3,2],["1.7.0",0.4,2],["1.8.0",0.3,2],["1.8.1",0.2,2],["1.9.0",0.5,2],["1.10.0",1.3,2],["1.10.1",0.2,2],["1.11.0",0.5,2],["1.11.1",0.5,2],["1.12.0",0.2,2],["1.12.1",0.2,2],["1.13.0",0.4,2],["1.13.1",0.1,2],["1.14.0",0.2,2],["2.0.0",1.5,2],["2.1.0",0.5,2],["2.2.0",0.7,2],["2.3.0",0.5,2],["2.3.1",0.1,2],["2.4.0",0.6,2],["2.5.0",0.8,4],["2.5.1",0.1,2],["2.5.2",0.5,2],["2.5.3",0.2,2],["2.6.0",1.2,3],["2.7.0",1.8,8],["2.8.0",0.2,2],["2.8.1",0.5,2],["2.9.0",0.9,3],["2.9.1",1.3,2],["2.10.0",0.5,2],["2.11.0",0.7,4],["2.12.0",0.5,3],["2.13.0",0.7,3],["2.14.0",0.6,3],["2.15.0",1.1,5],["2.16.0",3.2,7],["2.17.0",0.1,2],["2.18.0",1.6,4],["3.0.0",1.9,4],["3.1.0",1.0,3],["3.1.1",0.5,2],["3.1.2",1.0,3],["3.2.0",0.5,2],["3.2.1",0.1,2],["3.2.2",0.3,2],["3.3.0",2.1,6],["3.4.0",1.0,3],["3.4.1",0.9,4],["3.4.2",0.8,2],["3.4.3",1.2,6],["3.4.4",0.5,3],["3.5.0",0.1,4],["3.5.1",0.1,2],["3.6.0",0.5,2],["3.7.0",0.3,2],["3.8.0",0.5,2],["3.8.1",0.4,2],["3.9.0",1.1,2],["3.9.1",0.4,2],["3.10.0",0.6,2],["3.10.1",0.3,2],["3.10.2",0.1,2],["3.11.0",2.5,9],["3.12.0",0.5,2],["3.13.0",0.2,2],["3.13.1",0.1,3],["3.14.0",0.9,2],["3.15.0",0.5,2],["3.15.1",0.1,3],["3.16.0",0.6,2],["3.16.1",0.5,3],["3.17.0",2.2,19],["3.18.0",0.7,3],["3.19.0",0.6,3],["3.20.0",0.4,4],["3.20.1",0.7,3],["3.21.0",1.0,4],["3.22.0",0.6,4],["3.23.0",0.4,3],["3.24.0",0.5,3],["3.25.0",1.5,5],["3.26.0",0.0,1]]}/*BUD-END*/;
+const BUD_KEY="qah-budget-v1";
+const BUD_DEF={rate:350,vat:18,off:25,pre:0,claudeMo:0,months:1,other:[{n:"Domain",a:0},{n:"Other",a:0}],price:49,disc:20,yShare:30,newMo:20,churn:4,run:0};
+function budGet(){ let v={}; try{ v=JSON.parse(localStorage.getItem(BUD_KEY)||"{}")||{}; }catch(e){} const o=Object.assign({},BUD_DEF,v); if(!Array.isArray(o.other)) o.other=BUD_DEF.other; return o; }
+function budSet(o){ try{ localStorage.setItem(BUD_KEY,JSON.stringify(o)); }catch(e){} }
+const bN=x=>{ const n=parseFloat(String(x).replace(",",".")); return isFinite(n)?n:0; };
+const bF=(n,d)=>Number(n).toLocaleString("en-US",{minimumFractionDigits:d||0,maximumFractionDigits:d||0});
+function budCalc(o){ const D=BUDGET_DATA, hrs=D.hours, off=hrs*bN(o.off)/100, asafH=hrs+off+bN(o.pre), asafCost=asafH*bN(o.rate), claude=bN(o.claudeMo)*bN(o.months), others=o.other.reduce((a,x)=>a+bN(x.a),0), invest=asafCost+claude+others, vat=invest*bN(o.vat)/100;
+  const arpu=bN(o.price)*(1-bN(o.yShare)/100*bN(o.disc)/100); let subs=0,cum=-invest,be=null,pts=[[0,cum]]; const ch=bN(o.churn)/100, run=bN(o.run);
+  for(let m=1;m<=36;m++){ subs=subs*(1-ch)+bN(o.newMo); const net=subs*arpu-run; cum+=net; pts.push([m,cum]); if(be===null&&cum>=0) be=m; }
+  return {hrs,off,asafH,asafCost,claude,others,invest,vat,total:invest+vat,arpu,pts,be,subs}; }
+function budChart(pts){ const W=640,H=220,L=56,B=26,T=10,R=10; const ys=pts.map(p=>p[1]), mn=Math.min(0,...ys), mx=Math.max(0,...ys)||1, sx=m=>L+(W-L-R)*m/36, sy=v=>T+(H-T-B)*(1-(v-mn)/((mx-mn)||1));
+  const path=pts.map((p,i)=>(i?"L":"M")+sx(p[0]).toFixed(1)+" "+sy(p[1]).toFixed(1)).join(" "); const y0=sy(0).toFixed(1);
+  let g='<svg viewBox="0 0 '+W+' '+H+'" class="budSvg" role="img" aria-label="Cumulative result by month, break-even where the line crosses zero"><line x1="'+L+'" y1="'+y0+'" x2="'+(W-R)+'" y2="'+y0+'" stroke="currentColor" stroke-opacity=".45"/>';
+  [0,12,24,36].forEach(m=>{ g+='<text x="'+sx(m)+'" y="'+(H-8)+'" font-size="11" text-anchor="middle" fill="currentColor">'+(m?"month "+m:"now")+'</text>'; });
+  [mn,0,mx].forEach(v=>{ g+='<text x="'+(L-6)+'" y="'+(sy(v)+4).toFixed(1)+'" font-size="10" text-anchor="end" fill="currentColor">'+bF(v/1000)+'k</text>'; });
+  g+='<path d="'+path+'" fill="none" stroke="#16A34A" stroke-width="2.5"/></svg>'; return g; }
+function budDoc(o,c){ const D=BUDGET_DATA, S=[
+  {h:"Hours (from git history, built "+D.built+")",rows:[["Commits in both repositories",String(D.commits)],["Work sessions (gaps up to 90 min, 30 min per start)",String(D.sessions)],["Session hours since "+D.from,bF(D.hrs,1)],["Offline work for the owner (reviews, testing, images) %",o.off+" %"],["Hours before 12-NOV-2026 (owner input)",bF(bN(o.pre),1)],["Owner hours in total",bF(c.asafH,1)],["Claude active work hours (shown separately, not billed)",bF(D.hrs,1)]]},
+  {h:"Cost (NIS)",rows:[["Owner hours x rate ("+o.rate+" NIS/h)",bF(c.asafCost)],["Claude subscription ("+o.claudeMo+" x "+o.months+" months)",bF(c.claude)],...o.other.map(x=>[x.n||"Other",bF(bN(x.a))]),["Total before VAT",bF(c.invest)],["VAT "+o.vat+" %",bF(c.vat)],["Total including VAT",bF(c.total)]]},
+  {h:"Business plan",rows:[["Monthly price (NIS)",String(o.price)],["Yearly plan discount %",o.disc+" %"],["Share of subscribers on yearly plan %",o.yShare+" %"],["New subscribers per month",String(o.newMo)],["Monthly churn %",o.churn+" %"],["Running cost per month (NIS)",String(o.run)],["Average revenue per subscriber per month",bF(c.arpu,1)],["Break-even",c.be?"month "+c.be:"not within 36 months"]]},
+  {h:"By version (hours)",rows:D.versions.map(v=>[v[0],bF(v[1],1)+" h · "+v[2]+" commits"])}];
+  return mkDoc("Budget status","Budget status",S,null,[],{}); }
+function openBudget(){ const o=budGet(); const box=el("div",{class:"budBox"}), st=el("p",{class:"vvSt",role:"status"}); const out=el("div",{});
+  const inp=(lab,key,suf,step)=>{ const i=el("input",{type:"number",step:step||"any",value:String(o[key]),"aria-label":lab,class:"rIn"}); i.addEventListener("input",()=>{ o[key]=i.value; budSet(o); draw(); }); return el("label",{class:"rField budF"}, el("span",{},lab+(suf?" ("+suf+")":"")), i); };
+  const draw=()=>{ const c=budCalc(o), D=BUDGET_DATA; out.innerHTML="";
+    out.append(el("h4",{class:"profH"},"1. Hours"),
+      el("p",{class:"src"},"Measured from both git histories since "+D.from+" ("+D.commits+" commits, "+D.sessions+" sessions; gaps up to 90 min count as work, 30 min per session start). Built "+D.built+". Long working sessions with few commits are under-counted."),
+      el("div",{class:"budKpis"}, el("div",{}, el("b",{},bF(c.hrs,1)+" h"), el("small",{},"Session hours")), el("div",{}, el("b",{},bF(c.asafH,1)+" h"), el("small",{},"Owner hours (incl. offline and earlier)")), el("div",{}, el("b",{},bF(c.hrs,1)+" h"), el("small",{},"Claude active work (not billed)"))));
+    out.append(el("h4",{class:"profH"},"2. Cost (NIS)"),
+      el("div",{class:"tblWrap"}, (()=>{ const t=el("table",{class:"map rmTbl"}); const r=(a,b,bold)=>t.append(el("tr",{}, el(bold?"th":"td",{},a), el("td",{class:"budNum"},b))); r("Owner hours x rate",bF(c.asafCost)); r("Claude subscription",bF(c.claude)); o.other.forEach(x=>r(x.n||"Other",bF(bN(x.a)))); r("Total before VAT",bF(c.invest),true); r("VAT "+o.vat+" %",bF(c.vat)); r("Total including VAT",bF(c.total),true); return t; })()));
+    const oth=el("div",{class:"budOther"}); o.other.forEach((x,i)=>{ const n=el("input",{type:"text",value:x.n,class:"rIn","aria-label":"Cost line name"}), a=el("input",{type:"number",value:String(x.a),class:"rIn","aria-label":"Cost line amount"}); n.addEventListener("input",()=>{ x.n=n.value; budSet(o); }); a.addEventListener("input",()=>{ x.a=a.value; budSet(o); draw(); }); oth.append(el("div",{class:"budRow"}, n, a, el("button",{class:"linkBtn",type:"button",onclick:()=>{ o.other.splice(i,1); budSet(o); draw(); }},"Remove"))); });
+    out.append(oth, el("button",{class:"linkBtn",type:"button",onclick:()=>{ o.other.push({n:"New cost line",a:0}); budSet(o); draw(); }},"+ Add a cost line"));
+    out.append(el("details",{class:"budVers"}, el("summary",{}, el("b",{},"3. By version ("+BUDGET_DATA.versions.length+" versions)")), el("div",{class:"tblWrap"}, (()=>{ const t=el("table",{class:"map rmTbl"}); t.append(el("tr",{}, el("th",{},"Version"), el("th",{},"Hours"), el("th",{},"Commits"))); BUDGET_DATA.versions.forEach(v=>t.append(el("tr",{}, el("td",{},v[0]), el("td",{class:"budNum"},bF(v[1],1)), el("td",{class:"budNum"},String(v[2]))))); return t; })())));
+    out.append(el("h4",{class:"profH"},"4. Return on investment"), el("p",{class:"src"},"Average revenue per subscriber per month: "+bF(c.arpu,1)+" NIS. Investment (incl. VAT): "+bF(c.total)+" NIS. "+(c.be?"Break-even in month "+c.be+".":"No break-even within 36 months.")+" Subscribers after 36 months: "+bF(c.subs)+"."));
+    const sl=(lab,key,min,max,step)=>{ const r=el("input",{type:"range",min:String(min),max:String(max),step:String(step),value:String(o[key]),"aria-label":lab}); const v=el("b",{},String(o[key])); r.addEventListener("input",()=>{ o[key]=r.value; v.textContent=r.value; budSet(o); const c2=budCalc(o); chart.innerHTML=budChart(c2.pts); beTxt.textContent=c2.be?"Break-even in month "+c2.be:"No break-even within 36 months"; }); return el("label",{class:"budSl"}, el("span",{},lab), r, v); };
+    const chart=el("div",{class:"budChart",html:budChart(c.pts)}), beTxt=el("p",{class:"budBe",role:"status"},c.be?"Break-even in month "+c.be:"No break-even within 36 months");
+    out.append(el("div",{class:"budSls"}, sl("Monthly price (NIS)","price",9,199,1), sl("New subscribers per month","newMo",1,200,1)), beTxt, chart);
+  };
+  box.append(el("p",{},"Owner-only planning aid. Inputs stay on this device. Figures are estimates for planning, not accounting records."),
+    el("div",{class:"budIn"}, inp("Hourly rate","rate","NIS/h"), inp("VAT","vat","%"), inp("Offline work","off","% of session hours"), inp("Hours before 12-NOV-2026","pre","h"), inp("Claude subscription per month","claudeMo","NIS"), inp("Months","months"), inp("Yearly plan discount","disc","%"), inp("Subscribers on yearly plan","yShare","%"), inp("Monthly churn","churn","%"), inp("Running cost per month","run","NIS")));
+  box.append(out, el("div",{class:"budAct"}, el("button",{class:"cta",type:"button",onclick:()=>{ const c=budCalc(o), d=budDoc(o,c); saveFile("Qraft_budget_status.xlsx",buildXlsx(d.sheets),st); }},"Export Excel"), el("button",{class:"cta alt",type:"button",onclick:()=>{ const c=budCalc(o), d=budDoc(o,c); saveFile("Qraft_budget_status.pdf",buildPdf(d.pdf),st); }},"Export PDF"), el("button",{class:"linkBtn",type:"button",onclick:()=>{ budSet(BUD_DEF); closeModal(); setTimeout(openBudget,60); }},"Reset inputs")), st);
+  draw(); modal("Budget status",box); const mb=document.querySelector("#ovl .mbox"); if(mb) mb.classList.add("budModal"); }
+
 function openVVDocs(){
   const st=el("p",{class:"vvSt",role:"status"});
   const list=el("div",{class:"vvList"});
@@ -5254,6 +5310,7 @@ function openVVDocs(){
       el("div",{class:"vvBtns"}, el("button",{class:"tab",type:"button",onclick:()=>vvGet(code,ext,id,st)},ext==="xlsx"?"Excel":"Word"), el("button",{class:"tab",type:"button",onclick:()=>vvGet(code,"pdf",id,st)},"PDF"))));
   });
   const adm=el("div",{class:"svyAdm"});
+  list.append(el("div",{class:"vvRow"}, el("div",{}, el("b",{},"Budget status"), el("small",{},"Hours, costs, business plan and return on investment")), el("div",{class:"vvBtns"}, el("button",{class:"tab",type:"button",onclick:openBudget},"View"))));
   list.append(el("div",{class:"vvRow"}, el("div",{}, el("b",{},"Sources"), el("small",{},"All cited links by chapter, plus the log of removed links")), el("div",{class:"vvBtns"}, el("button",{class:"tab",type:"button",onclick:openSources},"View"))));
   list.append(el("div",{class:"vvRow"}, el("div",{}, el("b",{},"Screen flow map (interactive)"), el("small",{},"Screens, links, happy and alternative flows")), el("div",{class:"vvBtns"}, el("button",{class:"tab",type:"button",onclick:()=>openSFM(st)},"View"))));
   modal("Software V&V records", el("div",{class:"vvBox"}, el("p",{},"Read-only validation records for "+VERLINE+". Approach: risk-based software assurance for a training tool."), list, st, adm));
