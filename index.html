@@ -2603,6 +2603,9 @@ html body .tab[aria-pressed="true"], html body .tab[aria-selected="true"]{backgr
 .rcList{padding-left:22px} .rcList li{margin:0 0 10px} .rcList li b{display:block} .rcList li span{display:block} .rcList li small{color:var(--q-muted)}
 .rcAct{display:flex; gap:12px; flex-wrap:wrap; margin:8px 0}
 
+/* 3.23.0 Evidence package */
+.evTbl td,.evTbl th{font-size:14px; vertical-align:top} .evAct{display:flex; gap:12px; margin:12px 0 6px} .evNote{font-size:12.5px}
+
 </style>
 </head>
 <body>
@@ -4187,7 +4190,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="3.22.0", APPDATE="28-NOV-2026";
+const APPVER="3.23.0", APPDATE="28-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Qraft (Asaf Ben Zion). All rights reserved.";
 const LEGAL=[["Risk Management Approach", "Content is a paraphrased summary for training. It does not replace the standards: ISO 14971:2019 (with EN ISO 14971:2019+A11:2021 for the EU), ISO/TR 24971:2020 and IEC 62366-1:2015+A1:2020. Use your licensed copies for exact requirements."], ["Copyright", "© 2026 Qraft (Asaf Ben Zion). The selection, structure, design and original text of this handbook may not be copied or redistributed without written permission. Regulations and official guidance are cited from their publishers: US federal texts are in the public domain, and EU texts are reused with attribution. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number and described in the author’s own words; their text remains the property of their publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, selection and design, and was developed and tested with AI tools. Key facts, such as regulatory reporting timelines, device classifications and clause numbers, were checked against official sources; other content is the author’s interpretation and may contain inaccuracies."], ["Sources", "Cited sources are official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs and FDA databases. EU: EUR-Lex, European Commission pages and MDCG guidance. International: IMDRF codes and MDSAP documents. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number, based on freely available published information and the author’s own interpretation and knowledge."], ["Important", "Training simulation. Not legal or regulatory advice. Not an official FDA, EC or ISO document. No affiliation with FDA, the European Commission or ISO. This application is intended for training purposes only. It is provided without warranty. Results from its tools require human review, verification and approval. Always check the linked official source before citing anything in a formal regulatory or customer response."]];
@@ -4860,6 +4863,51 @@ function rcGoField(fid,g){ const F=SQF[fid]; let lab=null; F.secs.forEach(S=>S.f
   const hit=[...document.querySelectorAll("#main .panel label, #main .panel .rField, #main .panel span, #main .panel b")].find(e=>e.textContent.trim().startsWith(lab.slice(0,30)));
   if(hit){ hit.scrollIntoView({block:"center",behavior:"smooth"}); const inp=(hit.closest("label,.rField,.card")||hit).querySelector("input,textarea,select"); if(inp) setTimeout(()=>inp.focus({preventScroll:true}),400); } }
 
+/* ===== 3.23.0 Change-to-Evidence: each required deliverable of a change impact assessment opens a linked, pre-filled record ===== */
+/* Mapping is based on 21 CFR 820 and EU MDR Annex IX; it does not decide on submissions. Approvals stay in the user's eQMS. */
+const EV_MAP=[
+ [/clinical evaluation|validation \/ clinical evaluation input/i,null,"Clinical evaluation (outside this app)"],
+ [/cross-reference CAPA|effectiveness check/i,null,"Link the existing CAPA, NC or complaint records"],
+ [/traceability/i,["qa-trace"]],
+ [/user needs|design inputs|requirements and architecture|interface specifications/i,["qa-dir"]],
+ [/first article/i,["sq-fai"]],
+ [/quality agreement/i,["sq-sqa"]],
+ [/supplier \/ CMO qualification|supplier specifications|approved supplier/i,["sq-eval"]],
+ [/test method validation|\bTMV\b/i,["qa-tmv"]],
+ [/QMS software validation|\(CSA\)/i,["qa-nps"]],
+ [/V&V plan and protocols/i,["qa-prot"]],
+ [/risk management|hazard analysis|FMEA|URRA|benefit-risk|risk control|ratings/i,null,"Risk management file (use the Risk management tools)"],
+ [/verification|validation|revalidation|testing|test\b|tests|study|evaluation per ISO 10993|characterization|qualification|transport simulation|bioburden|residuals|equivalence/i,["qa-prot","qa-rep"]],
+ [/training/i,["qa-trn"]],
+ [/procedures|work instructions|release procedure|service procedures/i,["qa-sop"]],
+ [/correction or removal|recall vs enhancement/i,["qa-fsca"]],
+ [/\bRA\b|[Cc]lassification|[Ss]ubmission|notice|506J|Art\. 10a|UDI/,null,"Regulatory decision (RA; outside this app)"]
+];
+function evMap(d){ for(const [rx,f,n] of EV_MAP){ if(rx.test(d)) return {forms:f,note:n||""}; } return {forms:null,note:"No template in this app: track it in your eQMS"}; }
+function evItems(a){ const out=[]; IA_P1.forEach(T=>T.subs.forEach(S=>{ if(a.ans[S.id]!=="Y") return; (a.dl[S.id]||[]).forEach(d=>{ const m=evMap(d); out.push({sid:S.id,num:IA_NUM[S.id],d,forms:m.forms,note:m.note,key:S.id+"|"+d}); }); })); return out; }
+function evRec(id){ return SQ_STORE.list.find(r=>r.id===id); }
+function evStatus(r){ if(!r) return "Not created"; const F=SQF[r.form]; const [d,n]=sqProgress(F,r); return d>=n?"Complete":d?"In progress ("+d+"/"+n+")":"Not started"; }
+function evCreate(a){ const I=a.info; a.ev=a.ev||{}; let made=0;
+  if(!a.prj){ const p=prjNew({name:(I.cc?I.cc+" ":"")+(I.title||"Change").slice(0,60),device:(I.product||"").slice(0,80),cls:I.usClass?"Class "+I.usClass:"Class II",phase:"Change"}); a.prj=p.id; }
+  evItems(a).forEach(it=>{ if(!it.forms) return; it.forms.forEach(fid=>{ const k=it.key+"|"+fid; if(a.ev[k]&&evRec(a.ev[k])) return; const F=SQF[fid]; if(!F) return;
+    const v={}; v[F.titleKey||"title"]=(I.cc?I.cc+" – ":"")+it.d; const fs=sqFields(F).map(x=>x[0]); if(fs.includes("prod")&&I.product) v.prod=I.product; if(fs.includes("refs")) v.refs=[a.id,I.cc].filter(Boolean).join("; ");
+    const r=sqNew(fid,v); r.prj=a.prj; r.ia=a.id; a.ev[k]=r.id; made++; }); });
+  sqSave(); a.updated=nowTs(); iaSave(); return made; }
+function evOpen(id){ const r=evRec(id); if(!r) return; SQ_STORE.cur[r.form]=r.id; sqSave(); location.hash="#"+r.form; }
+const EV_NOTE="Based on 21 CFR 820 and EU MDR Annex IX. This list does not decide whether a 510(k), PMA supplement or Notified Body notification is needed: see the FDA guidance on deciding when to submit a 510(k) for a change to an existing device, and MDCG 2020-3. Approvals stay in your eQMS.";
+function evRows(a){ const rows=[]; evItems(a).forEach(it=>{ if(!it.forms){ rows.push([it.num,it.d,it.note,"-"]); return; } it.forms.forEach(fid=>{ const id=(a.ev||{})[it.key+"|"+fid], r=evRec(id); rows.push([it.num,it.d,(r?r.id+" ":"")+tc(SQF[fid].short),evStatus(r)]); }); }); return rows; }
+function evBlocks(a){ const rows=evRows(a); if(!rows.length) return []; return [{h2:"3a. Evidence package"},{table:[["#","Deliverable","Record","Status"],...rows],head:true,pdfAuto:true},{p:EV_NOTE}]; }
+function evCard(a,touch){ const its=evItems(a), c=el("div",{class:"card evCard noX"}, el("h3",{class:"secTitle"},"Evidence package"));
+  if(!its.length){ c.append(el("p",{class:"src"},"Answer Yes to an impact question and choose its deliverables; the records you need will appear here.")); return c; }
+  const n=its.filter(i=>i.forms).reduce((s,i)=>s+i.forms.length,0), have=its.filter(i=>i.forms).reduce((s,i)=>s+i.forms.filter(f=>evRec((a.ev||{})[i.key+"|"+f])).length,0);
+  c.append(el("p",{},its.length+" deliverables · "+its.filter(i=>i.forms).length+" start from a template in this app ("+n+" records) · "+have+" created"+(a.prj?" · project "+prjName(a.prj):"")));
+  const tb=el("table",{class:"map rmTbl evTbl"}); tb.append(el("tr",{}, el("th",{},"#"), el("th",{},"Deliverable"), el("th",{},"Record"), el("th",{},"Status")));
+  its.forEach(it=>{ if(!it.forms){ tb.append(el("tr",{}, el("td",{},it.num), el("td",{},it.d), el("td",{class:"src"},it.note), el("td",{},"-"))); return; }
+    it.forms.forEach(fid=>{ const id=(a.ev||{})[it.key+"|"+fid], r=evRec(id); tb.append(el("tr",{}, el("td",{},it.num), el("td",{},it.d), el("td",{}, r?el("button",{class:"linkBtn",type:"button",onclick:()=>evOpen(r.id)},r.id+" "+tc(SQF[fid].short)):el("span",{class:"src"},tc(SQF[fid].short))), el("td",{},evStatus(r)))); }); });
+  c.append(el("div",{class:"tblWrap"},tb));
+  c.append(el("div",{class:"evAct"}, el("button",Object.assign({class:"cta evMake",type:"button",onclick:()=>{ const k=evCreate(a); touch(); flash(k?k+(k===1?" record":" records")+" created and linked":"All records already exist"); renderImpact(); }},n&&have>=n?{disabled:"disabled"}:{}),have?"Create the missing records":"Create evidence records")));
+  c.append(el("p",{class:"src evNote"},EV_NOTE)); return c; }
+
 function statsSheet(){ closeModal(); if(location.hash==="#me") route(); else location.hash="#me"; }
 
 function profHdrRefresh(){ document.querySelectorAll(".avChip").forEach(b=>{ const p=profGet(); b.innerHTML=""; b.append(profIco(p)); b.classList.toggle("unset",!p.nick); b.classList.toggle("adm",isAdmin()); b.title=(p.nick?p.nick+" · ":"")+"My statistics"+(isAdmin()?" (administrator · "+PLAN_NAMES[planEff()]+")":""); }); }
@@ -5226,6 +5274,7 @@ const HELP_FEAT=[
  {r:"projects",t:"Add a new project",s:".prjBig.cta,#main .cta",h:"Create a project with its name, device, class and markets. Your work is saved on this device.",k:"new create project",q:["how do i create a project"]},
  {r:"projects",t:"Project list",s:".prjAlt",h:"Open a project you already created.",k:"open list existing",q:["how do i open a project"]},
  {r:"form",t:"Record check",s:".rcBtn",h:"On a CAPA or complaint record, press Record check. A simulated investigator finds gaps in your record (missing decisions, impossible dates, weak root cause) and asks about each one, then gives a closing list with what to fix and the basis. Training only; nothing leaves your device.",k:"record check gaps capa complaint mock inspection investigator review my record",q:["check my capa","is my record complete","what is missing in my complaint record","review my capa"]},
+ {r:"impact",t:"Evidence package",s:".evCard",h:"On the Output step of a change impact assessment, the Evidence package lists every required deliverable. Press Create evidence records: the app opens linked, pre-filled records (protocols, reports, traceability, training, SOP updates and more) in one project and shows their status. It does not decide on 510(k), PMA supplement or Notified Body submissions; approvals stay in your eQMS.",k:"evidence package deliverables records change impact create protocol report traceability project",q:["create the records for my change","what evidence do i need for this change","open the deliverables","evidence package"]},
  {r:"me",t:"My statistics",s:".msH",h:"Your practice score by process (weakest first), the next best action, your activity in the last 7 days and what is due for re-check. Open it from the round user button at the top. Everything is saved on this device only.",k:"my statistics progress score performance activity weak process recheck re-check",q:["how am i doing","where are my statistics","what should i practise next","what is my weakest area"]},
  {r:"dates",t:"Regulatory Timeline",s:"#main h2",h:"Regulatory milestones and transition dates, with links to official sources.",k:"timeline dates deadlines milestones transition qmsr mdr udi estar ai act",q:["when does the qmsr apply","where are the deadlines","what are the mdr transition dates"]},
  {r:"dates",t:"Search dates",s:".dSearch",h:"Type a topic or year (UDI, eSTAR, AI Act, 2027) to filter the milestones.",k:"filter year search",q:["how do i find a date"]},
@@ -7778,6 +7827,7 @@ function iaDocModel(a){
     if(T.risk) blocks.push({table:[["Potential risks associated with this change",a.risk.pot||"None identified"],["Linked risk-file items",a.risk.items.join(", ")||"none"],["Risk-file documents to update",a.risk.docs.join(", ")||"none"]]}); });
   const yes=IA_P1.flatMap(T=>T.subs.filter(S=>a.ans[S.id]==="Y"));
   blocks.push({h2:"3. Required deliverables"}); blocks.push(yes.length?{table:[["#","Deliverables","Details"],...yes.map(S=>[IA_NUM[S.id],(a.dl[S.id]||[]).join("; ")||"-",a.txt[S.id]||""])],head:true,w:[900,4300,4400],pdf:"d"}:{p:"No deliverables: the change does not modify design attributes, manufacturing processes, quality attributes or safety characteristics. Existing verification, validation and risk management evidence remains valid."});
+  evBlocks(a).forEach(b=>blocks.push(b));
   blocks.push({h2:"4. Impacted requirements and required tests"}); blocks.push(a.req.length?{table:[["Change item","Impacted area","Requirement","Tests"],...a.req.map(r=>[r.item,r.area,r.req,r.test])],head:true,w:[2400,2400,2400,2400],pdf:"r"}:{p:"No impacted requirements were identified."});
   blocks.push({h2:"5. Regulatory impact assessment"});
   const N=raOrder(a), A=a.ra.ans;
@@ -7848,6 +7898,7 @@ function iaOut(p,a,touch){
   if(missRa.length) p.append(el("p",{class:"warn"},"Regulatory assessment is not complete: "+missRa.slice(0,10).join("; ")));
   p.append(el("div",{class:"card"}, el("h3",{class:"secTitle"},"Change classification"), verdict(C.c!=="Critical",C.c+" change",C.c==="Critical"?"Escalate to Change Review Board or Steering Committee.":C.c==="Major"?"Regulatory pre-approval or a potential safety/performance impact.":"No safety, efficacy or quality impact and no regulatory pre-approval."),
     el("div",{class:"rInputs grid2"}, el("label",{class:"rField"}, el("span",{},"Override (optional)"), selectEl([["","Use automatic: "+C.auto],["Critical","Critical"],["Major","Major"],["Minor","Minor"]],a.cls.override,v=>{ a.cls.override=v; touch(); renderImpact(); })), txtField("Override rationale",a.cls.why,v=>{ a.cls.why=v; touch(); }))));
+  p.append(evCard(a,touch));
   const ap=el("div",{class:"card"}, el("h3",{class:"secTitle"},"8. Review and approval"), el("p",{class:"src"},"QA, RA and Engineering are mandatory. Tick the optional functions that take part. Names and dates go into the output; signatures stay in your eQMS."));
   IA_FUNCS.forEach(([k,l,m])=>{ const r=a.appr[k]; const cb=el("input",{type:"checkbox","aria-label":"Include "+l}); cb.checked=m?true:!!r.on; if(m) cb.disabled=true; cb.addEventListener("change",()=>{ r.on=cb.checked; touch(); renderImpact(); });
     const row=el("div",{class:"iaAppr"}, el("label",{class:"iaApprF"}, cb, el("b",{},l), el("span",{class:"tag"+(m?" focus":"")},m?"Mandatory":"Optional")));
