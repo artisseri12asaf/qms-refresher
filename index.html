@@ -2586,6 +2586,23 @@ input[type=checkbox],input[type=radio],progress{accent-color:var(--q-btn)}
 html body .cPager .cNext:not(:disabled), html body .cNext:not(:disabled){background:var(--q-btn) !important; background-color:var(--q-btn) !important; border-color:var(--q-btn) !important; color:#fff !important}
 html body .tab[aria-pressed="true"], html body .tab[aria-selected="true"]{background:var(--q-btn) !important; background-color:var(--q-btn) !important; background-image:none !important; color:#fff !important; border-color:var(--q-btn) !important}
 
+/* 3.22.0 Record check */
+.rcBtn{margin-left:auto}
+.rcBox{max-width:720px}
+.rcKick{font:700 12px/1.2 var(--q-font-sans); letter-spacing:.1em; text-transform:uppercase; color:var(--q-primary); margin:0 0 8px}
+.rcWarn{border-left:3px solid #c08a1e; padding:6px 10px; background:color-mix(in srgb,#c08a1e 10%,transparent); font-weight:600}
+.rcDisc{font-size:12.5px; color:var(--q-muted)}
+.rcCount{font-weight:700; font-size:16px}
+.rcNone{border:1px solid var(--q-line); border-radius:10px; padding:12px 14px}
+.rcGap{color:var(--q-muted); font-size:14px; margin:0 0 4px}
+.rcQ{font-size:18px !important; line-height:1.35; margin:6px 0 12px}
+.rcBox button.tcO{display:block; width:100%; text-align:left; background:var(--q-surface-2); border:1.5px solid var(--q-line); border-radius:8px; padding:10px 12px; margin:0 0 8px; font:500 15px/1.4 var(--q-font-sans); color:var(--q-text); cursor:pointer}
+.rcBox button.tcO:hover:not(:disabled){border-color:var(--q-btn)}
+.rcBox button.tcO.ok{border-color:#16A34A; background:color-mix(in srgb,#16A34A 12%,transparent)} .rcBox button.tcO.no{border-color:#DC2626; background:color-mix(in srgb,#DC2626 10%,transparent)}
+.rcBox .tcWhy{font-size:14px; margin:8px 0 12px}
+.rcList{padding-left:22px} .rcList li{margin:0 0 10px} .rcList li b{display:block} .rcList li span{display:block} .rcList li small{color:var(--q-muted)}
+.rcAct{display:flex; gap:12px; flex-wrap:wrap; margin:8px 0}
+
 </style>
 </head>
 <body>
@@ -4170,7 +4187,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="3.21.0", APPDATE="28-NOV-2026";
+const APPVER="3.22.0", APPDATE="28-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Qraft (Asaf Ben Zion). All rights reserved.";
 const LEGAL=[["Risk Management Approach", "Content is a paraphrased summary for training. It does not replace the standards: ISO 14971:2019 (with EN ISO 14971:2019+A11:2021 for the EU), ISO/TR 24971:2020 and IEC 62366-1:2015+A1:2020. Use your licensed copies for exact requirements."], ["Copyright", "© 2026 Qraft (Asaf Ben Zion). The selection, structure, design and original text of this handbook may not be copied or redistributed without written permission. Regulations and official guidance are cited from their publishers: US federal texts are in the public domain, and EU texts are reused with attribution. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number and described in the author’s own words; their text remains the property of their publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, selection and design, and was developed and tested with AI tools. Key facts, such as regulatory reporting timelines, device classifications and clause numbers, were checked against official sources; other content is the author’s interpretation and may contain inaccuracies."], ["Sources", "Cited sources are official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs and FDA databases. EU: EUR-Lex, European Commission pages and MDCG guidance. International: IMDRF codes and MDSAP documents. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number, based on freely available published information and the author’s own interpretation and knowledge."], ["Important", "Training simulation. Not legal or regulatory advice. Not an official FDA, EC or ISO document. No affiliation with FDA, the European Commission or ISO. This application is intended for training purposes only. It is provided without warranty. Results from its tools require human review, verification and approval. Always check the linked official source before citing anything in a formal regulatory or customer response."]];
@@ -4696,6 +4713,153 @@ function tryCardEl(){ const L=[]; CH.forEach(c=>c.qs.forEach((q,i)=>{ if(q.q.len
       fb.innerHTML=""; fb.append(el("p",{class:"tcWhy"},(j===q.a?"Correct. ":"Not quite. ")+q.w), el("a",{class:"tcGo",href:"#practice"},"Keep practising →")); }},String.fromCharCode(65+j)+". "+t)));
   box.append(fb); return box; }
 
+/* ===== 3.22.0 Record check: the simulated investigator questions the user's own CAPA / complaint drafts ===== */
+/* Rules are written in our own words; standards are cited by clause number only. Nothing leaves the device. */
+const RC_FORMS={"qa-capa":1,"qa-cmp":1};
+const rcYN=(v,k)=>(v[k]&&v[k].a)||"", rcTx=(v,k)=>String(v[k]??"").trim(), rcD=s=>/^\d{4}-\d{2}-\d{2}$/.test(s||"")?new Date(s+"T00:00:00"):null;
+function rcWords(s){ return new Set(String(s||"").toLowerCase().match(/[a-z]{4,}/g)||[]); }
+function rcSame(a,b){ const A=rcWords(a), B=rcWords(b); if(A.size<4||B.size<4) return false; let n=0; A.forEach(w=>{ if(B.has(w)) n++; }); return n/Math.min(A.size,B.size)>=0.7; }
+const RC_RULES=[
+ /* CAPA */
+ {f:"qa-capa",k:"eCrit",t:"capa",test:v=>rcYN(v,"e1")==="Y"&&!rcTx(v,"eCrit"),
+  gap:"The CAPA is marked effective, but no acceptance criteria for the effectiveness check are written.",
+  q:"Your record says the actions were effective. Against what criteria did you decide that?",
+  ok:"We set a measurable criterion before the check, and the result is compared with it in the record.",
+  bad:["No new complaints have come in since, so the actions clearly worked.","The CAPA owner and QA agreed at the review meeting that it was effective."],
+  fix:"Write measurable acceptance criteria (what, how much, over which period) before judging effectiveness.",cite:"ISO 13485:2016 8.5.2; 21 CFR 820.10"},
+ {f:"qa-capa",k:"target",t:"capa",test:v=>{ const a=rcD(rcTx(v,"opened")), b=rcD(rcTx(v,"target")); return a&&b&&b<a; },
+  gap:"The target closure date is earlier than the date the CAPA was opened.",
+  q:"Your target closure date comes before the opening date. Which date is right, and who approved the plan?",
+  ok:"It is a typing error; we correct the date with a dated, initialled change and keep the plan approval traceable.",
+  bad:["Dates in a draft do not matter; the system date is the real one.","We overwrite the date now so the record looks consistent."],
+  fix:"Correct the dates with a traceable change (who, when, why). Never overwrite without a trail.",cite:"21 CFR 820.35 (records); ISO 13485:2016 4.2.5"},
+ {f:"qa-capa",k:"rc",t:"capa",test:v=>rcTx(v,"rc")&&rcSame(v.rc,v.stmt),
+  gap:"The root cause repeats the problem statement in other words.",
+  q:"Your root cause reads like the problem itself. What made it happen, and how did you get there?",
+  ok:"We went back to the data, asked why until we reached a cause we can act on, and recorded the evidence for it.",
+  bad:["The problem and the cause are the same thing in this case.","Operator error: the user did not follow the procedure."],
+  fix:"State the cause you can act on, the method used (5 Whys, fault tree, data analysis) and the evidence.",cite:"ISO 13485:2016 8.5.2"},
+ {f:"qa-capa",k:"i1",t:"capa",test:v=>Array.isArray(v.acts)&&v.acts.some(a=>String(a.a||"").trim())&&rcYN(v,"i1")!=="Y",
+  gap:"Actions are planned, but the root cause is not recorded as verified.",
+  q:"You have actions in place. How do you know they address the real cause?",
+  ok:"We confirmed the cause by test, reproduction or data before choosing the actions, and the evidence is referenced.",
+  bad:["The engineering team is very experienced, so the cause is clear.","If the actions do not work, the effectiveness check will show it."],
+  fix:"Verify the root cause (test, reproduction, data) and reference the evidence before acting.",cite:"ISO 13485:2016 8.5.2"},
+ {f:"qa-capa",k:"acts",t:"capa",test:v=>Array.isArray(v.acts)&&v.acts.some(a=>String(a.a||"").trim())&&!v.acts.some(a=>a.t==="Corrective"||a.t==="Preventive"),
+  gap:"Every action is a correction; there is no action against the cause.",
+  q:"I see corrections only. What stops this from happening again?",
+  ok:"We add a corrective action aimed at the verified cause, separate from fixing the affected product.",
+  bad:["Reworking the affected units fixes the problem.","We retrained the operator, which covers it."],
+  fix:"Add at least one corrective action aimed at the cause (and a preventive action where similar risks exist).",cite:"ISO 13485:2016 8.5.2, 8.5.3"},
+ {f:"qa-capa",k:"acts",t:"capa",test:v=>{ const T=rcD(rcTx(v,"target")); return !!T&&Array.isArray(v.acts)&&v.acts.some(a=>{ const d=rcD(a.d); return d&&d>T; }); },
+  gap:"An action is due after the target closure date of the CAPA.",
+  q:"One action is due after the date you plan to close. How will you close on time?",
+  ok:"We re-plan with a justified, approved new target date, or split the late action into a tracked follow-up.",
+  bad:["We close the CAPA on time and finish the action later.","The due date is only a guide."],
+  fix:"Align the plan: approve a new target date with a reason, or track the late action separately.",cite:"ISO 13485:2016 8.5.2"},
+ {f:"qa-capa",k:"v1",t:"design",test:v=>rcYN(v,"v1")==="N",
+  gap:"The record says the changes were not made through change control.",
+  q:"Your actions changed the product or process. Show me the change record.",
+  ok:"We raise the change record now, assess its effect, verify or validate it, and link it to the CAPA.",
+  bad:["The change was small, so change control was not needed.","The CAPA itself is the change record."],
+  fix:"Route every product or process change through change control and link the change number.",cite:"ISO 13485:2016 7.3.9, 8.5.2"},
+ {f:"qa-capa",k:"c2",t:"field",test:v=>rcYN(v,"c1")==="Y"&&!rcYN(v,"c2"),
+  gap:"Distributed product may be affected, but the need for a field action or report is not assessed.",
+  q:"You say product in the field could be affected. Who assessed whether a correction, removal or report is needed?",
+  ok:"Regulatory Affairs assessed it against the reporting rules; the decision and its reasons are recorded.",
+  bad:["We wait for the CAPA to finish before deciding.","No one has been hurt, so nothing needs reporting."],
+  fix:"Record the RA assessment for field actions and reports, with the reasons.",cite:"21 CFR 806; 21 CFR 803; EU MDR Art. 87, 89"},
+ {f:"qa-capa",k:"stmt",t:"capa",test:v=>rcTx(v,"stmt")&&!/\d/.test(v.stmt),
+  gap:"The problem statement has no numbers (how many, how often, since when).",
+  q:"How big is this problem? I see no counts, rates or dates.",
+  ok:"We quantify it from the data: how many units or events, over which period, and the evidence source.",
+  bad:["It is a serious problem, everyone agrees.","We will quantify it at closure."],
+  fix:"Quantify the problem: counts, rates, period and source records.",cite:"ISO 13485:2016 8.4, 8.5.2"},
+ /* Complaint */
+ {f:"qa-cmp",k:"r1",t:"complaint",test:v=>!rcYN(v,"r1"),
+  gap:"No decision is recorded on whether the event could be reportable to FDA.",
+  q:"Was this complaint evaluated for medical device reporting, and when?",
+  ok:"Yes: every complaint is screened for reportability first, and the decision with its date is in the record.",
+  bad:["We decide on reporting after the investigation is finished.","Only injuries are checked for reporting."],
+  fix:"Record the reportability decision and its date before or alongside the investigation.",cite:"21 CFR 803; 21 CFR 820.35; ISO 13485:2016 8.2.2"},
+ {f:"qa-cmp",k:"rref",t:"complaint",test:v=>(rcYN(v,"r1")==="Y"||rcYN(v,"r2")==="Y")&&!rcTx(v,"rref"),
+  gap:"The event may be reportable, but no reportability assessment number is recorded.",
+  q:"You marked the event as possibly reportable. Where is the assessment?",
+  ok:"The assessment is a controlled record with a number, a decision, the reasons and the date.",
+  bad:["It was discussed by phone with the regulatory team.","We will file it if the authority asks."],
+  fix:"Link the reportability assessment record (number, decision, date, reasons).",cite:"21 CFR 803; EU MDR Art. 87"},
+ {f:"qa-cmp",k:"inv",t:"complaint",test:v=>rcYN(v,"inv")==="N"&&!String((v.inv&&v.inv.c)||"").trim(),
+  gap:"No investigation, and no written reason why.",
+  q:"You did not investigate this complaint. Where is the reason?",
+  ok:"A documented justification is in the record, approved by the responsible person.",
+  bad:["Similar complaints were investigated before.","The customer did not ask for an investigation."],
+  fix:"Write the justification for not investigating and who approved it.",cite:"ISO 13485:2016 8.2.2; 21 CFR 820.35"},
+ {f:"qa-cmp",k:"r1",t:"complaint",test:v=>v.pt==="Serious injury"&&rcYN(v,"r1")==="N",
+  gap:"The outcome is a serious injury, but the event is marked as not reportable.",
+  q:"The patient outcome is a serious injury. Why is this not reportable?",
+  ok:"We re-assess it against the reporting criteria; if it stays non-reportable, the reasons are documented and reviewed.",
+  bad:["The device worked as designed, so it is not reportable.","The user made a mistake, so it does not count."],
+  fix:"Re-assess reportability; a serious injury normally triggers a report unless a documented reason shows otherwise.",cite:"21 CFR 803; EU MDR Art. 2(65), 87"},
+ {f:"qa-cmp",k:"conc",t:"complaint",test:v=>rcTx(v,"close")&&!rcTx(v,"conc"),
+  gap:"The complaint has a closure date but no conclusion.",
+  q:"You closed the complaint. What did you conclude?",
+  ok:"The conclusion states the cause found (or why none), the actions and the link to CAPA or trending.",
+  bad:["Closed: the customer was satisfied.","Closed after the replacement unit was sent."],
+  fix:"Write the conclusion before closing: cause, actions, links.",cite:"ISO 13485:2016 8.2.2"},
+ {f:"qa-cmp",k:"close",t:"complaint",test:v=>{ const a=rcD(rcTx(v,"recv")), b=rcD(rcTx(v,"close")); return a&&b&&b<a; },
+  gap:"The closure date is earlier than the date the complaint was received.",
+  q:"Your closure date is before the date you received the complaint. Which is correct?",
+  ok:"We correct it with a traceable change and check how the error happened.",
+  bad:["We just fix the date in the record.","It does not matter once the complaint is closed."],
+  fix:"Correct the dates with a traceable change; check the cause of the error.",cite:"21 CFR 820.35; ISO 13485:2016 4.2.5"},
+ {f:"qa-cmp",k:"capa",t:"capa",test:v=>rcYN(v,"risk")==="N"&&!rcTx(v,"capa"),
+  gap:"The event is outside the known risks, but no CAPA, NCR or change is linked.",
+  q:"The event is not covered by your risk estimate. What did you open for it?",
+  ok:"We opened a CAPA and updated the risk file; both numbers are linked to the complaint.",
+  bad:["One event is not a trend, so nothing was opened.","We will look at it in the next management review."],
+  fix:"Link the CAPA (or justify why not) and update the risk management file.",cite:"ISO 13485:2016 8.5.2; ISO 14971:2019 10"},
+ {f:"qa-cmp",k:"trend",t:"data",test:v=>!rcTx(v,"trend"),
+  gap:"No trend category is recorded.",
+  q:"How will this complaint show up in your trend analysis?",
+  ok:"Each complaint gets a trend category so that rising rates are seen and acted on.",
+  bad:["We look for trends only when complaints get serious.","Trending is done by the sales team."],
+  fix:"Assign a trend category used in your complaint trending.",cite:"ISO 13485:2016 8.4"}
+];
+function rcFind(fid,v){ return RC_RULES.filter(r=>r.f===fid&&(()=>{ try{ return r.test(v); }catch(e){ return false; } })()); }
+function rcFollow(t,seed){ const ids=Object.keys(AUD_NODES).filter(k=>{ const n=AUD_NODES[k]; return n&&n.t===t&&n.bad&&n.bad.length>=2&&!/\{/.test(n.q+n.ok+n.bad.join(""))&&n.q.length<170; }); if(!ids.length) return null; const n=AUD_NODES[ids[seed%ids.length]]; return {q:n.q,ok:n.ok,bad:n.bad.slice(0,2),why:n.why||""}; }
+function rcShuffle(o,seed){ const a=o.slice(); for(let i=a.length-1;i>0;i--){ const j=(seed*31+i*7)%(i+1); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function rcStart(fid,rec){ const F=SQF[fid], gaps=rcFind(fid,rec.v), box=el("div",{class:"rcBox noX"});
+  box.append(el("p",{class:"rcKick"},"Record check · "+rec.id),
+    el("p",{},"A simulated investigator reads your "+F.short+" and asks about the gaps it finds. It checks completeness and consistency only; it does not judge whether your QMS complies."),
+    el("p",{class:"rcWarn"},"Do not enter patient names or real identifiers in training records."),
+    el("p",{class:"rcDisc"},DOC_DISC));
+  if(!gaps.length){ box.append(el("div",{class:"rcNone"}, el("b",{},"No gaps found by the "+RC_RULES.filter(r=>r.f===fid).length+" checks."), el("p",{class:"src"},"The check looks for missing decisions, impossible dates and weak root causes. A real auditor will look further."))); modal("Record check",box); return; }
+  box.append(el("p",{class:"rcCount"},gaps.length+(gaps.length===1?" gap":" gaps")+" found. The investigator will ask about "+(Math.min(gaps.length,5)===gaps.length?"each one":"the first 5")+"."), el("button",{class:"cta",type:"button",onclick:()=>rcRun(fid,rec,gaps)},"Start the questions →"));
+  modal("Record check",box); }
+function rcRun(fid,rec,gaps){ const steps=[]; const seed=rec.id.split("").reduce((a,c)=>a+c.charCodeAt(0),0);
+  gaps.slice(0,5).forEach((g,i)=>{ steps.push({g,q:g.q,o:rcShuffle([{t:g.ok,ok:true},...g.bad.map(b=>({t:b,ok:false}))],seed+i),why:g.fix+" ("+g.cite+")"}); if(i<2){ const f=rcFollow(g.t,seed+i*13); if(f) steps.push({g,q:f.q,o:rcShuffle([{t:f.ok,ok:true},...f.bad.map(b=>({t:b,ok:false}))],seed+i+5),why:f.why,follow:true}); } });
+  const res=[]; let k=0; const box=el("div",{class:"rcBox noX"});
+  const show=()=>{ box.innerHTML=""; if(k>=steps.length){ rcClose(fid,rec,gaps,res); return; } const s=steps[k];
+    box.append(el("p",{class:"rcKick"},"Question "+(k+1)+" of "+steps.length+(s.follow?" · follow-up":"")), el("p",{class:"rcGap"},s.follow?"":"Gap: "+s.g.gap), el("h3",{class:"rcQ"},"Investigator (simulated): "+s.q));
+    const fb=el("div",{});
+    s.o.forEach((o,j)=>box.append(el("button",{class:"tcO rcO",type:"button",onclick:e=>{ box.querySelectorAll(".rcO").forEach((b,i)=>{ b.disabled=true; if(s.o[i].ok) b.classList.add("ok"); }); if(!o.ok) e.currentTarget.classList.add("no"); res.push({s,ok:o.ok});
+      try{ actAdd({m:"i",p:procOf(s.g.t,s.q),ok:o.ok?1:0,k:"rec-"+rec.id}); }catch(x){}
+      fb.append(el("p",{class:"tcWhy"},(o.ok?"Acceptable. ":"Not acceptable. ")+s.why), el("button",{class:"cta",type:"button",onclick:()=>{ k++; show(); }},k+1<steps.length?"Next question →":"Closing list →")); }},String.fromCharCode(65+j)+". "+o.t)));
+    box.append(fb); };
+  modal("Record check",box); show(); }
+function rcDoc(fid,rec,gaps,res){ const F=SQF[fid], right=res.filter(r=>r.ok).length;
+  return [{h1:"Record check"},{h2:"Record"},{p:F.t+" · "+rec.id+" · "+(rec.v[F.titleKey]||"Untitled")},{p:"Answers acceptable: "+right+" of "+res.length},
+   {h2:"Simulated observations. Not an FDA Form 483 or an FDA finding."},{table:[["#","Gap","What to fix","Basis"],...gaps.map((g,i)=>[String(i+1),g.gap,g.fix,g.cite])],head:true,pdfAuto:true},
+   {p:"This check looks only at completeness and consistency of the training record. It does not decide whether a quality system complies."},{p:DOC_DISC}]; }
+function rcClose(fid,rec,gaps,res){ const F=SQF[fid], right=res.filter(r=>r.ok).length, box=el("div",{class:"rcBox noX"});
+  box.append(el("p",{class:"rcKick"},"Closing list · "+rec.id), el("h3",{class:"rcQ"},"Simulated observations. Not an FDA Form 483 or an FDA finding."), el("p",{class:"src"},"Answers acceptable: "+right+" of "+res.length+"."));
+  const ol=el("ol",{class:"rcList"}); gaps.forEach(g=>ol.append(el("li",{}, el("b",{},g.gap), el("span",{},"Fix: "+g.fix), el("small",{},"Basis: "+g.cite)))); box.append(ol);
+  box.append(el("div",{class:"rcAct"}, el("button",{class:"cta",type:"button",onclick:()=>{ closeModal(); rcGoField(fid,gaps[0]); }},"Fix the first gap"), el("button",{class:"cta alt",type:"button",onclick:()=>iaPdf(rcDoc(fid,rec,gaps,res),"Record check","Simulated observations · "+rec.id+" · Medical Device QA Handbook",{code:DOC_CODE[fid]||"FOR",ref:rec.id+"-RC"})},"Download PDF")), el("p",{class:"rcDisc"},DOC_DISC));
+  modal("Record check",box); }
+function rcGoField(fid,g){ const F=SQF[fid]; let lab=null; F.secs.forEach(S=>S.f.forEach(x=>{ if(x[0]===g.k) lab=x[2]; })); if(!lab) return;
+  const hit=[...document.querySelectorAll("#main .panel label, #main .panel .rField, #main .panel span, #main .panel b")].find(e=>e.textContent.trim().startsWith(lab.slice(0,30)));
+  if(hit){ hit.scrollIntoView({block:"center",behavior:"smooth"}); const inp=(hit.closest("label,.rField,.card")||hit).querySelector("input,textarea,select"); if(inp) setTimeout(()=>inp.focus({preventScroll:true}),400); } }
+
 function statsSheet(){ closeModal(); if(location.hash==="#me") route(); else location.hash="#me"; }
 
 function profHdrRefresh(){ document.querySelectorAll(".avChip").forEach(b=>{ const p=profGet(); b.innerHTML=""; b.append(profIco(p)); b.classList.toggle("unset",!p.nick); b.classList.toggle("adm",isAdmin()); b.title=(p.nick?p.nick+" · ":"")+"My statistics"+(isAdmin()?" (administrator · "+PLAN_NAMES[planEff()]+")":""); }); }
@@ -5061,6 +5225,7 @@ const HELP_FEAT=[
  {r:"projects",t:"Projects",s:"#main h2",h:"Group your forms, risk files and assessments by device project.",k:"project projects device organize",q:["where are my projects","how can i organize my work"]},
  {r:"projects",t:"Add a new project",s:".prjBig.cta,#main .cta",h:"Create a project with its name, device, class and markets. Your work is saved on this device.",k:"new create project",q:["how do i create a project"]},
  {r:"projects",t:"Project list",s:".prjAlt",h:"Open a project you already created.",k:"open list existing",q:["how do i open a project"]},
+ {r:"form",t:"Record check",s:".rcBtn",h:"On a CAPA or complaint record, press Record check. A simulated investigator finds gaps in your record (missing decisions, impossible dates, weak root cause) and asks about each one, then gives a closing list with what to fix and the basis. Training only; nothing leaves your device.",k:"record check gaps capa complaint mock inspection investigator review my record",q:["check my capa","is my record complete","what is missing in my complaint record","review my capa"]},
  {r:"me",t:"My statistics",s:".msH",h:"Your practice score by process (weakest first), the next best action, your activity in the last 7 days and what is due for re-check. Open it from the round user button at the top. Everything is saved on this device only.",k:"my statistics progress score performance activity weak process recheck re-check",q:["how am i doing","where are my statistics","what should i practise next","what is my weakest area"]},
  {r:"dates",t:"Regulatory Timeline",s:"#main h2",h:"Regulatory milestones and transition dates, with links to official sources.",k:"timeline dates deadlines milestones transition qmsr mdr udi estar ai act",q:["when does the qmsr apply","where are the deadlines","what are the mdr transition dates"]},
  {r:"dates",t:"Search dates",s:".dSearch",h:"Type a topic or year (UDI, eSTAR, AI Act, 2027) to filter the milestones.",k:"filter year search",q:["how do i find a date"]},
@@ -9000,7 +9165,7 @@ function renderSqForm(fid){
   const v=cur.v; const st=el("p",{class:"src",role:"status"});
   const touch=()=>{ cur.updated=nowTs(); sqSave(); const [d,n]=sqProgress(F,cur); st.textContent=d+" of "+n+" fields completed."; };
   const p=el("div",{class:"panel"}); m.append(p);
-  p.append(el("div",{class:"card sqStat"}, st, prjSel(cur.prj,v=>{ cur.prj=v||undefined; sqSave(); }), el("button",{class:"smpBtn wkOpenBtn",type:"button",onclick:()=>openSqWork(fid,0)}, el("span",{class:"wkGI","aria-hidden":"true"},"i"), "Open guided editor")));
+  p.append(el("div",{class:"card sqStat"}, st, prjSel(cur.prj,v=>{ cur.prj=v||undefined; sqSave(); }), el("button",{class:"smpBtn wkOpenBtn",type:"button",onclick:()=>openSqWork(fid,0)}, el("span",{class:"wkGI","aria-hidden":"true"},"i"), "Open guided editor"), RC_FORMS[fid]?el("button",{class:"cta rcBtn",type:"button",onclick:()=>rcStart(fid,cur)},"Record check"):""));
   F.secs.forEach(S=>p.append(sqSecCard(F,S,v,touch)));
   touch();
   const ttl=tc(F.short)+" "+cur.id;
