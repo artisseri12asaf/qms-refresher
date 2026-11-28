@@ -4269,7 +4269,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="3.26.1", APPDATE="28-NOV-2026";
+const APPVER="3.27.0", APPDATE="28-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Qraft (Asaf Ben Zion). All rights reserved.";
 const LEGAL=[["Risk Management Approach", "Content is a paraphrased summary for training. It does not replace the standards: ISO 14971:2019 (with EN ISO 14971:2019+A11:2021 for the EU), ISO/TR 24971:2020 and IEC 62366-1:2015+A1:2020. Use your licensed copies for exact requirements."], ["Copyright", "© 2026 Qraft (Asaf Ben Zion). The selection, structure, design and original text of this handbook may not be copied or redistributed without written permission. Regulations and official guidance are cited from their publishers: US federal texts are in the public domain, and EU texts are reused with attribution. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number and described in the author’s own words; their text remains the property of their publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, selection and design, and was developed and tested with AI tools. Key facts, such as regulatory reporting timelines, device classifications and clause numbers, were checked against official sources; other content is the author’s interpretation and may contain inaccuracies."], ["Sources", "Cited sources are official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs and FDA databases. EU: EUR-Lex, European Commission pages and MDCG guidance. International: IMDRF codes and MDSAP documents. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number, based on freely available published information and the author’s own interpretation and knowledge."], ["Important", "This application is intended for training simulation purposes only. It is provided without warranty. Results from its tools require human review, verification and approval. Not legal or regulatory advice. Not an official FDA, EC or ISO document. No affiliation with FDA, the European Commission or ISO. Always check the linked official source before citing anything in a formal regulatory or customer response."]];
@@ -4471,7 +4471,7 @@ function openGdp(after){ if(after&&!after.fn) after=null;
       stage.append(opts,fb);
       next.disabled=picked===undefined; next.textContent=S.qi<GDP_Q.length-1?"Next question ›":"See my result ›"; }
     if(k==="done"){ const sc=GDP_Q.reduce((s,q,j)=>s+(S.ans[j]===q.a?1:0),0), pct=Math.round(sc/GDP_Q.length*100);
-      const d=new Date(), p2=n=>String(n).padStart(2,"0"); const prev=gdpBest().best; if(prev===undefined||sc>=prev) actCourse("gdp",sc,10); gdpSave({best:sc,date:p2(d.getDate())+"/"+p2(d.getMonth()+1)+"/"+d.getFullYear()});
+      const d=new Date(), p2=n=>String(n).padStart(2,"0"); const prev=gdpBest().best; if(prev===undefined||sc>=prev) gdpSave({best:GDP_Q.length,date:p2(d.getDate())+"/"+p2(d.getMonth()+1)+"/"+d.getFullYear()});
       const ring=`<svg viewBox="0 0 120 120" class="gdpRing"><circle cx="60" cy="60" r="50" fill="none" stroke="#e3ebf1" stroke-width="12"/><circle cx="60" cy="60" r="50" fill="none" stroke="${pct>=80?"#2b8a5a":pct>=60?"#c08a1e":"#c0392b"}" stroke-width="12" stroke-linecap="round" stroke-dasharray="${(pct/100*314.16).toFixed(1)} 314.16" transform="rotate(-90 60 60)" class="gdpArc"/><text x="60" y="58" text-anchor="middle" font-size="26" font-weight="800" fill="#14202b" font-family="sans-serif">${sc}/${GDP_Q.length}</text><text x="60" y="78" text-anchor="middle" font-size="12" fill="#5d6f7a" font-family="sans-serif">${pct}%</text></svg>`;
       const msg=pct>=80?"Excellent. Your records would make an inspector smile.":pct>=60?"Good start. Review the rules you missed and try again.":"Worth another round. Go through the examples again, then retake the check.";
       const conf=el("div",{class:"gdpConf","aria-hidden":"true"}); if(pct>=80&&!reduce) for(let j=0;j<36;j++) conf.append(el("i",{style:`--x:${Math.random()*100}%;--d:${(Math.random()*0.6).toFixed(2)}s;--r:${Math.round(Math.random()*360)}deg;--c:${["#2b7299","#5fb3d9","#c08a1e","#2b8a5a","#8fa6b8"][j%5]}`}));
@@ -4575,12 +4575,12 @@ function openCourse(C,after){
       if(picked!==undefined){ fb.classList.add(picked===0?"ok":"no"); fb.append(el("b",{},picked===0?"Correct! ":"Not quite. "), Q.why); }
       stage.append(el("div",{class:"gdpQhead"}, el("span",{class:"gdpCount"},"Question "+(S.qi+1)+" of "+C.quiz.length), bar), el("h3",{class:"gdpQ"},Q.q), opts, fb);
       next.disabled=picked===undefined; next.textContent=S.qi<C.quiz.length-1?"Next question ›":"See my result ›"; }
-    if(k==="done"){ const sc=C.quiz.reduce((s,q,j)=>s+(S.ans[j]===0?1:0),0), pct=Math.round(sc/C.quiz.length*100), win=sc>=Math.ceil(C.quiz.length*0.8);
-      crsSave(C.id,sc); actCourse(C.id,sc,C.quiz.length);
+    if(k==="done"){ const sc=C.quiz.reduce((s,q,j)=>s+(S.ans[j]===0?1:0),0), pct=Math.round(sc/C.quiz.length*100), win=true;
+      crsSave(C.id,C.quiz.length); /* 3.27.0: completion only, the score is shown but not recorded */
       const ring=`<svg viewBox="0 0 120 120" class="gdpRing"><circle cx="60" cy="60" r="50" fill="none" stroke="#e3ebf1" stroke-width="12"/><circle cx="60" cy="60" r="50" fill="none" stroke="${pct>=80?"#2b8a5a":pct>=60?"#c08a1e":"#c0392b"}" stroke-width="12" stroke-linecap="round" stroke-dasharray="${(pct/100*314.16).toFixed(1)} 314.16" transform="rotate(-90 60 60)" class="gdpArc"/><text x="60" y="68" text-anchor="middle" font-size="26" font-weight="800" fill="#1d3b52">${sc}/${C.quiz.length}</text></svg>`;
       const conf=el("div",{class:"gdpConf","aria-hidden":"true"}); if(win&&!reduce) for(let j=0;j<36;j++) conf.append(el("i",{style:`--x:${Math.random()*100}%;--d:${(Math.random()*0.6).toFixed(2)}s;--r:${Math.round(Math.random()*360)}deg;--c:${["#2b7299","#5fb3d9","#c08a1e","#2b8a5a","#8fa6b8"][j%5]}`}));
       stage.append(conf, el("div",{class:"gdpDone"}, el("div",{class:"crsDoneArt"}, el("div",{html:ring}), el("div",{class:"crsArt"+(win?" pop":""),html:crsBadge(C.n,win)})),
-          el("div",{}, el("h3",{class:"gdpH"},win?"Badge earned: "+C.title+"!":pct>=60?"Good start. Review what you missed and retake the check.":"Worth another round. Go through the examples, then retake the check."),
+          el("div",{}, el("h3",{class:"gdpH"},"Course completed: "+C.title), el("p",{class:"src"},"Your check result: "+sc+" of "+C.quiz.length+". "+(pct>=80?"Well done.":pct>=60?"Good start. Review what you missed.":"Go through the examples again.")+" Results of courses are not saved; only that you completed the course."),
             el("div",{class:"gdpTake"}, el("b",{},"Remember these"), el("ul",{}, ...C.rules.slice(0,5).map(t=>el("li",{},t)))))),
         el("div",{class:"gdpSrc"}, el("b",{},"Sources"), ...C.src.map(([t,u])=>el("a",{href:u,target:"_blank",rel:"noopener"},t)), el("small",{},"Paraphrased summary for training. Standards are referenced by clause number only.")),
         el("div",{class:"gdpAgain"}, el("button",{class:"linkBtn",type:"button",onclick:()=>{ S.ans=[]; S.qi=0; S.ord=C.quiz.map(()=>shuf([0,1,2,3])); S.i=STEPS.indexOf("quiz"); draw(); }},"Retake the check"), el("button",{class:"linkBtn",type:"button",onclick:()=>{ S.ans=[]; S.qi=0; S.pi=0; go(0); }},"Start over")));
@@ -4744,9 +4744,9 @@ function procScores(){ const R={}; PROCS.forEach(([k])=>R[k]={q:[0,0],d:[0,0],i:
   const A=actGet(), t0=A.length?A[0].t:Infinity;
   A.filter(e=>e.m==="i").forEach(e=>{ const r=R[e.p]; if(r){ r.i[1]++; r.i[0]+=e.ok; } });
   Object.keys(AUD_SCEN).forEach(id=>{ const v=state["aud-"+id], k=PROC_TOPIC[AUD_SCEN[id].topic]; if(v&&k&&v.d<t0){ R[k].i[0]+=v.pct/10; R[k].i[1]+=10; } });
-  (typeof crsAll==="function"?crsAll():[]).forEach(c=>{ const k=PROC_CRS[c.id]; if(k&&c.best!==undefined){ R[k].c[0]+=c.best; R[k].c[1]+=c.total; } });
-  return PROCS.map(([k,l])=>{ const r=R[k], n=r.q[1]+r.d[1]+r.i[1]+r.c[1], ok=r.q[0]+r.d[0]+r.i[0]+r.c[0]; return {k,l,r,n,score:n>=10?Math.round(ok/n*100):null}; }); }
-function pctCell(v,course){ const [ok,n]=v; if(!n) return el("td",{class:"msNa"},"–"); if(course) return el("td",{class:"msC "+msBand(ok/n*100)},Math.round(ok)+"/"+n);
+  (typeof crsAll==="function"?crsAll():[]).forEach(c=>{ const k=PROC_CRS[c.id]; if(k&&c.best!==undefined){ R[k].cd=(R[k].cd||0)+1; } });
+  return PROCS.map(([k,l])=>{ const r=R[k], n=r.q[1]+r.d[1]+r.i[1], ok=r.q[0]+r.d[0]+r.i[0]; return {k,l,r,n,score:n>=10?Math.round(ok/n*100):null}; }); }
+function pctCell(v,course,cd){ const [ok,n]=v; if(course) return cd?el("td",{class:"msC msHi"},"Done "+cd):el("td",{class:"msNa"},"–"); if(!n) return el("td",{class:"msNa"},"–");
   if(n<10) return el("td",{class:"msThin",title:"Under 10 answers: not counted yet"},n+" ans."); const p=Math.round(ok/n*100); return el("td",{class:msBand(p)},p+"%"); }
 function msBand(p){ return p<70?"msLo":p<85?"msMid":"msHi"; }
 function msPractice(P){ const ch=P.r.chs.slice().sort((a,b)=>{ const ra=a.done>=3?a.right/a.done:2, rb=b.done>=3?b.right/b.done:2; return ra-rb||((b.c.qs.length-b.done)-(a.c.qs.length-a.done)); })[0]; return ch&&ch.c; }
@@ -4757,7 +4757,7 @@ function recheckItems(){ const L=[], now=Date.now(), DAY=864e5;
   audAllIds().forEach(id=>{ const v=state["aud-"+id]; if(v&&!v.pass) L.push({d:v.d,txt:audTitle(id)+" · scored "+v.pct+"% on "+dmy(v.d).slice(0,6),go:()=>{ location.hash="#audit"; setTimeout(()=>{ const s=Math.floor(Math.random()*1e6); audStart(AUD_REAL.some(c=>c.id===id)?audNewReal(id,s):AUD_SCEN[id]?audNewTopic(id,s):audNew(id,s)); },350); }}); });
   const A=actGet(), last={}; A.filter(e=>e.m==="q").forEach(e=>last[e.k]=e); const miss=Object.values(last).filter(e=>!e.ok&&now-e.t>=3*DAY&&now-e.t<=14*DAY);
   if(miss.length){ const by={}; miss.forEach(e=>{ const c=e.k.replace(/-\d+$/,""); by[c]=(by[c]||0)+1; }); const top=Object.keys(by).sort((a,b)=>by[b]-by[a])[0]; L.push({d:Math.min(...miss.map(e=>e.t)),txt:"Quick quiz · "+miss.length+" question"+(miss.length>1?"s":"")+" missed 3 to 14 days ago",go:()=>msGo(CH.find(c=>c.id===top))}); }
-  (typeof crsAll==="function"?crsAll():[]).filter(c=>c.best!==undefined&&c.best<c.total).forEach(c=>L.push({d:now,txt:"Course "+c.n+" · scored "+c.best+"/"+c.total+" · retake any time",go:()=>{ location.hash="#gdp"; setTimeout(()=>crsRun([c.id]),350); }}));
+  
   return L.sort((a,b)=>a.d-b.d).slice(0,3); }
 function renderMyStats(){ const m=document.getElementById("main"); m.innerHTML=""; const p=profGet(), v=visitTouch(), S=procScores(), A=actGet(), DAY=864e5;
   const mk=p.market?({us:"US",eu:"EU",both:"US + EU",other:"Other markets"})[p.market]:null, lv=({"3":"Foundation","4":"Practitioner","all":"Expert"})[profLevel(p)];
@@ -4769,7 +4769,7 @@ function renderMyStats(){ const m=document.getElementById("main"); m.innerHTML="
   /* process table */
   const order=scored.concat(S.filter(x=>x.score===null).sort((a,b)=>b.n-a.n)); let all=false;
   const tb=el("table",{class:"msTbl"}); const thead=el("thead",{},el("tr",{}, el("th",{},"Process"), el("th",{class:"msM"},"Quick quiz"), el("th",{class:"msM"},"Dilemmas"), el("th",{class:"msM"},"Inspection"), el("th",{class:"msM"},"Course"), el("th",{},"Practice score"), el("th",{},el("span",{class:"sr"},"Action")))); const body=el("tbody");
-  const fill=()=>{ body.innerHTML=""; order.slice(0,all?8:3).forEach(P=>{ const sc=P.score; body.append(el("tr",{"data-proc":P.k}, el("th",{scope:"row"},P.l), pctCell(P.r.q), pctCell(P.r.d), pctCell(P.r.i), pctCell(P.r.c,true),
+  const fill=()=>{ body.innerHTML=""; order.slice(0,all?8:3).forEach(P=>{ const sc=P.score; body.append(el("tr",{"data-proc":P.k}, el("th",{scope:"row"},P.l), pctCell(P.r.q), pctCell(P.r.d), pctCell(P.r.i), pctCell(P.r.c,true,P.r.cd),
       el("td",{class:"msBarC"}, el("span",{class:"msBar"}, el("i",{class:sc===null?"":msBand(sc),style:"width:"+(sc||0)+"%"}), el("u",{"aria-hidden":"true"})), el("b",{},sc===null?(P.n?P.n+" ans.":"–"):sc+"%")),
       el("td",{}, el("button",{class:"linkBtn",type:"button",onclick:()=>msGo(msPractice(P))},"Practice")))); });
     body.append(el("tr",{class:"msMore"}, el("td",{colspan:"7"}, el("button",{class:"linkBtn",type:"button",onclick:()=>{ all=!all; fill(); }},all?"Show top 3":"Show all 8")))); };
@@ -4904,6 +4904,24 @@ const RC_RULES=[
   ok:"We opened a CAPA and updated the risk file; both numbers are linked to the complaint.",
   bad:["One event is not a trend, so nothing was opened.","We will look at it in the next management review."],
   fix:"Link the CAPA (or justify why not) and update the risk management file.",cite:"ISO 13485:2016 8.5.2; ISO 14971:2019 10"},
+ {f:"qa-capa",k:"rc",t:"capa",test:v=>/^\s*(operator|human|user|technician|employee|worker|staff)\s+(error|mistake|fault)|^\s*(training|negligence|carelessness|inattention|lack of training)\b.{0,25}$/i.test(rcTx(v,"rc")),
+  gap:"The root cause names a person or a category (for example operator error), not a cause you can act on.",
+  q:"\u201cOperator error\u201d is a label, not a root cause. Why did your process allow the error?",
+  ok:"We asked why the error was possible (instructions, design, tooling, workload) and recorded the process cause with evidence.",
+  bad:["Operator error is the root cause; retraining closes it.","The operator was careless, so a warning is enough."],
+  fix:"Ask why the error was possible and record the process or design cause, with the evidence that confirms it.",cite:"ISO 13485:2016 8.5.2"},
+ {f:"qa-cmp",k:"rc",t:"complaint",test:v=>/^\s*(operator|human|user|technician|employee|worker|staff)\s+(error|mistake|fault)|^\s*(misuse|training|negligence|carelessness)\b.{0,25}$/i.test(rcTx(v,"rc")),
+  gap:"The probable cause names a person or a category (for example user error), not a cause that was investigated.",
+  q:"\u201cUser error\u201d is a label. What did the investigation show about why it could happen?",
+  ok:"We checked instructions, labeling, usability and the returned device, and recorded what allowed the event.",
+  bad:["User error closes the complaint; nothing else to look at.","The customer was not trained, so it is not our problem."],
+  fix:"Record what the investigation found (device, labeling, usability, use conditions), not only who was involved.",cite:"ISO 13485:2016 8.2.2; 21 CFR 820.35"},
+ {f:"qa-capa",k:"eCrit",t:"capa",test:v=>rcTx(v,"eCrit")&&!/\d/.test(rcTx(v,"eCrit")),
+  gap:"The acceptance criteria for the effectiveness check have no number (target, period or sample).",
+  q:"How will you measure \u201c"+"fewer complaints"+"\u201d? What number, over which period?",
+  ok:"We set a measurable limit and period before the check, for example a rate and a number of months.",
+  bad:["Fewer complaints is clear enough.","We will decide whether it improved when we look at the data."],
+  fix:"Write a measurable criterion: what, how much, over which period or sample.",cite:"ISO 13485:2016 8.5.2"},
  {f:"qa-cmp",k:"trend",t:"data",test:v=>!rcTx(v,"trend"),
   gap:"No trend category is recorded.",
   q:"How will this complaint show up in your trend analysis?",
@@ -4914,7 +4932,11 @@ const RC_RULES=[
 function rcFind(fid,v){ return RC_RULES.filter(r=>r.f===fid&&(()=>{ try{ return r.test(v); }catch(e){ return false; } })()); }
 function rcFollow(t,seed){ const ids=Object.keys(AUD_NODES).filter(k=>{ const n=AUD_NODES[k]; return n&&n.t===t&&n.bad&&n.bad.length>=2&&!/\{/.test(n.q+n.ok+n.bad.join(""))&&n.q.length<170; }); if(!ids.length) return null; const n=AUD_NODES[ids[seed%ids.length]]; return {q:n.q,ok:n.ok,bad:n.bad.slice(0,2),why:n.why||""}; }
 function rcShuffle(o,seed){ const a=o.slice(); for(let i=a.length-1;i>0;i--){ const j=(seed*31+i*7)%(i+1); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+const RC_NEED={"qa-capa":["title","stmt","owner","opened","target","corr","meth","rc","eMeth","eCrit"],"qa-cmp":["title","recv","aware","prod","desc","pt","meth","rc","conc","trend"]};
 function rcStart(fid,rec){ const F=SQF[fid], gaps=rcFind(fid,rec.v), box=el("div",{class:"rcBox noX"});
+  const need=RC_NEED[fid]||[], empty=need.filter(k=>!rcTx(rec.v,k));
+  if(need.length&&empty.length>=need.length/2){ const lab=k=>{ const x=sqFields(F).find(y=>y[0]===k); return x?x[2]:k; };
+    box.append(el("p",{class:"rcKick"},"Record check · "+rec.id), el("div",{class:"rcNone"}, el("b",{},"Not enough content to check yet."), el("p",{},"Fill in more of the record first. Still empty: "+empty.slice(0,6).map(lab).join("; ")+(empty.length>6?"; and "+(empty.length-6)+" more":"")+".")), el("p",{class:"rcDisc"},DOC_DISC)); modal("Record check",box); return; }
   box.append(el("p",{class:"rcKick"},"Record check · "+rec.id),
     el("p",{},"A simulated investigator reads your "+F.short+" and asks about the gaps it finds. It checks completeness and consistency only; it does not judge whether your QMS complies."),
     el("p",{class:"rcWarn"},"Do not enter patient names or real identifiers in training records."),
@@ -4977,9 +4999,9 @@ function evCreate(a){ const I=a.info; a.ev=a.ev||{}; let made=0;
     const r=sqNew(fid,v); r.prj=a.prj; r.ia=a.id; a.ev[k]=r.id; made++; }); });
   sqSave(); a.updated=nowTs(); iaSave(); return made; }
 function evOpen(id){ const r=evRec(id); if(!r) return; SQ_STORE.cur[r.form]=r.id; sqSave(); location.hash="#"+r.form; }
-const EV_NOTE="Based on 21 CFR 820 and EU MDR Annex IX. This list does not decide whether a 510(k), PMA supplement or Notified Body notification is needed: see the FDA guidance on deciding when to submit a 510(k) for a change to an existing device, and MDCG 2020-3. Approvals stay in your eQMS.";
+function evNote(a){ const leg=a&&a.info&&a.info.euCert==="legacy"; return "Based on 21 CFR 820 and EU MDR Annex IX. This list does not decide whether a 510(k), PMA supplement or Notified Body notification is needed: for the US see the FDA guidance on deciding when to submit a 510(k) for a change to an existing device; for the EU follow MDR Annex IX 2.4 and 4.10 and your notified body\u2019s procedure"+(leg?"; for legacy MDD/AIMDD devices see MDCG 2020-3":"")+". Approvals stay in your eQMS."; }
 function evRows(a){ const rows=[]; evItems(a).forEach(it=>{ if(!it.forms){ rows.push([it.num,it.d,it.note,"-"]); return; } it.forms.forEach(fid=>{ const id=(a.ev||{})[it.key+"|"+fid], r=evRec(id); rows.push([it.num,it.d,(r?r.id+" ":"")+tc(SQF[fid].short),evStatus(r)]); }); }); return rows; }
-function evBlocks(a){ const rows=evRows(a); if(!rows.length) return []; return [{h2:"3a. Evidence package"},{table:[["#","Deliverable","Record","Status"],...rows],head:true,pdfAuto:true},{p:EV_NOTE}]; }
+function evBlocks(a){ const rows=evRows(a); if(!rows.length) return []; return [{h2:"3a. Evidence package"},{table:[["#","Deliverable","Record","Status"],...rows],head:true,pdfAuto:true},{p:evNote(a)}]; }
 function evCard(a,touch){ const its=evItems(a), c=el("div",{class:"card evCard noX"}, el("h3",{class:"secTitle"},"Evidence package"));
   if(!its.length){ c.append(el("p",{class:"src"},"Answer Yes to an impact question and choose its deliverables; the records you need will appear here.")); return c; }
   const n=its.filter(i=>i.forms).reduce((s,i)=>s+i.forms.length,0), have=its.filter(i=>i.forms).reduce((s,i)=>s+i.forms.filter(f=>evRec((a.ev||{})[i.key+"|"+f])).length,0);
@@ -4989,7 +5011,7 @@ function evCard(a,touch){ const its=evItems(a), c=el("div",{class:"card evCard n
     it.forms.forEach(fid=>{ const id=(a.ev||{})[it.key+"|"+fid], r=evRec(id); tb.append(el("tr",{}, el("td",{},it.num), el("td",{},it.d), el("td",{}, r?el("button",{class:"linkBtn",type:"button",onclick:()=>evOpen(r.id)},r.id+" "+tc(SQF[fid].short)):el("span",{class:"src"},tc(SQF[fid].short))), el("td",{},evStatus(r)))); }); });
   c.append(el("div",{class:"tblWrap"},tb));
   c.append(el("div",{class:"evAct"}, el("button",Object.assign({class:"cta evMake",type:"button",onclick:()=>{ const k=evCreate(a); touch(); flash(k?k+(k===1?" record":" records")+" created and linked":"All records already exist"); renderImpact(); }},n&&have>=n?{disabled:"disabled"}:{}),have?"Create the missing records":"Create evidence records")));
-  c.append(el("p",{class:"src evNote"},EV_NOTE)); return c; }
+  c.append(el("p",{class:"src evNote"},evNote(a))); return c; }
 
 /* ===== 3.24.0 Field guidance notes: what to write, a good and a weak example (our own words; generic, no real companies) ===== */
 const FN_NOTES=[
@@ -5259,7 +5281,7 @@ function openSources(){ const box=el("div",{class:"srcAll"}); const seen=new Set
   box.append(el("h4",{class:"profH"},"Removed sources"), SRC_REMOVED.length?el("ul",{class:"srcList"}, ...SRC_REMOVED.map(r=>el("li",{}, el("b",{},r.t)," · removed "+r.d+": "+r.why+(r.by?" (replaced by "+r.by+")":""), el("br",{}), el("small",{},r.u)))):el("p",{class:"src"},"None so far."));
   modal("Sources (administrator)",box); }
 /* ===== 3.26.0 Budget status (hidden menu): hours from both git histories, costs, business plan and return on investment ===== */
-const BUDGET_DATA=/*BUD-DATA*/{"built":"28-NOV-2026","from":"12-NOV-2026","commits":315,"sessions":29,"hours":80.6,"days":[["12-NOV-2026",2.0],["15-NOV-2026",3.7],["16-NOV-2026",5.6],["17-NOV-2026",11.4],["18-NOV-2026",5.5],["19-NOV-2026",3.4],["20-NOV-2026",7.3],["21-NOV-2026",12.2],["22-NOV-2026",9.3],["23-NOV-2026",7.4],["27-NOV-2026",3.8],["28-NOV-2026",8.8]],"versions":[["earlier",15.1,34],["1.0.0",1.2,1],["1.1.0",0.8,2],["1.1.1",0.2,2],["1.2.0",1.2,2],["1.2.1",0.9,3],["1.3.0",1.0,4],["1.3.1",0.2,2],["1.4.0",1.4,2],["1.4.1",0.5,2],["1.4.2",0.0,2],["1.4.3",0.1,2],["1.5.0",0.5,2],["1.5.1",0.3,2],["1.6.0",0.3,2],["1.7.0",0.4,2],["1.8.0",0.3,2],["1.8.1",0.2,2],["1.9.0",0.5,2],["1.10.0",1.3,2],["1.10.1",0.2,2],["1.11.0",0.5,2],["1.11.1",0.5,2],["1.12.0",0.2,2],["1.12.1",0.2,2],["1.13.0",0.4,2],["1.13.1",0.1,2],["1.14.0",0.2,2],["2.0.0",1.5,2],["2.1.0",0.5,2],["2.2.0",0.7,2],["2.3.0",0.5,2],["2.3.1",0.1,2],["2.4.0",0.6,2],["2.5.0",0.8,4],["2.5.1",0.1,2],["2.5.2",0.5,2],["2.5.3",0.2,2],["2.6.0",1.2,3],["2.7.0",1.8,8],["2.8.0",0.2,2],["2.8.1",0.5,2],["2.9.0",0.9,3],["2.9.1",1.3,2],["2.10.0",0.5,2],["2.11.0",0.7,4],["2.12.0",0.5,3],["2.13.0",0.7,3],["2.14.0",0.6,3],["2.15.0",1.1,5],["2.16.0",3.2,7],["2.17.0",0.1,2],["2.18.0",1.6,4],["3.0.0",1.9,4],["3.1.0",1.0,3],["3.1.1",0.5,2],["3.1.2",1.0,3],["3.2.0",0.5,2],["3.2.1",0.1,2],["3.2.2",0.3,2],["3.3.0",2.1,6],["3.4.0",1.0,3],["3.4.1",0.9,4],["3.4.2",0.8,2],["3.4.3",1.2,6],["3.4.4",0.5,3],["3.5.0",0.1,4],["3.5.1",0.1,2],["3.6.0",0.5,2],["3.7.0",0.3,2],["3.8.0",0.5,2],["3.8.1",0.4,2],["3.9.0",1.1,2],["3.9.1",0.4,2],["3.10.0",0.6,2],["3.10.1",0.3,2],["3.10.2",0.1,2],["3.11.0",2.5,9],["3.12.0",0.5,2],["3.13.0",0.2,2],["3.13.1",0.1,3],["3.14.0",0.9,2],["3.15.0",0.5,2],["3.15.1",0.1,3],["3.16.0",0.6,2],["3.16.1",0.5,3],["3.17.0",2.2,19],["3.18.0",0.7,3],["3.19.0",0.6,3],["3.20.0",0.4,4],["3.20.1",0.7,3],["3.21.0",1.0,4],["3.22.0",0.6,4],["3.23.0",0.4,3],["3.24.0",0.5,3],["3.25.0",1.5,5],["3.26.0",0.4,3],["3.26.1",0.5,2]]}/*BUD-END*/;
+const BUDGET_DATA=/*BUD-DATA*/{"built":"28-NOV-2026","from":"12-NOV-2026","commits":321,"sessions":29,"hours":82.0,"days":[["12-NOV-2026",2.0],["15-NOV-2026",3.7],["16-NOV-2026",5.6],["17-NOV-2026",11.4],["18-NOV-2026",5.5],["19-NOV-2026",3.4],["20-NOV-2026",7.3],["21-NOV-2026",12.2],["22-NOV-2026",9.3],["23-NOV-2026",7.4],["27-NOV-2026",3.8],["28-NOV-2026",10.2]],"versions":[["earlier",15.1,34],["1.0.0",1.2,1],["1.1.0",0.8,2],["1.1.1",0.2,2],["1.2.0",1.2,2],["1.2.1",0.9,3],["1.3.0",1.0,4],["1.3.1",0.2,2],["1.4.0",1.4,2],["1.4.1",0.5,2],["1.4.2",0.0,2],["1.4.3",0.1,2],["1.5.0",0.5,2],["1.5.1",0.3,2],["1.6.0",0.3,2],["1.7.0",0.4,2],["1.8.0",0.3,2],["1.8.1",0.2,2],["1.9.0",0.5,2],["1.10.0",1.3,2],["1.10.1",0.2,2],["1.11.0",0.5,2],["1.11.1",0.5,2],["1.12.0",0.2,2],["1.12.1",0.2,2],["1.13.0",0.4,2],["1.13.1",0.1,2],["1.14.0",0.2,2],["2.0.0",1.5,2],["2.1.0",0.5,2],["2.2.0",0.7,2],["2.3.0",0.5,2],["2.3.1",0.1,2],["2.4.0",0.6,2],["2.5.0",0.8,4],["2.5.1",0.1,2],["2.5.2",0.5,2],["2.5.3",0.2,2],["2.6.0",1.2,3],["2.7.0",1.8,8],["2.8.0",0.2,2],["2.8.1",0.5,2],["2.9.0",0.9,3],["2.9.1",1.3,2],["2.10.0",0.5,2],["2.11.0",0.7,4],["2.12.0",0.5,3],["2.13.0",0.7,3],["2.14.0",0.6,3],["2.15.0",1.1,5],["2.16.0",3.2,7],["2.17.0",0.1,2],["2.18.0",1.6,4],["3.0.0",1.9,4],["3.1.0",1.0,3],["3.1.1",0.5,2],["3.1.2",1.0,3],["3.2.0",0.5,2],["3.2.1",0.1,2],["3.2.2",0.3,2],["3.3.0",2.1,6],["3.4.0",1.0,3],["3.4.1",0.9,4],["3.4.2",0.8,2],["3.4.3",1.2,6],["3.4.4",0.5,3],["3.5.0",0.1,4],["3.5.1",0.1,2],["3.6.0",0.5,2],["3.7.0",0.3,2],["3.8.0",0.5,2],["3.8.1",0.4,2],["3.9.0",1.1,2],["3.9.1",0.4,2],["3.10.0",0.6,2],["3.10.1",0.3,2],["3.10.2",0.1,2],["3.11.0",2.5,9],["3.12.0",0.5,2],["3.13.0",0.2,2],["3.13.1",0.1,3],["3.14.0",0.9,2],["3.15.0",0.5,2],["3.15.1",0.1,3],["3.16.0",0.6,2],["3.16.1",0.5,3],["3.17.0",2.2,19],["3.18.0",0.7,3],["3.19.0",0.6,3],["3.20.0",0.4,4],["3.20.1",0.7,3],["3.21.0",1.0,4],["3.22.0",0.6,4],["3.23.0",0.4,3],["3.24.0",0.5,3],["3.25.0",1.5,5],["3.26.0",0.4,3],["3.26.1",1.3,5],["3.27.0",0.6,3]]}/*BUD-END*/;
 const BUD_KEY="qah-budget-v1";
 const BUD_DEF={rate:350,vat:18,off:25,pre:0,claudeMo:0,months:1,other:[{n:"Domain",a:0},{n:"Other",a:0}],price:49,disc:20,yShare:30,newMo:20,churn:4,run:0};
 function budGet(){ let v={}; try{ v=JSON.parse(localStorage.getItem(BUD_KEY)||"{}")||{}; }catch(e){} const o=Object.assign({},BUD_DEF,v); if(!Array.isArray(o.other)) o.other=BUD_DEF.other; return o; }
@@ -5394,7 +5416,7 @@ const HELP_FEAT=[
  {r:"dilemmas",t:"Level filter",s:".lvBtn",h:"Choose the difficulty of the dilemmas, or All.",k:"level difficulty",q:["how do i change the difficulty"]},
  {r:"dilemmas",t:"The dilemma",s:"#main h3",h:"Read the situation and pick your option. You then see the outcome of each option.",k:"situation option outcome",q:["how do i answer a dilemma"]},
  {r:"dilemmas",t:"Next dilemma",s:"#main .cta||Next",h:"Move to the next dilemma, or back with Previous.",k:"next previous",q:["how do i get the next dilemma"]},
- {r:"audit",t:"Inspection mode",s:"#main h2",h:"Virtual FDA inspections: an investigator asks questions and follows the trail of your answers. Your score shows at the closing meeting.",k:"inspection inspect audit investigator interview fda simulation virtual",q:["how can i practice an inspection","where is the fda inspection","how do inspections work"]},
+ {r:"audit",t:"Inspection mode",s:"#main h2",h:"Virtual FDA inspections: an investigator asks questions and follows up on some of your answers. Your score shows at the closing meeting.",k:"inspection inspect audit investigator interview fda simulation virtual",q:["how can i practice an inspection","where is the fda inspection","how do inspections work"]},
  {r:"audit",t:"Level filter",s:".lvBtn",h:"Choose the difficulty of the inspections, or All.",k:"level difficulty",q:["how do i choose the difficulty"]},
  {r:"audit",t:"Study cases",s:"#main summary||study case",h:"Device study cases: a 20-question virtual inspection of one device company.",k:"study case device company",q:["where are the study cases"]},
  {r:"audit",t:"QMS topics",s:"#main summary||topic",h:"Topic scenarios (CAPA, complaints, suppliers and more), 12 questions each.",k:"topic scenario capa complaints suppliers",q:["where are the topic scenarios","how can i practice capa"]},
@@ -5807,7 +5829,7 @@ function dayRng(str){ let h=2166136261; for(const ch of str){ h^=ch.charCodeAt(0
 function dayPool(){ const P=[], done=id=>!!state["aud-"+id], seed=Number(dayIso().replace(/-/g,""));
   const realDone=AUD_REAL.some(R=>done(R.id));
   AUD_REAL.forEach(R=>P.push({k:R.id,type:"real",w:3,lab:"Real Event",title:R.title,desc:R.areas+". Based on a published FDA warning letter; the real outcome is revealed at the closing meeting.",meta:["Inspection","★".repeat(R.lv),"about 15 min"],done:done(R.id),why:realDone?"":"You haven't tried a Real Event yet.",go:()=>{ location.hash="audit"; setTimeout(()=>audStart(audNewReal(R.id,seed)),350); }}));
-  AUD_CASES.forEach(c=>P.push({k:c.id,type:"case",w:2,lab:"Study case",title:c.name,desc:"A 20-question virtual inspection of a "+c.dev+" maker. The investigator follows the trail of your answers.",meta:["Inspection","★".repeat(AUD_LV[c.id]||4),"about 20 min"],done:done(c.id),go:()=>{ location.hash="audit"; setTimeout(()=>audStart(audNew(c.id,seed)),350); }}));
+  AUD_CASES.forEach(c=>P.push({k:c.id,type:"case",w:2,lab:"Study case",title:c.name,desc:"A 20-question virtual inspection of a "+c.dev+" maker. The investigator follows up on some of your answers.",meta:["Inspection","★".repeat(AUD_LV[c.id]||4),"about 20 min"],done:done(c.id),go:()=>{ location.hash="audit"; setTimeout(()=>audStart(audNew(c.id,seed)),350); }}));
   Object.values(AUD_SCEN).forEach(S=>P.push({k:S.id,type:"topic",w:2,lab:"QMS topic: "+S.ttitle,title:S.title,desc:S.sit,meta:["Inspection","★".repeat(S.lv||4),"about 12 min"],done:done(S.id),go:()=>{ location.hash="audit"; setTimeout(()=>audStart(audNewTopic(S.id,seed)),350); }}));
   P.push({k:"quiz",type:"quiz",w:6,lab:"Practice",title:"Answer 5 random questions",desc:"Five questions from any chapter, at your level. Each answer shows why it is right or wrong, with the source.",meta:["Questions","5 questions","about 5 min"],go:()=>{ location.hash="random"; }});
   P.push({k:"dil",type:"dil",w:6,lab:"Practice",title:"Solve 3 real-life dilemmas",desc:"Real QA situations: choose what you would do and compare the likely outcome of each option.",meta:["Dilemmas","3 dilemmas","about 8 min"],go:()=>{ location.hash="dilemmas"; }});
@@ -6124,11 +6146,17 @@ function audAnswer(st,opt){ const n=AUD_NODES[st.node]; st.asked.push({id:st.nod
 function audResult(st){ const right=st.asked.filter(a=>a.ok).length; const pct=Math.round(right/st.asked.length*100); const by={};
   st.asked.forEach(a=>{ by[a.t]=by[a.t]||{n:0,ok:0}; by[a.t].n++; if(a.ok) by[a.t].ok++; });
   const good=Object.keys(by).filter(k=>by[k].ok/by[k].n>=0.75), weak=Object.keys(by).filter(k=>by[k].ok/by[k].n<0.6);
+  const prim=AUD_NODES[st.plan[0]]&&AUD_NODES[st.plan[0]].t, primWrong=!!(prim&&by[prim]&&by[prim].ok<by[prim].n);
   const L=(arr,i)=>arr.map(k=>AUD_FB[k][i]); const join=a=>a.length<=1?a.join(""):a.slice(0,-1).join("; ")+"; and "+a[a.length-1];
+  const real=st.kind==="real", dev=st.c.dev, v=(st.seed||0)%3;
+  const G=good.length?" Strong: "+join(L(good,0))+".":"";
+  const W=weak.length?" To tighten: "+join(L(weak,1))+".":"";
+  const Pm=primWrong&&AUD_FB[prim]?" On the main topic of this inspection, my concern is: "+AUD_FB[prim][1]+".":"";
   let fb;
-  if(pct>=85) fb="Overall I am satisfied with your quality management system for the "+st.c.dev+". "+(good.length?"In particular, "+join(L(good,0))+". ":"")+(weak.length?"One area to tighten before the next inspection: "+join(L(weak,1))+". ":"")+"I don’t expect to issue significant observations from what I have seen today.";
-  else if(pct>=70) fb="Your QMS for the "+st.c.dev+" has a reasonable foundation, but I am not yet satisfied. "+(weak.length?"My concerns: "+join(L(weak,1))+". ":"")+(good.length?"On the positive side, "+join(L(good,0))+". ":"")+"I would expect to list observations and verify your corrective actions at a follow-up.";
-  else fb="I am not satisfied with the controls I reviewed for the "+st.c.dev+". "+(weak.length?"The main problems: "+join(L(weak,1))+". ":"")+"These gaps would likely lead to inspectional observations (Form 483) or major nonconformities, and I would want to see systemic corrective action, not isolated fixes."+(good.length?" Some areas were stronger: "+join(L(good,0))+".":"");
+  if(pct>=85){ if(primWrong) fb=["A passing result for the "+dev+", with one point to follow up."+Pm+G, "You passed, but the main topic needs another look."+Pm+G, "A pass. Before the next inspection, please revisit the main topic."+Pm+G][v];
+    else fb=["A solid result for the "+dev+"."+G+W+(real?"":" I would not expect major observations."), "Thank you for a clear walk-through."+G+W, "I have what I need."+G+W+(real?"":" Nothing alarming today.")][v]; }
+  else if(pct>=70) fb=["Your QMS for the "+dev+" has a reasonable foundation, but I am not yet satisfied."+(Pm||W)+G+" I would verify corrective actions at a follow-up.", "Not yet a pass for the "+dev+"."+(Pm||W)+G+" Expect observations and a follow-up.", "Reasonable, with gaps."+(Pm||W)+G+" I would check your corrective actions later."][v];
+  else fb=["I am not satisfied with the controls I reviewed for the "+dev+"."+(Pm||W)+" These gaps point to systemic corrective action, not isolated fixes."+G, "Significant gaps for the "+dev+"."+(Pm||W)+" I would want systemic corrective action."+G, "This did not reach the mark."+(Pm||W)+" Gaps like these would likely lead to observations."+G][v];
   return {right,pct,pass:pct>=85,by,fb}; }
 /* ===== Audit mode UI ===== */
 let AUD=null;
@@ -6202,7 +6230,7 @@ function renderAudit(){ setTimeout(()=>{ try{ planMark(document.getElementById("
   m.append(el("section",{class:"chHead auditHead withRing"},
     el("div",{class:"hTxt"}, el("div",{class:"eyebrow"},"Inspection mode"),
       el("h2",{},"Practice an inspection"),
-      el("p",{},"Pick a study case (20 questions), a QMS topic (12 questions) or a Real Event (up to 20). The investigator follows the trail of your answers. Your score stays hidden until the closing meeting. You need at least 85% to pass.")),
+      el("p",{},"Pick a study case (20 questions), a QMS topic (12 questions) or a Real Event (up to 20). Study cases and topics follow up on some of your answers; a Real Event follows the story of the letter. Your score stays hidden until the closing meeting. You need at least 85% to pass.")),
     moduleRing("audit")));
   if(!AUD){
     const res=id=>{ const r=state["aud-"+id]; return r?el("span",{class:"caseRes "+(r.pass?"pass":"fail")},(r.pass?"Passed ":"Last ")+r.pct+"%"):null; };
@@ -6286,6 +6314,12 @@ function audFocus(){ const q=document.querySelector(".audQ")||document.querySele
   [document.querySelector(".appbar"),document.getElementById("navMini")].forEach(x=>{ if(!x||!x.offsetHeight) return; const cs=getComputedStyle(x); if(cs.position==="fixed") off=Math.max(off,x.getBoundingClientRect().bottom); else if(cs.position==="sticky") off=Math.max(off,(parseFloat(cs.top)||0)+x.offsetHeight); });
   const bar=document.querySelector(".audBar"); if(bar&&bar!==q) off+=bar.offsetHeight;
   window.scrollTo({top:Math.max(0,q.getBoundingClientRect().top+window.scrollY-off-12)}); }
+/* 3.27.0: several short alternative opening and closing meetings (picked from the session seed) */
+function audOpenLine(st,c,story){ const v=(st.seed||0)%5, topic=st.kind==="topic"||st.kind==="real", sit=topic?st.scen.sit.replace(/^./,x=>x.toLowerCase()):"", t=topic?audLc(st.scen.ttitle):"", cs=c.name.toLowerCase(), sy=story.toLowerCase().replace(/^for-cause: /,"");
+  const T=[ "Good morning. Today I am looking at "+t+". Let me start with this: "+sit, "Welcome. My focus today is "+t+". First situation: "+sit, "Thank you for having me. I am here for "+t+". I would like to begin with this: "+sit, "Good morning. I will keep this short: "+t+". Starting point: "+sit, "Hello. "+t.replace(/^./,x=>x.toUpperCase())+" is my focus today. Let us begin: "+sit ];
+  const C=[ "Good morning. This inspection covers the "+cs+". I will start with the "+sy+" and follow the evidence.", "Welcome. Today: the "+cs+". We begin with the "+sy+".", "Thank you for having me. I am here about the "+cs+". First, the "+sy+".", "Good morning. A short opening: the "+cs+", starting with the "+sy+".", "Hello. We are looking at the "+cs+" today. I would like to open with the "+sy+"." ];
+  return (topic?T:C)[v]; }
+function audOpenAsk(st){ const v=Math.floor((st.seed||0)/5)%4; return ["Please have a guide, a scribe and quick access to your records. I will share my observations at the closing meeting.","Please keep your records ready. We will close with my summary.","A guide who knows the processes and someone to fetch records will help. I will summarize at the end.","Ready when you are. Answer as you would in a real inspection: precise and backed by records."][v]; }
 function renderAuditOpening(m){
   const st=AUD.st, c=st.c;
   const story=AUD_TOPICS[AUD_NODES[st.plan[0]].t]||"Case review";
@@ -6297,17 +6331,20 @@ function renderAuditOpening(m){
   sec.append(invTools(()=>renderAudit(),()=>invSpeak([...oq.querySelectorAll(".speech p")].map(x=>x.textContent).join(" "),INV_LOOKS[invPick(st)].g,av),INV_LOOKS[invPick(st)].g));
   if(!AUD.openSaid){ AUD.openSaid=1; setTimeout(()=>{ if(document.body.contains(av)&&invPref().voice) invSpeak([...oq.querySelectorAll(".speech p")].map(x=>x.textContent).join(" "),INV_LOOKS[invPick(st)].g,av); },400); }
   sec.append(oq); oq.append(el("div",{class:"avCol"},av), el("div",{class:"speech"}, el("span",{class:"audTopic"},"Investigator"),
-    el("p",{},st.kind==="topic"||st.kind==="real"?"Good morning. I’m the investigator assigned to your site. Today I’m focusing on "+audLc(st.scen.ttitle)+". I’ll start with this situation: "+st.scen.sit.replace(/^./,x=>x.toLowerCase())+" Then I’ll look at how the process works in general.":"Good morning. I’m the investigator assigned to your site. This inspection covers the "+c.name.toLowerCase()+". I’ll start with the "+story.toLowerCase().replace(/^for-cause: /,"")+" and then follow the evidence wherever it leads."),
-    el("p",{},"Please give me a guide who knows the processes, a scribe, and a back room that can pull records quickly. I’ll share my observations at the closing meeting.")));
+    el("p",{},audOpenLine(st,c,story)),
+    el("p",{},audOpenAsk(st))));
   const ul=el("ul",{class:"areaList"}); areas.forEach(a=>ul.append(el("li",{},a)));
-  if(st.kind!=="topic"&&st.kind!=="real") sec.append(el("div",{class:"agenda"}, el("b",{},"Areas the investigator expects to cover"), ul, el("small",{},"The trail may change depending on your answers.")));
-  else sec.append(el("div",{class:"agenda"}, el("b",{},"Scope"), el("p",{},st.N+" questions on "+audLc(st.scen.ttitle)+". The trail may change depending on your answers.")));
+  if(st.kind!=="topic"&&st.kind!=="real") sec.append(el("div",{class:"agenda"}, el("b",{},"Areas the investigator expects to cover"), ul, el("small",{},"The investigator may follow up on some of your answers.")));
+  else sec.append(el("div",{class:"agenda"}, el("b",{},"Scope"), el("p",{},st.N+" questions on "+audLc(st.scen.ttitle)+"."+(st.kind==="real"?" This Real Event follows the story of the letter.":" The investigator may follow up on some of your answers."))));
   sec.append(el("div",{class:"howTo"}, el("b",{},"How this works"),
     el("p",{},"Answer as you would in a real inspection: precise, backed by records, no guessing. Once you choose an answer it’s final, and the next question follows after a second. The stopwatch under the investigator counts the seconds; after 30 seconds the investigator starts to worry about the time. You’ll see your score, the observations and the correct answers at the closing meeting.")));
   sec.append(el("div",{class:"mact"}, el("button",{class:"reset",type:"button",onclick:()=>{ invHush(); AUD=null; renderAudit(); }},st.kind==="topic"?"Choose another scenario":"Choose another case"),
     el("button",{class:"cta",type:"button",onclick:()=>{ invHush(); AUD.phase="q"; renderAudit(); window.scrollTo({top:0}); }},"Start the inspection →")));
   m.append(sec);
 }
+/* 3.27.0: legacy QSR section numbers get a note with the QMSR (ISO 13485) equivalent; the six sections that remain in 21 CFR 820 are left alone */
+const QSR_KEEP=new Set(["1","3","7","10","35","45"]), QSR_MAP={20:"5.1, 5.5, 5.6",22:"8.2.4",25:"6.2",30:"7.3",40:"4.2.4",50:"7.4",60:"7.5.9",65:"7.5.9",70:"7.5, 6.3, 6.4",72:"7.6",75:"7.5.6",80:"7.4.3, 8.2.6",90:"8.3",100:"8.5.2, 8.5.3",120:"7.5.1",130:"7.5.1",140:"7.5.11",150:"7.5.11",160:"7.5.11",170:"7.5.3",180:"4.2.5",181:"4.2.3",184:"7.5.1",186:"4.2.3",198:"8.2.2",200:"7.5.4",250:"8.1, 8.4"};
+function qsrX(t){ if(!t||!/820\.\d/.test(t)) return t; const seen={}; return String(t).replace(/820\.(\d{1,3})(?:\([a-z0-9]+\))*(?!\d)/g,(m,n)=>{ if(QSR_KEEP.has(n)||!QSR_MAP[n]||seen[n]) return m; seen[n]=1; return m+" [legacy QSR number; QMSR: ISO 13485 "+QSR_MAP[n]+"]"; }); }
 function renderAuditReport(m){
   const st=AUD.st, r=audResult(st);
   if(!st.saved){ state["aud-"+st.c.id]={pct:r.pct,pass:r.pass,d:Date.now()}; st.saved=true; save(); const mr=document.querySelector('[data-mring="audit"]'); if(mr) mr.replaceWith(moduleRing("audit")); }
@@ -6328,12 +6365,12 @@ function renderAuditReport(m){
     el("p",{}, el("span",{class:"obsL"},"Question: "), a.q),
     el("p",{}, el("span",{class:"obsL"},"Your answer: "), el("del",{class:"obsNo"},a.a)),
     el("div",{class:"obsExp"}, el("span",{class:"obsL"},"Expected"), el("span",{},a.r||"")),
-    el("small",{class:"obsBasis"}, el("b",{},"Basis: "), a.why))));
+    el("small",{class:"obsBasis"}, el("b",{},"Basis: "), qsrX(a.why)))));
   const tb=el("div",{class:"topicRes"});
   Object.entries(r.by).forEach(([k,v])=>{ const p=Math.round(v.ok/v.n*100); tb.append(el("div",{class:"trow"}, el("span",{},AUD_TOPICS[k]), el("div",{class:"track qTrack"}, el("i",{style:"width:"+p+"%;background:"+(p<70?"var(--q-alert)":"var(--q-primary)")}), el("u",{class:"qPass","aria-hidden":"true"})), el("b",{},v.ok+"/"+v.n))); });
   rep.append(el("h3",{class:"secTitle"},"Results by area"), tb);
   const log=el("details",{class:"audLog"}, el("summary",{},"Review the full inspection trail ("+st.asked.length+" questions)"));
-  st.asked.forEach((a,i)=>log.append(el("div",{class:"logItem "+(a.ok?"ok":"no")}, el("b",{},(i+1)+". "+a.q), el("span",{},(a.ok?"✓ ":"✗ ")+"Your answer: "+a.a), a.ok?null:el("span",{},"Expected: "+(a.r||"")), el("small",{},a.why))));
+  st.asked.forEach((a,i)=>log.append(el("div",{class:"logItem "+(a.ok?"ok":"no")}, el("b",{},(i+1)+". "+a.q), el("span",{},(a.ok?"✓ ":"✗ ")+"Your answer: "+a.a), a.ok?null:el("span",{},"Expected: "+(a.r||"")), el("small",{},qsrX(a.why)))));
   rep.append(log);
   rep.append(el("div",{class:"mact"}, el("button",{class:"cta",type:"button",onclick:()=>{ const id=st.c.id; audStart(st.kind==="real"?audNewReal(id,Math.floor(Math.random()*1e6)):st.kind==="topic"?audNewTopic(id,Math.floor(Math.random()*1e6)):audNew(id,Math.floor(Math.random()*1e6))); }},wrong.length?"Re-check now":(st.kind==="topic"?"Repeat this scenario":"Repeat this case")), el("button",{class:"cta alt",type:"button",onclick:()=>{ AUD=null; renderAudit(); window.scrollTo({top:0}); }},"Back to inspections")));
   m.append(rep);
@@ -7834,7 +7871,7 @@ function raCalc(a){
     RA_EU_DOCS.forEach(([id,t])=>{ if(A[id]==="Y") out.notes.push("EU: update "+t.split(" (")[0]+"."); }); }
   return out;
 }
-function iaClass(a){ const r=raCalc(a); const safety=["P1.1","P2.2","P10.1","P10.2","P10.3"].some(id=>a.ans[id]==="Y");
+function iaClass(a){ const r=raCalc(a); const safety=["P1.1","P2.2","P10.1","P10.2","P10.3"].some(id=>a.ans[id]==="Y")||["P3.","P4.","P8."].some(pre=>Object.keys(a.ans).some(k=>k.indexOf(pre)===0&&a.ans[k]==="Y"));
   let c=a.info.immediate==="Y"?"Critical":(r.preapproval||safety)?"Major":"Minor"; if(a.cls.override) c=a.cls.override; return {c,auto:a.info.immediate==="Y"?"Critical":(r.preapproval||safety)?"Major":"Minor",r,safety}; }
 /* ---- UI ---- */
 let IA_TAB="info";
@@ -7996,10 +8033,10 @@ function iaDocModel(a){
   blocks.push({h2:"1. Description of change"},{table:[["Originator",I.originator||"-"],["Description",I.desc||"-"],["Reason",I.reason||"-"],["Product description",I.product||"-"],["Part number(s)",I.partNos||"-"],["Device class",cls],["Source",I.source],["Related documents / records",I.refs||"-"],["Related changes",I.relChanges||"-"],["Related CAPAs",I.relCapas||"-"]]});
   blocks.push({h2:"2. Change impact assessment"});
   IA_P1.forEach(T=>{ blocks.push({h3:IA_NUM[T.id]+" "+T.t});
-    blocks.push({table:[["#","Question","Answer","Rationale / impact"],...T.subs.map(S=>{ const v=a.ans[S.id]; return [IA_NUM[S.id],S.q,IA_ANS[v]||"-",(a.txt[S.id]||"")+(v==="Y"&&(a.dl[S.id]||[]).length?" Deliverables: "+a.dl[S.id].join("; ")+".":"")]; })],head:true,w:[900,4300,800,3600],pdf:"q"});
+    blocks.push({table:[["#","Question","Answer","Rationale / impact"],...T.subs.map(S=>{ const v=a.ans[S.id]; return [IA_NUM[S.id],S.q,IA_ANS[v]||"-",(a.txt[S.id]||(v==="Y"?"NOT DESCRIBED":""))+(v==="Y"&&(a.dl[S.id]||[]).length?" Deliverables: "+a.dl[S.id].join("; ")+".":"")]; })],head:true,w:[900,4300,800,3600],pdf:"q"});
     if(T.risk) blocks.push({table:[["Potential risks associated with this change",a.risk.pot||"None identified"],["Linked risk-file items",a.risk.items.join(", ")||"none"],["Risk-file documents to update",a.risk.docs.join(", ")||"none"]]}); });
   const yes=IA_P1.flatMap(T=>T.subs.filter(S=>a.ans[S.id]==="Y"));
-  blocks.push({h2:"3. Required deliverables"}); blocks.push(yes.length?{table:[["#","Deliverables","Details"],...yes.map(S=>[IA_NUM[S.id],(a.dl[S.id]||[]).join("; ")||"-",a.txt[S.id]||""])],head:true,w:[900,4300,4400],pdf:"d"}:{p:"No deliverables: the change does not modify design attributes, manufacturing processes, quality attributes or safety characteristics. Existing verification, validation and risk management evidence remains valid."});
+  blocks.push({h2:"3. Required deliverables"}); blocks.push(yes.length?{table:[["#","Deliverables","Details"],...yes.map(S=>[IA_NUM[S.id],(a.dl[S.id]||[]).join("; ")||"-",a.txt[S.id]||"NOT DESCRIBED"])],head:true,w:[900,4300,4400],pdf:"d"}:{p:"No deliverables: the change does not modify design attributes, manufacturing processes, quality attributes or safety characteristics. Existing verification, validation and risk management evidence remains valid."});
   evBlocks(a).forEach(b=>blocks.push(b));
   blocks.push({h2:"4. Impacted requirements and required tests"}); blocks.push(a.req.length?{table:[["Change item","Impacted area","Requirement","Tests"],...a.req.map(r=>[r.item,r.area,r.req,r.test])],head:true,w:[2400,2400,2400,2400],pdf:"r"}:{p:"No impacted requirements were identified."});
   blocks.push({h2:"5. Regulatory impact assessment"});
