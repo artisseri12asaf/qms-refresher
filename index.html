@@ -2516,6 +2516,9 @@ header.top .appbar .brand2 b{font-family:var(--q-font-serif); color:var(--q-hero
   .msTbl .msM, .msTbl td:nth-child(2), .msTbl td:nth-child(3), .msTbl td:nth-child(4), .msTbl td:nth-child(5){display:none}
   .msTbl{font-size:14px} .msBar{width:56px} .msTwo{grid-template-columns:1fr; gap:6px} .msNote{display:none} .qSec h2{white-space:normal} }
 
+.qH1s{font-size:clamp(28px,3.3vw,42px)} .qH1s>span,.qH1s>em{display:block}
+@media (max-width:700px){ .qH1s{font-size:26px} .qHero .qSub{font-size:14.5px; margin-bottom:12px} }
+.qHeroAct{display:flex; align-items:center; gap:18px; flex-wrap:wrap} .qHeroAct .qHeroLnk{font-weight:600}
 </style>
 </head>
 <body>
@@ -4100,7 +4103,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="3.20.0", APPDATE="28-NOV-2026";
+const APPVER="3.20.1", APPDATE="28-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Qraft (Asaf Ben Zion). All rights reserved.";
 const LEGAL=[["Risk Management Approach", "Content is a paraphrased summary for training. It does not replace the standards: ISO 14971:2019 (with EN ISO 14971:2019+A11:2021 for the EU), ISO/TR 24971:2020 and IEC 62366-1:2015+A1:2020. Use your licensed copies for exact requirements."], ["Copyright", "© 2026 Qraft (Asaf Ben Zion). The selection, structure, design and original text of this handbook may not be copied or redistributed without written permission. Regulations and official guidance are cited from their publishers: US federal texts are in the public domain, and EU texts are reused with attribution. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number and described in the author’s own words; their text remains the property of their publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, selection and design, and was developed and tested with AI tools. Key facts, such as regulatory reporting timelines, device classifications and clause numbers, were checked against official sources; other content is the author’s interpretation and may contain inaccuracies."], ["Sources", "Cited sources are official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs and FDA databases. EU: EUR-Lex, European Commission pages and MDCG guidance. International: IMDRF codes and MDSAP documents. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number, based on freely available published information and the author’s own interpretation and knowledge."], ["Important", "Training simulation. Not legal or regulatory advice. Not an official FDA, EC or ISO document. No affiliation with FDA, the European Commission or ISO. This application is intended for training purposes only. It is provided without warranty. Results from its tools require human review, verification and approval. Always check the linked official source before citing anything in a formal regulatory or customer response."]];
@@ -5149,9 +5152,9 @@ function heroTop(show){
   h.append(el("h2",{class:"srOnly"},"Qraft: a Quality Handbook and Training Guide for QA Experts"),
     el("div",{class:"qHero"}, el("div",{class:"qHeroTop"}, heroLogo()),
       el("div",{class:"qHeroTxt"}, el("div",{class:"qKick"},"Medical-device QA/RA training \u00b7 simulation"),
-        el("h1",{class:"qH1"},"Every answer leaves a trail. ", el("em",{},"The investigator follows it.")),
-        el("p",{class:"qSub"},"In a virtual FDA inspection, your last answer decides the next question. Practise the calls here, before an audit makes them for you."),
-        el("a",{class:"cta qHeroBtn",href:"#map"},"See the QMS map \u2192")),
+        el("h1",{class:"qH1 qH1s"}, el("span",{},"Learn the requirements. "), el("span",{},"Practise the inspection. "), el("em",{},"Use the tools.")),
+        el("p",{class:"qSub"},"ISO 13485, the FDA QMSR and EU MDR in one place: clear chapters, simulated FDA inspections, ready-to-use QA forms and useful statistical tools."),
+        el("div",{class:"qHeroAct"}, el("a",{class:"cta qHeroBtn",href:"#explore"},"Explore \u2192"), el("a",{class:"linkBtn qHeroLnk",href:"#practice"},"Practise"), el("a",{class:"linkBtn qHeroLnk",href:"#tools"},"Tools"))),
       el("div",{class:"qDraw",html:'<svg viewBox="0 0 330 250" aria-hidden="true" fill="none" stroke-width="1.6"><rect class="d" x="20" y="20" width="230" height="155" rx="3"/><rect class="d" x="42" y="42" width="110" height="74"/><circle class="d" cx="206" cy="80" r="24"/><circle class="d" cx="206" cy="80" r="9"/><path class="d" d="M42 140h180M42 154h130"/><path class="m" d="M268 20v155M262 20h12M262 175h12M20 196h230M20 190v12M250 190v12"/><text x="135" y="216" font-size="10" font-family="ui-monospace,monospace" text-anchor="middle" stroke="none">250.0 ±0.1</text></svg>'})));
   clearInterval(window.HEROT);
 }
