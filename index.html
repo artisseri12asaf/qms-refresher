@@ -2668,6 +2668,15 @@ html[data-home="true"] #navRow2 .navGroup:first-child{border-top:0}
 .budAct{display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin:14px 0 4px}
 @media (max-width:600px){ .budSl{grid-template-columns:1fr 1fr 50px} .budRow{grid-template-columns:1fr 100px auto} }
 
+/* 3.27.1 QMS Requirements Traceability: clear, pinned column headers (colors match the column markers) */
+@media (min-width:701px){
+ .mapGrid .mrow.mhd{position:sticky; top:116px; z-index:25; display:grid !important; gap:8px; align-items:stretch; padding:8px 14px !important; margin:0 0 -2px; background:var(--q-bg,#fff) !important; border:0 !important; box-shadow:0 6px 8px -6px rgba(16,24,40,.28); text-transform:none !important; letter-spacing:0 !important; font-size:15px !important}
+ .mapGrid .mrow.mhd>div{display:block; min-height:46px; padding:13px 14px; border-radius:8px; color:#fff !important; font-weight:800; line-height:1.25; box-shadow:inset 0 -3px 0 rgba(0,0,0,.18)}
+ .mapGrid .mrow.mhd>div:nth-child(1){background:#0C1A15}
+ .mapGrid .mrow.mhd>div:nth-child(2){background:#2F7BA8}
+ .mapGrid .mrow.mhd>div:nth-child(3){background:#3A4A43}
+ .mapGrid .mrow.mhd>div:nth-child(4){background:#8C5F2B}
+}
 </style>
 </head>
 <body>
@@ -3254,7 +3263,7 @@ function renderMap(){
   m.append(grid);
   const draw=()=>{
     grid.innerHTML="";
-    grid.append(el("div",{class:"mrow mhd"}, el("div",{},"QMS topic"), el("div",{},"ISO 13485:2016"), el("div",{},"21 CFR (QMSR and related parts)"), el("div",{},"EU MDR 2017/745")));
+    grid.append(el("div",{class:"mrow mhd noX"}, el("div",{},"QMS topic"), el("div",{},"ISO 13485:2016"), el("div",{},"21 CFR (QMSR and related parts)"), el("div",{},"EU MDR 2017/745")));
     const t=msel.q.trim().toLowerCase();
     let n=0;
     MAPROWS.forEach(([title,iso,cr,ct,mr,mt,ex])=>{
@@ -4269,7 +4278,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="3.27.0", APPDATE="28-NOV-2026";
+const APPVER="3.27.1", APPDATE="28-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Qraft (Asaf Ben Zion). All rights reserved.";
 const LEGAL=[["Risk Management Approach", "Content is a paraphrased summary for training. It does not replace the standards: ISO 14971:2019 (with EN ISO 14971:2019+A11:2021 for the EU), ISO/TR 24971:2020 and IEC 62366-1:2015+A1:2020. Use your licensed copies for exact requirements."], ["Copyright", "© 2026 Qraft (Asaf Ben Zion). The selection, structure, design and original text of this handbook may not be copied or redistributed without written permission. Regulations and official guidance are cited from their publishers: US federal texts are in the public domain, and EU texts are reused with attribution. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number and described in the author’s own words; their text remains the property of their publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, selection and design, and was developed and tested with AI tools. Key facts, such as regulatory reporting timelines, device classifications and clause numbers, were checked against official sources; other content is the author’s interpretation and may contain inaccuracies."], ["Sources", "Cited sources are official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs and FDA databases. EU: EUR-Lex, European Commission pages and MDCG guidance. International: IMDRF codes and MDSAP documents. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number, based on freely available published information and the author’s own interpretation and knowledge."], ["Important", "This application is intended for training simulation purposes only. It is provided without warranty. Results from its tools require human review, verification and approval. Not legal or regulatory advice. Not an official FDA, EC or ISO document. No affiliation with FDA, the European Commission or ISO. Always check the linked official source before citing anything in a formal regulatory or customer response."]];
@@ -4602,7 +4611,7 @@ const PLAN_RANK={free:0,premium:1,all:2,admin:3};
 const PLAN_FREE_COURSES=["gdp","complaint","nc"];
 const PLAN_FREE_FORMS=["qa-ncr","qa-capa","qa-cmp","qa-sop","qa-trn"];
 const PLAN_PREM_FORMS=PLAN_FREE_FORMS.concat(["qa-mr","qa-qo","qa-ddp","qa-dir","qa-drv","qa-trace","qa-mrb","qa-dev","qa-rpt","qa-pmsp","qa-trend","sq-quest","sq-eval","sq-scar","qa-iap","qa-iac","qa-wi","qa-vis","qa-prot","qa-rep"]);
-const PLAN_ROUTE_NEED={sampling:"premium",bstats:"all",msa:"all",grr:"all",risk:"all",rmtools:"all",rmtool:"all",cvss:"all",impact:"all",projects:"all"};
+const PLAN_ROUTE_NEED={sampling:"premium",bstats:"premium",msa:"premium",grr:"premium",risk:"premium",rmtools:"premium",rmtool:"premium",cvss:"premium",impact:"all",projects:"all"};
 const PLAN_LIMIT={rq:10,dl:3};
 const PROF_KEY="qah-profile-v1", ADM_KEY="qah-admin-v1", VIEW_KEY="qah-plan-view", USE_KEY="qah-plan-use";
 function ls(k,v){ try{ if(v===undefined) return localStorage.getItem(k); if(v===null) localStorage.removeItem(k); else localStorage.setItem(k,v); }catch(e){ return null; } }
@@ -4617,7 +4626,7 @@ function needRoute(id){ if(typeof SQF!=="undefined"&&SQF[id]) return needForm(id
 function needAud(st){ const id=st&&st.c&&st.c.id; if(st.kind==="topic") return "premium"; if(st.kind==="real") return AUD_REAL[0]&&AUD_REAL[0].id===id?"free":"premium"; return AUD_CASES[0]&&AUD_CASES[0].id===id?"free":"premium"; }
 function planTag(need){ return need==="free"?null:el("span",{class:"plTag "+need+(planCan(need)?"":" locked"),title:PLAN_NAMES[need]+" plan"},(planCan(need)?"":"🔒 ")+PLAN_NAMES[need]); }
 function planWallBody(need,what){ return el("div",{class:"plWall"}, el("div",{class:"plWallIco"},"🔒"), el("h3",{},what+" is part of "+PLAN_NAMES[need]),
-  el("p",{},need==="premium"?"Premium opens every question, dilemma, inspection, course, 25 QMS forms and the sampling tools for incoming inspection and design verification.":"All inclusive adds every QMS form, the statistical and risk tools, Projects and the quarterly regulatory watch."),
+  el("p",{},need==="premium"?"Premium opens every question, dilemma, inspection, course, 25 QMS forms, the sampling tools, the other statistical tools and the risk tools.":"All inclusive adds every QMS form, Change Impact, Projects and the quarterly regulatory watch."),
   el("button",{class:"cta",type:"button",onclick:()=>{ closeModal(); setTimeout(planSheet,60); }},"See the plans")); }
 function planWall(need,what){ modal("Upgrade",planWallBody(need,what)); }
 function planGateRoute(id){ const need=needRoute(id); if(planCan(need)) return false;
@@ -4658,7 +4667,7 @@ function profForYou(c){ const p=profGet(); const rx=DEV_RX[p.device]; return !!(
 async function admCheck(v){ try{ const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("qraft-admin|"+v)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")===ADMIN_H; }catch(e){ return false; } }
 function planTable(rec){ const rows=[["Chapters, QMS Requirements Traceability, Regulatory Timeline, search, glossary","✓","✓","✓"],["Quick quiz","10 a day","All","All"],["Real-life Dilemmas","3 a day","All","All"],
   ["Inspection mode","1 study case + 1 Real Event","All 160","All 160"],["Training Courses","GDP + 2 courses","All 11","All 11"],["Today's suggestion","✓","✓","✓"],["QMS Assistant forms","5","25","All"],
-  ["Sample Size Tool (incoming inspection, design verification)","–","✓","✓"],["Other statistics, risk tools, Projects","–","–","✓"],["Quarterly regulatory watch","–","–","✓"]];
+  ["Sample Size Tool (incoming inspection, design verification)","–","✓","✓"],["Other statistics, risk tools","–","✓","✓"],["Change Impact, Projects","–","–","✓"],["Quarterly regulatory watch","–","–","✓"]];
   const t=el("table",{class:"plTable"}); const cols=["free","premium","all"];
   t.append(el("thead",{},el("tr",{}, el("th",{},""), ...cols.map(k=>el("th",{class:k+(rec===k?" rec":"")}, PLAN_NAMES[k], rec===k?el("small",{},"Recommended"):"")))));
   const tb=el("tbody",{}); rows.forEach(r=>tb.append(el("tr",{}, el("td",{},r[0]), ...r.slice(1).map((v,j)=>el("td",{class:cols[j]+(rec===cols[j]?" rec":"")},v))))); t.append(tb);
@@ -5281,7 +5290,7 @@ function openSources(){ const box=el("div",{class:"srcAll"}); const seen=new Set
   box.append(el("h4",{class:"profH"},"Removed sources"), SRC_REMOVED.length?el("ul",{class:"srcList"}, ...SRC_REMOVED.map(r=>el("li",{}, el("b",{},r.t)," · removed "+r.d+": "+r.why+(r.by?" (replaced by "+r.by+")":""), el("br",{}), el("small",{},r.u)))):el("p",{class:"src"},"None so far."));
   modal("Sources (administrator)",box); }
 /* ===== 3.26.0 Budget status (hidden menu): hours from both git histories, costs, business plan and return on investment ===== */
-const BUDGET_DATA=/*BUD-DATA*/{"built":"28-NOV-2026","from":"12-NOV-2026","commits":321,"sessions":29,"hours":82.0,"days":[["12-NOV-2026",2.0],["15-NOV-2026",3.7],["16-NOV-2026",5.6],["17-NOV-2026",11.4],["18-NOV-2026",5.5],["19-NOV-2026",3.4],["20-NOV-2026",7.3],["21-NOV-2026",12.2],["22-NOV-2026",9.3],["23-NOV-2026",7.4],["27-NOV-2026",3.8],["28-NOV-2026",10.2]],"versions":[["earlier",15.1,34],["1.0.0",1.2,1],["1.1.0",0.8,2],["1.1.1",0.2,2],["1.2.0",1.2,2],["1.2.1",0.9,3],["1.3.0",1.0,4],["1.3.1",0.2,2],["1.4.0",1.4,2],["1.4.1",0.5,2],["1.4.2",0.0,2],["1.4.3",0.1,2],["1.5.0",0.5,2],["1.5.1",0.3,2],["1.6.0",0.3,2],["1.7.0",0.4,2],["1.8.0",0.3,2],["1.8.1",0.2,2],["1.9.0",0.5,2],["1.10.0",1.3,2],["1.10.1",0.2,2],["1.11.0",0.5,2],["1.11.1",0.5,2],["1.12.0",0.2,2],["1.12.1",0.2,2],["1.13.0",0.4,2],["1.13.1",0.1,2],["1.14.0",0.2,2],["2.0.0",1.5,2],["2.1.0",0.5,2],["2.2.0",0.7,2],["2.3.0",0.5,2],["2.3.1",0.1,2],["2.4.0",0.6,2],["2.5.0",0.8,4],["2.5.1",0.1,2],["2.5.2",0.5,2],["2.5.3",0.2,2],["2.6.0",1.2,3],["2.7.0",1.8,8],["2.8.0",0.2,2],["2.8.1",0.5,2],["2.9.0",0.9,3],["2.9.1",1.3,2],["2.10.0",0.5,2],["2.11.0",0.7,4],["2.12.0",0.5,3],["2.13.0",0.7,3],["2.14.0",0.6,3],["2.15.0",1.1,5],["2.16.0",3.2,7],["2.17.0",0.1,2],["2.18.0",1.6,4],["3.0.0",1.9,4],["3.1.0",1.0,3],["3.1.1",0.5,2],["3.1.2",1.0,3],["3.2.0",0.5,2],["3.2.1",0.1,2],["3.2.2",0.3,2],["3.3.0",2.1,6],["3.4.0",1.0,3],["3.4.1",0.9,4],["3.4.2",0.8,2],["3.4.3",1.2,6],["3.4.4",0.5,3],["3.5.0",0.1,4],["3.5.1",0.1,2],["3.6.0",0.5,2],["3.7.0",0.3,2],["3.8.0",0.5,2],["3.8.1",0.4,2],["3.9.0",1.1,2],["3.9.1",0.4,2],["3.10.0",0.6,2],["3.10.1",0.3,2],["3.10.2",0.1,2],["3.11.0",2.5,9],["3.12.0",0.5,2],["3.13.0",0.2,2],["3.13.1",0.1,3],["3.14.0",0.9,2],["3.15.0",0.5,2],["3.15.1",0.1,3],["3.16.0",0.6,2],["3.16.1",0.5,3],["3.17.0",2.2,19],["3.18.0",0.7,3],["3.19.0",0.6,3],["3.20.0",0.4,4],["3.20.1",0.7,3],["3.21.0",1.0,4],["3.22.0",0.6,4],["3.23.0",0.4,3],["3.24.0",0.5,3],["3.25.0",1.5,5],["3.26.0",0.4,3],["3.26.1",1.3,5],["3.27.0",0.6,3]]}/*BUD-END*/;
+const BUDGET_DATA=/*BUD-DATA*/{"built":"28-NOV-2026","from":"12-NOV-2026","commits":323,"sessions":29,"hours":82.0,"days":[["12-NOV-2026",2.0],["15-NOV-2026",3.7],["16-NOV-2026",5.6],["17-NOV-2026",11.4],["18-NOV-2026",5.5],["19-NOV-2026",3.4],["20-NOV-2026",7.3],["21-NOV-2026",12.2],["22-NOV-2026",9.3],["23-NOV-2026",7.4],["27-NOV-2026",3.8],["28-NOV-2026",10.3]],"versions":[["earlier",15.1,34],["1.0.0",1.2,1],["1.1.0",0.8,2],["1.1.1",0.2,2],["1.2.0",1.2,2],["1.2.1",0.9,3],["1.3.0",1.0,4],["1.3.1",0.2,2],["1.4.0",1.4,2],["1.4.1",0.5,2],["1.4.2",0.0,2],["1.4.3",0.1,2],["1.5.0",0.5,2],["1.5.1",0.3,2],["1.6.0",0.3,2],["1.7.0",0.4,2],["1.8.0",0.3,2],["1.8.1",0.2,2],["1.9.0",0.5,2],["1.10.0",1.3,2],["1.10.1",0.2,2],["1.11.0",0.5,2],["1.11.1",0.5,2],["1.12.0",0.2,2],["1.12.1",0.2,2],["1.13.0",0.4,2],["1.13.1",0.1,2],["1.14.0",0.2,2],["2.0.0",1.5,2],["2.1.0",0.5,2],["2.2.0",0.7,2],["2.3.0",0.5,2],["2.3.1",0.1,2],["2.4.0",0.6,2],["2.5.0",0.8,4],["2.5.1",0.1,2],["2.5.2",0.5,2],["2.5.3",0.2,2],["2.6.0",1.2,3],["2.7.0",1.8,8],["2.8.0",0.2,2],["2.8.1",0.5,2],["2.9.0",0.9,3],["2.9.1",1.3,2],["2.10.0",0.5,2],["2.11.0",0.7,4],["2.12.0",0.5,3],["2.13.0",0.7,3],["2.14.0",0.6,3],["2.15.0",1.1,5],["2.16.0",3.2,7],["2.17.0",0.1,2],["2.18.0",1.6,4],["3.0.0",1.9,4],["3.1.0",1.0,3],["3.1.1",0.5,2],["3.1.2",1.0,3],["3.2.0",0.5,2],["3.2.1",0.1,2],["3.2.2",0.3,2],["3.3.0",2.1,6],["3.4.0",1.0,3],["3.4.1",0.9,4],["3.4.2",0.8,2],["3.4.3",1.2,6],["3.4.4",0.5,3],["3.5.0",0.1,4],["3.5.1",0.1,2],["3.6.0",0.5,2],["3.7.0",0.3,2],["3.8.0",0.5,2],["3.8.1",0.4,2],["3.9.0",1.1,2],["3.9.1",0.4,2],["3.10.0",0.6,2],["3.10.1",0.3,2],["3.10.2",0.1,2],["3.11.0",2.5,9],["3.12.0",0.5,2],["3.13.0",0.2,2],["3.13.1",0.1,3],["3.14.0",0.9,2],["3.15.0",0.5,2],["3.15.1",0.1,3],["3.16.0",0.6,2],["3.16.1",0.5,3],["3.17.0",2.2,19],["3.18.0",0.7,3],["3.19.0",0.6,3],["3.20.0",0.4,4],["3.20.1",0.7,3],["3.21.0",1.0,4],["3.22.0",0.6,4],["3.23.0",0.4,3],["3.24.0",0.5,3],["3.25.0",1.5,5],["3.26.0",0.4,3],["3.26.1",1.3,5],["3.27.0",0.7,5]]}/*BUD-END*/;
 const BUD_KEY="qah-budget-v1";
 const BUD_DEF={rate:350,vat:18,off:25,pre:0,claudeMo:0,months:1,other:[{n:"Domain",a:0},{n:"Other",a:0}],price:49,disc:20,yShare:30,newMo:20,churn:4,run:0};
 function budGet(){ let v={}; try{ v=JSON.parse(localStorage.getItem(BUD_KEY)||"{}")||{}; }catch(e){} const o=Object.assign({},BUD_DEF,v); if(!Array.isArray(o.other)) o.other=BUD_DEF.other; return o; }
