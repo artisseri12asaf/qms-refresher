@@ -2606,6 +2606,12 @@ html body .tab[aria-pressed="true"], html body .tab[aria-selected="true"]{backgr
 /* 3.23.0 Evidence package */
 .evTbl td,.evTbl th{font-size:14px; vertical-align:top} .evAct{display:flex; gap:12px; margin:12px 0 6px} .evNote{font-size:12.5px}
 
+/* 3.24.0 field guidance notes */
+.fnBtn{display:inline-grid; place-items:center; width:20px; height:20px; margin-left:6px; border-radius:50%; border:1.5px solid var(--q-btn); background:transparent; color:var(--q-primary); font:700 12px/1 var(--q-font-sans); cursor:pointer; vertical-align:middle; padding:0}
+.fnBtn[aria-expanded="true"]{background:var(--q-btn); color:#fff}
+.fnNote{margin:6px 0 2px; padding:10px 12px; border-left:3px solid var(--q-btn); background:var(--q-surface-2); border-radius:0 8px 8px 0; font-size:13.5px}
+.fnNote p{margin:0 0 4px} .fnGood b{color:#15803d} .fnWeak b{color:#b91c1c}
+
 </style>
 </head>
 <body>
@@ -3654,11 +3660,21 @@ function docChrome(i,n,o){ const {L,R}=o, PH=o.PH||842, NAVY="0.12 0.37 0.55", G
   /* 3.2.2: the slogan is part of the logo artwork */
   if(i>0){ t(L,PH-36,"Document Reference # "+o.ref,8.5,"F1","0.36 0.45 0.52"); const tl=pdfWrap(o.title,R-L-175,11,true); t(L,PH-52,tl[0]+(tl.length>1?" \u2026":""),11,"F2",NAVY);
     out.push(`0.62 0.71 0.78 RG 1 w ${L} ${PH-100} m ${R} ${PH-100} l S`); }
-  out.push(`0.77 0.82 0.86 RG 0.6 w ${L} 64 m ${R} 64 l S`);
-  t(L,50,"Page "+(i+1)+" of "+n,8,"F1");
-  pdfWrap(DOC_COPY,270,7.5,false).forEach((ln,k)=>t((L+R)/2-pdfW(ln,7.5,false)/2,50-k*9.5,ln,7.5,"F1"));
-  pdfWrap(DOC_DISC,R-L,6.5,false).forEach((ln,k)=>t((L+R)/2-pdfW(ln,6.5,false)/2,22-k*8,ln,6.5,"F1","0.2 0.25 0.3")); /* 3.18.0 full disclaimer on every page */
-  const a="Template # "+o.tpl.no, b="Effective date "+o.tpl.eff; t(R-pdfW(a,8,true),50,a,8,"F2","0.2 0.25 0.3"); t(R-pdfW(b,8,false),40,b,8,"F1");
+  /* drawing frame (3.24.0): border with zone markers and a boxed title block, like an engineering drawing sheet */
+  const PW=R+L, M=18, FR=PW-M, FT=PH-M, TB=FR-236, TT=74, ink="0.25 0.32 0.30";
+  out.push(`${ink} RG 1 w ${M} ${M} ${FR-M} ${FT-M} re S`, `${ink} RG 0.35 w ${M+4} ${M+4} ${FR-M-8} ${FT-M-8} re S`);
+  const zx=4, zy=6; for(let k=1;k<zx;k++){ const x=M+(FR-M)*k/zx; out.push(`${ink} RG 0.35 w ${x.toFixed(1)} ${FT} m ${x.toFixed(1)} ${FT-4} l S ${x.toFixed(1)} ${M} m ${x.toFixed(1)} ${M+4} l S`); }
+  for(let k=1;k<zy;k++){ const y=M+(FT-M)*k/zy; out.push(`${ink} RG 0.35 w ${M} ${y.toFixed(1)} m ${M+4} ${y.toFixed(1)} l S ${FR} ${y.toFixed(1)} m ${FR-4} ${y.toFixed(1)} l S`); }
+  for(let k=0;k<zx;k++){ const x=M+(FR-M)*(k+.5)/zx; t(x-2,FT-3.2,String(k+1),5.5,"F1",ink); }
+  for(let k=0;k<zy;k++){ const y=M+(FT-M)*(k+.5)/zy; t(M+0.8,y-2,"ABCDEF"[zy-1-k],5.5,"F1",ink); }
+  out.push(`${ink} RG 0.6 w ${M+4} ${TT} m ${FR-4} ${TT} l S`, `${ink} RG 0.6 w ${TB} ${M+4} m ${TB} ${TT} l S`);
+  const rows=[TT-17,TT-34], mid=TB+118; rows.forEach(y=>out.push(`${ink} RG 0.35 w ${TB} ${y} m ${FR-4} ${y} l S`)); out.push(`${ink} RG 0.35 w ${mid} ${TT-34} m ${mid} ${TT} l S`);
+  const cell=(x,y,lab,val,bold)=>{ t(x+4,y+10,lab,5.5,"F1",G); t(x+4,y+3,val,7.5,bold?"F2":"F1","0.12 0.16 0.2"); };
+  cell(TB,TT-17,"DOCUMENT REFERENCE",o.ref,true); cell(mid,TT-17,"SHEET","Page "+(i+1)+" of "+n,true);
+  cell(TB,TT-34,"TEMPLATE",o.tpl.no,false); cell(mid,TT-34,"EFFECTIVE",o.tpl.eff,false);
+  const tt=pdfWrap(o.title||"",FR-TB-12,7.5,true); t(TB+4,M+16,"TITLE",5.5,"F1",G); t(TB+4,M+8,tt[0]+(tt.length>1?" \u2026":""),7.5,"F2",NAVY);
+  pdfWrap(DOC_COPY,TB-M-20,7,false).forEach((ln,k)=>t(M+10,TT-9-k*8,ln,7,"F1"));
+  pdfWrap(DOC_DISC,TB-M-20,6.5,false).forEach((ln,k)=>t(M+10,TT-30-k*7.5,ln,6.5,"F1","0.2 0.25 0.3")); /* 3.18.0 full disclaimer on every page */
   return out.join("\n"); }
 function safeName(s,ext){ let b=String(s||"").trim().replace(/[\\/:*?"<>|]+/g,"-").replace(/\s+/g," ").replace(/\.(xlsx|pdf)$/i,""); if(!b) b="sample-size-run"; return b.slice(0,120)+"."+ext; }
 async function saveFile(name,blob,statusEl){
@@ -4190,7 +4206,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="3.23.0", APPDATE="28-NOV-2026";
+const APPVER="3.24.0", APPDATE="28-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Qraft (Asaf Ben Zion). All rights reserved.";
 const LEGAL=[["Risk Management Approach", "Content is a paraphrased summary for training. It does not replace the standards: ISO 14971:2019 (with EN ISO 14971:2019+A11:2021 for the EU), ISO/TR 24971:2020 and IEC 62366-1:2015+A1:2020. Use your licensed copies for exact requirements."], ["Copyright", "© 2026 Qraft (Asaf Ben Zion). The selection, structure, design and original text of this handbook may not be copied or redistributed without written permission. Regulations and official guidance are cited from their publishers: US federal texts are in the public domain, and EU texts are reused with attribution. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number and described in the author’s own words; their text remains the property of their publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, selection and design, and was developed and tested with AI tools. Key facts, such as regulatory reporting timelines, device classifications and clause numbers, were checked against official sources; other content is the author’s interpretation and may contain inaccuracies."], ["Sources", "Cited sources are official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs and FDA databases. EU: EUR-Lex, European Commission pages and MDCG guidance. International: IMDRF codes and MDSAP documents. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number, based on freely available published information and the author’s own interpretation and knowledge."], ["Important", "Training simulation. Not legal or regulatory advice. Not an official FDA, EC or ISO document. No affiliation with FDA, the European Commission or ISO. This application is intended for training purposes only. It is provided without warranty. Results from its tools require human review, verification and approval. Always check the linked official source before citing anything in a formal regulatory or customer response."]];
@@ -4908,6 +4924,45 @@ function evCard(a,touch){ const its=evItems(a), c=el("div",{class:"card evCard n
   c.append(el("div",{class:"evAct"}, el("button",Object.assign({class:"cta evMake",type:"button",onclick:()=>{ const k=evCreate(a); touch(); flash(k?k+(k===1?" record":" records")+" created and linked":"All records already exist"); renderImpact(); }},n&&have>=n?{disabled:"disabled"}:{}),have?"Create the missing records":"Create evidence records")));
   c.append(el("p",{class:"src evNote"},EV_NOTE)); return c; }
 
+/* ===== 3.24.0 Field guidance notes: what to write, a good and a weak example (our own words; generic, no real companies) ===== */
+const FN_NOTES=[
+ [/^description of the change/i,"Current state, proposed state and what exactly changes (part, process, software, supplier), where and from when.","Current: one liner supplier. Proposed: add a second qualified supplier for the same grade and wall thickness from lot 2701; reflow temperature 235 → 240 °C.","Change of supplier."],
+ [/^problem statement|^description of the (nonconformity|deviation)|^event description/i,"State what, where, when, how many and the evidence. Facts only; no cause and no blame.","14 of 200 units from lot 2611 failed the seal-strength test (spec ≥ 1.2 N/15 mm, results 0.8–1.0) on 12 Nov; test report TR-118.","Seals are weak again."],
+ [/^root cause/i,"The cause you can act on, how you found it (method) and the evidence that confirms it.","Sealer platen temperature drifted 8 °C low because the thermocouple was not in the calibration plan; confirmed by data log and re-test at set point.","Operator error."],
+ [/^acceptance criteria|^method and criteria/i,"Measurable pass/fail limits set before the test or check, with the basis.","≥ 95% reliability at 95% confidence (59 of 59 pass), per sampling plan SP-04.","Results should be acceptable."],
+ [/^(result|results summary|result and evidence|result \/ score|capability result)\b/i,"The observed outcome against the criteria, with numbers and the record reference.","59 of 59 passed; mean 1.6 N/15 mm (min 1.3). Raw data in TR-121. Meets criteria.","Passed."],
+ [/^conclusions?\b/i,"What the result means: criteria met or not, open items and the next step.","All criteria met; no deviations. Process released for production from lot 2701.","OK, see above."],
+ [/^(owner|document owner|capa owner|requested by|approved by|closed by|trainer|inspector and date|lead auditor|prepared by|reviewed by)$/i,"A named person and role, so responsibility is clear.","J. Ortega, Senior Process Engineer","Engineering"],
+ [/^out of scope/i,"What this document does not cover, so readers do not assume it does.","Packaging line 2 and sterilization are excluded; covered by PQ-PK-02.","Other things."],
+ [/^(scope|scope and clauses|purpose and scope|scope of the qms)\b/i,"The products, processes, sites and lifecycle stages covered; be specific.","Final assembly of model X-100 at site A, all shifts, from incoming kitting to packaging.","Production."],
+ [/^(objective|purpose)$/i,"What this must achieve, in measurable terms.","Show the new mould produces parts within drawing tolerances at Cpk ≥ 1.33.","To check the mould."],
+ [/^(summary of this revision|revision)$/i,"Revision letter and what changed, with the reason.","Rev C: added torque check at step 7 (CAPA-0012); fixed typo in 4.2.","Updated."],
+ [/^(document title|report title|list title|change title|scar title|title|document number|report number|fai number|ncr number\(s\)|ncr number|(iq|oq|pq|index|tracker|plan) number and revision)$/i,"A unique, controlled number or a short, specific title someone can search for.","Design verification report – catheter tip bond strength, model C-6F","Report"],
+ [/^(sample size|statistical rationale)\b/i,"The number and why it is enough (risk, statistics or standard).","n = 59 (zero failures, 95% confidence, 95% reliability), per sampling procedure SOP-STAT-01.","A few units."],
+ [/^(lot \/|lots \/ units|po and lot|lot \/ po|effective lot|products, versions(,| and) lots)/i,"Exact identifiers for traceability (lot, serial, PO), with quantities where relevant.","Lots 2611 and 2612 (400 units each), PO 7781.","Recent lots."],
+ [/^(evidence attached|supporting data)/i,"Reference the controlled records that prove it (numbers and revisions).","Test report TR-121 rev A; raw data file in the DHF index, item 14.","See attached."],
+ [/containment/i,"What was done at once to stop the problem spreading, with quantities and dates.","Quarantined 380 units in stock and 2 WIP lots on 12 Nov; customer shipments held.","Contained."],
+ [/^(deviations|summary of deviations)/i,"Each deviation, its impact on the result, the justification and who approved it. Write 'None' if none.","Room temperature reached 26 °C for 20 min (limit 25 °C); no impact on adhesive cure per TR-87; approved by QA.","Minor deviations occurred."],
+ [/^(conditions \/ rationale|justification|priority rationale|rationale for)/i,"Why this decision is right, based on risk, data or a requirement.","Low risk: cosmetic only, no effect on function per risk file item H-22; accepted for 1 lot.","Approved by management."],
+ [/^(related records|capa \/ ncr \/ change links|links to)/i,"Record numbers that connect this to other records, so the trail can be followed.","Complaints CMP-0412, CMP-0419; NCR-0077; risk file RMR-6.","Several complaints."],
+ [/^(method used|investigation method|investigation performed|test method name)/i,"The named method and the data used.","Fault tree plus review of 6 months of complaint data and DHRs for lots 2601–2612.","Investigated."],
+ [/^(part numbers? concerned|affected part numbers|part number, revision)/i,"Part numbers with revision and description.","30-0412 rev E, PTFE inner liner, 0.05 mm wall","The liner."],
+ [/^(supplier name|supplier and site|subcontractor and site|legal company name)$/i,"Legal name and the actual manufacturing site (not the sales office).","Supplier S-240 (demo), plant 2, full street address","Our supplier."],
+ [/^training topic/i,"The document and revision trained on, and the task it covers.","SOP-PRD-014 rev D: heat sealer set-up and daily check","Sealing training."],
+ [/^period covered/i,"Exact start and end dates.","1 Jan 2026 to 30 Jun 2026","First half."],
+ [/^requirement not met/i,"The requirement, the evidence seen and the gap, in that order.","Procedure SOP-CAL-01 requires a calibration label; torque driver TD-14 had none (seen in cell 3, 14 Nov).","Calibration issues."],
+ [/^revalidation triggers/i,"The specific changes or results that require revalidation.","Change of resin supplier, mould repair, or Cpk < 1.33 on monthly review.","Major changes."],
+ [/^equipment id/i,"The asset number and its calibration or qualification status.","SEAL-03, calibrated to 15 Mar 2027 (CAL-2026-311)","Sealer."],
+ [/^device(,| and)? (model|models)|^device and models|^device, model/i,"Device name, model and software version exactly as labelled.","Infusion pump model X-300, firmware 3.2.1","The pump."],
+ [/^priority$/i,"Base it on severity and likelihood from the risk file, not on opinion.","High: potential under-delivery (severity serious) and rising rate (3 to 9 per quarter).","Important."],
+ [/^(comments \/ follow-up|open items with owner and date)/i,"Only what the reader needs next: open points, who, by when.","Re-check effectiveness in 3 months (owner J. Ortega, due 15 Mar 2027).","Monitor."]
+];
+function fnNote(lab){ for(const n of FN_NOTES){ if(n[0].test(lab)) return n; } return null; }
+function fnAttach(c){ c.querySelectorAll(".rField").forEach(f=>{ const sp=f.querySelector(":scope > span"); if(!sp||f.querySelector(".fnBtn")) return; const n=fnNote(sp.textContent); if(!n) return;
+  const box=el("div",{class:"fnNote noX",hidden:"hidden"}, el("p",{},n[1]), el("p",{class:"fnGood"}, el("b",{},"Good: "), n[2]), el("p",{class:"fnWeak"}, el("b",{},"Weak: "), n[3]));
+  const b=el("button",{class:"fnBtn",type:"button","aria-expanded":"false","aria-label":"What to write in "+sp.textContent,onclick:e=>{ e.preventDefault(); e.stopPropagation(); const open=box.hidden; box.hidden=!open; b.setAttribute("aria-expanded",String(open)); }},"?");
+  sp.append(" ",b); f.append(box); }); return c; }
+
 function statsSheet(){ closeModal(); if(location.hash==="#me") route(); else location.hash="#me"; }
 
 function profHdrRefresh(){ document.querySelectorAll(".avChip").forEach(b=>{ const p=profGet(); b.innerHTML=""; b.append(profIco(p)); b.classList.toggle("unset",!p.nick); b.classList.toggle("adm",isAdmin()); b.title=(p.nick?p.nick+" · ":"")+"My statistics"+(isAdmin()?" (administrator · "+PLAN_NAMES[planEff()]+")":""); }); }
@@ -5275,6 +5330,7 @@ const HELP_FEAT=[
  {r:"projects",t:"Project list",s:".prjAlt",h:"Open a project you already created.",k:"open list existing",q:["how do i open a project"]},
  {r:"form",t:"Record check",s:".rcBtn",h:"On a CAPA or complaint record, press Record check. A simulated investigator finds gaps in your record (missing decisions, impossible dates, weak root cause) and asks about each one, then gives a closing list with what to fix and the basis. Training only; nothing leaves your device.",k:"record check gaps capa complaint mock inspection investigator review my record",q:["check my capa","is my record complete","what is missing in my complaint record","review my capa"]},
  {r:"impact",t:"Evidence package",s:".evCard",h:"On the Output step of a change impact assessment, the Evidence package lists every required deliverable. Press Create evidence records: the app opens linked, pre-filled records (protocols, reports, traceability, training, SOP updates and more) in one project and shows their status. It does not decide on 510(k), PMA supplement or Notified Body submissions; approvals stay in your eQMS.",k:"evidence package deliverables records change impact create protocol report traceability project",q:["create the records for my change","what evidence do i need for this change","open the deliverables","evidence package"]},
+ {r:"form",t:"What to write in a field",s:".fnBtn",h:"Tap the small ? next to a field name to see what to write there, with a good and a weak example. Tap it again to hide it.",k:"field help guidance note what to write example good weak",q:["what should i write here","example for this field","how do i fill this field"]},
  {r:"me",t:"My statistics",s:".msH",h:"Your practice score by process (weakest first), the next best action, your activity in the last 7 days and what is due for re-check. Open it from the round user button at the top. Everything is saved on this device only.",k:"my statistics progress score performance activity weak process recheck re-check",q:["how am i doing","where are my statistics","what should i practise next","what is my weakest area"]},
  {r:"dates",t:"Regulatory Timeline",s:"#main h2",h:"Regulatory milestones and transition dates, with links to official sources.",k:"timeline dates deadlines milestones transition qmsr mdr udi estar ai act",q:["when does the qmsr apply","where are the deadlines","what are the mdr transition dates"]},
  {r:"dates",t:"Search dates",s:".dSearch",h:"Type a topic or year (UDI, eSTAR, AI Act, 2027) to filter the milestones.",k:"filter year search",q:["how do i find a date"]},
@@ -8971,7 +9027,7 @@ function sqSecCard(F,S,v,touch){ const c=el("div",{class:"card"}, el("h3",{class
             g.append(el("button",{class:"linkBtn del",type:"button","aria-label":"Delete row "+(i+1),onclick:()=>{ rows.splice(i,1); touch(); draw(); }},"Delete row")); box.append(g); });
           box.append(el("button",{class:"linkBtn",type:"button",onclick:()=>{ const r={}; cols.forEach(([ck])=>r[ck]=""); rows.push(r); touch(); draw(); }},"+ Add row")); };
         draw(); c.append(box); return; } });
-    return c; }
+    return fnAttach(c); }
 /* 2.13.0 Basic Statistical Calculators: standard deviation, Cp/Cpk, p-value, normality, t-tests, binomial test, ANOVA, regression,
    factor analysis; each with a short tutorial. Methods are standard textbook statistics, written for this app. */
 const BS=lsGet("qah-bstats-v1",{cur:"sd",alpha:"0.05",in:{}});
