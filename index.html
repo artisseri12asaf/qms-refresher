@@ -2473,6 +2473,49 @@ header.top .appbar .brand2 b{font-family:var(--q-font-serif); color:var(--q-hero
 @media (max-width:900px){ .qModes{grid-template-columns:repeat(2,minmax(0,1fr))} }
 @media (max-width:700px){ .qHero{grid-template-columns:1fr; padding:18px 16px 20px} .qDraw{display:none} .qH1{font-size:30px} .qSub{font-size:15px; margin-bottom:12px} .qMode{padding:12px} .qMode p,.qMode .qmGo{display:none} .qMode b{font-size:16px} .qSec h2{font-size:23px} }
 
+/* 3.20.0 My statistics */
+.msTop{display:grid; grid-template-columns:1fr minmax(0,480px); gap:28px; align-items:start; padding:26px 0 30px; border-bottom:1px solid var(--q-line)}
+.msH{font-family:var(--q-font-serif); font-weight:500; font-size:34px; margin:6px 0 4px; color:var(--q-ink)}
+.msSub{margin:0; color:var(--q-muted)}
+.msNba{background:var(--q-surface); border:1px solid var(--q-ink); border-radius:var(--q-r-card); padding:20px 22px}
+.msNk{font:600 12px/1.2 var(--q-font-sans); letter-spacing:1.4px; text-transform:uppercase; color:var(--q-alert)}
+.msNba h3{font-family:var(--q-font-serif); font-weight:500; font-size:22px; margin:8px 0 6px}
+.msNba p{margin:0 0 10px; color:var(--q-muted)} .msNba .msWhy{border-left:2px solid var(--q-primary); padding-left:10px; color:var(--q-ink)}
+.msBtns{display:flex; gap:16px; align-items:center; flex-wrap:wrap}
+.msAud{display:flex; gap:10px; align-items:baseline; flex-wrap:wrap; border-top:1px dashed var(--q-line); margin-top:16px; padding-top:12px; color:var(--q-muted)}
+.msAud span{flex:1 1 160px} .msAud b{font-family:var(--q-font-serif); font-size:28px; font-weight:500; color:var(--q-ink)}
+.msSec .qSec{align-items:baseline} .msNote{order:3; color:var(--q-muted); font-size:13.5px; white-space:nowrap}
+.msWrap{border:1px solid var(--q-ink); border-radius:var(--q-r-card); overflow:hidden; background:var(--q-surface)}
+.msTbl{width:100%; border-collapse:collapse; font-size:15px}
+.msTbl thead th{background:var(--q-bg-alt,var(--q-bg)); font:600 11.5px/1.3 var(--q-font-sans); letter-spacing:1.2px; text-transform:uppercase; color:var(--q-muted); text-align:left; padding:12px 10px; border-bottom:1px solid var(--q-ink)}
+.msTbl tbody th{text-align:left; font-weight:600; padding:11px 10px}
+.msTbl td{padding:11px 10px; border-top:1px solid var(--q-line); text-align:center; white-space:nowrap}
+.msTbl tbody tr+tr th{border-top:1px solid var(--q-line)} .msTbl tbody tr:first-child td{border-top:0}
+.msTbl td.msLo{background:color-mix(in srgb,var(--q-alert) 10%,transparent); color:var(--q-alert)}
+.msTbl td.msMid{background:color-mix(in srgb,#c08a1e 12%,transparent)}
+.msTbl td.msHi{background:color-mix(in srgb,var(--q-primary) 10%,transparent)}
+.msTbl td.msThin{background:repeating-linear-gradient(135deg,transparent 0 5px,color-mix(in srgb,var(--q-muted) 22%,transparent) 5px 6px); color:var(--q-muted)}
+.msTbl td.msNa{color:var(--q-muted)}
+.msBarC{text-align:left !important} .msBarC b{font-weight:500; margin-left:8px}
+.msBar{position:relative; display:inline-block; width:140px; height:8px; background:var(--q-line); vertical-align:middle}
+.msBar i{position:absolute; left:0; top:0; bottom:0; background:var(--q-muted)} .msBar i.msLo{background:var(--q-alert)} .msBar i.msMid{background:#b07a12} .msBar i.msHi{background:var(--q-primary)}
+.msBar u{position:absolute; left:85%; top:-4px; bottom:-4px; width:2px; background:var(--q-alert)}
+.msMore td{text-align:center; padding:10px}
+.msKey{color:var(--q-muted); font-size:13px; margin:8px 0 0} .msKey .k{display:inline-block; width:14px; height:10px; margin:0 4px 0 8px; border:1px solid var(--q-line); vertical-align:middle}
+.msKey .k:first-child{margin-left:0} .msKey .k.msLo{background:color-mix(in srgb,var(--q-alert) 14%,transparent)} .msKey .k.msMid{background:color-mix(in srgb,#c08a1e 16%,transparent)} .msKey .k.msHi{background:color-mix(in srgb,var(--q-primary) 14%,transparent)}
+.msKey .k.msThin{background:repeating-linear-gradient(135deg,transparent 0 3px,color-mix(in srgb,var(--q-muted) 35%,transparent) 3px 4px)}
+.msTwo{display:grid; grid-template-columns:1fr 1fr; gap:40px; margin-top:8px}
+.msBig{font-weight:600; margin:0 0 8px}
+.msDays{display:flex; gap:6px; margin:0 0 8px} .msDays span{width:30px; height:30px; display:grid; place-items:center; border:1px solid var(--q-line); font:600 12px var(--q-font-mono); color:var(--q-muted)}
+.msDays span.on{background:var(--q-primary); border-color:var(--q-primary); color:var(--q-on-primary,#fff)}
+.msRc{margin:0 0 12px; padding-left:22px; line-height:1.9} .msRc .linkBtn{text-align:left}
+.msLinks{display:flex; gap:16px; flex-wrap:wrap}
+.msFoot{border-top:1px solid var(--q-line); margin-top:22px; padding-top:12px; font-size:13px; color:var(--q-muted)}
+.sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0)}
+@media (max-width:760px){ .msTop{grid-template-columns:1fr; gap:18px; padding:16px 0 22px} .msH{font-size:28px}
+  .msTbl .msM, .msTbl td:nth-child(2), .msTbl td:nth-child(3), .msTbl td:nth-child(4), .msTbl td:nth-child(5){display:none}
+  .msTbl{font-size:14px} .msBar{width:56px} .msTwo{grid-template-columns:1fr; gap:6px} .msNote{display:none} .qSec h2{white-space:normal} }
+
 </style>
 </head>
 <body>
@@ -2641,7 +2684,7 @@ function qCard(c,i,num,after){
   const opts=el("div",{class:"opts"});
   const order=perm(q.o.length,key);
   order.forEach((j,pos)=>{
-    const b=el("button",{class:"opt",type:"button",onclick:()=>{ state[key]=j; save(); after(); }}, String.fromCharCode(65+pos)+". "+q.o[j]);
+    const b=el("button",{class:"opt",type:"button",onclick:()=>{ state[key]=j; actAnswer(key,j); save(); after(); }}, String.fromCharCode(65+pos)+". "+q.o[j]);
     if(ans!==undefined){ b.disabled=true; if(j===q.a) b.classList.add("right"); else if(j===ans) b.classList.add("wrong"); }
     opts.append(b);
   });
@@ -2680,7 +2723,7 @@ function dilCard(c,di,after,showSource){
   card.append(el("div",{class:"eyebrow"},"What would you do? Pick one to see the analysis."));
   const ch=el("div",{class:"choice"});
   d.c.forEach(([opt,ana],j)=>{
-    const b=el("button",{class:"opt",type:"button",onclick:()=>{ state[key]=j; save(); after(); }}, el("b",{},String.fromCharCode(65+j)), opt);
+    const b=el("button",{class:"opt",type:"button",onclick:()=>{ state[key]=j; actAnswer(key,j); save(); after(); }}, el("b",{},String.fromCharCode(65+j)), opt);
     if(pick===j) b.style.borderColor="var(--fda)";
     ch.append(b);
   });
@@ -4057,7 +4100,7 @@ function explorePanel(open){
 }
 
 /* ---------- home ---------- */
-const APPVER="3.19.0", APPDATE="28-NOV-2026";
+const APPVER="3.20.0", APPDATE="28-NOV-2026";
 const VERLINE="Ver. "+APPVER+" ("+APPDATE+")";
 const COPYLINE="© 2026 Qraft (Asaf Ben Zion). All rights reserved.";
 const LEGAL=[["Risk Management Approach", "Content is a paraphrased summary for training. It does not replace the standards: ISO 14971:2019 (with EN ISO 14971:2019+A11:2021 for the EU), ISO/TR 24971:2020 and IEC 62366-1:2015+A1:2020. Use your licensed copies for exact requirements."], ["Copyright", "© 2026 Qraft (Asaf Ben Zion). The selection, structure, design and original text of this handbook may not be copied or redistributed without written permission. Regulations and official guidance are cited from their publishers: US federal texts are in the public domain, and EU texts are reused with attribution. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number and described in the author’s own words; their text remains the property of their publishers."], ["About the content", "This application contains no official statements. It reflects the author’s own reasoning, selection and design, and was developed and tested with AI tools. Key facts, such as regulatory reporting timelines, device classifications and clause numbers, were checked against official sources; other content is the author’s interpretation and may contain inaccuracies."], ["Sources", "Cited sources are official publications. US: the Federal Register, eCFR, FDA guidance, compliance programs and FDA databases. EU: EUR-Lex, European Commission pages and MDCG guidance. International: IMDRF codes and MDSAP documents. Standards (ISO, IEC, ASTM, AAMI) are referred to by clause number, based on freely available published information and the author’s own interpretation and knowledge."], ["Important", "Training simulation. Not legal or regulatory advice. Not an official FDA, EC or ISO document. No affiliation with FDA, the European Commission or ISO. This application is intended for training purposes only. It is provided without warranty. Results from its tools require human review, verification and approval. Always check the linked official source before citing anything in a formal regulatory or customer response."]];
@@ -4259,7 +4302,7 @@ function openGdp(after){ if(after&&!after.fn) after=null;
       stage.append(opts,fb);
       next.disabled=picked===undefined; next.textContent=S.qi<GDP_Q.length-1?"Next question ›":"See my result ›"; }
     if(k==="done"){ const sc=GDP_Q.reduce((s,q,j)=>s+(S.ans[j]===q.a?1:0),0), pct=Math.round(sc/GDP_Q.length*100);
-      const d=new Date(), p2=n=>String(n).padStart(2,"0"); const prev=gdpBest().best; if(prev===undefined||sc>=prev) gdpSave({best:sc,date:p2(d.getDate())+"/"+p2(d.getMonth()+1)+"/"+d.getFullYear()});
+      const d=new Date(), p2=n=>String(n).padStart(2,"0"); const prev=gdpBest().best; if(prev===undefined||sc>=prev) actCourse("gdp",sc,10); gdpSave({best:sc,date:p2(d.getDate())+"/"+p2(d.getMonth()+1)+"/"+d.getFullYear()});
       const ring=`<svg viewBox="0 0 120 120" class="gdpRing"><circle cx="60" cy="60" r="50" fill="none" stroke="#e3ebf1" stroke-width="12"/><circle cx="60" cy="60" r="50" fill="none" stroke="${pct>=80?"#2b8a5a":pct>=60?"#c08a1e":"#c0392b"}" stroke-width="12" stroke-linecap="round" stroke-dasharray="${(pct/100*314.16).toFixed(1)} 314.16" transform="rotate(-90 60 60)" class="gdpArc"/><text x="60" y="58" text-anchor="middle" font-size="26" font-weight="800" fill="#14202b" font-family="sans-serif">${sc}/${GDP_Q.length}</text><text x="60" y="78" text-anchor="middle" font-size="12" fill="#5d6f7a" font-family="sans-serif">${pct}%</text></svg>`;
       const msg=pct>=80?"Excellent. Your records would make an inspector smile.":pct>=60?"Good start. Review the rules you missed and try again.":"Worth another round. Go through the examples again, then retake the check.";
       const conf=el("div",{class:"gdpConf","aria-hidden":"true"}); if(pct>=80&&!reduce) for(let j=0;j<36;j++) conf.append(el("i",{style:`--x:${Math.random()*100}%;--d:${(Math.random()*0.6).toFixed(2)}s;--r:${Math.round(Math.random()*360)}deg;--c:${["#2b7299","#5fb3d9","#c08a1e","#2b8a5a","#8fa6b8"][j%5]}`}));
@@ -4364,7 +4407,7 @@ function openCourse(C,after){
       stage.append(el("div",{class:"gdpQhead"}, el("span",{class:"gdpCount"},"Question "+(S.qi+1)+" of "+C.quiz.length), bar), el("h3",{class:"gdpQ"},Q.q), opts, fb);
       next.disabled=picked===undefined; next.textContent=S.qi<C.quiz.length-1?"Next question ›":"See my result ›"; }
     if(k==="done"){ const sc=C.quiz.reduce((s,q,j)=>s+(S.ans[j]===0?1:0),0), pct=Math.round(sc/C.quiz.length*100), win=sc>=Math.ceil(C.quiz.length*0.8);
-      crsSave(C.id,sc);
+      crsSave(C.id,sc); actCourse(C.id,sc,C.quiz.length);
       const ring=`<svg viewBox="0 0 120 120" class="gdpRing"><circle cx="60" cy="60" r="50" fill="none" stroke="#e3ebf1" stroke-width="12"/><circle cx="60" cy="60" r="50" fill="none" stroke="${pct>=80?"#2b8a5a":pct>=60?"#c08a1e":"#c0392b"}" stroke-width="12" stroke-linecap="round" stroke-dasharray="${(pct/100*314.16).toFixed(1)} 314.16" transform="rotate(-90 60 60)" class="gdpArc"/><text x="60" y="68" text-anchor="middle" font-size="26" font-weight="800" fill="#1d3b52">${sc}/${C.quiz.length}</text></svg>`;
       const conf=el("div",{class:"gdpConf","aria-hidden":"true"}); if(win&&!reduce) for(let j=0;j<36;j++) conf.append(el("i",{style:`--x:${Math.random()*100}%;--d:${(Math.random()*0.6).toFixed(2)}s;--r:${Math.round(Math.random()*360)}deg;--c:${["#2b7299","#5fb3d9","#c08a1e","#2b8a5a","#8fa6b8"][j%5]}`}));
       stage.append(conf, el("div",{class:"gdpDone"}, el("div",{class:"crsDoneArt"}, el("div",{html:ring}), el("div",{class:"crsArt"+(win?" pop":""),html:crsBadge(C.n,win)})),
@@ -4498,22 +4541,82 @@ function planSheet(start){ const p=profGet(); const box=el("div",{class:"prof"})
   draw(start==="q"||(!p.done&&start!=="res")?"q":"res"); }
 
 /* my statistics (user icon) */
-function statsSheet(){ const p=profGet(); const box=el("div",{class:"pfStats"});
-  const T=modStats("train"), D=modStats("dil"), A=modStats("audit"), C=(typeof crsAll==="function"?crsAll():[]), won=C.filter(c=>c.best!==undefined&&c.best>=Math.ceil(c.total*0.8)).length, tried=C.filter(c=>c.best!==undefined).length;
-  const tile=(t,acc,cov,line,href)=>el("a",{class:"pfTile",href,onclick:()=>closeModal()}, el("span",{class:"pfRing",html:ringSvg(acc,cov,64)}), el("div",{}, el("b",{},t), el("small",{},line)));
-  box.append(el("div",{class:"profTop"}, profIco(p,"big"), el("div",{}, el("h3",{},p.nick?"Hi, "+p.nick:"Your statistics"),
-      el("p",{class:"src"},(isAdmin()?"Administrator · viewing as "+PLAN_NAMES[planEff()]:PLAN_ENFORCE?PLAN_NAMES[planEff()]+" plan":"Preview: all content open")+" · saved on this device"))),
-    el("div",{class:"pfGrid"},
-      tile("Selected Questions",T.acc,T.cov,T.line,"#random"),
-      tile("Real-life Dilemmas",D.acc,D.cov,D.line,"#dilemmas"),
-      tile("Inspection mode",A.acc,A.cov,A.line,"#audit"),
-      el("p",{class:"src pfLib"},"Library: "+(AUD_CASES.length+Object.keys(AUD_SCEN).length+AUD_REAL.length)+" virtual inspections · "+CH.reduce((a,c)=>a+c.qs.length,0).toLocaleString("en-US")+" questions · "+CH.reduce((a,c)=>a+c.dils.length,0).toLocaleString("en-US")+" dilemmas · "+CH.reduce((a,c)=>a+(c.debates||[]).length,0)+" expert views · "+(typeof crsAll==="function"?crsAll().length:0)+" courses"),
-      tile("Training Courses",tried?Math.round(won/C.length*100):null,C.length?Math.round(tried/C.length*100):0,won+" of "+C.length+" badges earned · "+tried+" courses taken","#gdp")),
-    el("div",{class:"pfAct"},
-      typeof openPerf==="function"?el("button",{class:"cta alt",type:"button",onclick:()=>{ closeModal(); setTimeout(openPerf,60); }},"Detailed performance"):"",
-      el("button",{class:"cta alt",type:"button",onclick:()=>{ closeModal(); setTimeout(()=>planSheet("q"),60); }},p.done?"Edit my profile":"Set up my profile"),
-      el("button",{class:"linkBtn",type:"button",onclick:()=>{ closeModal(); setTimeout(()=>planSheet("res"),60); }},"Plans and administrator")));
-  modal("My statistics",box); const mb=document.querySelector("#ovl .mbox"); if(mb) mb.classList.add("profBox"); }
+/* ===== 3.20.0 My statistics + on-device activity log (qah-activity-v1) ===== */
+const ACT_KEY="qah-activity-v1", VISIT_KEY="qah-visit-v1";
+const PROCS=[["mgmt","Management, QMS and documents"],["risk","Risk management"],["design","Design and change control"],["supplier","Purchasing and suppliers"],["prod","Production, validation and sterilization"],["capa","Complaints, CAPA and nonconformance"],["pms","Post-market surveillance and vigilance"],["reg","Regulatory pathways and inspections"]];
+const PROC_CH={b0:"mgmt",b13:"mgmt",b4:"mgmt",b5:"mgmt",b6:"mgmt",b7:"prod",b8:"capa",ch1:"mgmt",ch2:"mgmt",ch3:"risk",ch4:"design",ch5:"supplier",ch6:"prod",ch7:"prod",ch8:"prod",ch9:"capa",ch10:"reg",ch11:"pms",ch12:"reg",ch13:"reg",e1:"mgmt",e2:"reg",e3:"pms",e4:"prod"};
+const PROC_TOPIC={complaint:"capa",supplier:"supplier",validation:"prod",design:"design",risk:"risk",labeling:"prod",mgmt:"mgmt",nc:"capa",training:"mgmt",calibration:"prod",audit:"mgmt",software:"design",field:"pms",sterility:"prod",trace:"prod",cyber:"design",pms:"pms",reprocess:"prod",service:"prod",docs:"mgmt",data:"capa",capa:"capa"};
+const PROC_CRS={gdp:"mgmt",complaint:"capa",mdr:"pms",capa:"capa",nc:"capa",change:"design",req:"design",risk:"risk",supplier:"supplier",inspect:"reg",di:"mgmt"};
+const PROC_RX=[["pms",/\b(806|803|vigilance|recall|removal|correction|field (safety|action)|PSUR|post-?market|adverse event|serious incident|MDR report)/gi],["capa",/\b(CAPA|complaint|nonconform|root cause|corrective|preventive|820\.100|rework|concession|trend)/gi],["design",/\b(design|DHF|change control|820\.30|software|firmware|requirement|usability|human factors|PCCP|algorithm)/gi],["risk",/\b(risk|hazard|FMEA|14971)/gi],["supplier",/\b(supplier|purchas|vendor|contract manufactur|incoming|outsourc)/gi],["prod",/\b(process validation|IQ|OQ|PQ|steril|bioburden|cleanroom|environmental|calibrat|equipment|DHR|device history|production|label|UDI|packag|shelf life|acceptance)/gi],["mgmt",/\b(management review|internal audit|training|document control|data integrity|quality policy|record)/gi],["reg",/\b(510\(k\)|PMA|De Novo|classif|notified body|technical documentation|483|establishment registration)/gi]];
+function procOf(t,text){ if(PROC_TOPIC[t]) return PROC_TOPIC[t]; let best=null,bn=0; PROC_RX.forEach(([k,rx])=>{ const n=((text||"").match(rx)||[]).length; if(n>bn){ bn=n; best=k; } }); return best||"capa"; }
+let ACT_MEM=null, ACT_RAW=null, ACT_T=0;
+function actGet(){ try{ const raw=localStorage.getItem(ACT_KEY)||"[]"; if(ACT_MEM&&(ACT_T||raw===ACT_RAW)) return ACT_MEM; const a=JSON.parse(raw); ACT_MEM=Array.isArray(a)?a:[]; ACT_RAW=raw; return ACT_MEM; }catch(e){ return ACT_MEM||[]; } }
+function actFlush(){ ACT_T=0; try{ if(ACT_MEM.length>3000) ACT_MEM=ACT_MEM.slice(-3000); ACT_RAW=JSON.stringify(ACT_MEM); localStorage.setItem(ACT_KEY,ACT_RAW); }catch(x){} }
+function actAdd(e){ try{ const a=actGet(); e.t=Date.now(); a.push(e); if(!ACT_T) ACT_T=setTimeout(actFlush,300); }catch(x){} }
+addEventListener("pagehide",()=>{ if(ACT_T){ clearTimeout(ACT_T); actFlush(); } });
+/* key "<ch>-<i>" = question, "<ch>-dil-<i>" = dilemma */
+function actAnswer(key,j){ try{ const m=/^(.+?)-(dil-)?(\d+)$/.exec(key); if(!m) return; const c=CH.find(x=>x.id===m[1]); if(!c) return; const i=+m[3];
+  if(m[2]){ const d=c.dils[i]; if(d) actAdd({m:"d",p:PROC_CH[c.id]||"mgmt",ok:j===dilRec(d)?1:0,k:key}); }
+  else { const q=c.qs[i]; if(q) actAdd({m:"q",p:PROC_CH[c.id]||"mgmt",ok:j===q.a?1:0,k:key}); } }catch(e){} }
+function actAudit(st,n,a){ try{ actAdd({m:"i",p:procOf(n.t,(a.q||"")+" "+(a.why||"")),ok:a.ok?1:0,k:"aud-"+st.c.id}); }catch(e){} }
+function actCourse(id,sc,total){ try{ actAdd({m:"c",p:PROC_CRS[id]||"mgmt",ok:sc,n:total,k:"crs-"+id}); }catch(e){} }
+function visitTouch(){ try{ const v=JSON.parse(localStorage.getItem(VISIT_KEY)||"{}")||{}; const today=new Date().toISOString().slice(0,10); if(v.cur!==today){ v.prev=v.cur||null; v.cur=today; localStorage.setItem(VISIT_KEY,JSON.stringify(v)); } return v; }catch(e){ return {}; } }
+const MON=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+function dmy(d){ d=new Date(d); return String(d.getDate()).padStart(2,"0")+"-"+MON[d.getMonth()]+"-"+d.getFullYear(); }
+function procScores(){ const R={}; PROCS.forEach(([k])=>R[k]={q:[0,0],d:[0,0],i:[0,0],c:[0,0],chs:[]});
+  CH.forEach(c=>{ const k=PROC_CH[c.id]||"mgmt", r=R[k]; let cd=0,cr=0; c.qs.forEach((q,i)=>{ const a=state[c.id+"-"+i]; if(a!==undefined){ cd++; if(a===q.a) cr++; } }); r.q[0]+=cr; r.q[1]+=cd; r.chs.push({c,done:cd,right:cr});
+    c.dils.forEach((d,i)=>{ const a=state[c.id+"-dil-"+i]; if(a!==undefined){ r.d[1]++; if(a===dilRec(d)) r.d[0]++; } }); });
+  const A=actGet(), t0=A.length?A[0].t:Infinity;
+  A.filter(e=>e.m==="i").forEach(e=>{ const r=R[e.p]; if(r){ r.i[1]++; r.i[0]+=e.ok; } });
+  Object.keys(AUD_SCEN).forEach(id=>{ const v=state["aud-"+id], k=PROC_TOPIC[AUD_SCEN[id].topic]; if(v&&k&&v.d<t0){ R[k].i[0]+=v.pct/10; R[k].i[1]+=10; } });
+  (typeof crsAll==="function"?crsAll():[]).forEach(c=>{ const k=PROC_CRS[c.id]; if(k&&c.best!==undefined){ R[k].c[0]+=c.best; R[k].c[1]+=c.total; } });
+  return PROCS.map(([k,l])=>{ const r=R[k], n=r.q[1]+r.d[1]+r.i[1]+r.c[1], ok=r.q[0]+r.d[0]+r.i[0]+r.c[0]; return {k,l,r,n,score:n>=10?Math.round(ok/n*100):null}; }); }
+function pctCell(v,course){ const [ok,n]=v; if(!n) return el("td",{class:"msNa"},"–"); if(course) return el("td",{class:"msC "+msBand(ok/n*100)},Math.round(ok)+"/"+n);
+  if(n<10) return el("td",{class:"msThin",title:"Under 10 answers: not counted yet"},n+" ans."); const p=Math.round(ok/n*100); return el("td",{class:msBand(p)},p+"%"); }
+function msBand(p){ return p<70?"msLo":p<85?"msMid":"msHi"; }
+function msPractise(P){ const ch=P.r.chs.slice().sort((a,b)=>{ const ra=a.done>=3?a.right/a.done:2, rb=b.done>=3?b.right/b.done:2; return ra-rb||((b.c.qs.length-b.done)-(a.c.qs.length-a.done)); })[0]; return ch&&ch.c; }
+function msGo(c){ if(!c){ go("random"); return; } rnd.ch=c.id; rnd.cur=null; rnd.unanswered=true; if(location.hash==="#random") route(); else location.hash="#random"; }
+function recheckItems(){ const L=[], now=Date.now(), DAY=864e5;
+  audAllIds().forEach(id=>{ const v=state["aud-"+id]; if(v&&!v.pass) L.push({d:v.d,txt:id+" · scored "+v.pct+"% on "+dmy(v.d).slice(0,6)+" · re-check",go:()=>{ location.hash="#audit"; setTimeout(()=>{ const s=Math.floor(Math.random()*1e6); audStart(AUD_REAL.some(c=>c.id===id)?audNewReal(id,s):AUD_SCEN[id]?audNewTopic(id,s):audNew(id,s)); },350); }}); });
+  const A=actGet(), last={}; A.filter(e=>e.m==="q").forEach(e=>last[e.k]=e); const miss=Object.values(last).filter(e=>!e.ok&&now-e.t>=3*DAY&&now-e.t<=14*DAY);
+  if(miss.length){ const by={}; miss.forEach(e=>{ const c=e.k.replace(/-\d+$/,""); by[c]=(by[c]||0)+1; }); const top=Object.keys(by).sort((a,b)=>by[b]-by[a])[0]; L.push({d:Math.min(...miss.map(e=>e.t)),txt:"Quick quiz · "+miss.length+" question"+(miss.length>1?"s":"")+" missed 3 to 14 days ago",go:()=>msGo(CH.find(c=>c.id===top))}); }
+  (typeof crsAll==="function"?crsAll():[]).filter(c=>c.best!==undefined&&c.best<c.total).forEach(c=>L.push({d:now,txt:"Course "+c.n+" · scored "+c.best+"/"+c.total+" · retake any time",go:()=>{ location.hash="#gdp"; setTimeout(()=>crsRun([c.id]),350); }}));
+  return L.sort((a,b)=>a.d-b.d).slice(0,3); }
+function renderMyStats(){ const m=document.getElementById("main"); m.innerHTML=""; const p=profGet(), v=visitTouch(), S=procScores(), A=actGet(), DAY=864e5;
+  const mk=p.market?({us:"US",eu:"EU",both:"US + EU",other:"Other markets"})[p.market]:null, lv=({"3":"Foundation","4":"Practitioner","all":"Expert"})[profLevel(p)];
+  const head=el("div",{class:"msHead"}, el("div",{class:"qKick"},["My statistics",p.done?lv:null,mk].filter(Boolean).join(" · ")), el("h2",{class:"msH"},p.nick?"Welcome back, "+p.nick:"Your statistics"), el("p",{class:"msSub"},v.prev?"Last visit "+dmy(v.prev):"First visit today"));
+  const scored=S.filter(x=>x.score!==null).sort((a,b)=>a.score-b.score), weak=scored[0];
+  const nba=el("div",{class:"msNba"}, el("div",{class:"msNk"},"Next best action"));
+  if(weak){ const c=msPractise(weak), left=c?c.qs.length-(weak.r.chs.find(x=>x.c===c)||{done:0}).done:0;
+    nba.append(el("h3",{},"Practise "+weak.l.charAt(0).toLowerCase()+weak.l.slice(1)), el("p",{},c?"Start with "+Math.min(10,Math.max(left,5))+" questions in "+c.title+" · about 6 min":"Start with a Quick quiz on this process · about 6 min"), el("p",{class:"msWhy"},"Why: "+weak.l+" is your lowest process ("+weak.score+"%)."),
+      el("div",{class:"msBtns"}, el("button",{class:"cta",type:"button",onclick:()=>msGo(c)},"Start →"), el("a",{class:"linkBtn",href:"#practice"},"Something else"))); }
+  else nba.append(el("h3",{},"Take your first Quick quiz"), el("p",{},"10 questions · about 6 min"), el("p",{class:"msWhy"},"Why: process scores appear after 10 answers in a process."),
+      el("div",{class:"msBtns"}, el("button",{class:"cta",type:"button",onclick:()=>go("random")},"Start →"), el("a",{class:"linkBtn",href:"#practice"},"Something else")));
+  if(p.auditDate){ const days=Math.ceil((new Date(p.auditDate+"T00:00:00")-new Date(new Date().toDateString()))/DAY); if(days>=0) nba.append(el("div",{class:"msAud"}, el("b",{},String(days)), el("span",{},(days===1?"day":"days")+" to your audit on "+dmy(p.auditDate)+" · "), el("button",{class:"linkBtn",type:"button",onclick:()=>planSheet("res")},"Change date"))); }
+  m.append(el("section",{class:"msTop noX"}, head, nba));
+  /* process table */
+  const order=scored.concat(S.filter(x=>x.score===null).sort((a,b)=>b.n-a.n)); let all=false;
+  const tb=el("table",{class:"msTbl"}); const thead=el("thead",{},el("tr",{}, el("th",{},"Process"), el("th",{class:"msM"},"Quick quiz"), el("th",{class:"msM"},"Dilemmas"), el("th",{class:"msM"},"Inspection"), el("th",{class:"msM"},"Course"), el("th",{},"Practice score"), el("th",{},el("span",{class:"sr"},"Action")))); const body=el("tbody");
+  const fill=()=>{ body.innerHTML=""; order.slice(0,all?8:3).forEach(P=>{ const sc=P.score; body.append(el("tr",{"data-proc":P.k}, el("th",{scope:"row"},P.l), pctCell(P.r.q), pctCell(P.r.d), pctCell(P.r.i), pctCell(P.r.c,true),
+      el("td",{class:"msBarC"}, el("span",{class:"msBar"}, el("i",{class:sc===null?"":msBand(sc),style:"width:"+(sc||0)+"%"}), el("u",{"aria-hidden":"true"})), el("b",{},sc===null?(P.n?P.n+" ans.":"–"):sc+"%")),
+      el("td",{}, el("button",{class:"linkBtn",type:"button",onclick:()=>msGo(msPractise(P))},"Practise")))); });
+    body.append(el("tr",{class:"msMore"}, el("td",{colspan:"7"}, el("button",{class:"linkBtn",type:"button",onclick:()=>{ all=!all; fill(); }},all?"Show top 3":"Show all 8")))); };
+  fill(); tb.append(thead,body);
+  m.append(el("section",{class:"msSec"}, el("div",{class:"qSec"}, el("h2",{},"Practice score by process"), el("span",{class:"msNote"},"Weakest first · all four practice modes")), el("div",{class:"msWrap noX"},tb),
+    el("p",{class:"msKey"}, el("i",{class:"k msLo"}),"below 70% ", el("i",{class:"k msMid"}),"70 to 84% ", el("i",{class:"k msHi"}),"85% or more ", el("i",{class:"k msThin"}),"under 10 answers, not counted yet · red tick = 85% pass mark")));
+  /* activity + re-check */
+  const days=new Set(A.filter(e=>Date.now()-e.t<7*DAY).map(e=>new Date(e.t).toDateString())), strip=el("div",{class:"msDays","aria-hidden":"true"});
+  for(let i=6;i>=0;i--){ const d=new Date(Date.now()-i*DAY); strip.append(el("span",{class:days.has(d.toDateString())?"on":""},"MTWTFSS"[(d.getDay()+6)%7])); }
+  const wk=A.filter(e=>Date.now()-e.t<7*DAY&&e.m!=="c").length;
+  const act=el("div",{class:"msCol"}, el("div",{class:"qSec"},el("h2",{},"Activity")), el("p",{class:"msBig"},"Active "+days.size+" of the last 7 days"), strip, el("p",{class:"src"},wk+" answers this week. A rolling count. A missed day does not reset anything."));
+  const RC=recheckItems(), ol=el("ol",{class:"msRc"}); RC.forEach(x=>ol.append(el("li",{}, el("button",{class:"linkBtn",type:"button",onclick:x.go},x.txt))));
+  const rc=el("div",{class:"msCol"}, el("div",{class:"qSec"},el("h2",{},"Due for re-check")), RC.length?ol:el("p",{class:"src"},"Nothing due. Missed inspection answers and quiz questions come back here after 3 days."),
+    el("div",{class:"msLinks"}, el("button",{class:"linkBtn",type:"button",onclick:()=>planSheet("q")},p.done?"Edit profile":"Set up my profile"), typeof openPerf==="function"?el("button",{class:"linkBtn",type:"button",onclick:openPerf},"Detailed performance"):"", el("button",{class:"linkBtn",type:"button",onclick:()=>planSheet("res")},"Plans and administrator")));
+  m.append(el("section",{class:"msTwo"}, act, rc));
+  m.append(el("p",{class:"src pfLib"},"Library: "+(AUD_CASES.length+Object.keys(AUD_SCEN).length+AUD_REAL.length)+" virtual inspections · "+CH.reduce((a,c)=>a+c.qs.length,0).toLocaleString("en-US")+" questions · "+CH.reduce((a,c)=>a+c.dils.length,0).toLocaleString("en-US")+" dilemmas · "+CH.reduce((a,c)=>a+(c.debates||[]).length,0)+" expert views · "+(typeof crsAll==="function"?crsAll().length:0)+" courses"),
+    el("p",{class:"msFoot"},"Saved on this device only. ", el("b",{},DOC_DISC)));
+}
+function statsSheet(){ closeModal(); if(location.hash==="#me") route(); else location.hash="#me"; }
 
 function profHdrRefresh(){ document.querySelectorAll(".avChip").forEach(b=>{ const p=profGet(); b.innerHTML=""; b.append(profIco(p)); b.classList.toggle("unset",!p.nick); b.classList.toggle("adm",isAdmin()); b.title=(p.nick?p.nick+" · ":"")+"My statistics"+(isAdmin()?" (administrator · "+PLAN_NAMES[planEff()]+")":""); }); }
 function profHdr(a,hat){ if(!a.querySelector(".backBtn")) a.prepend(navBackBtn()); if(a.querySelector(".avChip")) return; const b=el("button",{class:"avChip",type:"button","aria-label":"My statistics",onclick:statsSheet}); a.insertBefore(b,hat); profHdrRefresh(); }
@@ -4878,6 +4981,7 @@ const HELP_FEAT=[
  {r:"projects",t:"Projects",s:"#main h2",h:"Group your forms, risk files and assessments by device project.",k:"project projects device organize",q:["where are my projects","how can i organize my work"]},
  {r:"projects",t:"Add a new project",s:".prjBig.cta,#main .cta",h:"Create a project with its name, device, class and markets. Your work is saved on this device.",k:"new create project",q:["how do i create a project"]},
  {r:"projects",t:"Project list",s:".prjAlt",h:"Open a project you already created.",k:"open list existing",q:["how do i open a project"]},
+ {r:"me",t:"My statistics",s:".msH",h:"Your practice score by process (weakest first), the next best action, your activity in the last 7 days and what is due for re-check. Open it from the round user button at the top. Everything is saved on this device only.",k:"my statistics progress score performance activity weak process recheck re-check",q:["how am i doing","where are my statistics","what should i practise next","what is my weakest area"]},
  {r:"dates",t:"Regulatory Timeline",s:"#main h2",h:"Regulatory milestones and transition dates, with links to official sources.",k:"timeline dates deadlines milestones transition qmsr mdr udi estar ai act",q:["when does the qmsr apply","where are the deadlines","what are the mdr transition dates"]},
  {r:"dates",t:"Search dates",s:".dSearch",h:"Type a topic or year (UDI, eSTAR, AI Act, 2027) to filter the milestones.",k:"filter year search",q:["how do i find a date"]},
  {r:"map",t:"QMS map",s:"#main h2",h:"A crosswalk between ISO 13485, 21 CFR 820 and the EU MDR.",k:"map crosswalk compare iso 820 mdr clause article",q:["how do iso 13485 and 820 compare","where is the crosswalk"]},
@@ -5540,7 +5644,7 @@ function audNew(caseId,seed){ const c=AUD_CASES.find(x=>x.id===caseId); seed=(se
   const plan=[...head,...rest].map((n,i)=>i>0&&AUD_ALT[n]&&r()<0.5?AUD_ALT[n]:n);
   return {c,plan,ti:0,inTopic:0,node:plan[0],asked:[],seed,done:false}; }
 function audOptions(st){ const n=AUD_NODES[st.node]; const r=rngFrom(st.seed*31+st.asked.length*97+st.node.charCodeAt(0)); const o=[{t:audFill(n.ok,st.c),ok:true},...n.bad.map(b=>({t:audFill(b,st.c),ok:false}))]; for(let i=o.length-1;i>0;i--){ const j=Math.floor(r()*(i+1)); [o[i],o[j]]=[o[j],o[i]]; } return o; }
-function audAnswer(st,opt){ const n=AUD_NODES[st.node]; st.asked.push({id:st.node,t:n.t,ok:opt.ok,q:audFill(n.q,st.c),a:opt.t,r:audFill(n.ok,st.c),why:n.why});
+function audAnswer(st,opt){ const n=AUD_NODES[st.node]; st.asked.push({id:st.node,t:n.t,ok:opt.ok,q:audFill(n.q,st.c),a:opt.t,r:audFill(n.ok,st.c),why:n.why}); actAudit(st,n,st.asked[st.asked.length-1]);
   if(st.asked.length>=(st.N||20)){ st.done=true; return; }
   if(st.kind==="topic"||st.kind==="real"){ const done=new Set(st.asked.map(a=>a.id)); let nx=opt.ok?n.n:n.w; if(nx&&done.has(nx)) nx=null;
     while(!nx){ st.ti++; if(st.ti>=st.plan.length){ st.done=true; return; } nx=st.plan[st.ti]; if(done.has(nx)) nx=null; }
@@ -5865,7 +5969,7 @@ function renderChapter(id){
       const order=perm(q.o.length,key);
       order.forEach((j,pos)=>{
         const o=q.o[j];
-        const b=el("button",{class:"opt",type:"button",onclick:()=>{ state[key]=j; save(); renderChapter(c.id); renderRail(c.id); totals(); }}, String.fromCharCode(65+pos)+". "+o);
+        const b=el("button",{class:"opt",type:"button",onclick:()=>{ state[key]=j; actAnswer(key,j); save(); renderChapter(c.id); renderRail(c.id); totals(); }}, String.fromCharCode(65+pos)+". "+o);
         if(ans!==undefined){ b.disabled=true; if(j===q.a) b.classList.add("right"); else if(j===ans) b.classList.add("wrong"); }
         opts.append(b);
       });
@@ -8875,7 +8979,7 @@ function route(){
   LAST_ROUTE=id;
   if(id==="practice"){ closeModal(); renderNav("practice"); renderPractice(); totals(); try{ window.scrollTo({top:0}); }catch(e){} return; }
   if(id==="gdp"){ closeModal(); renderNav("gdp"); renderGdp(); totals(); try{ window.scrollTo({top:0}); }catch(e){} return; }
-  if(["home","explore","dilemmas","map","sampling","bstats","tools","daily","stats","dates","audit","risk","rmtool","msa","grr","rmtools","impact","cvss","projects","qadrafts"].includes(id)){ closeModal(); renderNav(id); ({home:()=>renderHome(false),explore:()=>renderHome(true),dilemmas:renderDilemmas,map:renderMap,sampling:renderSampling,tools:()=>renderTools("daily"),daily:()=>renderTools("daily"),stats:()=>renderTools("stats"),risk:renderRisk,rmtool:renderRisk,msa:renderMsa,grr:renderGrr,rmtools:renderRmTools,impact:renderImpact,cvss:renderCvss,projects:renderProjects,bstats:renderBstats,qadrafts:renderQaDrafts,dates:renderDates,audit:renderAudit})[id](); totals(); try{ if(navPinned()&&id!=="home") pinScroll(); else window.scrollTo({top:0}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
+  if(["home","explore","dilemmas","map","sampling","bstats","tools","daily","stats","dates","audit","risk","rmtool","msa","grr","rmtools","impact","cvss","projects","qadrafts","me"].includes(id)){ closeModal(); renderNav(id); ({home:()=>renderHome(false),explore:()=>renderHome(true),dilemmas:renderDilemmas,map:renderMap,sampling:renderSampling,tools:()=>renderTools("daily"),daily:()=>renderTools("daily"),stats:()=>renderTools("stats"),risk:renderRisk,rmtool:renderRisk,msa:renderMsa,grr:renderGrr,rmtools:renderRmTools,impact:renderImpact,cvss:renderCvss,projects:renderProjects,bstats:renderBstats,qadrafts:renderQaDrafts,dates:renderDates,audit:renderAudit,me:renderMyStats})[id](); totals(); try{ if(navPinned()&&id!=="home") pinScroll(); else window.scrollTo({top:0}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
   if(id==="random"){ closeModal(); renderNav("random"); renderRandom(); totals(); try{ if(navPinned()) pinScroll(); else window.scrollTo({top:document.getElementById("dnav").offsetTop}); }catch(e){} requestAnimationFrame(()=>{ const d=document.getElementById("dnav"); document.documentElement.style.setProperty("--navH",(d.offsetHeight)+"px"); }); return; }
   const valid=CH.some(c=>c.id===id)?id:CH[0].id;
   if((pendingTab==="q"||pendingTab==="x"||pendingTab==="d")&&CH.some(c=>c.id===id)){ const t=pendingTab, h=pendingHit; pendingTab=null; pendingHit=null; practiceChapter(t,id,h); return; }
@@ -8908,7 +9012,7 @@ trimContent();
 window.addEventListener("hashchange",route);
 route();
 window.addEventListener("resize",()=>{ topBar(); });
-(function(){ let on=true; try{ on=localStorage.getItem(LKEY)!=="off"; }catch(e){} if(on) showLaunch(); })();
+(function(){ let on=true; try{ on=localStorage.getItem(LKEY)!=="off"; }catch(e){} if(on) showLaunch(); try{ visitTouch(); }catch(e){} })();
 if("serviceWorker" in navigator){ let reloaded=false; const hadCtl=!!navigator.serviceWorker.controller;
   navigator.serviceWorker.addEventListener("controllerchange",()=>{ if(hadCtl&&!reloaded){ reloaded=true; location.reload(); } });
   window.addEventListener("load",()=>{ navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>{ r.update(); document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible") r.update(); }); }).catch(()=>{}); }); }
